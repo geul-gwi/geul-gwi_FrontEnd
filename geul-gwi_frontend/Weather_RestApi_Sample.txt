@@ -1,0 +1,38 @@
+ <초단기예보조회>
+http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst
+?serviceKey=uFER9sr44D2CZ86QZMJpgSksS8CC%2B7K8369U0ulh4KC7JJvr3gXefXJ6XsaD8pcft3AxKyBXyAeODFqBVnWxUA%3D%3D
+&pageNo=1
+&numOfRows=1000
+&dataType=JSON
+&base_date=20230719
+&base_time=1530
+&nx=55
+&ny=127
+ 
+ <단기예보조회>
+http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst
+?serviceKey=uFER9sr44D2CZ86QZMJpgSksS8CC%2B7K8369U0ulh4KC7JJvr3gXefXJ6XsaD8pcft3AxKyBXyAeODFqBVnWxUA%3D%3D
+&pageNo=1
+&numOfRows=1000
+&dataType=JSON
+&base_date=20230719
+&base_time=0500
+&nx=55
+&ny=127
+
+ <예보버전조회 (예보업데이트)> ( ODAM: 동네예보실황 / VSRT: 동네예보초단기 / SHRT: 동네예보단기 )
+http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getFcstVersion
+?serviceKey=uFER9sr44D2CZ86QZMJpgSksS8CC%2B7K8369U0ulh4KC7JJvr3gXefXJ6XsaD8pcft3AxKyBXyAeODFqBVnWxUA%3D%3D
+&pageNo=1
+&numOfRows=1000
+&dataType=XML
+&ftype=ODAM
+basedatetime=202307190500
+
+http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getFcstVersion
+?serviceKey=uFER9sr44D2CZ86QZMJpgSksS8CC%2B7K8369U0ulh4KC7JJvr3gXefXJ6XsaD8pcft3AxKyBXyAeODFqBVnWxUA%3D%3D
+&pageNo=1
+&numOfRows=1000
+&dataType=XML
+&ftype=ODAM
+&basedatetime=202106280800

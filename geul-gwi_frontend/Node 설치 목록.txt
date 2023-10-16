@@ -1,0 +1,3 @@
+npm install
+npm axios			// 데이터 보내기 위한 라이브러리
+npm install clipboard-copy	// 클립보드 저장용 라이브러리npm install react-toastify	// 토스트 메시지 보내기 라이브러리npm install redux react-redux	// 리덕스 설치npm install @reduxjs/toolkit	// 리덕스 툴킷 설치npm install --save react-hook-geolocation		// HTML자체에서 제공하는 Geolocation 설치

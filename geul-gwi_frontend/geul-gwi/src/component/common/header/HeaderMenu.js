@@ -1,0 +1,112 @@
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Navigate, useNavigate } from 'react-router-dom';
+
+const MenuList = [];
+MenuList.push({'value' : '글 작성','componentSrc':'/main/Writing'});
+MenuList.push({'value' : '글 귀 챌린지','componentSrc':'/main/WritingChallenge'});
+MenuList.push({'value' : '프로필', 'componentSrc':'/main/ProfilePage'});
+MenuList.push({'value' : '로그아웃','componentSrc':''});
+
+const HeaderMenu = () => {
+    const navigate = useNavigate();
+    const [isButtonHidden, setIsButtonHidden] = useState(false);
+    
+    const ShowList = () => {
+        setIsButtonHidden(!isButtonHidden);
+    };
+    const OnLiClicked = (src) =>{
+        navigate(`${src}`);
+    }
+
+    return (
+        <MenuContainer>
+            <IconBox onClick={ShowList}>
+                <CustomizedImage src={process.env.PUBLIC_URL + "/icon/Header/bars-sort.svg"} alt="HeaderMenu" fill={"blue"} ></CustomizedImage>
+            </IconBox>
+            { 
+            isButtonHidden && <MenuButtonContainer id="displayMenu">
+                {/* 보일 버튼들을 담는 ul */}
+                <MenuButtonManager>
+                    {
+                        MenuList.map((element,idx) => (
+                            <MenuItem onClick={() => {OnLiClicked(element.componentSrc)}}>{element.value}</MenuItem>
+                        ))
+                    }
+                </MenuButtonManager>
+            </MenuButtonContainer>
+            }
+        </MenuContainer>
+    );
+};
+// level 1
+const MenuContainer = styled.div`
+    position : relative;
+    display : flex;
+    min-width : 50px;
+    width : auto;
+    height : 100%;
+    justify-content : center;
+    align-items : center; 
+`
+const IconBox = styled.div`
+    display : flex;
+    justify-content : center;
+    align-items : center;
+    width : 50px;
+    height : 50px;
+    background-color : white;
+    box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.25);
+    border-radius : 50px;
+    cursor : pointer;
+`
+// MenuButton Container = 클릭했을때 보이는 메뉴를 담는 Container
+const MenuButtonContainer = styled.div`
+    position : absolute;
+    right : 0px;
+    top : calc(100% + 10px);
+    width : calc(100% * 2);
+    min-height : 50px;
+    height : auto;
+    border-radius : 12px;
+    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.25);
+    background-color : white;
+    overflow : hidden;
+`
+
+// level 2
+    // icon
+    const CustomizedImage = styled.img`
+        width : 25px;
+        height : 25px;
+        margin : 0 auto;
+    `
+
+    // Button Manager
+    // 클릭했을때 보이는 버튼들을 뿌려줄 ul
+    const MenuButtonManager = styled.ul`
+        display : flex;
+        width : 100%;
+        height : 100%;
+        flex-direction : column;
+        padding-left : 0px;
+        margin : 0px;
+    `
+
+// level 3
+    // ButtonItem
+    // 클릭할 수 있는 버튼
+    const MenuItem = styled.li`
+        display : flex;
+        width : 100%;
+        height : 40px;
+        justify-content : center;
+        align-items : center;
+        color : #343434;
+        cursor : pointer;
+        &:hover{
+            background-color : #D9D9D9;
+        }
+    `
+
+export default HeaderMenu;

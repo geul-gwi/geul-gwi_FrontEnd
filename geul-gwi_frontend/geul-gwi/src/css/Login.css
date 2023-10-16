@@ -1,0 +1,10 @@
+.Login{
+    display:flex;
+    position : relative;
+    width: 100%;
+    height : 100vh;
+    background: url('/src/img/back_gradient.jpg');
+    align-items: center;
+    color: #b3b3b3;
+
+}
