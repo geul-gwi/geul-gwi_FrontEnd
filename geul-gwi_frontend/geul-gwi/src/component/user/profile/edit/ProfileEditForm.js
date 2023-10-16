@@ -1,14 +1,22 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+// Import Library
+import { useSelector } from 'react-redux'; // Redux 사용 Library
 import styled from 'styled-components';
 import {AxiosAddrContext} from 'contextStore/AxiosAddress';
+// component
 import ProfileEditUser from 'component/user/profile/edit/ProfileEditUser';
 import ProfileEditTagForm from 'component/user/profile/edit/ProfileEditTagForm';
 
 const ProfileEditForm = ({ userInfo }) => {
     const navigate = useNavigate();
     const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
+    const userUpdateUrl = '/user/update/';
+
+    // User 로그인 정보
+    const userSeq = useSelector((state) => state.authReducer.userSeq);
+    const userToken = useSelector((state) => state.authReducer.accessToken);
 
     const [newProfile, setNewProfile] = useState(userInfo.profile); 
     const [newNickname, setNewNickname] = useState(userInfo.nickname); 
@@ -39,7 +47,8 @@ const ProfileEditForm = ({ userInfo }) => {
                 password: accountDeletePassword, 
             };
 
-            const response = await axios.delete(`${axiosAddress}/user/delete/${userInfo.userSeq}`, data);
+            const userSeqNumber = Number(userSeq);
+            const response = await axios.delete(`${axiosAddress}/user/delete/${userSeqNumber}`, data);
 
             if (response) {
                 alert('계정이 성공적으로 삭제되었습니다.');
@@ -67,24 +76,39 @@ const ProfileEditForm = ({ userInfo }) => {
         }
 
         try {
-            const data = {
-                password: showPasswordChange? userInfo.userPassword : newPassword,
+            const formData = new FormData();
+            formData.append("file", newProfile);
+
+            const userSeqNumber = Number(userSeq);
+            const updateDTO = {
+                password: showPasswordChange ? newPassword : userInfo.password,
                 nickname: newNickname,
-                tags: selectedTags,
+                tags: selectedTags.map(tag => tag.tagSeq),
                 comment: newComment,
-                file: newProfile,
             };
 
-            const response = await axios.post(`${axiosAddress}/user/delete/${userInfo.userSeq}`, data);
-           
+            // 나머지 데이터를 JSON 문자열로 변환하여 FormData에 추가
+            formData.append("updateDTO", JSON.stringify(updateDTO));
+
+            const response = await axios.post(
+                `${axiosAddress}${userUpdateUrl}${userSeqNumber}`,
+                formData, // 사진 파일은 FormData로 보냅니다
+                {
+                    headers: {
+                        Authorization: "Bearer " + userToken,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
+
             if (response) {
-                 // 프로필 편집이 성공하면 프로필 페이지로 이동
-                navigate('/main/ProfilePage'); 
+                console.log('프로필 편집 성공!!'); 
+                navigate('/main/ProfilePage');
             }
 
         } catch (error) {
             // 프로필 편집이 실패하면 오류 메시지를 출력
-            console.error('프로필 편집 실패', error); 
+            console.log('프로필 편집 실패', error); 
         }
     };
 
@@ -115,7 +139,7 @@ const ProfileEditForm = ({ userInfo }) => {
         if (curPassword.trim() === '') {
             setCurrentPasswordError('기존 비밀번호를 입력해주세요.');
             return false;
-        } else if (curPassword !== userInfo.userPassword) {
+        } else if (curPassword !== userInfo.password) {
             setCurrentPasswordError('기존 비밀번호가 일치하지 않습니다.');
             return false;
         }
@@ -174,6 +198,7 @@ const ProfileEditForm = ({ userInfo }) => {
                     CheckNickname={CheckNickname}
                     CheckComment={CheckComment}
                     newPassword={newPassword}
+                    
                     setCurPassword={setCurPassword}
                     setNewPassword={setNewPassword}
                     setConfirmNewPassword={setConfirmNewPassword}

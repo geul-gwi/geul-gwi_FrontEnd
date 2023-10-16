@@ -8,7 +8,7 @@ const PasswordChangeForm = (props) => {
                 <Tittle>기존 비밀번호 입력</Tittle>
                 <Input
                     type="password"
-                    onChange={(e) => props.setCurrentPassword(e.target.value)}
+                    onChange={(e) => props.setCurPassword(e.target.value)}
                     onBlur={props.CheckCurPassword}
                 />
                 <ErrorMessage>{props.currentPasswordError}</ErrorMessage>

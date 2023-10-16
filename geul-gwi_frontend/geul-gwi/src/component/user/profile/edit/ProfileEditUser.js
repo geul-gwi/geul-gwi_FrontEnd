@@ -51,7 +51,7 @@ const ProfileEditUser = (props) => {
                     onBlur={props.CheckComment}
                 />
                 <ErrorMessage>{props.newCommentError}</ErrorMessage>
-                <CharCount>{props.newComment.length} / 300자</CharCount>
+                <CharCount>{props.newComment ? `${props.newComment.length} / 300자` : "0 / 300자"}</CharCount>
             </NameText>
 
             <ShowButton onClick={() => props.setShowPasswordChange(!props.showPasswordChange)}>
@@ -64,9 +64,9 @@ const ProfileEditUser = (props) => {
             {props.showPasswordChange && (
                 <PasswordChangeForm
                     curPassword={props.curPassword}
+                    setCurPassword={props.setCurPassword}
                     newPassword={props.newPassword}
                     confirmNewPassword={props.confirmNewPassword}
-                    setCurPassword={props.setCurPassword}
                     setNewPassword={props.setNewPassword}
                     setConfirmNewPassword={props.setConfirmNewPassword}
                     currentPasswordError={props.currentPasswordError}

@@ -12,10 +12,10 @@ const Profile = () => {
   const navigate = useNavigate();
   
   const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
-  const userDetailUrl = '/user/detail'; 
+  const userDetailUrl = '/user/detail/'; 
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userInfo, setUserInfo] = useState();
+  const [userInfo, setUserInfo] = useState({});
 
   // User 로그인 정보
   const userSeq = useSelector((state) => state.authReducer.userSeq);
@@ -29,6 +29,12 @@ const Profile = () => {
       .then((response) => {
         console.log(' 응답 결과 : ' + response);
         setUserInfo(response.data);
+
+        console.log('비밀번호: ' + response.data.password)
+        console.log('유저 닉네임: ' + response.data.nickname)
+
+        
+        console.log('불러온 유저 정보 데이터: ' + userInfo.password)
       })
       .catch((error) => {
         console.log('프로필 불러오기 실패:', error);
@@ -59,7 +65,7 @@ const Profile = () => {
           <NameText>{userInfo.nickname}</NameText>
           <CommentText>{userInfo.comment}</CommentText>
           <TagsContainer>
-            {userInfo.tags.map(tag => (
+            {userInfo.tags && userInfo.tags.map(tag => (
               <TagButton
                 key={tag.value}
                 fontColor={tag.fontColor}
