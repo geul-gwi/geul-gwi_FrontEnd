@@ -41,7 +41,6 @@ const RegisterAction = () => {
     // 이메일 인증코드
     const [EmailValidConfirm, setEmailValidConfirm] = useState('');
     const [ShowEmailValidContainer , setShowEmailValidContainer] = useState(false);
-    const [IsValidRequested, setIsValidRequested] = useState(false);
     
     // onChangeHandler
     const onIdHandler = (event) => {
@@ -124,28 +123,26 @@ const RegisterAction = () => {
     }
 
     // 아이디 유효성 검사
-    let IdCheckResult = null;
     const CheckIdExist = async () => {
-        IdCheckResult = null;
         // 아무것도 입력안했으면 return
         if (Id.length === 0){return false;}
 
         console.log("Axios Shoot : "+AxiosAddress+IdChkMapping+"/"+Id);
         try{
             const response = await axios.post(AxiosAddress+IdChkMapping+"/"+Id,null);
-            console.log(response);
+            return response.data;
         }
         catch (error){
             console.log(error);
+            return false;
         }
-        return IdCheckResult;
     }
 
     // 비밀번호 패턴 체크
     const CheckPwdRule = () => {
         let result = true;
         let CheckText = document.getElementById("pwdCheck");
-        let special_pattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,15}$/;
+        let special_pattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/;
         if (Password.search(/\s/) !== -1){
             return "SpaceProblem";
         }
@@ -166,61 +163,56 @@ const RegisterAction = () => {
         else{return false;}
     }
     // 닉네임 중복 체크
-    let NickCheckResult;
     const NickNameCheck = async () => {
-        NickCheckResult = null;
         try{
             const response = await axios.post(AxiosAddress+NickChkMapping+"/"+NickName,null);
             console.log(response.data);
-            NickCheckResult = response.data;
+            return response.data;
         }
         catch(error){
             console.log(error);
+            return false;
         }
-        // 결과 확인
-        if (NickCheckResult === true){return true;}
-        else {return false;}
     }
 
 
     // 이메일 인증 버튼
-    const RequestEmailCode = (email) => {
-        
+    const RequestEmailCode = async (email) => {
         // 요청을 아직 하지 않았다면,
-        if (!IsValidRequested){
-            console.log("Email Send : "+Email);
-            console.log("Email Request Console => "+ AxiosAddress+EmailCodeRequestMapping)
-            axios.post(AxiosAddress+EmailCodeRequestMapping, {"email" : Email})
-            .then((response)=>{
-                setIsValidRequested(true);
-                setShowEmailValidContainer(true);
-                alert("성공적으로 이메일 인증 요청이 완료되었습니다.");
-                console.log(response);
-                return "ValidCodeSent";
-            })
-            .catch((error) => {
-                alert("이메일 인증 요청중 오류가 발생하였습니다.");
-                console.log(error);
-                return "ValidCodeSentFailed";
-            })
+        console.log("Email Send : "+Email);
+        console.log("Email Request Console => "+ AxiosAddress+EmailCodeRequestMapping)
+        try{
+            const response = await axios.post(AxiosAddress+EmailCodeRequestMapping, {"email" : Email});
+            setShowEmailValidContainer(true);
+            alert("성공적으로 이메일 인증 요청이 완료되었습니다.");
+            console.log(response);
+            return true;
         }
-        // 이미 요청을 했다면 => 인증번호 확인 단계
-        else{
-            console.log("Valid Confirm Step");
-            console.log("Input Code value : "+ EmailValidConfirm);
-            console.log("AxiosAddress Check : "+AxiosAddress+CodeValidMapping);
-            axios.post(AxiosAddress+CodeValidMapping, {"code" : EmailValidConfirm})
-            .then((response) => {
-                console.log(response);
-                return "ConfirmedValidCode";
-            })
-            .catch((error) => {
-                console.log(error);
-                alert("인증코드가 틀립니다.");
-                return "ValidCodeFault";
-            })
+        catch(error){
+            alert("인증코드가 틀립니다.");
+            console.log(error);
+            return false;
         }
     }
+
+    // 이메일 인증코드 확인
+    const CheckEmailValidCode = async() => {
+        console.log("Valid Confirm Step");
+        console.log("Input Code value : "+ EmailValidConfirm);
+        console.log("AxiosAddress Check : "+AxiosAddress+CodeValidMapping);
+        try{
+            const response = await axios.post(AxiosAddress+CodeValidMapping, {"code" : EmailValidConfirm});
+            alert("인증이 성공적으로 완료되었습니다.");
+            console.log(response);
+            return true;
+        }
+        catch(error){
+            alert("인증코드가 틀립니다.");
+            console.log(error);
+            return false;
+        }
+    }
+
 
     // 입력 누락 확인 및 조건만족 Check
     const CheckGoodToContinue = () => {
@@ -313,12 +305,14 @@ const RegisterAction = () => {
         // 이메일 인증코드
         EmailValidConfirm={EmailValidConfirm}   // 사용자가 입력한 인증확인코드
         ShowEmailValidContainer={ShowEmailValidContainer}   // 인증확인 코드 창을 보여주는 State
-        IsValidRequested={IsValidRequested}     
-        RequestEmailCode={RequestEmailCode}
+
+        RequestEmailCode={RequestEmailCode} // 이메일 인증 요청 func
+        CheckEmailValidCode={CheckEmailValidCode}   // 이메일 인증코드 확인 func
 
         onEmailHandler={onEmailHandler} // 이메일 Request Input Handler
         EmailValidCodeHandler={EmailValidCodeHandler} // 이메일인증코드 Input Handler
-
+        
+        
 
         // Page Manage
         PageStep={PageStep}

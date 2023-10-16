@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 // React-icons import
@@ -8,27 +8,27 @@ import TagButton from 'component/user/register/TagButton';
 
 
 const RegisterContainer = (props) => {
-    useEffect(()=> {
+    // ValidRequested State => 이메일 인증 스텝
+    const [IsValidRequested, setIsValidRequested] = useState(false);
 
-    },[props]);
+    useEffect(()=> {
+    },[]);
 
     // 아이디 유효성 검사
     const CheckId = () => {
         const CheckText = document.getElementById("idCheck");
-        let result = null;
         // CheckIdExsit는 await으로 return값이 Object Promise타입입니다.
-        props.CheckIdExist().then(data => {
-            result = data;
+        const result = props.CheckIdExist();
+        result.then(result => {
+            if (result === true){
+                CheckText.innerHTML = "사용 가능합니다";
+                CheckText.style.color = "green";
+            }
+            else{
+                CheckText.innerHTML = "사용이 불가합니다.";
+                CheckText.style.color = "red";
+            }
         });
-        console.log("checkidexist : "+ result);
-        if (result === true){
-            CheckText.innerHTML = "사용 가능합니다";
-            CheckText.style.color = "green";
-        }
-        else{
-            CheckText.innerHTML = "사용이 불가합니다.";
-            CheckText.style.color = "red";
-        }
     }
     // 비밀번호 패턴 체크
     const CheckPwdRegularExpression = () =>{
@@ -46,7 +46,7 @@ const RegisterContainer = (props) => {
         }
         else if(result === "RegressionProblem"){
             // 비밀번호 정규식 확인 요망
-            pwdConfirm.innerHTML = "영문,숫자, 특수문자를 조합하여 8~15자 내로 입력해주세요";
+            pwdConfirm.innerHTML = "문자,숫자,특수문자 최소1개 이상 8~20자 내로 입력해주세요";
             pwdConfirm.style.color = "red";
         }
         else {
@@ -74,36 +74,51 @@ const RegisterContainer = (props) => {
     // 닉네임 중복 확인
     const CheckNickname = () => {
         let nickCheckHtml = document.getElementById("nicknameCheck");
-        let result = null;
-
         // NickNameCheck는 await으로 return값이 Object Promise타입입니다.
-        props.NickNameCheck().then(data => result = data);
-        if (result === true){
-            nickCheckHtml.innerHTML = "닉네임 사용가능합니다";
-            nickCheckHtml.style.color = "green";
-        }
-        else{
-            nickCheckHtml.innerHTML = "이미 닉네임이 존재합니다";
-            nickCheckHtml.style.color = "red";
-        }
+        props.NickNameCheck().then(result => {
+            if (result === true){
+                nickCheckHtml.innerHTML = "닉네임 사용가능합니다";
+                nickCheckHtml.style.color = "green";
+            }
+            else{
+                nickCheckHtml.innerHTML = "이미 닉네임이 존재합니다";
+                nickCheckHtml.style.color = "red";
+            }
+        });
+        
     }
     // 이메일 인증코드 발송
     const RequestEmailValid = () => {
+        let ButtonObj = document.getElementById("emailValidButton");
+        if (IsValidRequested === false){
+            let result = props.RequestEmailCode(props.Email);
+            result.then(result => {
+                console.log("result : "+result);
+                if (result === true){
+                    setIsValidRequested(true);
+                    ButtonObj.innerHTML = "인증확인";
+                }
+                else{
+                    console.log("value 오류");
+                }
+            })
+        }
+        else if(IsValidRequested === true){
+            let result = props.RequestEmailCode(props.Email);
+            result.then(result => {
+                console.log("result : "+result);
+                if (result === true){
+                    ButtonObj.innerHTML = "인증완료";
+                    ButtonObj.style.backgroundColor = "green";
+                }
+                else{
+                    
+                }
+            })
+        }
         // 버튼 Obj 받음 => innertext를 바꾸기 위함
-        const ButtonObj = document.getElementById("EmailValidButton");
-        let result = props.RequestEmailCode(props.Email);
-        if (result === "ValidCodeSent"){
-            ButtonObj.innerHTML = "인증확인";
-        }
-        else if (result === "ConfirmedValidCode"){
-            ButtonObj.innerHTML = "인증완료";
-        }
-        else if(result === "ValidCodeSentFailed"){
-            
-        }
-        else{
-
-        }
+        
+        setIsValidRequested(true);
     }
 
     return (
@@ -158,7 +173,7 @@ const RegisterContainer = (props) => {
                     <EmailValidContainer>
                         <EmailValidRequestContainer>
                             <EmailInput type="email" value={props.Email} onChange={(e) => props.onEmailHandler(e)} placeholder='이메일 입력'/>
-                            <EmailValidRequestButton id="EmailValidButton" onClick={() => RequestEmailValid()}>인증요청</EmailValidRequestButton>
+                            <EmailValidRequestButton id="emailValidButton" onClick={() => RequestEmailValid()}>인증요청</EmailValidRequestButton>
                         </EmailValidRequestContainer>
                         {
                             props.ShowEmailValidContainer ?
