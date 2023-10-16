@@ -5,28 +5,18 @@ import {AxiosAddrContext} from 'contextStore/AxiosAddress';
 
 const ProfileEditTagForm = (props) => {
     const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
-    const [tags, setTags] = useState([
-        { "fontColor": "white", "backColor": "#E3DFFF", "value": "#위로"},
-        { "fontColor": "white", "backColor": "#FED9D9", "value": "#동기부여"},
-        { "fontColor": "white", "backColor": "#D9F7D9", "value": "#감사"},
-        { "fontColor": "white", "backColor": "#FFEAA7", "value": "#시"},
-        { "fontColor": "white", "backColor": "#B2F5EA", "value": "#현실직시"},
-        { "fontColor": "white", "backColor": "#F0E68C", "value": "#자연"},
-        { "fontColor": "white", "backColor": "#B0C4DE", "value": "#명언"},
-        { "fontColor": "white", "backColor": "#F5DEB3", "value": "#소설속명언"},
-        { "fontColor": "white", "backColor": "#FFB6C1", "value": "#열정"},
-        { "fontColor": "white", "backColor": "#FFA07A", "value": "#사랑"}
-    ]);
-
+    const [tags, setTags] = useState([]);
+    const tagListUrl = '/tag/list/DEFAULT'
     useEffect(() => {
-        axios.post(`${axiosAddress}/user/update/tags`)
+        axios.post(`${axiosAddress}${tagListUrl}`)
             .then(response => {
+                console.log(response);
                 setTags(response.data);
             })
             .catch(error => {
-                // 오류 처리
+                console.log('사용자 태그 리스트 불러오기 실패' + error);
             });
-    }, [axiosAddress]);
+    }, []);
 
     // 태그 선택
     const handleAddTag = (tagToAdd) => {
