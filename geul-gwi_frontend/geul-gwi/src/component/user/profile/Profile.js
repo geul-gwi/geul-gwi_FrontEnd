@@ -22,14 +22,16 @@ const Profile = () => {
   const userToken = useSelector((state) => state.authReducer.accessToken);
 
   useEffect(() => {
+    console.log(UserSequence);
+    console.log(userToken);
     const userSeqNumber = Number(userSeq);
     Axios.post(`${axiosAddress}${userDetailUrl}${userSeqNumber}`)
       .then((response) => {
-        console.log('Profile data : ' + response.data);
+        console.log(' 응답 결과 : ' + response);
         setUserInfo(response.data);
       })
       .catch((error) => {
-        console.error('Error profile data:', error);
+        console.log('프로필 불러오기 실패:', error);
       });
   }, []);
 
