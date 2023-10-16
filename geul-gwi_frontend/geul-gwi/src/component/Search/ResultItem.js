@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-
-// Axios Address Context
-import { AxiosAddrContext } from 'contextStore/AxiosAddress';
+import { AxiosAddrContext } from 'contextStore/AxiosAddress'; // Axios Address Context
 
 const ResultItem = ({ data }) => {
   const axiosAddress = useState(useContext(AxiosAddrContext).axiosAddr); // Axios Address

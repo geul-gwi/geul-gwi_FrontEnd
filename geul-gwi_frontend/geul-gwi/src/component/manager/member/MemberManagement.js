@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { AxiosAddrContext } from 'contextStore/AxiosAddress'; // Axios Address Context
+
+// component
 import MemberItem from "./MemberItem";
 import MemberInfoForm from 'component/manager/member/MemberInfoForm'
 
 const MemberManagement = () => {
-    const [tags, setTags] = useState([
-      { "fontColor": "white", "backColor": "#E3DFFF", "value": "#위로" },
-      { "fontColor": "white", "backColor": "#FED9D9", "value": "#동기부여" },
-      { "fontColor": "white", "backColor": "#FFA07A", "value": "#사랑" }
-    ]);
+  const userListApi = '/user/list';
+  const userDeleteApi = '/user/admin/delete/';
+  const axiosAddress = useState(useContext(AxiosAddrContext).axiosAddr);   // Axios Address
+
+  const [tags, setTags] = useState([
+    { "fontColor": "white", "backColor": "#E3DFFF", "value": "#위로" },
+    { "fontColor": "white", "backColor": "#FED9D9", "value": "#동기부여" },
+    { "fontColor": "white", "backColor": "#FFA07A", "value": "#사랑" }
+  ]);
 
   const members = [
     { userSeq: 1, userId: 1, nickname: "재희", profile: null, role: null, comment: "안녕하세요", userPassword: null, tags: tags },
@@ -16,12 +24,6 @@ const MemberManagement = () => {
     { userSeq: 3, userId: 1, nickname: "건", profile: null, role: null, comment: null, userPassword: null, tags: tags },
     { userSeq: 4, userId: 1, nickname: "닉네임1", profile: null, role: null, comment: null, userPassword: null, tags: tags },
     { userSeq: 5, userId: 1, nickname: "닉네임2", profile: null, role: null, comment: null, userPassword: null, tags: tags },
-    { userSeq: 6, userId: 1, nickname: "닉네임3", profile: null, role: null, comment: null, userPassword: null, tags: tags },
-    { userSeq: 7, userId: 1, nickname: "닉네임4", profile: null, role: null, comment: null, userPassword: null, tags: tags },
-    { userSeq: 8, userId: 1, nickname: "닉네임5", profile: null, role: null, comment: null, userPassword: null, tags: tags },
-    { userSeq: 9, userId: 1, nickname: "닉네임6", profile: null, role: null, comment: null, userPassword: null, tags: tags },
-    { userSeq: 10, userId: 1, nickname: "닉네임7", profile: null, role: null, comment: null, userPassword: null, tags: tags },
-    { userSeq: 11, userId: 1, nickname: "닉네임8", profile: null, role: null, comment: null, userPassword: null, tags: tags },
   ];
 
   const PAGE_SIZE = 8; // 한 페이지에 보여줄 회원 수
@@ -31,12 +33,37 @@ const MemberManagement = () => {
   const [isShowProfile, setShowProfile] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
+  // 회원 목록 load
+  useEffect(() => {
+    axios.post(`${axiosAddress}${userListApi}`)
+      .then((response) => {
+        setUsers(response.data);
+      })
+      .catch((error) => {
+        console.error('회원 목록을 가져오는 동안 오류 발생:', error);
+      });
+  }, []);
+
+
+  // 회원 삭제
   const handleDelete = (userSeq) => {
     const confirmDelete = window.confirm('정말로 이 사용자를 삭제하시겠습니까?');
     if (confirmDelete) {
-      const updatedUsers = users.filter((user) => user.userSeq !== userSeq);
-      setUsers(updatedUsers);
-      setShowProfile(false);
+      // 회원 삭제 요청
+      axios.delete(`${axiosAddress}${userDeleteApi}${userSeq}`)
+        .then((response) => {
+          if (response.status === 200) {
+            // 삭제가 성공한 경우, 사용자 목록에서 해당 회원 제거
+            const updatedUsers = users.filter((user) => user.userSeq !== userSeq);
+            setUsers(updatedUsers);
+            setShowProfile(false);
+          } else {
+            console.error('유저 삭제에 실패했습니다.');
+          }
+        })
+        .catch((error) => {
+          console.error('유저 삭제 요청 중 오류 발생:', error);
+        });
     }
   };
 
@@ -88,8 +115,8 @@ const MemberManagement = () => {
         </LeftContainer>
       </SubContainer>
       <SubContainer>
-        {isShowProfile ? 
-       <MemberInfoForm user={selectedUser} /> : null}
+        {isShowProfile ?
+          <MemberInfoForm user={selectedUser} /> : null}
       </SubContainer>
     </MainContainer>
   );

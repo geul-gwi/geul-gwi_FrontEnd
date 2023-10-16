@@ -36,10 +36,6 @@ const SearchResultForm = () => {
     { "geulgwiSeq": "17", "nickname": "콩이", "geulgwiContent": "피할수 없으면 즐겨라 ", "regDate": "2020-10-14" },
     { "geulgwiSeq": "18", "nickname": "세정", "geulgwiContent": "직업에서 행복을 찾아라. 아니면 행복이 무엇인지 절대 모를 것이다 ", "regDate": "2020-10-14" },
     { "geulgwiSeq": "19", "nickname": "콩이", "geulgwiContent": "신은 용기있는자를 결코 버리지 않는다 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "20", "nickname": "콩이", "geulgwiContent": "피할수 없으면 즐겨라 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "21", "nickname": "세정", "geulgwiContent": "직업에서 행복을 찾아라. 아니면 행복이 무엇인지 절대 모를 것이다 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "22", "nickname": "콩이", "geulgwiContent": "신은 용기있는자를 결코 버리지 않는다 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "23", "nickname": "콩이", "geulgwiContent": "피할수 없으면 즐겨라 ", "regDate": "2020-10-14" },
   ]);
 
   const [visiblePosts, setVisiblePosts] = useState([]);

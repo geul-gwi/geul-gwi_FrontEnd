@@ -5,24 +5,22 @@ import MainPost from 'component/main/MainPost/MainPost';
 import styled from 'styled-components';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 
+const tags = ([
+  { "fontColor": "white", "backColor": "#E3DFFF", "value": "#위로" },
+  { "fontColor": "white", "backColor": "#FED9D9", "value": "#동기부여" },
+  { "fontColor": "white", "backColor": "#FFA07A", "value": "#사랑" }
+]);
+
 const Profile = () => {
   const navigate = useNavigate();
   const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
-
-  // RequestMappings
-  let userInfoRequest = '/user/detail';
+  const userInfoApi = '/user/detail'; 
 
   const userSeq = '';
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [tags, setTags] = useState([
-    { "fontColor": "white", "backColor": "#E3DFFF", "value": "#위로" },
-    { "fontColor": "white", "backColor": "#FED9D9", "value": "#동기부여" },
-    { "fontColor": "white", "backColor": "#FFA07A", "value": "#사랑" }
-  ]);
-
   const [userInfo, setUserInfo] = useState({
-    userSeq: '',
+    userSeq: 1,
     userId: 'abc',
     userPassword: '1234',
     profile: null,
@@ -32,7 +30,7 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    Axios.post(`${axiosAddress}${userInfoRequest}${userSeq}`)
+    Axios.post(`${axiosAddress}${userInfoApi}${userSeq}`)
       .then((response) => {
         console.log('Profile data : ' + response.data);
         setUserInfo(response.data);

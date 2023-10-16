@@ -7,31 +7,29 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 
 const TagSearchForm = () => {
   const PublicWritingIconPath = process.env.PUBLIC_URL + "/icon/Writing/";
-  // Axios Address
-  const AxiosAddress = useState(useContext(AxiosAddrContext).axiosAddr);
-  // tag list
+  const AxiosAddress = useState(useContext(AxiosAddrContext).axiosAddr);   // Axios Address
+  
+  // 전체 태그 리스트
   const [tags, setTags] = useState([
     { "fontColor": "white", "backColor": "#E3DFFF", "value": "#위로" },
     { "fontColor": "white", "backColor": "#FED9D9", "value": "#동기부여" },
     { "fontColor": "white", "backColor": "#D9F7D9", "value": "#감사" },
     { "fontColor": "white", "backColor": "#FFEAA7", "value": "#시" },
-    { "fontColor": "white", "backColor": "#B2F5EA", "value": "#현실직시" },
-    { "fontColor": "white", "backColor": "#F0E68C", "value": "#자연" },
-    { "fontColor": "white", "backColor": "#B0C4DE", "value": "#명언" },
-    { "fontColor": "white", "backColor": "#F5DEB3", "value": "#소설속명언" },
-    { "fontColor": "white", "backColor": "#FFB6C1", "value": "#열정" },
-    { "fontColor": "white", "backColor": "#FFA07A", "value": "#사랑" }
   ]);
 
-  // 태그 삭제
-  const handleRemoveTag = (tag) => {
-
-  };
-
-  const [searchContainerVisible, setSearchContainerVisible] = useState(false);
+  const [searchContainerVisible, setSearchContainerVisible] = useState(false); // 필터 On/Off
+  const [selectedTag, setSelectedTag] = useState(null); // 검색하고자 하는 태그
 
   const toggleSearchContainer = () => {
     setSearchContainerVisible(!searchContainerVisible);
+  };
+
+  const handleTagClick = (tagValue) => {
+    if (selectedTag === tagValue) {
+      setSelectedTag(null); 
+    } else {
+      setSelectedTag(tagValue); 
+    }
   };
 
   return (
@@ -52,7 +50,8 @@ const TagSearchForm = () => {
                   key={tag.value}
                   fontColor={tag.fontColor}
                   backColor={tag.backColor}
-                  onClick={() => handleRemoveTag(tag)}
+                  selected={selectedTag === tag.value}
+                  onClick={() => handleTagClick(tag.value)}
                 >
                   {tag.value}
                 </TagButton>
@@ -87,38 +86,14 @@ const Title = styled.p`
   margin-bottom: 10px;
 `;
 
-const RemoveTagButton = styled.button`
-    background: none;
-    border: none;
-    color: red;
-    cursor: pointer;
-    margin-left: 8px;
-`;
-const SelectedTagsList = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-`;
-
-const SelectedTag = styled.div`
-    background-color: #F0F2F5;
-    color: #7A6B8A;
-    border-radius: 20px;
-    padding: 8px 15px;
-    display: flex;
-    align-items: center;
-    font-size: 15px;
-    position: relative;
-`;
-
 const TagContainer = styled.div`
   width: 100%;
   height: 100%;
 `;
 
 const TagButton = styled.button`
-    background-color: ${props => props.backColor};
-    color: ${props => props.fontColor};
+    background-color: ${props => (props.selected ? props.backColor : '#f0f0f0')};
+    color: ${props => (props.selected ? props.fontColor : 'black')};
     border: none;
     border-radius: 20px;
     padding: 8px 15px;
@@ -131,9 +106,9 @@ const TagButton = styled.button`
     transition: all 0.3s ease-in-out;
 
     &:hover {
-        background-color: ${props => props.selected ? props.backColor : '#f0f0f0'};
+        background-color: ${props => (props.selected ? props.backColor : '#f0f0f0')};
         transform: translateY(-2px);
-        box-shadow: ${props => props.selected ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none'};
+        box-shadow: ${props => (props.selected ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none')};
     }
 `;
 
