@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { AxiosAddrContext } from 'contextStore/AxiosAddress'; // Axios Address Context
+// Axios Address Context
+import { AxiosAddrContext } from 'contextStore/AxiosAddress'; 
 // component
 import MemberItem from "./MemberItem";
 import MemberInfoForm from 'component/manager/member/MemberInfoForm'
@@ -10,8 +11,8 @@ const MemberManagement = () => {
   // Axios Address
   const axiosAddress = useContext(AxiosAddrContext).axiosAddr;  
   // Api Mapping
-  const userListApi = '/user/list';
-  const userDeleteApi = '/user/admin/delete/';
+  const userListUrl = '/user/list';
+  const userDeleteUrl = '/user/admin/delete/';
 
   const PAGE_SIZE = 8; // 한 페이지에 보여줄 회원 수
 
@@ -20,12 +21,12 @@ const MemberManagement = () => {
   const [isShowProfile, setShowProfile] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  // 회원 목록 load
+  // 회원 목록 불러오기
   useEffect(() => {
-    console.log("회원 조회(전체) url 주소: " + axiosAddress + userListApi);
-    axios.post(axiosAddress + userListApi)
+    console.log("회원 조회(전체) url 주소: " + axiosAddress + userListUrl);
+    axios.post(axiosAddress + userListUrl)
       .then(response => {
-        console.log("load Request => ");  // response 찍어보기
+        console.log("받은 응답 => "); 
         console.log(response);
         setUsers(response.data);
       })
@@ -39,23 +40,23 @@ const MemberManagement = () => {
   const handleDelete = (userSeq) => {
     const confirmDelete = window.confirm('정말로 이 사용자를 삭제하시겠습니까?');
     if (confirmDelete) {
+       // userSeq를 숫자로 변환
+    const userSeqNumber = Number(userSeq);
       // 회원 삭제 요청
-      console.log("회원 삭제 url 주소 : " `${axiosAddress}${userDeleteApi}${userSeq}`);
-      axios.delete(`${axiosAddress}${userDeleteApi}${userSeq}`)
+      //console.log("회원 삭제 url 주소 : " `${axiosAddress}${userDeleteUrl}${userSeqNumber}`);
+      axios.delete(`${axiosAddress}${userDeleteUrl}${userSeqNumber}`)
         .then((response) => {
-          console.log("load Request => ");  // response 찍어보기
+          console.log("받은 응답 => ");  
           console.log(response);
           if (response) {
             // 삭제 성공, 사용자 목록에서 해당 회원 제거
             const updatedUsers = users.filter((user) => user.userSeq !== userSeq);
             setUsers(updatedUsers);
             setShowProfile(false);
-          } else {
-            console.error('유저 삭제에 실패했습니다.');
-          }
+          } 
         })
         .catch((error) => {
-          console.error('유저 삭제 요청 중 오류 발생:', error);
+          console.log('유저 삭제 요청 중 오류 발생:', error);
         });
     }
   };

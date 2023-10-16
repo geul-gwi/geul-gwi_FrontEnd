@@ -13,10 +13,11 @@ const MemberItem = (props) => {
 
   const handleClick = () => {
     // 유저 세부 정보 요청
-    console.log("회원 세부 조회 url 주소: " `${axiosAddress}${userDetailApi}${user.userSeq}`);
-    axios.post(`${axiosAddress}${userDetailApi}${user.userSeq}`)
+    const userSeqNumber = Number(user.userSeq);
+    //console.log("회원 세부 조회 url 주소: " `${axiosAddress}${userDetailApi}${userSeqNumber}`);
+    axios.post(`${axiosAddress}${userDetailApi}${userSeqNumber}`)
       .then((response) => {
-        console.log("load Request => ");  // response 찍어보기
+        console.log("load Request => "); 
         console.log(response);
         handleShowProfile(response.data);
       })
@@ -26,12 +27,13 @@ const MemberItem = (props) => {
   };
 
   return (
-    <Item onClick={handleClick}>
+    <Item>
       <Container>
         <ProfileImage
           src={user.profile || '/img/defaultProfile.png'}
+          onClick={handleClick}
         />
-        <UserName>{user.nickname}</UserName>
+        <UserName onClick={handleClick}>{user.nickname}</UserName>
       </Container>
       <ButtonContainer>
         <DeleteButton onClick={() => handleDelete(user.userSeq)}>삭제</DeleteButton>
