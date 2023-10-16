@@ -3,13 +3,11 @@ import styled from 'styled-components';
 import axios from 'axios';
 // Axios Address Context
 import { AxiosAddrContext } from 'contextStore/AxiosAddress'; // Axios Address Context
-// Import Library
-import { useSelector } from 'react-redux'; // Redux 사용 Library
 
 const MemberItem = (props) => {
   const { user, handleShowProfile, handleDelete } = props;
   // Axios Address
-  const axiosAddress = useState(useContext(AxiosAddrContext).axiosAddr);  
+  const axiosAddress = useContext(AxiosAddrContext).axiosAddr;  
   // Api Mapping
   const userDetailApi = '/user/detail/';
 

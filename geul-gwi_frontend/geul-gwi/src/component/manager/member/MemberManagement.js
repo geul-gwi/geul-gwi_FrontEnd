@@ -2,17 +2,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress'; // Axios Address Context
-// Import Library
-import { useSelector } from 'react-redux'; // Redux 사용 Library
 // component
 import MemberItem from "./MemberItem";
 import MemberInfoForm from 'component/manager/member/MemberInfoForm'
 
 const MemberManagement = () => {
   // Axios Address
-  const axiosAddress = useState(useContext(AxiosAddrContext).axiosAddr);  
+  const axiosAddress = useContext(AxiosAddrContext).axiosAddr;  
   // Api Mapping
-  const userListApi = '/user/list/';
+  const userListApi = '/user/list';
   const userDeleteApi = '/user/admin/delete/';
 
   const PAGE_SIZE = 8; // 한 페이지에 보여줄 회원 수
@@ -26,13 +24,13 @@ const MemberManagement = () => {
   useEffect(() => {
     console.log("회원 조회(전체) url 주소: " + axiosAddress + userListApi);
     axios.post(axiosAddress + userListApi)
-      .then((response) => {
+      .then(response => {
         console.log("load Request => ");  // response 찍어보기
         console.log(response);
         setUsers(response.data);
       })
       .catch((error) => {
-        console.error('회원 목록을 가져오는 동안 오류 발생:', error);
+        console.log('회원 목록을 가져오는 동안 오류 발생:', error);
       });
   }, []);
 
