@@ -22,7 +22,7 @@ const Profile = () => {
   const userToken = useSelector((state) => state.authReducer.accessToken);
 
   useEffect(() => {
-    console.log(UserSequence);
+    console.log(userSeq);
     console.log(userToken);
     const userSeqNumber = Number(userSeq);
     Axios.post(`${axiosAddress}${userDetailUrl}${userSeqNumber}`)
