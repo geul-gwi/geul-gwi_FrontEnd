@@ -2,41 +2,33 @@ import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress'; // Axios Address Context
-
+// Import Library
+import { useSelector } from 'react-redux'; // Redux 사용 Library
 // component
 import MemberItem from "./MemberItem";
 import MemberInfoForm from 'component/manager/member/MemberInfoForm'
 
 const MemberManagement = () => {
-  const userListApi = '/user/list';
+  // Axios Address
+  const axiosAddress = useState(useContext(AxiosAddrContext).axiosAddr);  
+  // Api Mapping
+  const userListApi = '/user/list/';
   const userDeleteApi = '/user/admin/delete/';
-  const axiosAddress = useState(useContext(AxiosAddrContext).axiosAddr);   // Axios Address
-
-  const [tags, setTags] = useState([
-    { "fontColor": "white", "backColor": "#E3DFFF", "value": "#위로" },
-    { "fontColor": "white", "backColor": "#FED9D9", "value": "#동기부여" },
-    { "fontColor": "white", "backColor": "#FFA07A", "value": "#사랑" }
-  ]);
-
-  const members = [
-    { userSeq: 1, userId: 1, nickname: "재희", profile: null, role: null, comment: "안녕하세요", userPassword: null, tags: tags },
-    { userSeq: 2, userId: 1, nickname: "세정", profile: null, role: null, comment: "맛탕", userPassword: null, tags: tags },
-    { userSeq: 3, userId: 1, nickname: "건", profile: null, role: null, comment: null, userPassword: null, tags: tags },
-    { userSeq: 4, userId: 1, nickname: "닉네임1", profile: null, role: null, comment: null, userPassword: null, tags: tags },
-    { userSeq: 5, userId: 1, nickname: "닉네임2", profile: null, role: null, comment: null, userPassword: null, tags: tags },
-  ];
 
   const PAGE_SIZE = 8; // 한 페이지에 보여줄 회원 수
 
-  const [users, setUsers] = useState(members); // 초기 사용자 데이터를 users 상태로 관리
+  const [users, setUsers] = useState([]); // 초기 사용자 데이터를 users 상태로 관리
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호, 기본값은 1
   const [isShowProfile, setShowProfile] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   // 회원 목록 load
   useEffect(() => {
-    axios.post(`${axiosAddress}${userListApi}`)
+    console.log("회원 조회(전체) url 주소: " + axiosAddress + userListApi);
+    axios.post(axiosAddress + userListApi)
       .then((response) => {
+        console.log("load Request => ");  // response 찍어보기
+        console.log(response);
         setUsers(response.data);
       })
       .catch((error) => {
@@ -50,10 +42,13 @@ const MemberManagement = () => {
     const confirmDelete = window.confirm('정말로 이 사용자를 삭제하시겠습니까?');
     if (confirmDelete) {
       // 회원 삭제 요청
+      console.log("회원 삭제 url 주소 : " `${axiosAddress}${userDeleteApi}${userSeq}`);
       axios.delete(`${axiosAddress}${userDeleteApi}${userSeq}`)
         .then((response) => {
-          if (response.status === 200) {
-            // 삭제가 성공한 경우, 사용자 목록에서 해당 회원 제거
+          console.log("load Request => ");  // response 찍어보기
+          console.log(response);
+          if (response) {
+            // 삭제 성공, 사용자 목록에서 해당 회원 제거
             const updatedUsers = users.filter((user) => user.userSeq !== userSeq);
             setUsers(updatedUsers);
             setShowProfile(false);
@@ -71,8 +66,8 @@ const MemberManagement = () => {
     setCurrentPage(pageNumber);
   };
 
-  const handleShowProfile = (user) => {
-    setSelectedUser(user);
+  const handleShowProfile = (userSeq) => {
+    setSelectedUser(userSeq);
     setShowProfile(true);
   };
 
