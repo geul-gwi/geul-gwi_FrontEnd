@@ -1,42 +1,37 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
+// Import Library
+import { useSelector } from 'react-redux'; // Redux 사용 Library
+
 import MainPost from 'component/main/MainPost/MainPost';
 import styled from 'styled-components';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 
-const tags = ([
-  { "fontColor": "white", "backColor": "#E3DFFF", "value": "#위로" },
-  { "fontColor": "white", "backColor": "#FED9D9", "value": "#동기부여" },
-  { "fontColor": "white", "backColor": "#FFA07A", "value": "#사랑" }
-]);
-
 const Profile = () => {
   const navigate = useNavigate();
+  
   const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
-  const userInfoApi = '/user/detail'; 
+  const userDetailUrl = '/user/detail'; 
 
-  const userSeq = '';
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState();
 
-  const [userInfo, setUserInfo] = useState({
-    userSeq: 1,
-    userId: 'abc',
-    userPassword: '1234',
-    profile: null,
-    nickname: '재희',
-    comment: '하이',
-    tags: tags,
-  });
+  // User 로그인 정보
+  const userSeq = useSelector((state) => state.authReducer.userSeq);
+  const userToken = useSelector((state) => state.authReducer.accessToken);
 
   useEffect(() => {
-    Axios.post(`${axiosAddress}${userInfoApi}${userSeq}`)
+    console.log(userSeq);
+    console.log(userToken);
+    const userSeqNumber = Number(userSeq);
+    Axios.post(`${axiosAddress}${userDetailUrl}${userSeqNumber}`)
       .then((response) => {
-        console.log('Profile data : ' + response.data);
+        console.log(' 응답 결과 : ' + response);
         setUserInfo(response.data);
       })
       .catch((error) => {
-        console.error('Error profile data:', error);
+        console.log('프로필 불러오기 실패:', error);
       });
   }, []);
 

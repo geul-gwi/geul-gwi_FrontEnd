@@ -8,13 +8,17 @@ const MemberInfoForm = ({ user }) => {
       <ProfileImage src={user.profile || '/img/defaultProfile.png'} />
       <Title>회원 정보</Title>
       <UserInfo>
+        <InfoLabel>Role:</InfoLabel>
+        <InfoValue>{user.role}</InfoValue>
+      </UserInfo>
+      <UserInfo>
         <InfoLabel>아이디:</InfoLabel>
         <InfoValue>{user.userId}</InfoValue>
       </UserInfo>
-      <UserInfo>
+      {/* <UserInfo>
         <InfoLabel>비밀번호:</InfoLabel>
         <InfoValue>{user.userPassword}</InfoValue>
-      </UserInfo>
+      </UserInfo> */}
       <UserInfo>
         <InfoLabel>닉네임:</InfoLabel>
         <InfoValue>{user.nickname}</InfoValue>
@@ -28,7 +32,7 @@ const MemberInfoForm = ({ user }) => {
           <InfoLabel>선택한 태그</InfoLabel>
         </UserInfo>
         <TagsContainer>
-          {user.tags.map(tag => (
+          {user.tags && user.tags.map(tag => (
             <TagButton
               key={tag.value}
               fontColor={tag.fontColor}

@@ -1,20 +1,39 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+// Axios Address Context
+import { AxiosAddrContext } from 'contextStore/AxiosAddress'; // Axios Address Context
 
 const MemberItem = (props) => {
   const { user, handleShowProfile, handleDelete } = props;
+  // Axios Address
+  const axiosAddress = useContext(AxiosAddrContext).axiosAddr;  
+  // Api Mapping
+  const userDetailApi = '/user/detail/';
 
   const handleClick = () => {
-    handleShowProfile(user);
+    // 유저 세부 정보 요청
+    const userSeqNumber = Number(user.userSeq);
+    //console.log("회원 세부 조회 url 주소: " `${axiosAddress}${userDetailApi}${userSeqNumber}`);
+    axios.post(`${axiosAddress}${userDetailApi}${userSeqNumber}`)
+      .then((response) => {
+        console.log("load Request => "); 
+        console.log(response);
+        handleShowProfile(response.data);
+      })
+      .catch((error) => {
+        console.error('회원 세부정보를 가져오는 동안 오류 발생:', error);
+      });
   };
 
   return (
-    <Item onClick={handleClick}>
+    <Item>
       <Container>
         <ProfileImage
           src={user.profile || '/img/defaultProfile.png'}
+          onClick={handleClick}
         />
-        <UserName>{user.nickname}</UserName>
+        <UserName onClick={handleClick}>{user.nickname}</UserName>
       </Container>
       <ButtonContainer>
         <DeleteButton onClick={() => handleDelete(user.userSeq)}>삭제</DeleteButton>
