@@ -20,14 +20,15 @@ const ProfileEditUser = (props) => {
     // 프로필 사진 변경
     const handleProfileImgChange = (event) => {
         const file = event.target.files[0];
-        props.setNewProfile(URL.createObjectURL(file)); 
+        //props.setNewProfile(URL.createObjectURL(file)); 
+        props.setNewProfile(file);
     };
 
     return (
         <MainContainer>
             <Tittle>프로필 수정</Tittle>
             <ProfilePicture
-                src={props.newProfile || '/img/defaultProfile.png'}
+                src={URL.createObjectURL(props.newProfile) || '/img/defaultProfile.png'}
                 onClick={toggleModal}
             />
             <ImageEditButton onClick={setIsModalOpen}>

@@ -38,7 +38,7 @@ const ProfileEditTagForm = (props) => {
         <MainContainer>
             <Title>태그 설정</Title>
             <TagsContainer>
-                {tags.map(tag => (
+                {tags && tags.map(tag => (
                     <TagButton
                         key={tag.value}
                         fontColor={tag.fontColor}
@@ -52,7 +52,7 @@ const ProfileEditTagForm = (props) => {
             <Title>선택한 태그</Title>
             <TagsContainer>
                 <SelectedTagsList>
-                    {props.selectedTags.map(tag => (
+                    {props.selectedTags && props.selectedTags.map(tag => (
                         <SelectedTag key={tag.value}>
                             {tag.value}
                             <RemoveTagButton onClick={() => handleRemoveTag(tag)}>x</RemoveTagButton>

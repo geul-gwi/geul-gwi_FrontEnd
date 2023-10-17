@@ -66,15 +66,12 @@ const ProfileEditForm = ({ userInfo }) => {
     // 적용 버튼 클릭
     const handleChange = async () => {
         // 유효성 검사
-        if (!CheckNickname()) return; 
-        if (!CheckComment()) return;
-        if (showPasswordChange) 
+        if(!CheckAll()) 
         {
-            if (!CheckCurPassword()) return; 
-            if (!CheckNewPassword()) return;
-            if (!CheckConfirmNewPassword()) return; 
+            alert('적용을 실패했습니다. 입력 칸을 확인해 주세요');
+            return;
         }
-
+      
         try {
             const formData = new FormData();
             formData.append("file", newProfile);
@@ -83,7 +80,7 @@ const ProfileEditForm = ({ userInfo }) => {
             const updateDTO = {
                 password: showPasswordChange ? newPassword : userInfo.password,
                 nickname: newNickname,
-                tags: selectedTags.map(tag => tag.tagSeq),
+                tags: selectedTags ? null : selectedTags.map(tag => tag.tagSeq),
                 comment: newComment,
             };
 
@@ -110,6 +107,19 @@ const ProfileEditForm = ({ userInfo }) => {
             // 프로필 편집이 실패하면 오류 메시지를 출력
             console.log('프로필 편집 실패', error); 
         }
+    };
+
+    // 전체 유효성 검사
+    const CheckAll = () => {
+        if (!CheckNickname()) return false;
+        if (!CheckComment()) return false;
+        if (showPasswordChange) {
+            if (!CheckCurPassword()) return false;
+            if (!CheckNewPassword()) return false;
+            if (!CheckConfirmNewPassword()) return false;
+        }
+
+        return true;
     };
 
     // 닉네임 유효성 검사
