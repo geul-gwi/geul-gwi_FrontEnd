@@ -1,59 +1,48 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
-import styled from 'styled-components';
-import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 // Import Library
 import { useSelector } from 'react-redux'; // Redux 사용 Library
-// component
+
 import MainPost from 'component/main/MainPost/MainPost';
+import styled from 'styled-components';
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 
 const Profile = () => {
   const navigate = useNavigate();
+  
   const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
   const userDetailUrl = '/user/detail/'; 
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // 유저 프로필 정보
   const [userInfo, setUserInfo] = useState({});
-  // 유저 로그인 정보
+
+  // User 로그인 정보
   const userSeq = useSelector((state) => state.authReducer.userSeq);
-  const httpUrl = 'https://localhost:8080';
 
   useEffect(() => {
-    // 유저 프로필 정보 데이터 요청
-    Axios.post(`${axiosAddress}${userDetailUrl}${userSeq}`)
+    const userSeqNumber = Number(userSeq);
+    Axios.post(`${axiosAddress}${userDetailUrl}${userSeqNumber}`)
       .then((response) => {
-        // 서버 응답에서 헤더와 바디 추출
-        const profilePath = response.headers["profileimagepath"];
         setUserInfo(response.data);
-        setUserInfo(prevUserInfo => ({
-          ...prevUserInfo,
-          profile: profilePath
-        }));
-
-        console.log('헤더 : ', response.headers["profileimagepath"]);
-        console.log('바디 : ', response.data);
-
+        console.log("사진 path => " + `${axiosAddress}${userInfo.profile}`);
       })
       .catch((error) => {
         console.log('프로필 불러오기 실패:', error);
       });
   }, []);
 
-  // 프로필 사진 클릭
   const onProfileClick = () => {
     if (null == userInfo.profile) return;
     setIsModalOpen(true);
   };
 
-  // 프로필 자세히 보기 닫기
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
-  // 프로필 편집 버튼 클릭
   const onEditClick = () => {
-    navigate('/main/ProfileEditPage', { state: userInfo }); // 프로필 정보 넘기기
+    navigate('/main/ProfileEditPage', { state: userInfo });
   };
 
   return (
@@ -61,6 +50,7 @@ const Profile = () => {
       <ProfileContainer>
         <ProfilePicture
           src={userInfo.profile}
+          alt="Profile Image"
           onClick={onProfileClick}
         />
         <ProfileInfo>
@@ -169,28 +159,28 @@ const CommentText = styled.p`
 `;
 
 const ModalOverlay = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 100;
 `;
 
 const ModalContent = styled.div`
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    img {
-      width: 100%;
-      max-width: 400px;
-      border-radius: 5px;
-    }
+background-color: #fff;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 5px;
+}
 `;
 
 export default Profile;
