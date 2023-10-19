@@ -23,11 +23,11 @@ const Profile = () => {
       try {
         console.log('요청 주소 : ', `${axiosAddress}${userDetailUrl}${userSeq}`);
         const response = await Axios.get(`${axiosAddress}${userDetailUrl}${userSeq}`
-        // , {
-        //   headers: {
-        //     Authorization: `Bearer ${userToken}`,
-        //   },
-        // }
+        , {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
         );
 
         setUserInfo(response.data);
