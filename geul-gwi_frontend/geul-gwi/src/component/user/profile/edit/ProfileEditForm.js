@@ -63,15 +63,13 @@ const ProfileEditForm = ({ userInfo }) => {
     };
 
 
-    // 적용 버튼 클릭
     const handleChange = async () => {
         // 유효성 검사
-        if(!CheckAll()) 
-        {
+        if (!CheckAll()) {
             alert('적용을 실패했습니다. 입력 칸을 확인해 주세요');
             return;
         }
-      
+
         try {
             const formData = new FormData();
             formData.append("file", newProfile);
@@ -80,12 +78,20 @@ const ProfileEditForm = ({ userInfo }) => {
             const updateDTO = {
                 password: showPasswordChange ? newPassword : userInfo.password,
                 nickname: newNickname,
-                tags: selectedTags ? null : selectedTags.map(tag => tag.tagSeq),
+                userTagSeq: selectedTags ? selectedTags.map(tag => tag.tagSeq) : null, // 선택된 태그가 있을 때만 매핑
                 comment: newComment,
             };
+            console.log("선택한 태그:" + selectedTags[0], selectedTags[1], selectedTags[2]);
+            console.log("updateDTO 내의 userTagSeq:", updateDTO.userTagSeq);
 
             // 나머지 데이터를 JSON 문자열로 변환하여 FormData에 추가
-            formData.append("updateDTO", JSON.stringify(updateDTO));
+            //formData.append("updateDTO", JSON.stringify(updateDTO));
+            formData.append("updateDTO", new Blob([JSON.stringify(updateDTO)], {type:"application/json"}));
+            // console.log("편집 적용 보낸 데이터:");
+            // // 데이터 확인을 위해 FormData 객체를 콘솔에 출력합니다.
+            // for (var pair of formData.entries()) {
+            //     console.log(pair[0], pair[1]);
+            // }
 
             const response = await axios.post(
                 `${axiosAddress}${userUpdateUrl}${userSeqNumber}`,
@@ -99,15 +105,16 @@ const ProfileEditForm = ({ userInfo }) => {
             );
 
             if (response) {
-                console.log('프로필 편집 성공!!'); 
+                console.log('프로필 편집 성공!!');
                 navigate('/main/ProfilePage');
             }
 
         } catch (error) {
             // 프로필 편집이 실패하면 오류 메시지를 출력
-            console.log('프로필 편집 실패', error); 
+            console.log('프로필 편집 실패', error);
         }
     };
+
 
     // 전체 유효성 검사
     const CheckAll = () => {

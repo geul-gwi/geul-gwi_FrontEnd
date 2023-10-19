@@ -83,16 +83,17 @@ const RegisterAction = () => {
     const TagClick = (value) => {
         // 선택된 태그의 CSS를 관리하기 위해 selected 값을 바꾸는 코드
         // 해당 Item.selected가 True로 바뀌게 되면 CSS가 바뀌면서 사용자가 어떤 태그를 선택했는지 확인하기 편하다
-        if (Tags.length < 3){
-            let idx = TagList.findIndex((item) => item.value === value);
-            let updateList = [...TagList];
-            let updateItem = updateList[idx];
-            updateItem.selected = !updateItem.selected;
-            updateList[idx] = updateItem;
-            setTagList(updateList);
-        }
-        else{
-            alert("3개 까지만 지정 가능합니다.");
+        if (Tags.length < 3) {
+            const idx = TagList.findIndex((item) => item.value === value);
+            if (idx !== -1) {
+                const updatedList = [...TagList];
+                const updateItem = { ...updatedList[idx] };
+                updateItem.selected = !updateItem.selected;
+                updatedList[idx] = updateItem;
+                setTagList(updatedList);
+            }
+        } else {
+            alert("3개까지만 지정 가능합니다.");
         }
 
         // Handler에게 값을 넘김으로써 Register Submit이 작동할 때 보낼 데이터를 담음
@@ -142,7 +143,7 @@ const RegisterAction = () => {
     const CheckPwdRule = () => {
         let result = true;
         let CheckText = document.getElementById("pwdCheck");
-        let special_pattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/;
+        let special_pattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&~])[A-Za-z\d@$!%*#?&~]{8,20}$/;
         if (Password.search(/\s/) !== -1){
             return "SpaceProblem";
         }
@@ -231,7 +232,9 @@ const RegisterAction = () => {
             userName : Name,
             userAge : Age,
             userGender : Gender,
-            userTags : Tags
+            userTagSeq: TagList
+                .filter(tag => tag.selected === true)
+                .map(tag => tag.tagSeq)
             // userEmail : Email
         }
         axios.post(AxiosAddress+JoinRequest, data)
@@ -277,15 +280,20 @@ const RegisterAction = () => {
         console.log("url 주소: " + AxiosAddress + tagListUrl);
         axios.post(AxiosAddress + tagListUrl)
             .then(response => {
-                console.log("load Request => ");  // response 찍어보기
-                console.log(response);
-                setTagList(response.data); // 태그 목록 배열로 반환
+                console.log(response.data);
+                const updatedList = response.data.map(tag => {
+                    return {
+                        ...tag,
+                        selected: false // selected 속성을 false로 초기화
+                    };
+                });
+                setTagList(updatedList);
+
             })
             .catch(error => {
                 console.log(error);
             });
     }, []);
-
 
     return (
         <RegisterContainer

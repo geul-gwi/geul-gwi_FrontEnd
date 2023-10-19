@@ -28,7 +28,7 @@ const ProfileEditUser = (props) => {
         <MainContainer>
             <Tittle>프로필 수정</Tittle>
             <ProfilePicture
-                src={URL.createObjectURL(props.newProfile) || '/img/defaultProfile.png'}
+                src={props.newProfile ? URL.createObjectURL(props.newProfile) : null || '/img/defaultProfile.png'}
                 onClick={toggleModal}
             />
             <ImageEditButton onClick={setIsModalOpen}>

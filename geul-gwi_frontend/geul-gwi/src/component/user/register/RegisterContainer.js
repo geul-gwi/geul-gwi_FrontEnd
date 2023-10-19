@@ -208,7 +208,7 @@ const RegisterContainer = (props) => {
                             backColor = {element.backColor} 
                             value = {element.value} 
                             selected={element.selected}
-                            TagClick={(element) => props.TagClick(element.value)}
+                            TagClick={(element) => props.TagClick(element)}
                             />
                         ))}
                     </TagsContainer>

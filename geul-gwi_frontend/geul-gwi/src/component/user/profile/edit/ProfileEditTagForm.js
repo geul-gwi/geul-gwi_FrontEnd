@@ -22,6 +22,7 @@ const ProfileEditTagForm = (props) => {
     const handleAddTag = (tagToAdd) => {
         if (props.selectedTags.length >= 3) return; 
         if (props.selectedTags.some((selectedTag) => selectedTag.value === tagToAdd.value)) {
+            
             return; // 이미 선택된 태그인 경우 추가하지 않음
         }
 

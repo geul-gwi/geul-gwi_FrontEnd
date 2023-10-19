@@ -19,22 +19,13 @@ const Profile = () => {
 
   // User 로그인 정보
   const userSeq = useSelector((state) => state.authReducer.userSeq);
-  const userToken = useSelector((state) => state.authReducer.accessToken);
 
   useEffect(() => {
-    console.log(userSeq);
-    console.log(userToken);
     const userSeqNumber = Number(userSeq);
     Axios.post(`${axiosAddress}${userDetailUrl}${userSeqNumber}`)
       .then((response) => {
-        console.log(' 응답 결과 : ' + response);
         setUserInfo(response.data);
-
-        console.log('비밀번호: ' + response.data.password)
-        console.log('유저 닉네임: ' + response.data.nickname)
-
-        
-        console.log('불러온 유저 정보 데이터: ' + userInfo.password)
+        console.log("사진 path => " + `${axiosAddress}${userInfo.profile}`);
       })
       .catch((error) => {
         console.log('프로필 불러오기 실패:', error);
@@ -58,7 +49,8 @@ const Profile = () => {
     <>
       <ProfileContainer>
         <ProfilePicture
-          src={userInfo.profile || '/img/defaultProfile.png'}
+          src={userInfo.profile}
+          alt="Profile Image"
           onClick={onProfileClick}
         />
         <ProfileInfo>
