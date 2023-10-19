@@ -13,31 +13,32 @@ const Profile = () => {
   const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
   const userDetailUrl = '/user/detail/'; 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // 유저 프로필 정보
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState({}); // 유저 프로필 정보
   // 유저 로그인 정보
   const userSeq = useSelector((state) => state.authReducer.userSeq);
-  const httpUrl = 'https://localhost:8080';
+  const userToken = useSelector((state) => state.authReducer.accessToken);
 
   useEffect(() => {
-    // 유저 프로필 정보 데이터 요청
-    Axios.post(`${axiosAddress}${userDetailUrl}${userSeq}`)
-      .then((response) => {
-        // 서버 응답에서 헤더와 바디 추출
-        const profilePath = response.headers["profileimagepath"];
+    async function fetchUserProfile() {
+      try {
+        console.log('요청 주소 : ', `${axiosAddress}${userDetailUrl}${userSeq}`);
+        const response = await Axios.get(`${axiosAddress}${userDetailUrl}${userSeq}`
+        // , {
+        //   headers: {
+        //     Authorization: `Bearer ${userToken}`,
+        //   },
+        // }
+        );
+
         setUserInfo(response.data);
-        setUserInfo(prevUserInfo => ({
-          ...prevUserInfo,
-          profile: profilePath
-        }));
-
-        console.log('헤더 : ', response.headers["profileimagepath"]);
         console.log('바디 : ', response.data);
-
-      })
-      .catch((error) => {
+        console.log('프로필 : ', response.data.profile);
+      } catch (error) {
         console.log('프로필 불러오기 실패:', error);
-      });
+      }
+    }
+
+    fetchUserProfile();
   }, []);
 
   // 프로필 사진 클릭
