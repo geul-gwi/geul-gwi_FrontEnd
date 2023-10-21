@@ -11,16 +11,25 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai"
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 
+// List < GeulgwiSrchDTO.Response > {
+//     geulgwiContent(String),
+//     userSeq(Long),
+//     regDate(String),
+//     files(String),
+//     tags(List<TagDTO.Response >),
+//     likeCount(int),
+//     isLiked(Boolean)
+// }
 
 const Post = (props) => {
     const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
-    const likeUrl = '/geulgwi/like/';
-    const likeDelateUrl = '/geulgwi/unlike/';
+    const likeUrl = '/geulgwi/like/'; // 좋아요 요청 주소
+    const likeDelateUrl = '/geulgwi/unlike/'; // 좋아요 취소 요청 주소
     // User 로그인 정보
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
 
-    const [HeartFill, setHeartFill] = useState(false);
+    const [HeartFill, setHeartFill] = useState(props.isLiked);
 
     const HeartChange = async (e) => {
         if (HeartFill) {
@@ -56,19 +65,17 @@ const Post = (props) => {
                 </ProfileImage>
                 <ProfileName>
                     <Name>{props.nickname}</Name>
+                    <Name>{props.comment}</Name>
                     {/* <SubName>{props.userTitle}</SubName> */}
                 </ProfileName>
             </PostProfileContainer>
             <PostImageContainer><img src={props.imagePath}></img></PostImageContainer>
-            <PostSayingContainer>{props.contentSaying}</PostSayingContainer>
+            <PostSayingContainer>{props.geulgwiContent}</PostSayingContainer>
             <TagButtonContainer>
                 <TagContainer>
                     <TagsContainer>
                         {props.tags && props.tags.map((tag) => (
-                            <Tag
-                                fontColor={tag.color}
-                                backColor={tag.color}
-                            >
+                            <Tag fontColor={tag.fontColor} backColor={tag.backColor}>
                                 {'#' + tag.value}
                             </Tag>
                         ))

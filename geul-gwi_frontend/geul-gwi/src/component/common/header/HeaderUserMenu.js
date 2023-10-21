@@ -2,9 +2,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { FiLogOut } from 'react-icons/fi'; // 로그아웃 아이콘
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
+import { useSelector } from 'react-redux'; // Redux 사용 Library
 
 const HeaderUserMenu = () => {
     const navigate = useNavigate();
+    // 유저 로그인 정보
+    const userNickname = useSelector((state) => state.authReducer.userNickname);
+    const userProfile = useSelector((state) => state.authReducer.userProfile);
     const [isButtonHidden, setIsButtonHidden] = useState(false);
 
     const showList = () => {
@@ -16,9 +21,13 @@ const HeaderUserMenu = () => {
     };
 
     return (
+        
         <MenuContainer>
-            <ProfileImage src="/img/defaultProfile.png" onClick={showList} />
-            <UserName>안녕하세요, 맛탕님.</UserName>
+            <ProfileImage 
+                src={userProfile ? userProfile : "/img/defaultProfile.png" }
+                onClick={showList} 
+            />
+            <UserName>안녕하세요, {userNickname}님.</UserName>
             {isButtonHidden && (
                 <MenuButtonContainer>
                     <MenuButtonManager>
@@ -32,7 +41,9 @@ const HeaderUserMenu = () => {
                     </MenuButtonManager>
                 </MenuButtonContainer>
             )}
+        
         </MenuContainer>
+        
     );
 };
 

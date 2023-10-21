@@ -115,6 +115,7 @@ const MessageForm = () => {
          <Header>{selectedTab === "received" ? "받은 쪽지함" : "보낸 쪽지함"}</Header>
 
          <MessageList>
+               {messages.length === 0 ? (<EmptyMessage>쪽지함이 비어있습니다.</EmptyMessage>) : (null)}
             {messages && messages.map((message) => (
                <MessageItem key={message.messageSeq}>
                   {selectedTab === "received" ? (
@@ -183,15 +184,23 @@ const Header = styled.h1`
    margin-bottom: 20px;
 `;
 
+const EmptyMessage = styled.p`
+   color: grey;
+`;
+
 const MessageList = styled.ul`
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
    list-style: none;
    padding: 0;
+   margin: none;
 `;
 
 const MessageItem = styled.li`
    border: 1px solid #ccc;
    padding: 20px;
-   margin: 20px 0;
+   margin: 10px 0;
    border-radius: 10px;
    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
    transition: transform 0.3s;

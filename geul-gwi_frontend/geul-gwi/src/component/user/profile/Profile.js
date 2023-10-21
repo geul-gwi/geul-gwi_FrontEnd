@@ -6,7 +6,7 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 // Import Library
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 // component
-import MainPost from 'component/main/MainPost/MainPost';
+import ProfilePostList from 'component/user/profile/ProfilePostList';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const Profile = () => {
 
         setUserInfo(response.data);
         //console.log('바디 : ', response.data);
-        //console.log('프로필 : ', response.data.profile);
+        console.log('프로필 : ', response.data.profile);
 
         // 이미지 가져오는 함수를 호출
         fetchImageData(response.data.profile);
@@ -43,37 +43,27 @@ const Profile = () => {
   }, []);
 
     // 이미지 데이터를 가져오는 함수
-    const fetchImageData = async (path) => {
-      try {
-        //console.log('이미지 요쳥한 주소 : ' + `${axiosAddress}/file${path}`);
-        const response = await Axios.get(`${axiosAddress}/file${path}`,
-        {
-          responseType: 'blob', // Blob 형식으로 데이터를 받습니다.
-        }, 
-        {
-          headers: {
-            Origin: 'http://localhost:3000',
-            Authorization: `Bearer ${userToken}`
-          },
-        }
-        );
+  const fetchImageData = async (path) => {
+    try {
+      const encodedPath = encodeURIComponent(path);
+      const response = await Axios.get(`${axiosAddress}/file?file=${encodedPath}`, {
+        responseType: 'blob',
+      });
 
-        if (response) {
-          // Blob 데이터를 이미지 URL로 변환
-          const newFile = new File(['profile'], response.data);
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            const profileImageUrl = String(event.target?.result);
-            setUserInfo({ ...userInfo, profile: profileImageUrl }); 
-          }
-          reader.readAsDataURL(newFile);
-          //const imageUrl = URL.createObjectURL(response.data);
-          //console.log('blob : ' + response.data);
-          //console.log('완성된 이미지 주소 : ' + imageUrl);
-        } 
-      } catch (error) {
-        console.error('이미지 가져오기에 실패했습니다.', error);
+      if (response) {
+        const newFile = new File([response.data], 'profile');
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const profileImageUrl = event.target.result;
+          setUserInfo((prevUserInfo) => {
+            return { ...prevUserInfo, profile: profileImageUrl };
+          });
+        };
+        reader.readAsDataURL(newFile);
       }
+    } catch (error) {
+      console.error('이미지 가져오기에 실패했습니다.', error);
+    }
   }
 
   // 프로필 사진 클릭
@@ -123,7 +113,10 @@ const Profile = () => {
           </ModalOverlay>
         )}
       </ProfileContainer>
-      <MainPost />
+      <ProfilePostList
+        nickname={userInfo.nickname}
+        comment={userInfo.comment}
+      />
     </>
   );
 };

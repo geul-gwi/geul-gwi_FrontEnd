@@ -5,6 +5,7 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 // Import Library
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 
+// 받는 사람 userSeq랑 nickname 보내주기
 const MessageWritingForm = ({ receiverSeq, receiverNickName }) => {
    const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
    const receiverDeleteUrl = '/message/send';
@@ -22,7 +23,7 @@ const MessageWritingForm = ({ receiverSeq, receiverNickName }) => {
          title: message.title,
          content: message.content,
          senderSeq: userSeq,
-         receiverSeq: 2,
+         receiverSeq: receiverSeq,
       };
 
       axios.post(`${axiosAddress}${receiverDeleteUrl}`, messageDTO, {
