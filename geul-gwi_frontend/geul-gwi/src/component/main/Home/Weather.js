@@ -10,8 +10,6 @@ const Weather = () => {
         'temp' : '',
     })
     const [iconImg, setIconImg] = useState('');
-
-    
     
     const OnloadWeather = () => {
         navigator.geolocation.getCurrentPosition(GetPosition);

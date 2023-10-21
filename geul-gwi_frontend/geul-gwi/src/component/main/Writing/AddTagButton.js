@@ -3,59 +3,56 @@ import styled from 'styled-components';
 
 // 컴포넌트 임포트
 import AddTagListComponent from 'component/main/Writing/AddTagListComponent';
+import { Tag } from 'component/common/button/Tag';
 
 const AddTagButton = (props) => {
     // Icon Public 경로
     const PublicWritingIconPath = process.env.PUBLIC_URL + "/icon/Writing/"
-
-    
     const [showTagList, setShowTagList] = useState(false); // 태그 추가 리스트를 보여줄지 True False
-    
+
     // Function
     // 태그 추가 리스트 , 열고 닫기
-    const ShowList = () => {
+    const onShowList = () => {
         setShowTagList(!showTagList);
     }
-
 
     return (
         <Fragment>
             <AddTagFrame>
                 {/* 태그를 추가하라는 설명 */}
                 태그 지정
-                
                 {/* 태그 추가 버튼 */}
-                <ShowButton onClick={ShowList}>
-                    <ButtonTextContainer>태그추가</ButtonTextContainer>
+                <ShowButton onClick={onShowList}>
+                    <ButtonTextContainer>태그 추가</ButtonTextContainer>
                     <ButtonIconContainer>
-                        <Iconimg src={PublicWritingIconPath + "plus.svg"}/>
+                        <Iconimg src={PublicWritingIconPath + "plus.svg"} />
                     </ButtonIconContainer>
                 </ShowButton>
-        
                 {/* 태그 추가 리스트 보기 */}
-                {
-                    showTagList?  
+                {showTagList &&
                     <AddTagListContainer>
-                        <AddTagListComponent    
-                        ShowFunc={ShowList}
-                        SetFnTags={props.SetFnTags}
+                        <AddTagListComponent
+                            FnTagSetHandler={props.FnTagSetHandler}
+                            onShowList={onShowList}
+                            fnTags={props.fnTags}
                         />
-                    </AddTagListContainer> :
-                    ""
+                    </AddTagListContainer> 
                 }
-
-                
-                
-
             </AddTagFrame>
-            {/* 선택된 태그 보여주기 */}
+            {/* 선택한 태그 */}
+            {!showTagList &&
             <FnTagsShowContainer>
-                {
-                    props.FnTagsState.map((element,idx) => (
-                        <FnTagItem key={`${idx}-${element.tagname}}`}>{`#${element.tagname}`}</FnTagItem>
-                    ))
+                    {props.fnTags && props.fnTags.map((tag) => (
+                    <Tag
+                        fontColor={tag.fontColor}
+                        backColor={tag.backColor}
+                    >
+                        {`#${tag.value}`}
+                    </Tag>
+                ))
                 }
             </FnTagsShowContainer>
+            }
         </Fragment>
     );
 };
@@ -148,6 +145,5 @@ const FnTagItem = styled.div`
     border-radius : 12px;
     background-color : #B5B5B5;
 `
-
 
 export default AddTagButton;

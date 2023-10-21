@@ -40,16 +40,6 @@ const TrendFrame = styled.div`
     min-height : 500px;
     height : auto;
     background-color: white;
-<<<<<<< HEAD
-    border-radius : 16px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-
-    box-shadow: 0px 0px 32px 0px #FF9989;
-    transition : 0.5s;
-    opacity : 0.85;
-=======
     opacity : 0.85;
     border-radius : 16px;
 
@@ -58,7 +48,6 @@ const TrendFrame = styled.div`
     justify-content: space-evenly;
     box-shadow: 0px 0px 32px 0px #FF9989;
     transition : 0.5s;
->>>>>>> 5dda5c908a35d94689ed2c5ba26832d7a69f59ce
     &:hover { 
         opacity: 1;
     }

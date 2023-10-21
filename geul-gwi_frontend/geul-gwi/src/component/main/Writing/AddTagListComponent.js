@@ -1,143 +1,199 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-
+import axios from 'axios';
 // css Import
 import 'css/main/Writing/AddTagListComponent.css';
+// Import Library
+import { useSelector } from 'react-redux'; // Redux 사용 Library
+// Axios Address Context
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 
 const AddTagListComponent = (props) => {
-    const [selectedMenu, setSelectedMenu] = useState(true);
-    const [selectedTag, setSelectedTag] = useState('');
+    const axiosAddress = useContext(AxiosAddrContext).axiosAddr;  // Axios Address
+    const defaultTagUrl = "/tag/list/DEFAULT";
+    const addTagUrl = "/tag/register/";
+    // 로그인 정보
+    const userSeq = useSelector((state) => state.authReducer.userSeq);
+    const userToken = useSelector((state) => state.authReducer.accessToken);
 
-    // 사용자지정 태그 목록 (임시로 지정해둠)
-    const TagList = [];
-    TagList.push({'tagname' : '사랑'});
-    TagList.push({'tagname' : '우정'});
-    TagList.push({'tagname' : '현실직시'});
-    TagList.push({'tagname' : '명언'});
-    TagList.push({'tagname' : '경제'});
-    TagList.push({'tagname' : '우울함'});
-    TagList.push({'tagname' : '경제'});
-    TagList.push({'tagname' : '우울함'});
+    const [selectedMenu, setSelectedMenu] = useState(true); // 태그 선택 폼 On/Off
+    const [defaultTags, setDefaultTags] = useState([]); // DEFAULT 전채 태그
+    const [selectedTags, setSelectedTags] = useState(props.fnTags); // 선택한 태그 목록
 
-    // 선택된 태그 목록
-    const [selectedTagList,setSelectedTagList] = useState([]);
-    const [inputTag,setInputTag] = useState("");
-    
+    // 사용자가 추가 중인 태그 정보 변수들
+    const [tagValue, setTagValue] = useState('');
+    const [tagFontColor, setTagFontColor] = useState('white'); 
+    const [tagBackColor, setTagBackColor] = useState('#FBD929'); 
 
+    // DEFAULT 전채 태그 불러오기
+    useEffect(() => {
+        axios.post(`${axiosAddress}${defaultTagUrl}`)
+            .then(response => {
+                setDefaultTags(response.data); 
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, []);
 
-    // 선택된 태그 추가 Handler
-    const TagAddHandler = (tagname) => {
-        const isDuplicate = selectedTagList.some(tag => tag.tagname === tagname);
-
-        if (!isDuplicate){
-            setSelectedTag(tagname);
-            let prevList = [...selectedTagList];
-            prevList.push({'tagname' : tagname});
-            setSelectedTagList(prevList);
-        }
-    }
     // 직접 입력한 태그 Handler
     const InputTagHandler = (e) => {
-        let value = e.target.value;
-        setInputTag(value);
+        setTagValue(e.target.value);
     }
-    // 직접 입력한 Enter 이벤트 처리
+    
+    // 유저가 직접 입력한 태그 Enter 이벤트 처리
     const OnEnterPress = (e) => {
-        // 누른키가 Enter
-        if(e.key === 'Enter'){
-            TagAddHandler(inputTag);
+        if (e.key !== 'Enter')
+        {
+            return;
+        } 
+        if (tagValue.trim() === '') {
+            alert('태그를 입력하세요.');
+            return;
         }
+
+        // 사용자 지정 태그는 서버에 바로 요청 넣어서 시퀀스 값 받는다.
+        // 그리고 글 작성하면서 tagSeq 값 리스트로 보내주면 된다.
+
+        const userAddTag = {
+            fontColor: tagFontColor,
+            backColor: tagBackColor,
+            value: tagValue,
+        };
+
+        // 사용자가 추가한 태그 요청
+        axios.post(`${axiosAddress}${addTagUrl}${userSeq}`,
+            userAddTag,
+            {
+                headers: {
+                    Authorization: "Bearer " + userToken
+                },
+            }).then((response) => {
+                console.log("사용자 지정 태그 추가 성공", response);
+                TagAddHandler(response.data);
+
+            }).catch((error) => {
+                console.error("사용자 지정 태그 추가 실패", error);
+            })    
     }
 
+    // 선택한 태그 추가 Handler
+    const TagAddHandler = (tag) => {
+        // 선택 개수 3개 제한
+        if (selectedTags.length >= 3) 
+        {
+            alert('태그는 최대 3개까지 선택 가능합니다.');
+            return;
+        }
+        // 이미 추가한 태그인지 유효성 검사
+        if (selectedTags.some(selectedTag => selectedTag.value === tag.value))
+        {
+            alert('이미 선택한 태그입니다.');
+            return;
+        }
+
+        let prevList = [...selectedTags];
+        prevList.push(tag);
+        setSelectedTags(prevList);
+    }
 
     // 선택된 태그 삭제 Handler
     const SeletedTagDeleteHandler = (idx) => {
-        setSelectedTagList(selectedTagList.filter( (_, index) => index !== idx ));
+        setSelectedTags(selectedTags.filter((_, index) => index !== idx));
     }
-
-
 
     // 완료 버튼 클릭 -> FnTags에 태그들 재설정
     const OnCompleteClick = () => {
-        props.SetFnTags(selectedTagList);
-        props.ShowFunc();
+        props.FnTagSetHandler(selectedTags);
+        props.onShowList();
     }
 
-    
+    // 태그 font 색상 선택 처리 
+    const onTagFontColorChange = (event) => {
+        setTagFontColor(event.target.value);
+    };
+
+    // 태그 back 색상 선택 처리 
+    const onTagBackColorChange = (event) => {
+        setTagBackColor(event.target.value);
+    };
+
     return (
         <ComponentFrame>
-            {/* 라디오 옵션 버튼 */}
             <TagMenuContainer>
-                <TagMenuItemContainer><TagMenuItem onClick={() => {setSelectedMenu(true)}}>지정된 태그</TagMenuItem></TagMenuItemContainer>
-                <TagMenuItemContainer><TagMenuItem onClick={() => {setSelectedMenu(false)}}>사용자 지정</TagMenuItem></TagMenuItemContainer>
+                <TagMenuItemContainer><TagMenuItem onClick={() => { setSelectedMenu(true) }}>지정된 태그</TagMenuItem></TagMenuItemContainer>
+                <TagMenuItemContainer><TagMenuItem onClick={() => { setSelectedMenu(false) }}>사용자 지정</TagMenuItem></TagMenuItemContainer>
             </TagMenuContainer>
-
             {/* 메뉴에 따라 보여주는 콘텐츠가 다름 => 지정된태그 or 사용자지정 */}
-            {
-                selectedMenu ? 
-                <ExistTagList>
-                    <SmallTitle_Container>사용할 태그를 체크해주세요</SmallTitle_Container>
-                    <ExistTagListItemContainer>
-                        {
-                            TagList.map((element,idx) => (
-                                <ExistTagItem 
-                                key={idx}
-                                onClick={() => TagAddHandler(element.tagname)}
-                                className={`${selectedTag === element.tagname ? 'selectedTag' : ''}`}
-                                >
-                                    {'#' + element.tagname}
-                                </ExistTagItem>
-                            ))
-                        }
-                    </ExistTagListItemContainer>
-                </ExistTagList>
-                :
-                <UserChooseTagList>
-                    <SmallTitle_Container>태그를 직접 입력해주세요</SmallTitle_Container>
-                    {/* 사용자가 원하는 태그를 직접 입력 */}
-                    <UserChooseInputContainer>
-                        {/* input 태그 */}
-                        <UserChooseStyledInput 
-                        type='text' 
-                        placeholder="최대 20자 가능합니다." 
-                        onChange={(e) => InputTagHandler(e)}
-                        onKeyPress={(e) => OnEnterPress(e)}
+            { selectedMenu ?
+                    <ExistTagList>
+                        <SmallTitle_Container>사용할 태그를 선택해주세요</SmallTitle_Container>
+                        <ExistTagListItemContainer>
+                            {defaultTags && defaultTags.map((tag, idx) => (
+                                    <TagButton
+                                        key={idx}
+                                        fontColor={tag.fontColor}
+                                        backColor={tag.backColor}
+                                        onClick={() => TagAddHandler(tag)}
+                                    >
+                                        {'#' + tag.value}
+                                    </TagButton>
+                                ))
+                            }
+                        </ExistTagListItemContainer>
+                    </ExistTagList>
+                    :
+                    <UserChooseTagList>
+                        <SmallTitle_Container>원하는 태그를 설정해주세요</SmallTitle_Container>
+                        <UserChooseInputContainer>
+                            <UserChooseStyledInput
+                                type='text'
+                                placeholder="최대 10자 가능합니다."
+                                onChange={(e) => InputTagHandler(e)}
+                                onKeyPress={(e) => OnEnterPress(e)}
+                            />
+                        </UserChooseInputContainer>
+                    <ColorPickerContainer>
+                        <Title>태그 글자 색상</Title>
+                        <ColorPicker
+                            type='color'
+                            value={tagFontColor}
+                            onChange={onTagFontColorChange}
                         />
-                    </UserChooseInputContainer>
-                </UserChooseTagList>
+                        <Title>태그 배경 색상</Title>
+                        <ColorPicker
+                            type='color'
+                            value={tagBackColor}
+                            onChange={onTagBackColorChange}
+                        />
+                    </ColorPickerContainer>
+                    </UserChooseTagList>
             }
-
-            {/* 선택된 태그 보여줌 */}
             <SelectedTagContainer>
-                {/* 제목 */}
-                <SmallTitle_Container>선택된 태그</SmallTitle_Container>  
-                {/* 아이템 콘테이너 */}
+                <SmallTitle_Container>선택된 태그</SmallTitle_Container>
                 <SelectedTagItemContainer>
-                    {
-                        selectedTagList.map((element,idx) => (
-                            <SelectedButton 
-                            key={idx}
-                            onClick={() => SeletedTagDeleteHandler(idx)}
+                    {selectedTags && selectedTags.map((tag, idx) => (
+                        <TagButton
+                                key={idx}
+                                fontColor={tag.fontColor}
+                                backColor={tag.backColor}
+                                onClick={() => SeletedTagDeleteHandler(idx)}
                             >
-                                {element.tagname}
-                            </SelectedButton>
+                            {'#' + tag.value}
+                        </TagButton>
                         ))
                     }
                 </SelectedTagItemContainer>
             </SelectedTagContainer>
-
-            {/* 완료버튼 */}
             <CompleteButtonContainer>
-                <CompleteButton
-                onClick={() => OnCompleteClick()}>
-                    완료
-                </CompleteButton>
+                <CompleteButton onClick={() => OnCompleteClick()}>완료</CompleteButton>
             </CompleteButtonContainer>
         </ComponentFrame>
     );
 };
 // Common
 const ContainerFrame = styled.div`
+    user-select: none;
     width : 95%;
 `
 // 소제목 Container
@@ -147,9 +203,10 @@ const SmallTitle_Container = styled.div`
     height : 40px;
     font-size : 14px;
     text-indent : 10px;
-    flex-direction : row; justify-content: flex-start; align-items: center;
+    flex-direction : row; 
+    justify-content: flex-start; 
+    align-items: center;
 `
-
 // ---------------------------------------------------
 
 // 태그를 추가하는 리스트 컴포넌트의 프레임
@@ -157,11 +214,10 @@ const ComponentFrame = styled.div`
     display : flex;
     width : 100%;
     height : 100%;
-    padding : 0px 0px 10px 0px;
+    //padding : 0px 0px 10px 0px;
     flex-direction: column;
     align-items: center;
 `
-
 // ---------------------------------------------------
 
 // TagMenu level 1
@@ -169,7 +225,7 @@ const ComponentFrame = styled.div`
 const TagMenuContainer = styled.div`
     display : flex;
     width : 100%;
-    height : 50px;
+    height : 45px;
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -180,7 +236,8 @@ const TagMenuItemContainer = styled.div`
     display : flex;
     width : 50%;
     height : 100%;
-    justify-content : center; align-items: center;
+    justify-content : center; 
+    align-items: center;
 `
 // TagMenu Level 3
 // 태그메뉴 아이템
@@ -189,8 +246,9 @@ const TagMenuItem = styled.div`
     width : 100%;
     height : 100%;
     border-radius : 8px 8px 0px 0px;
-    justify-content: center; align-items: center;
-    font-size : 16px;
+    justify-content: center; 
+    align-items: center;
+    font-size : 15px;
     transition : 0.1s;
     cursor : pointer;
     &:hover{
@@ -203,12 +261,12 @@ const TagMenuItem = styled.div`
 // TagList의 프레임
 const TagListContainer = styled(ContainerFrame)`
     display : flex;
-    min-height : 100px;
+    min-height : 120px;
     height : auto;
     flex-direction : column;
     align-items : center;
-    padding-top : 20px;
-    border-radius : 0px 0px 8px 8%;
+    padding-top : 10px;
+    //border-radius : 0px 0px 8px 8%;
     /* box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.25); */
 `
 
@@ -225,8 +283,11 @@ const ExistTagListItemContainer = styled.div`
     min-height : 60px;
     height : auto;
     padding : 5px 0px 5px 0px;
-    gap : 10px;
-    flex-direction : row; justify-content: space-around; align-items: center; flex-wrap: wrap;
+    gap : 5px;
+    flex-direction : row; 
+    justify-content: space-around; 
+    align-items: center; 
+    flex-wrap: wrap;
 `
 // ExistTagList 태그 아이템 Level 3
 const ExistTagItem = styled.div`
@@ -237,11 +298,11 @@ const ExistTagItem = styled.div`
     border-radius : 16px;
     font-size : 14px;
     cursor : pointer;
-    
     justify-content: center; align-items: center;
+
     &:hover{
         background-color : rgba(245,245,245, 0.9);
-        color : black;
+       color : black;
     }
 `
 
@@ -255,21 +316,22 @@ const UserChooseTagList = styled(TagListContainer)`
 const UserChooseInputContainer = styled.div`
     display : flex;
     width : 100%;
-    height : 50px;
-    justify-content: center; align-items: center;
+    height : 45px;
+    justify-content: center; 
+    align-items: center;
+    margin-bottom: 10px;
 `
 // 태그를 직접추가하는 styled input
 const UserChooseStyledInput = styled.input`
     width : 100%;
-    height : 100%;
+    height : 40px;
     text-indent: 10px;
     border-radius : 12px;
-    border : 2px solid grey;
+    border : 2px solid #CCC;
     box-shadow : none;
-    color : #545454; font-size : 14px;
+    color : #545454; 
+    font-size : 14px;
 `
-
-
 
 // ---------------------------------------------------
 
@@ -287,28 +349,55 @@ const SelectedTagItemContainer = styled.div`
     width : 100%;
     min-height : 40px;
     height : auto;
-    justify-content : flex-start; align-items : center;
-    flex-wrap : wrap;
+    justify-content : flex-start; 
+    align-items : center;
     gap : 10px;
 `
 // 선택된 태그 버튼 Level 2
 const SelectedButton = styled.div`
+    background-color: ${props => props.backColor};
+    color: ${props => props.fontColor};
     display : flex;
-    min-width : 40px; width : auto; height : 20px;
+    min-width : 40px; 
+    width : auto; 
+    height : 20px;
     border-radius : 16px;
     box-shadow : 0px 0px 10px 0px grey;
     padding : 0px 5px 0px 5px;
-    justify-content : center; align-items : center;
-    font-size : 12px; color : grey;
+    justify-content : center; 
+    align-items : center;
+    font-size : 12px; 
+    color : grey;
     cursor : pointer;
 
-    &:hover{
-        background-color : grey;
-        color : white;
+    &:hover {
+        background-color: ${props => props.selected ? props.backColor : '#f0f0f0'};
+        transform: translateY(-2px);
+        box-shadow: ${props => props.selected ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none'};
     }
 `
 
-// ---------------------------------------------------
+// 재희가 만든 태그 버튼 (모든 태그가 사용함)
+const TagButton = styled.div`
+    background-color: ${props => props.backColor};
+    color: ${props => props.fontColor};
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        background-color: ${props => props.selected ? props.backColor : '#f0f0f0'};
+        transform: translateY(-2px);
+        box-shadow: ${props => props.selected ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none'};
+    }
+`
 
 const CompleteButtonContainer = styled(ContainerFrame)`
     display : flex;
@@ -317,20 +406,46 @@ const CompleteButtonContainer = styled(ContainerFrame)`
     justify-content: flex-end;
     align-items : center;
 `
+
 const CompleteButton = styled.div`
     display : flex;
-    min-width : 80px; max-width : 100px; width : auto;
+    min-width : 80px; 
+    max-width : 100px; 
+    width : auto;
     height : 30px;
     border-radius : 16px;
-
     background-color: #21DD3F;
-    color : white; font-size : 14px;
-    justify-content: center; align-items: center;
+    color : white; 
+    font-size : 14px;
+    justify-content: center; 
+    align-items: center;
     cursor : pointer;
 
     &:hover{
         background-color : #2DF24D;
     }
 `
+
+const ColorPickerContainer = styled.div`
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  width: 100%;
+  height: auto;
+`;
+
+const ColorPicker = styled.input`
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+`;
+
+const Title = styled.span`
+    font-size: 12px;
+`;
+
 
 export default AddTagListComponent;

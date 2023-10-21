@@ -15,10 +15,6 @@ const MemberInfoForm = ({ user }) => {
         <InfoLabel>아이디:</InfoLabel>
         <InfoValue>{user.userId}</InfoValue>
       </UserInfo>
-      {/* <UserInfo>
-        <InfoLabel>비밀번호:</InfoLabel>
-        <InfoValue>{user.userPassword}</InfoValue>
-      </UserInfo> */}
       <UserInfo>
         <InfoLabel>닉네임:</InfoLabel>
         <InfoValue>{user.nickname}</InfoValue>

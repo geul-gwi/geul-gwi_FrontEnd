@@ -47,8 +47,7 @@ const ProfileEditForm = ({ userInfo }) => {
                 password: accountDeletePassword, 
             };
 
-            const userSeqNumber = Number(userSeq);
-            const response = await axios.delete(`${axiosAddress}/user/delete/${userSeqNumber}`, data);
+            const response = await axios.delete(`${axiosAddress}/user/delete/${userSeq}`, data);
 
             if (response) {
                 alert('계정이 성공적으로 삭제되었습니다.');
@@ -62,7 +61,7 @@ const ProfileEditForm = ({ userInfo }) => {
         }
     };
 
-
+    // 적용 버튼 클릭
     const handleChange = async () => {
         // 유효성 검사
         if (!CheckAll()) {
@@ -72,17 +71,18 @@ const ProfileEditForm = ({ userInfo }) => {
 
         try {
             const formData = new FormData();
+            
             formData.append("file", newProfile);
 
-            const userSeqNumber = Number(userSeq);
+            //const userSeqNumber = Number(userSeq);
             const updateDTO = {
                 password: showPasswordChange ? newPassword : userInfo.password,
                 nickname: newNickname,
                 userTagSeq: selectedTags ? selectedTags.map(tag => tag.tagSeq) : null, // 선택된 태그가 있을 때만 매핑
                 comment: newComment,
             };
-            console.log("선택한 태그:" + selectedTags[0], selectedTags[1], selectedTags[2]);
-            console.log("updateDTO 내의 userTagSeq:", updateDTO.userTagSeq);
+            //console.log("선택한 태그:" + selectedTags[0], selectedTags[1], selectedTags[2]);
+            //console.log("updateDTO 내의 userTagSeq:", updateDTO.userTagSeq);
 
             // 나머지 데이터를 JSON 문자열로 변환하여 FormData에 추가
             //formData.append("updateDTO", JSON.stringify(updateDTO));
@@ -94,7 +94,7 @@ const ProfileEditForm = ({ userInfo }) => {
             // }
 
             const response = await axios.post(
-                `${axiosAddress}${userUpdateUrl}${userSeqNumber}`,
+                `${axiosAddress}${userUpdateUrl}${userSeq}`,
                 formData, // 사진 파일은 FormData로 보냅니다
                 {
                     headers: {
@@ -105,13 +105,13 @@ const ProfileEditForm = ({ userInfo }) => {
             );
 
             if (response) {
-                console.log('프로필 편집 성공!!');
+                console.log('프로필 편집 성공 : ', response);
                 navigate('/main/ProfilePage');
             }
 
         } catch (error) {
             // 프로필 편집이 실패하면 오류 메시지를 출력
-            console.log('프로필 편집 실패', error);
+            console.log('프로필 편집 실패  : ', error);
         }
     };
 

@@ -17,29 +17,64 @@ const Profile = () => {
   // 유저 로그인 정보
   const userSeq = useSelector((state) => state.authReducer.userSeq);
   const userToken = useSelector((state) => state.authReducer.accessToken);
-
+  
   useEffect(() => {
     async function fetchUserProfile() {
       try {
-        console.log('요청 주소 : ', `${axiosAddress}${userDetailUrl}${userSeq}`);
-        const response = await Axios.get(`${axiosAddress}${userDetailUrl}${userSeq}`
-        , {
+        //console.log('요청 주소 : ', `${axiosAddress}${userDetailUrl}${userSeq}`);
+        const response = await Axios.get(`${axiosAddress}${userDetailUrl}${userSeq}`, {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },
-        }
-        );
+        });
 
         setUserInfo(response.data);
-        console.log('바디 : ', response.data);
-        console.log('프로필 : ', response.data.profile);
+        //console.log('바디 : ', response.data);
+        //console.log('프로필 : ', response.data.profile);
+
+        // 이미지 가져오는 함수를 호출
+        fetchImageData(response.data.profile);
+        
       } catch (error) {
         console.log('프로필 불러오기 실패:', error);
       }
     }
-
     fetchUserProfile();
   }, []);
+
+    // 이미지 데이터를 가져오는 함수
+    const fetchImageData = async (path) => {
+      try {
+        //console.log('이미지 요쳥한 주소 : ' + `${axiosAddress}/file${path}`);
+        const response = await Axios.get(`${axiosAddress}/file${path}`,
+        {
+          responseType: 'blob', // Blob 형식으로 데이터를 받습니다.
+        }, 
+        {
+          headers: {
+            Origin: 'http://localhost:3000',
+            Authorization: `Bearer ${userToken}`
+          },
+        }
+        );
+
+        if (response) {
+          // Blob 데이터를 이미지 URL로 변환
+          const newFile = new File(['profile'], response.data);
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const profileImageUrl = String(event.target?.result);
+            setUserInfo({ ...userInfo, profile: profileImageUrl }); 
+          }
+          reader.readAsDataURL(newFile);
+          //const imageUrl = URL.createObjectURL(response.data);
+          //console.log('blob : ' + response.data);
+          //console.log('완성된 이미지 주소 : ' + imageUrl);
+        } 
+      } catch (error) {
+        console.error('이미지 가져오기에 실패했습니다.', error);
+      }
+  }
 
   // 프로필 사진 클릭
   const onProfileClick = () => {
@@ -54,7 +89,7 @@ const Profile = () => {
 
   // 프로필 편집 버튼 클릭
   const onEditClick = () => {
-    navigate('/main/ProfileEditPage', { state: userInfo }); // 프로필 정보 넘기기
+    navigate('/main/ProfileEdit', { state: userInfo }); // 프로필 정보 넘기기
   };
 
   return (

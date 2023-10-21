@@ -22,10 +22,10 @@ const HeaderUserMenu = () => {
             {isButtonHidden && (
                 <MenuButtonContainer>
                     <MenuButtonManager>
-                        <MenuItem onClick={() => onLiClicked('/main/ProfilePage')}>
+                        <MenuItem onClick={() => onLiClicked('/main/Profile')}>
                             프로필
                         </MenuItem>
-                        <MenuItem onClick={() => onLiClicked('/main/ProfilePage')}>
+                        <MenuItem onClick={() => onLiClicked('/')}>
                             로그아웃
                             <FiLogOut size={16} style={{ marginLeft: '8px' }} />
                         </MenuItem>

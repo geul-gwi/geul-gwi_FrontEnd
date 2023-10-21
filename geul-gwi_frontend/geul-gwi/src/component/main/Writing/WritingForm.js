@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 // css import
-import 'css/main/Writing/WritingForm.css'
+//import 'css/main/Writing/WritingForm.css'
 
 const WritingForm = (props) => {
     return (
@@ -12,12 +12,14 @@ const WritingForm = (props) => {
                 <input class="main-writingform-input" id="FormName" style={{width : '98%' , textIndent : '10px'}} required={true}/>
                 <FormNamelabel id="FormNameLabel" for={"FormName"}>글 제목</FormNamelabel>
             </FormNameInputContainer> */}
-            <FormMainTextInputContainer class="FormMainTextContainer">
-                <textarea class="main-writingform-textarea" name="opinion" 
-                placeholder="여기에 명언을 남겨주세요" required={true} onChange={(e) => props.FormMainTextChange(e)}>
-                    
-                </textarea>
-            </FormMainTextInputContainer>
+            <ContentArea 
+                class="main-writingform-textarea" 
+                name="opinion"
+                placeholder="여기에 글 귀를 남겨주세요" 
+                required={true} 
+                onChange={(e) => props.FormMainTextChange(e)}
+            >
+            </ContentArea>
         </FormContainer>
     );
 };
@@ -26,24 +28,33 @@ const WritingForm = (props) => {
 const FormContainer = styled.form`
     display : flex;
     width : 100%;
-    min-height : 200px;
+    //min-height : 200px;
     height : auto;
     flex-direction: column;
-    margin-bottom : 30px;
+    margin-bottom : 10px;
+    align-items: center;
+`
+
+// 글 작성 입력하는 textarea
+const ContentArea = styled.textarea`
+    width : 100%;
+    height : 450px;
+    border-radius : 12px;
+    padding: 10px;
 `
 // just frame = input태그 스타일의 기반이 되는 Container Frame
-const InputFrame = styled.div`
-    width : 100%;
-    height : 45px;
-    border-radius : 12px;
-`
-const FormNameInputContainer = styled(InputFrame)`
-    position : relative;
-`
-const FormMainTextInputContainer = styled(InputFrame)`
-    min-height : 200px;
-    height : auto;
-`
+// const InputFrame = styled.div`
+//     width : 100%;
+//     height : 45px;
+//     border-radius : 12px;
+// `
+// const FormNameInputContainer = styled(InputFrame)`
+//     position : relative;
+// `
+// const FormMainTextInputContainer = styled(InputFrame)`
+//     min-height : 200px;
+//     height : auto;
+// `
 
 // level 2
     // FormName
@@ -59,6 +70,5 @@ const FormMainTextInputContainer = styled(InputFrame)`
     //     align-items: center;
     //     padding : 0;
     // `
-
 
 export default WritingForm;

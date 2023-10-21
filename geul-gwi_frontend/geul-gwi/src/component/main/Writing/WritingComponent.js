@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-// Import Component
+// Component
 import WritingForm from 'component/main/Writing/WritingForm';
 import ImageUploadForm from 'component/main/Writing/ImageUploadForm';
 import AddTagButton from 'component/main/Writing/AddTagButton';
 
 const WritingComponent = (props) => {
-    
     return (
         <Frame>
             <FlexFrame>
@@ -20,27 +19,24 @@ const WritingComponent = (props) => {
                         사람들에게 당신의 <span style={{color : '#FD7474'}}>영향</span>을 전파하세요
                     </ComponentIntro>
                 </TitleContainer>
-
                 <WritingForm 
-                FormNameChange={props.FormNameChange}   // Writing Action의 FormName Handler넘겨주기
-                FormMainTextChange={props.FormMainTextChange}   // Writing Action의 FormMainTtext Handler넘겨주기
+                    FormNameChange={props.FormNameChange}   // Writing Action의 FormName Handler넘겨주기
+                    FormMainTextChange={props.FormMainTextChange}   // Writing Action의 FormMainTtext Handler넘겨주기
                 />
                 {/* 이미지 업로드 하는 Component에 Handler 넘겨주기 */}
                 <ImageUploadForm 
-                style={{marginBottom : '20px'}}
-                returnImageList={props.ReturnImg}
-                imageAddHandler={props.ImageAdd}
-                imageDeleteHandler={props.ImageDelete}
+                    style={{marginBottom : '20px'}}
+                    returnImageList={props.ReturnImg}
+                    imageAddHandler={props.ImageAdd}
+                    imageDeleteHandler={props.ImageDelete}
                 />
-
                 <AddTagButton
-                SetFnTags={props.SetFnTags}     // list State값 변경하는 함수 넘겨주기
-                FnTagsState={props.FnTagsState} // WritingAction의 list State넘겨주지
+                    FnTagSetHandler={props.FnTagSetHandler}     // list State값 변경하는 함수 넘겨주기
+                    fnTags={props.fnTags} // WritingAction의 list State넘겨주지
                 />
-
                 {/* 작성완료 */}
                 <SubmitContainer>
-                    <SubmitBtn onClick={() => props.Submit()}>완료 </SubmitBtn>
+                    <SubmitBtn onClick={() => props.Submit()}>작성</SubmitBtn>
                 </SubmitContainer>
                 
             </FlexFrame>
@@ -52,21 +48,22 @@ const Frame = styled.div`
     position : relative;
     display : flex;
     width : 100%;
-    min-height : 700px;
+    //min-height : 700px;
 
     background-color : white;
     border-radius : 16px;
 
     justify-content : center;
-    padding-top: 20px; padding-bottom: 20px;
-    margin-bottom : 60px;
+    padding-top: 20px; 
+    padding-bottom: 20px;
+
+    user-select: none;
 `
 
 const FlexFrame = styled.div`
     display : flex;
     width : 90%;
-    height : calc(100%);
-
+    //height : calc(100%);
     flex-direction: column;
 `
 
@@ -81,11 +78,9 @@ const TitleContainer = styled.div`
     display : flex;
     width : 100%;
     height : 50px;
-
     flex-direction: column;
     justify-content : space-between;
 `
-
 
 // level 2
     // Title Contanier
@@ -101,7 +96,6 @@ const TitleContainer = styled.div`
         width : 100%;
         min-height : 10px;
         height : auto;
-
         font-size : 14px;
         color : #BCBABA;
     `
@@ -114,6 +108,7 @@ const SubmitContainer = styled.div`
     justify-content : flex-end;
     align-items : end;
 `
+
 const SubmitBtn = styled.div`
     display : flex;
     width : 100px;
@@ -124,6 +119,7 @@ const SubmitBtn = styled.div`
     font-size : 14px; color : white;
     box-shadow : 1px 1px 8px 0px #B5B5B5;
     cursor : pointer;
+
     &:hover{
         background-color : #FFB1B1;
     }

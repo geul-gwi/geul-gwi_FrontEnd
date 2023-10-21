@@ -15,13 +15,10 @@ const ImageUploadForm = (props) => {
     useEffect(() => {
         const getImageUrlList = props.returnImageList();
         setUrlImageList(getImageUrlList);
-        console.log("image added");
+        //console.log("image added");
     },[handleImageChanged]);
 
-
     return (
-        
-
         <Frame>
             {/* 컨테이너 이름 : 이미지 추가 */}
             <TitleContainer>사진 업로드</TitleContainer>
@@ -32,28 +29,32 @@ const ImageUploadForm = (props) => {
                         <InputLabel for="imgUpload">
                             {/* 이미지를 추가하세요 버튼의 아이콘 */}
                             <DefaultImgIconContainer>
-                                <img src={WritingIconPath + "picture.svg"} alt='이미지 추가' style={{width : "40px", height : "40 px"}}/>
+                                <img 
+                                    src={WritingIconPath + "picture.svg"} 
+                                    alt='이미지 추가' 
+                                    style={{width : "40px", height : "40 px"}}
+                                />
                             </DefaultImgIconContainer>
                             {/* 이미지를 추가하세요 버튼의 텍스트 */}
                             <DefaultImgTextContainer>이미지 올리기</DefaultImgTextContainer>
                         </InputLabel>
                     </ItemContainer>
-                    
-                    {/* 이미지를 올릴 수 있게 됨 */}
-                    
-                    {
-                        urlImageList.map((image,idx) => (
+                    { urlImageList.map((image,idx) => (
                             <ItemContainer>
-                                <StyledImg key={`${idx}-${image}`} src={image} alt={`${idx}-${image}`}/>
-                                <DeleteImage onClick={(e) => DeleteImageChanged(idx)} alt="이미지 지우기">X</DeleteImage>
+                                <StyledImg 
+                                    key={`${idx}-${image}`} 
+                                    src={image} 
+                                    alt={`${idx}-${image}`}
+                                />
+                                <DeleteImage 
+                                    onClick={(e) => DeleteImageChanged(idx)} 
+                                    alt="이미지 지우기"
+                                />
                             </ItemContainer>
                         ))
                     }
-
                 </ItemFlexManager>
             </ItemShowContainer>
-            
-            
         </Frame>
     );
 };
@@ -99,7 +100,6 @@ const ItemFlexManager = styled.div`
     flex-direction : row;
     justify-content : flex-start;
     align-items : center;
-    
 `
 
 const ItemContainer = styled.div`

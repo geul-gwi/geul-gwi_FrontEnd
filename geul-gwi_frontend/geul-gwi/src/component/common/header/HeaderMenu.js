@@ -4,8 +4,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 const MenuList = [];
 MenuList.push({'value' : '글 작성','componentSrc':'/main/Writing'});
-MenuList.push({'value' : '글 귀 챌린지','componentSrc':'/main/WritingChallenge'});
-MenuList.push({'value' : '프로필', 'componentSrc':'/main/ProfilePage'});
+MenuList.push({'value' : '챌린지','componentSrc':'/main/WritingChallenge'});
 MenuList.push({'value' : '로그아웃','componentSrc':''});
 
 const HeaderMenu = () => {

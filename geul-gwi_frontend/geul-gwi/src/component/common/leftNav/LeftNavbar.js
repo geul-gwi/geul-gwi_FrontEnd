@@ -1,9 +1,6 @@
-import {React , useState, useContext, useEffect} from 'react';
+import {React , useState, useContext} from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-// css import
-import path from 'css/common/leftNav/leftNav.css'
-
 // import FontAwesome Icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser as SolidUser, faEnvelope as SolidEnvelope , faBell as SolidBell} from '@fortawesome/free-solid-svg-icons'
@@ -12,12 +9,9 @@ import { faUser as RegularUser, faEnvelope as RegularEnvelope , faBell as Regula
 //context Import
 import { userStoreContext } from 'contextStore/UserStore';
 
-
 const LeftNavbar = () => {
-
     // context
     const UserState = useContext(userStoreContext);
-
     // function
     const navigate = useNavigate();
     const newWrite = () => {
@@ -33,13 +27,10 @@ const LeftNavbar = () => {
         
     }
 
-
-
     const [userHover, setUserHover] = useState(true);
     const [envelopeHover, setEnvelopeHover] = useState(true);
     const [bellHover, setBellHover] = useState(true);
     const [writeHover, setWriteHover] = useState(true);
-
 
     // 아이콘 Hover Effect 처리
     const setHover = (stateName, isTrue) => {
@@ -61,14 +52,7 @@ const LeftNavbar = () => {
         }
     };
 
-    useEffect(() => {
-
-    }, []);
-
     // 글 작성 이벤트
-    
-
-
     return (
         <NavBar>
             <ItemContainer>

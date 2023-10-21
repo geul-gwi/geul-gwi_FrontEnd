@@ -8,7 +8,6 @@ import HeaderUserMenu from "component/common/header/HeaderUserMenu";
 
 const Header = () => {
     const navigate = useNavigate()
-    
     const goHome = () =>{
         navigate("/");
     }
