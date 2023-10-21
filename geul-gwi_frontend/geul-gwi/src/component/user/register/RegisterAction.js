@@ -253,25 +253,7 @@ const RegisterAction = () => {
 
 
     // 태그 버튼 생성 List
-    let [TagList,setTagList] = useState([
-        // {"fontColor" : "white", "backColor" : "grey", "value" : "감성" , "selected" : false},
-        // {"fontColor" : "white", "backColor" : "purple", "value" : "깨달음", "selected" : false},
-        // {"fontColor" : "white", "backColor" : "#FBD929", "value" : "위로", "selected" : false},
-        // {"fontColor" : "white", "backColor" : "#FF867E", "value" : "동기부여", "selected" : false},
-        // {"fontColor" : "white", "backColor" : "#7EFFAA", "value" : "감사", "selected" : false},
-        // {"fontColor" : "white", "backColor" : "#A8FF7E", "value" : "시", "selected" : false},
-        // {"fontColor" : "white", "backColor" : "#84B5FF", "value" : "현실직시", "selected" : false},
-        // {"fontColor" : "white", "backColor" : "#A8FF7E", "value" : "자연", "selected" : false},
-        // {"fontColor" : "white", "backColor" : "#0E2D5C", "value" : "명언", "selected" : false},
-        // {"fontColor" : "white", "backColor" : "#CBC6C3", "value" : "소설속명언", "selected" : false},
-        // {"fontColor" : "white", "backColor" : "#FC3131", "value" : "열정", "selected" : false},
-        // {"fontColor" : "white", "backColor" : "#FF5252", "value" : "사랑", "selected" : false}
-    ]);
-    
-
-    // useEffect(()=> {
-
-    // },[]);
+    let [TagList,setTagList] = useState([]);
 
 
     const tagListUrl = "/tag/list/DEFAULT";

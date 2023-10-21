@@ -38,7 +38,6 @@ const WritingComponent = (props) => {
                 <SubmitContainer>
                     <SubmitBtn onClick={() => props.Submit()}>작성</SubmitBtn>
                 </SubmitContainer>
-                
             </FlexFrame>
         </Frame>
     );

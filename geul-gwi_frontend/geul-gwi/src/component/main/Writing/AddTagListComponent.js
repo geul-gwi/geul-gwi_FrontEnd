@@ -18,7 +18,7 @@ const AddTagListComponent = (props) => {
 
     const [selectedMenu, setSelectedMenu] = useState(true); // 태그 선택 폼 On/Off
     const [defaultTags, setDefaultTags] = useState([]); // DEFAULT 전채 태그
-    const [selectedTags, setSelectedTags] = useState(props.fnTags); // 선택한 태그 목록
+    const [selectedTags, setSelectedTags] = useState(props.fnTags? props.fnTags : []); // 선택한 태그 목록
 
     // 사용자가 추가 중인 태그 정보 변수들
     const [tagValue, setTagValue] = useState('');

@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import styled from 'styled-components';
 import { Navigate, useNavigate } from 'react-router-dom';
+// Using Redux
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const MenuList = [];
 MenuList.push({'value' : '글 작성','componentSrc':'/main/Writing'});
 MenuList.push({'value' : '챌린지','componentSrc':'/main/WritingChallenge'});
-MenuList.push({'value' : '로그아웃','componentSrc':''});
 
 const HeaderMenu = () => {
     const navigate = useNavigate();
+    const AxiosAddress = useContext(AxiosAddrContext).axiosAddr; // Axios Address
+    // User 로그인 정보
+    const userToken = useSelector((state) => state.authReducer.accessToken);
+    const logoutUrl = '/user/logout'; // 로그아웃 요청 주소
+
     const [isButtonHidden, setIsButtonHidden] = useState(false);
-    
+
     const ShowList = () => {
         setIsButtonHidden(!isButtonHidden);
     };
@@ -18,20 +26,39 @@ const HeaderMenu = () => {
         navigate(`${src}`);
     }
 
+    // 로그아웃 버튼 클릭
+    const onLogout = async () => {
+        //console.log("Current userToken : ", userToken);
+        await axios.post(`${AxiosAddress}${logoutUrl}`, {},
+            {
+                headers: {
+                    Authorization: "Bearer " + userToken,  // 토큰 넣어주기
+                },
+            }
+        )
+            .then((response) => {
+                //console.log("로그아웃 성공 : ", response);
+                navigate(`/user/login`); // 로그아웃 성공하면 메인 페이지로 이동한다.
+            }).catch((error) => {
+                console.error("로그아웃 실패 : ", error);
+            })
+      
+    }
+
     return (
         <MenuContainer>
             <IconBox onClick={ShowList}>
                 <CustomizedImage src={process.env.PUBLIC_URL + "/icon/Header/bars-sort.svg"} alt="HeaderMenu" fill={"blue"} ></CustomizedImage>
             </IconBox>
-            { 
-            isButtonHidden && <MenuButtonContainer id="displayMenu">
+            {isButtonHidden && <MenuButtonContainer id="displayMenu">
                 {/* 보일 버튼들을 담는 ul */}
                 <MenuButtonManager>
-                    {
-                        MenuList.map((element,idx) => (
-                            <MenuItem onClick={() => {OnLiClicked(element.componentSrc)}}>{element.value}</MenuItem>
-                        ))
-                    }
+                    {MenuList.map((element) => (
+                            <MenuItem onClick={() => {OnLiClicked(element.componentSrc)}}>
+                                {element.value}
+                            </MenuItem>
+                    ))}
+                        <MenuItem onClick={onLogout}>로그아웃</MenuItem>
                 </MenuButtonManager>
             </MenuButtonContainer>
             }

@@ -5,47 +5,22 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 // Library
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 // component
-import MessageWritingForm from 'component/Message/MessageWritingForm';
+import MessageWritingForm from 'component/message/MessageWritingForm';
 
 const MessageForm = () => {
    const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
    const receiverDeleteUrl = '/message/receiver/delete/';
-   const senderDeleteUrl = '/message/sender/delete/';
+   const senderDeleteUrl = '/message/sender/delete/'; 
+   const receiveListUrl = '/message/receiver/list/'; // 받은 메시지 리스트 요청 주소
+   const sendListUrl = '/message/sender/list/'; // 보낸 메시지 리스트 요청 주소
+
    // 유저 로그인 정보
    const userSeq = useSelector((state) => state.authReducer.userSeq);
    const userToken = useSelector((state) => state.authReducer.accessToken);
    
    const [selectedMessage, setSelectedMessage] = useState(null); // 선택한 메시지 정보
    const [selectedTab, setSelectedTab] = useState("received");
-   const [messages, setMessages] = useState([
-      {
-         messageSeq: 1,
-         title: "쪽지 제목",
-         content: '뭐해?',
-         senderSeq: 2,
-         senderNickname: "세정",
-         receiverSeq: 1,
-         receiverNickName: '재희'
-      },
-      {
-         messageSeq: 2,
-         title: "쪽지 제목",
-         content: '뭐해?',
-         senderSeq: 2,
-         senderNickname: "안건",
-         receiverSeq: 1,
-         receiverNickName: '세정'
-      },
-      {
-         messageSeq: 3,
-         title: "배고프네",
-         content: '뭐해?',
-         senderSeq: 2,
-         senderNickname: "세정",
-         receiverSeq: 1,
-         receiverNickName: '재희'
-      },
-   ]);
+   const [messages, setMessages] = useState([]);
 
    // 답장하기 버튼을 클릭하면 해당 메시지 정보를 선택하고 MessageWritingForm을 표시
    const replyToMessage = (message) => {
@@ -56,14 +31,15 @@ const MessageForm = () => {
    const deleteMessage = (messageSeq) => {
       // 사용자가 보낸 사람인지, 받은 사람인지에 따라 요청하는 주소가 다르다.
       const deleteUrl = (selectedTab === "sent") ? senderDeleteUrl : receiverDeleteUrl;
-      axios.delete(`${axiosAddress}${deleteUrl}${messageSeq}`, {}, {
+      //console.log('요청한 주소 : ', `${axiosAddress}${deleteUrl}${messageSeq}`);
+      axios.post(`${axiosAddress}${deleteUrl}${messageSeq}`, {}, {
          headers: {
             Authorization: `Bearer ${userToken}`,
          },
       })
          .then((response) => {
             if (response) {
-               console.log('메시지 삭제 성공 :', response);
+               console.log('삭제 성공 :', response);
                const updatedMessages = messages.filter((message) => message.messageSeq !== messageSeq);
                setMessages(updatedMessages);
             }
@@ -73,19 +49,64 @@ const MessageForm = () => {
          });
    }
 
+   // 받은 쪽지 목록 가져오기
+   const GetReceiveMessage = () => {
+      axios.post(`${axiosAddress}${receiveListUrl}${userSeq}`, {}, {
+         headers: {
+            Authorization: `Bearer ${userToken}`,
+         },
+      })
+         .then((response) => {
+            if (response) {
+               console.log('받은 목록 요청 성공 :', response);
+               setMessages(response.data);
+            }
+         })
+         .catch((error) => {
+            console.error('받은 목록 요청 실패 :', error);
+         });
+   }
+
+   // 보낸 쪽지 목록 가져오기
+   const GetSendMessage = () => {
+      axios.post(`${axiosAddress}${sendListUrl}${userSeq}`, {}, {
+         headers: {
+            Authorization: `Bearer ${userToken}`,
+         },
+      })
+         .then((response) => {
+            if (response) {
+               console.log('보낸 메시지 목록 요청 성공 :', response);
+               setMessages(response.data);
+            }
+         })
+         .catch((error) => {
+            console.error('보낸 메시지 목록 요청 실패 :', error);
+         });
+   }
+
+   // 받은 메시지와 보낸 메시지 메뉴 클릭 이벤트 핸들러
+   const handleTabClick = (tab) => {
+      setSelectedTab(tab); // 선택한 탭 설정
+      if (tab === "received") {
+         GetReceiveMessage(); // 받은 쪽지 목록 요청
+      } else {
+         GetSendMessage(); // 보낸 쪽지 목록 요청
+      }
+   }
 
    return (
       <>
       <Container>
          <Tabs>
             <TabButton
-               onClick={() => setSelectedTab("received")}
+                  onClick={() => handleTabClick("received")}
                active={selectedTab === "received"}
             >
                받은 쪽지
             </TabButton>
             <TabButton
-               onClick={() => setSelectedTab("sent")}
+                  onClick={() => handleTabClick("sent")}
                active={selectedTab === "sent"}
             >
                보낸 쪽지
@@ -102,10 +123,10 @@ const MessageForm = () => {
                         <Sender>보낸 사람: {message.senderNickname}</Sender>
                      </>
                   ) : (
-                     <Recipient>받는 사람: {message.receiverNickName}</Recipient>
+                     <Recipient>받는 사람: {message.receiverNickname}</Recipient>
                   )}
                   <Title>제목: {message.title}</Title>
-                  <MessageContent>내용: {message.content}</MessageContent>
+                  <div>{message.content}</div>
                   <DeleteButton onClick={() => deleteMessage(message.messageSeq)}>X</DeleteButton>
                   {selectedTab === "received" ? (
                      <ReplyButton onClick={() => replyToMessage(message)}>답장하기</ReplyButton>
@@ -143,7 +164,7 @@ const Tabs = styled.div`
 `;
 
 const TabButton = styled.button`
-   background-color: ${(props) => (props.active ? "#0074D9" : "#ccc")};
+   background-color: ${(props) => (props.active ? "#FF9E9E" : "#ccc")};
    color: #fff;
    border: none;
    padding: 10px 20px;
@@ -153,12 +174,12 @@ const TabButton = styled.button`
    transition: background-color 0.3s;
 
    &:hover {
-      background-color: ${(props) => (props.active ? "#0059A0" : "#aaa")};
+      background-color: #aaa;
    }
 `;
 
 const Header = styled.h1`
-   font-size: 24px;
+   font-size: 20px;
    margin-bottom: 20px;
 `;
 
@@ -192,24 +213,20 @@ const Recipient = styled.div`
 `;
 
 const Title = styled.div`
-   font-weight: bold;
-   margin-bottom: 10px;
+   margin-bottom: 20px;
 `;
 
-const MessageContent = styled.div``;
-
 const ReplyButton = styled.button`
-   background-color: #0074D9;
-   color: #fff;
-   border: none;
+   border: solid 1px #ccc;
    padding: 5px 10px;
    cursor: pointer;
-   margin: 10px 0;
+   margin-top: 10px;
+   background-color: white;
    border-radius: 5px;
    transition: background-color 0.3s;
 
    &:hover {
-      background-color: #0059A0;
+      background-color: #ccc;
    }
 `;
 

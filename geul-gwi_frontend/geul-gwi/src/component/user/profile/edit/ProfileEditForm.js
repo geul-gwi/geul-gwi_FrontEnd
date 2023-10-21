@@ -144,8 +144,8 @@ const ProfileEditForm = ({ userInfo }) => {
 
     // 소개 유효성 검사
     const CheckComment = () => {
-        if (newComment.length > 300) {
-            setNewCommentError('소개는 300자 이하로 작성해주세요.')
+        if (newComment.length > 250) {
+            setNewCommentError('소개는 250자 이하로 작성해주세요.')
             return false;
         }
         setNewCommentError('');

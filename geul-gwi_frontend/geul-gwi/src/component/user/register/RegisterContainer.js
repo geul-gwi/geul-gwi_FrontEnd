@@ -21,11 +21,11 @@ const RegisterContainer = (props) => {
         const result = props.CheckIdExist();
         result.then(result => {
             if (result === true){
-                CheckText.innerHTML = "사용 가능합니다";
+                CheckText.innerHTML = "사용 가능한 아이디입니다.";
                 CheckText.style.color = "green";
             }
             else{
-                CheckText.innerHTML = "사용이 불가합니다.";
+                CheckText.innerHTML = "중복되는 아이디입니다.";
                 CheckText.style.color = "red";
             }
         });
@@ -36,22 +36,22 @@ const RegisterContainer = (props) => {
         let result = props.CheckPwdRule();
         if (result === "SpaceProblem"){
             // Spacebar 입력 상태 => 거부
-            pwdConfirm.innerHTML = "공백을 제거해주세요";
+            pwdConfirm.innerHTML = "공백을 제거해주세요.";
             pwdConfirm.style.color = "red";
         }
         else if(result === "PasswordLengthProblem"){
             // 비밀번호 입력 요망
-            pwdConfirm.innerHTML = "비밀번호를 입력하지 않았습니다";
+            pwdConfirm.innerHTML = "비밀번호를 입력해주세요.";
             pwdConfirm.style.color = "red";
         }
         else if(result === "RegressionProblem"){
             // 비밀번호 정규식 확인 요망
-            pwdConfirm.innerHTML = "문자,숫자,특수문자 최소1개 이상 8~20자 내로 입력해주세요";
+            pwdConfirm.innerHTML = "문자,숫자,특수문자 최소1개 이상 8~20자 내로 입력해주세요.";
             pwdConfirm.style.color = "red";
         }
         else {
             // 사용가능
-            pwdConfirm.innerHTML = "사용 가능합니다";
+            pwdConfirm.innerHTML = "사용 가능한 비밀번호입니다.";
             pwdConfirm.style.color = "green";
         }
         
@@ -63,11 +63,11 @@ const RegisterContainer = (props) => {
         let result = props.CheckPwdConfirm();
         console.log("pwd chk : "+result);
         if (result === true){
-            pwdConfirm.innerHTML = "비밀번호가 일치합니다";
+            pwdConfirm.innerHTML = "일치한 비밀번호입니다.";
             pwdConfirm.style.color = "green";
         }
         else{
-            pwdConfirm.innerHTML = "비밀번호가 일치하지 않습니다";
+            pwdConfirm.innerHTML = "비밀번호가 일치하지 않습니다.";
             pwdConfirm.style.color = "red";
         }
     }
@@ -77,11 +77,11 @@ const RegisterContainer = (props) => {
         // NickNameCheck는 await으로 return값이 Object Promise타입입니다.
         props.NickNameCheck().then(result => {
             if (result === true){
-                nickCheckHtml.innerHTML = "닉네임 사용가능합니다";
+                nickCheckHtml.innerHTML = "사용 가능한 닉네임입니다.";
                 nickCheckHtml.style.color = "green";
             }
             else{
-                nickCheckHtml.innerHTML = "이미 닉네임이 존재합니다";
+                nickCheckHtml.innerHTML = "중복되는 닉네임입니다.";
                 nickCheckHtml.style.color = "red";
             }
         });
@@ -131,7 +131,7 @@ const RegisterContainer = (props) => {
             <PrivacyContainer>
                 <div style={{display: 'flex' , flexDirection : 'column', width  : '400px', height : '100%', margin : '0 auto'}}>
                     <h3 className='title'>회원가입</h3>
-                    <h5 className='sub_title'>회원정보를 입력해주세요</h5>
+                    <h5 className='sub_title'>회원 정보를 입력해주세요</h5>
                     <label>아이디</label>
                     <input type='text' value={props.Id} onBlur={() => CheckId()} onChange={props.onIdHandler} placeholder='아이디를 입력'/>
                     <ShowText id='idCheck'></ShowText>
@@ -153,9 +153,9 @@ const RegisterContainer = (props) => {
                     <input type='text' value={props.NickName} onChange={props.onNickNameHandler} placeholder='닉네임 입력' onBlur={CheckNickname}/>
                     <ShowText id='nicknameCheck'></ShowText>
 
-                    <label>이름</label>
+                    {/* <label>이름</label>
                     <input type='text' value={props.Name} onChange={props.onNameHandler} placeholder='이름 입력'/>
-                    <ShowText></ShowText>
+                    <ShowText></ShowText> */}
 
                     <label>나이</label>
                     <input type='number' value={props.Age} onChange={props.onAgeHandler} placeholder='나이 입력'/>
@@ -197,7 +197,7 @@ const RegisterContainer = (props) => {
                 <form style={{display: 'flex' , flexDirection : 
                 'column', width  : '400px', height : '100%', margin : '0 auto'}} onSubmit={(e) => props.onSubmitHandler(e)}>
                     <h3 className='title'>태그 선택</h3>
-                    <h5 className='sub_title'>선호하시는 태그를 선택하시면 됩니다. (3개 제한)</h5>
+                    <h5 className='sub_title'>선호하는 태그를 선택해주세요. (3개)</h5>
                     
                     <TagsContainer>
                         

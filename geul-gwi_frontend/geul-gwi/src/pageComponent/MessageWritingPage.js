@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Component
-import MessageWritingForm from 'component/Message/MessageWritingForm';
+import MessageWritingForm from 'component/message/MessageWritingForm';
 
 const MessagePage = () => {
     return (

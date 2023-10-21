@@ -60,33 +60,9 @@ const WritingAction = () => {
         setFnTags(taglist);
     }
 
-    // Final Tag를 Return해주는 함수
-    // const ReturnFnTags = () => {
-    //     return fnTags;
-    // }
-
     // 글 작성 완료 버튼
     const OnSubmit = async() => {
         const formData = new FormData();
-        // for (const tag of fnTags){
-        //     try{
-        //         console.log(tag);
-        //         const newTag = {
-        //             fontColor: '#FFFFFF',
-        //             backColor: "#000000",
-        //             value: tag.tagname,
-        //         };
-
-        //         const response = await axios.post(AxiosAddress + addTagApiMapping + `/${UserSequence}`
-        //             ,newTag,
-        //             {headers : {
-        //                     Authorization : "Bearer "+UserToken
-        //             }}
-        //         );
-        //         TagSeqs.push(response.data.seq);
-        //     }
-        //     catch(error){console.log(error);}   
-        // }
         const geulgwiRegDTO = {
             geulgwiContent: FormMainText,
             tagSeqs: fnTags.map(tag => tag.tagSeq),
@@ -96,12 +72,12 @@ const WritingAction = () => {
         urlImages.map(image => formData.append("files", image));  // urlImages 배열의 요소를 formData에 추가
         
         // 데이터 확인을 위해 FormData 객체를 콘솔에 출력합니다.
-        console.log("글 작성 요청 formData :");
-        for (var pair of formData.entries()) {
-            console.log(pair[0], pair[1]);
-        }
+        // console.log("글 작성 요청 formData :");
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0], pair[1]);
+        // }
 
-        console.log("요청한 주소 : " + `${AxiosAddress}${WritingApi}${UserSequence}`);
+        //console.log("요청한 주소 : " + `${AxiosAddress}${WritingApi}${UserSequence}`);
         await axios.post(`${AxiosAddress}${WritingApi}${UserSequence}`,
             formData,
             {
@@ -121,16 +97,16 @@ const WritingAction = () => {
     return (
         <Fragment>
             <WritingComponent 
-            FormMainTextChange={FormMainTextHandler}
+                FormMainTextChange={FormMainTextHandler}
 
-            ReturnImg={ReturnImageList}
-            ImageAdd={ImageAddHandler}
-            ImageDelete={ImageDeleteHandler}
-            
-            FnTagSetHandler={FnTagSetHandler}
-            fnTags={fnTags}
+                ReturnImg={ReturnImageList}
+                ImageAdd={ImageAddHandler}
+                ImageDelete={ImageDeleteHandler}
+                
+                FnTagSetHandler={FnTagSetHandler}
+                fnTags={fnTags}
 
-            Submit={OnSubmit}
+                Submit={OnSubmit}
             />
         </Fragment>
     );

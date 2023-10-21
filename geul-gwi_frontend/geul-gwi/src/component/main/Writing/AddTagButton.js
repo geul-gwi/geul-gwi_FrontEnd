@@ -32,7 +32,7 @@ const AddTagButton = (props) => {
                 {showTagList &&
                     <AddTagListContainer>
                         <AddTagListComponent
-                            FnTagSetHandler={props.FnTagSetHandler}
+                            FnTagSetHandler = {props.FnTagSetHandler}
                             onShowList={onShowList}
                             fnTags={props.fnTags}
                         />

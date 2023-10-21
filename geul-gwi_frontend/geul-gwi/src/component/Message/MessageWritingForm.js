@@ -15,33 +15,48 @@ const MessageWritingForm = ({ receiverSeq, receiverNickName }) => {
 
    // 메시지 전송 요청
    const sendMessage = () => {
-      if (message.title && message.content) {
-         const messageDTO = {
-            title: message.title,
-            content: message.content,
-            senderSeq: userSeq,
-            receiverSeq: receiverSeq, // 받는 사람의 고유 식별자
-         };
+      // 유효성 검사
+      //if (!CheckMessage()) return;
 
-         axios.post(`${axiosAddress}${receiverDeleteUrl}`, messageDTO, {
-               headers: {
-                  Authorization: `Bearer ${userToken}`
-               }
-         })
+      const messageDTO = {
+         title: message.title,
+         content: message.content,
+         senderSeq: userSeq,
+         receiverSeq: 2,
+      };
+
+      axios.post(`${axiosAddress}${receiverDeleteUrl}`, messageDTO, {
+         headers: {
+            Authorization: `Bearer ${userToken}`
+         }
+      })
          .then((response) => {
-            console.log('메시지가 전송 성공 : ', response);
+            console.log('메시지 전송 성공 : ', response);
             // 성공 후 메시지 입력란 초기화
             setMessage({ title: '', content: '' });
          })
          .catch((error) => {
             console.error('메시지 전송 실패:', error);
          });
+
+   };
+
+   // 쪽지 유효성 검사
+   const CheckMessage = () => {
+      if (message.content && message.title){
+         alert('쪽지를 작성해주세요.');
+         return false;
+      } 
+      else if (message.content.length > 250) {
+         alert('내용은 250자 이하로 작성해주세요.');
+         return false;
       }
+      return true;
    };
 
    return (
       <Container>
-         <Title>메시지</Title>
+         <Title>쪽지</Title>
          <RecipientInfo>
             <RecipientLabel>받는 사람:</RecipientLabel>
             <RecipientName>{receiverNickName}</RecipientName>
@@ -49,15 +64,16 @@ const MessageWritingForm = ({ receiverSeq, receiverNickName }) => {
          <Form>
             <Input
                type="text"
-               placeholder="제목을 입력하세요"
+               placeholder="제목을 입력하세요."
                value={message.title}
                onChange={(e) => setMessage({ ...message, title: e.target.value })}
             />
             <Textarea
-               placeholder="메시지를 입력하세요"
+               placeholder="내용을 입력하세요."
                value={message.content}
                onChange={(e) => setMessage({ ...message, content: e.target.value })}
             />
+            <CharCount>{message.content ? `${message.content.length} / 250자` : "0 / 250자"}</CharCount>
             <SendButton onClick={sendMessage}>전송</SendButton>
          </Form>
       </Container>
@@ -73,6 +89,7 @@ const Container = styled.div`
    border-radius: 10px;
    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
    background-color: white;
+   margin-bottom: 50px;
 `;
 
 const Title = styled.h2`
@@ -117,7 +134,7 @@ const Textarea = styled.textarea`
    border-radius: 5px;
    resize: vertical;
    width: 500px;
-   height: 300px;
+   height: 150px;
 `;
 
 const SendButton = styled.button`
@@ -130,6 +147,13 @@ const SendButton = styled.button`
    border: 1px solid #ccc;
    border-radius: 8px;
    cursor: pointer;
+`;
+
+const CharCount = styled.div`
+    font-size: 12px;
+    color: gray;
+    margin-top: 5px;
+    margin-bottom: 10px;
 `;
 
 export default MessageWritingForm;
