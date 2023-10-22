@@ -9,11 +9,15 @@ import SearchResultForm from 'component/Search/SearchResultForm'
 
 // Axios Address Context
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
+// Import Redux
+import { useSelector } from 'react-redux';
 
 
 const SearchForm = () => {
    // axios Address
    const axiosAddress = useContext(AxiosAddrContext).axiosAddr; // Axios Address
+   // User로그인 정보
+   const UserToken = useSelector((state) => state.authReducer.accessToken);
 
 
    // Api Mapping
@@ -24,6 +28,7 @@ const SearchForm = () => {
 
 
 
+   
    // ModelState
    const [ModalState, setModalState] = useState(false);
    const [ModalData, setModalData] = useState(null);
@@ -47,8 +52,15 @@ const SearchForm = () => {
       setModalState(false);
    }
 
-  useEffect(() => {
-    // 글 귀 리스트 요청
+   useEffect(() => {
+      // 글 귀 리스트 요청
+      const config = {
+         headers: {
+           'Authorization': 'Bearer YourAccessToken',
+         }
+       };
+
+
       console.log("axios post list : "+axiosAddress + postListApi);
       axios
       .get(axiosAddress + postListApi)
@@ -60,7 +72,7 @@ const SearchForm = () => {
       .catch((error) => {
          console.error(error);
       });
-  }, []);
+   }, []);
 
 
    // 글 귀 전체 리스트
