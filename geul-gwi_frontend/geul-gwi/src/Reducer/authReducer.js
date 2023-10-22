@@ -2,8 +2,8 @@
 
 // 초기 상태
 const initialState = {
-  accessToken: "eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE2OTcwMjE1MjYsImV4cCI6MTY5NzAyMjQyNiwic2VxIjoxfQ.c04y-tCED19vk-XROjLNKKDbqJmruDJD79e56vGx2J2SdGQHogQoqK9nDhmkzT0vKE47ykic23FTvzN8bUwoBg",
-  userSeq: 1,
+  accessToken: null,
+  userSeq: null,
   userProfile: null,
   userUserNickname: null
 };
@@ -52,6 +52,9 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         accessToken: null,
+        userSeq : null,
+        userProfile: null,
+        userUserNickname: null
       };
     case SETUSERSEQ:
       return {

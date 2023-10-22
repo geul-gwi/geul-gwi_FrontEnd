@@ -8,12 +8,12 @@ import { MdBreakfastDining } from 'react-icons/md';
 
 
 const itemList = []
-itemList.push({"name" : "탐색", "src" : "/icon/Navigation/search.svg", "target" : "/"});
+itemList.push({"name" : "탐색", "src" : "/icon/Navigation/search.svg", "target" : "/main/Search"});
 itemList.push({"name" : "홈", "src" : "/icon/Navigation/home.svg" , "target" : "/"})
 itemList.push({"name" : "알람", "src" : "/icon/Navigation/bell.svg" , "target" : "/alarm"})
 itemList.push({"name" : "팔로우", "src" : "/icon/Navigation/users.svg" , "target" : "/"})
 
-const Navigation = () => {
+const Navigation = (props) => {
     // navigate Object
     const navigate = useNavigate();
     // useState

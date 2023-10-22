@@ -71,7 +71,6 @@ const WrtchgAction = () => {
         
             return updatedPosts;
           });
-
     }
 
     // 모달창을 띄우는 함수

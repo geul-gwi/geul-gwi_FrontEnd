@@ -1,12 +1,12 @@
 import React from 'react';
 
 // import Component
-import SearchForm from 'component/Search/SearchForm'
+import SearchAction from 'component/Search/SearchAction'
 
 const SearchPage = () => {
     return (
         <>
-            <SearchForm />
+            <SearchAction />
         </>
     );
 };

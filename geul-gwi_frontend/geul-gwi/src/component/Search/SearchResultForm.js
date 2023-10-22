@@ -1,81 +1,71 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState} from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
-// Axios Address Context
-import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 
 // Component
 import ResultItem from 'component/Search/ResultItem';
-
-const SearchResultForm = () => {
-  const axiosAddress = useState(useContext(AxiosAddrContext).axiosAddr); // Axios Address
-  const postListApi = '/geulgwi/list'; // 글 귀 리스트 요청 api 주소
-
-  const initCount = 10; // 초기로 보여줄 아이템 수
-  const increment = 10; // "더 보기"를 클릭할 때 추가로 보여줄 아이템 수
-
-  // 글 귀 전체 리스트
-  const [posts, setPosts] = useState([
-    { "geulgwiSeq": "1", "nickname": "재희", "geulgwiContent": "삶이 있는 한 희망은 있다", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "2", "nickname": "재희", "geulgwiContent": "산다는것 그것은 치열한 전투이다. ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "3", "nickname": "재희", "geulgwiContent": "하루에 3시간을 걸으면 7년 후에 지구를 한바퀴 돌 수 있다.", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "4", "nickname": "쁨벙이", "geulgwiContent": "언제나 현재에 집중할수 있다면 행복할것이다.", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "5", "nickname": "세정", "geulgwiContent": "진정으로 웃으려면 고통을 참아야하며 , 나아가 고통을 즐길 줄 알아야 해", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "6", "nickname": "세정", "geulgwiContent": "직업에서 행복을 찾아라. 아니면 행복이 무엇인지 절대 모를 것이다 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "7", "nickname": "콩이", "geulgwiContent": "신은 용기있는자를 결코 버리지 않는다 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "8", "nickname": "콩이", "geulgwiContent": "피할수 없으면 즐겨라 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "9", "nickname": "세정", "geulgwiContent": "직업에서 행복을 찾아라. 아니면 행복이 무엇인지 절대 모를 것이다 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "10", "nickname": "콩이", "geulgwiContent": "신은 용기있는자를 결코 버리지 않는다 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "11", "nickname": "콩이", "geulgwiContent": "피할수 없으면 즐겨라 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "12", "nickname": "세정", "geulgwiContent": "직업에서 행복을 찾아라. 아니면 행복이 무엇인지 절대 모를 것이다 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "13", "nickname": "콩이", "geulgwiContent": "신은 용기있는자를 결코 버리지 않는다 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "14", "nickname": "콩이", "geulgwiContent": "피할수 없으면 즐겨라 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "15", "nickname": "세정", "geulgwiContent": "직업에서 행복을 찾아라. 아니면 행복이 무엇인지 절대 모를 것이다 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "16", "nickname": "콩이", "geulgwiContent": "신은 용기있는자를 결코 버리지 않는다 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "17", "nickname": "콩이", "geulgwiContent": "피할수 없으면 즐겨라 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "18", "nickname": "세정", "geulgwiContent": "직업에서 행복을 찾아라. 아니면 행복이 무엇인지 절대 모를 것이다 ", "regDate": "2020-10-14" },
-    { "geulgwiSeq": "19", "nickname": "콩이", "geulgwiContent": "신은 용기있는자를 결코 버리지 않는다 ", "regDate": "2020-10-14" },
-  ]);
-
-  const [visiblePosts, setVisiblePosts] = useState([]);
-
-  useEffect(() => {
-    // 글 귀 리스트 요청
-    axios
-      .get(axiosAddress + postListApi)
-      .then((response) => {
-        setPosts(response.data); // 가져온 데이터로 state 업데이트
-        setVisiblePosts(response.data.slice(0, initCount));
-      })
-      .catch((error) => {
-        console.error('글귀 리스트를 불러오는 중 오류가 발생했습니다: ', error);
-      });
-  }, []);
+import ModalPage from 'component/common/modal/ModalPage';
 
 
-  const handleLoadMore = () => {
-    const newVisiblePosts = posts.slice(0, visiblePosts.length + increment);
-    setVisiblePosts(newVisiblePosts);
-  };
+
+const SearchResultForm = (props) => {
+  // public Env => 정적인 이미지
+  const imagePath = process.env.PUBLIC_URL + '/img/';
+  const [data, setData] = useState(props.posts);
 
   return (
     <Container>
-      <p>{posts.length}개의 검색결과</p>
-      <Header>
-        <Num>번호</Num>
-        <Author>작성자</Author>
-        <Content>내용</Content>
-        <Date>날짜</Date>
-      </Header>
-      <ItemContainer>
-        {visiblePosts.map((item) => (
-          <ResultItem key={item.geulgwiSeq} data={item} />
-        ))}
-      </ItemContainer>
-      {visiblePosts.length < posts.length && (
-        <LoadMoreButton onClick={handleLoadMore}>더 보기</LoadMoreButton>
-      )}
+      {
+        data.map((element) => (
+              element.imgPath === null ?
+              // 이미지가 없는 경우
+              <Item onClick={() => props.ModalOpen(element)}>
+                <HoveredContainer>
+                  {/* 작성자 명 */}
+                  <HoveredContainer_tutor>
+                    {element.postUser}
+                  </HoveredContainer_tutor>
+                  {/* 작성 내용 */}
+                  <HoveredContainer_Content>
+                    {element.mainText}
+                  </HoveredContainer_Content>
+                </HoveredContainer>
+              </Item> 
+              :
+              // 이미지가 있는 경우
+              <Item onClick={() => props.ModalOpen(element)}>
+                {/* 글의 이미지 */}
+                <ItemImg src={imagePath + element.imgPath} alt={element.imgPath}></ItemImg>
+                <HoveredContainer>
+                  {/* 작성자 명 */}
+                  <HoveredContainer_tutor>
+                    {element.postUser}
+                  </HoveredContainer_tutor>
+                  {/* 작성 내용 */}
+                  <HoveredContainer_Content>
+                    {element.mainText}
+                  </HoveredContainer_Content>
+                </HoveredContainer>
+
+                <HoveredBack/>
+              </Item>
+        ))
+      }
+
+      {/* 모달 띄우기 */}
+      {
+        props.ModalState?
+        <ModalPage
+          ModalClosed={props.ModalClosed} // 모달 닫는 함수
+          ModalData={props.ModalData}     // 모달이 열릴 때, 전달할 Object State 함수
+          // likeBtnClick = {props.likeBtnClick} // 좋아요 처리 함수
+          // LikeCountConverter={props.LikeCountConverter}
+        />
+        :
+        ""
+      }
+       
     </Container>
   )
 };
@@ -83,7 +73,6 @@ const SearchResultForm = () => {
 const Container = styled.div`
   margin-top: 20px;
   display: flex;
-  flex-direction: column;
   width: 100%;
   height: auto;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -92,57 +81,82 @@ const Container = styled.div`
   user-select: none;
   padding: 20px;
   margin-bottom: 50px;
+
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap : 15px;
 `;
 
-const Header = styled.div`
-  display: flex;
+// 하나의 글
+const Item = styled.div`
+  position : relative;
+  display : flex;
+  width : 190px;
+  height : 190px;
+  border-radius : 12px;
+  background-color : white;
+  box-shadow: 1px 1px 10px 2px rgba(50,50,50,0.2);
+  overflow : hidden;
+
+  justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 30px;
-  border-bottom: 1px solid #ccc;
-`;
+  cursor : pointer;
+  transition : 0.3s;
 
-const Author = styled.p`
-  flex: 1;
-  padding-left: 10px;
-  font-weight:bold;
-`;
+  &:hover{
+    box-shadow : 10px 10px 10px 2px rgba(50,50,50,0.5);
+  }
+`
+const ItemImg = styled.img`
+  width : 100%;
+  height : 100%;
+  object-fit: cover;
+  object-position: center center;
+`
 
-const Num = styled.p`
-  flex: 0.5;
-  padding-left: 10px;
-  font-weight:bold;
-  
-`;
+// 하얀색 블라인드 배경
+const HoveredBack = styled.div`
+  position : absolute;
+  width : 100%;
+  height : 100%;
+  background-color: rgba(255,255,255,0.3);
+  z-index : 1;
+`
 
-const Date = styled.p`
-  font-size: 14px;
-  flex: 1;
-    font-weight:bold;
-    padding-left: 10px;
-`;
-
-const Content = styled.p`
-  flex: 4;
-    font-weight:bold;
-  font-size: 15px;
-  padding-left: 10px;
-`;
-
-const ItemContainer = styled.div`
-  display: flex;
+const HoveredContainer = styled.div`
+  display : flex;
+  position : absolute;
+  width : 90%;
+  max-height : 90%; height : auto;
+  z-index : 2;
   flex-direction: column;
-  align-items: center;
-  width: 100%;
-`;
+  justify-content : center;
+  align-items : flex-start;
+  gap : 10px;
+`
+const HoveredContainer_tutor = styled.div`
+  display : flex;
+  width : 100%;
+  height : 10px;
+  padding : 5px 0px 5px 0px;
+  font-size : 15px;
+  font-family: "Nanum Square";
+  font-style : "bold";
 
-const LoadMoreButton = styled.button`
-  margin: 10px 0;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: white;
-`;
+  justify-content: center;
+`
+const HoveredContainer_Content = styled.div`
+  display : flex;
+  width : 100%;
+  max-height : calc(100% - 10px); height : auto;
+  font-size : 13px;
+  font-family: "Nanum Square Round";
+  font-style : "normal";
+
+  justify-content: center;
+  text-align: center;
+`
+
 
 export default SearchResultForm;
