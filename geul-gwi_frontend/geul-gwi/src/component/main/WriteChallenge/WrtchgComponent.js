@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import SelectChg from 'component/main/WriteChallenge/SelectChallenge/SelectChg';
 import WrtChgInfo from 'component/main/WriteChallenge/WrtChgInfo/WrtChgInfo';
 import SortManager from './PostManager/SortManager';
-import ModalPage from './ModalPage';
+import ModalPage from 'component/common/modal/ModalPage';
 
 
 const WrtchgComponent = (props) => {
