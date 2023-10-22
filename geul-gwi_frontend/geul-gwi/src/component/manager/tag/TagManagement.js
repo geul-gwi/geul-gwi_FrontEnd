@@ -8,16 +8,16 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { TagButton } from 'component/common/button/Tag';
 
 const TagManagement = () => {
-  // Axios Address
   const AxiosAddress = useContext(AxiosAddrContext).axiosAddr;
-  const getTagListMapping = "/tag/admin/list"; 
-  const addTagApiMapping =  "/tag/register";
+  const getTagListMapping = "/tag/admin/list"; // 전체 태그 목록 요청 주소
+  const addTagApiMapping =  "/tag/register/"; // 태그 추가 요청 주소
+  const deleteTagUrl = "/tag/delete/"; // 태그 삭제 요청 주소
 
   // State 값 변수
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState('');
-  const [tagFontColor, setTagFontColor] = useState('#FBD929'); 
-  const [tagBackColor, setTagBackColor] = useState('white'); 
+  const [tagFontColor, setTagFontColor] = useState('white'); 
+  const [tagBackColor, setTagBackColor] = useState('#FBD929'); 
   // User 로그인 정보
   const UserSequence = useSelector((state) => state.authReducer.userSeq);
   const UserToken = useSelector((state) => state.authReducer.accessToken);
@@ -37,27 +37,31 @@ const TagManagement = () => {
 
   useEffect(() => {
     TagsRefresh(); // Tag목록 초기화
-    console.log(UserSequence);
-    console.log(UserToken);
   }, []);
 
   // Tags값 할당 or 재할당
   const TagsRefresh = () => {
-    axios.post(AxiosAddress + getTagListMapping)
+    axios.post(`${AxiosAddress}${getTagListMapping}`, {} ,{
+        headers: {
+          Authorization: "Bearer " + UserToken
+        },
+      })
       .then(response => {
-        console.log("load Request => ");  // response 찍어보기
         console.log(response);
         setTags(response.data); // 태그 목록 배열로 반환
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
   }
 
-
   // 태그 삭제
   const handleRemoveTag = async (tagSeq) => {
-    await axios.delete(AxiosAddress+`/tag/delete/${tagSeq}`);
+    await axios.delete(`${AxiosAddress}${deleteTagUrl}${tagSeq}`, {
+      headers: {
+        Authorization: "Bearer " + UserToken
+      },
+    });
     TagsRefresh();
   };
 
@@ -75,8 +79,7 @@ const TagManagement = () => {
         backColor: tagBackColor,
         value: tag,
       };
-      //console.log("태그 추가중 : "+newTag);
-      await axios.post(AxiosAddress + addTagApiMapping + `/${UserSequence}`, 
+      await axios.post(AxiosAddress + addTagApiMapping + `${UserSequence}`, 
         newTag,
         {
           headers : {
@@ -101,12 +104,11 @@ const TagManagement = () => {
         <TagsContainer>
           {tags.map(tag => (
             <TagButton
-              key={tag.value}
               fontColor={tag.fontColor}
               backColor={tag.backColor}
               onClick={() => handleRemoveTag(tag.tagSeq)}
             >
-              {tag.value} x
+              {'# '+ tag.value} x
             </TagButton>
           ))}
         </TagsContainer>
@@ -185,6 +187,7 @@ const Button = styled.div`
   padding: 8px 40px;
   cursor: pointer;
   margin-left: 10px;
+  margin-top: 10px;
   font-size: 15px;
 `;
 

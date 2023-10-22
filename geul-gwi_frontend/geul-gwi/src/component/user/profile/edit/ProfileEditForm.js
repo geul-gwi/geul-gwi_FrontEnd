@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 // Import Library
@@ -13,7 +13,7 @@ const ProfileEditForm = ({ userInfo }) => {
     const navigate = useNavigate();
     const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
     const userUpdateUrl = '/user/update/';
-
+    const userDeleteUrl = '/user/delete/';
     // User 로그인 정보
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
@@ -41,20 +41,23 @@ const ProfileEditForm = ({ userInfo }) => {
     const [accountDeletePassword, setAccountDeletePassword] = useState('');
 
     // 계정 삭제 요청
-    const handleDeleteAccount = async  () => {
+    const handleDeleteAccount = async () => {
         try {
             const data = {
-                password: accountDeletePassword, 
+                password: accountDeletePassword,
             };
 
-            const response = await axios.delete(`${axiosAddress}/user/delete/${userSeq}`, data);
+            const response = await axios.delete(`${axiosAddress}${userDeleteUrl}${userSeq}`, {
+                data,
+                headers: {
+                    Authorization: "Bearer " + userToken,
+                },
+            });
 
             if (response) {
                 alert('계정이 성공적으로 삭제되었습니다.');
                 navigate('/user/login');
-            } else {
-                alert('계정 탈퇴에 실패했습니다. 현재 비밀번호를 올바르게 입력하세요.');
-            }
+            } 
         } catch (error) {
             console.error('계정 탈퇴 실패', error);
             alert('계정 삭제에 실패했습니다. 서버 오류가 발생했습니다.');
@@ -81,21 +84,13 @@ const ProfileEditForm = ({ userInfo }) => {
                 userTagSeq: selectedTags ? selectedTags.map(tag => tag.tagSeq) : null, // 선택된 태그가 있을 때만 매핑
                 comment: newComment,
             };
-            //console.log("선택한 태그:" + selectedTags[0], selectedTags[1], selectedTags[2]);
-            //console.log("updateDTO 내의 userTagSeq:", updateDTO.userTagSeq);
 
             // 나머지 데이터를 JSON 문자열로 변환하여 FormData에 추가
-            //formData.append("updateDTO", JSON.stringify(updateDTO));
             formData.append("updateDTO", new Blob([JSON.stringify(updateDTO)], {type:"application/json"}));
-            // console.log("편집 적용 보낸 데이터:");
-            // // 데이터 확인을 위해 FormData 객체를 콘솔에 출력합니다.
-            // for (var pair of formData.entries()) {
-            //     console.log(pair[0], pair[1]);
-            // }
 
             const response = await axios.post(
                 `${axiosAddress}${userUpdateUrl}${userSeq}`,
-                formData, // 사진 파일은 FormData로 보냅니다
+                formData, // 사진 파일
                 {
                     headers: {
                         Authorization: "Bearer " + userToken,
@@ -103,14 +98,11 @@ const ProfileEditForm = ({ userInfo }) => {
                     },
                 }
             );
-
             if (response) {
                 console.log('프로필 편집 성공 : ', response);
-                navigate('/main/ProfilePage');
+                navigate('/main/Profile');
             }
-
         } catch (error) {
-            // 프로필 편집이 실패하면 오류 메시지를 출력
             console.log('프로필 편집 실패  : ', error);
         }
     };
@@ -125,7 +117,6 @@ const ProfileEditForm = ({ userInfo }) => {
             if (!CheckNewPassword()) return false;
             if (!CheckConfirmNewPassword()) return false;
         }
-
         return true;
     };
 
@@ -144,6 +135,9 @@ const ProfileEditForm = ({ userInfo }) => {
 
     // 소개 유효성 검사
     const CheckComment = () => {
+        if (!newComment)
+            return true;
+        
         if (newComment.length > 250) {
             setNewCommentError('소개는 250자 이하로 작성해주세요.')
             return false;

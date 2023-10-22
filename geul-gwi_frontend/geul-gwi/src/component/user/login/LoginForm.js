@@ -54,8 +54,8 @@ const LoginForm = () => {
                 dispatch(login(response.data.accessToken));
                 // User의 Sequence값을 전역으로 관리
                 dispatch(setuserseq(response.data.userSeq));
-                dispatch(setUserNickname(response.data.userNickname));
-                dispatch(setUserProfile(response.data.profile));
+                // dispatch(setUserNickname(response.data.userNickname));
+                // dispatch(setUserProfile(response.data.profile));
                 // 메인 페이지로 이동
                 navigate("/");
             })

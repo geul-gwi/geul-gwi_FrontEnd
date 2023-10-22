@@ -46,7 +46,7 @@ const ProfileEditTagForm = (props) => {
                         backColor={tag.backColor}
                         onClick={() => handleAddTag(tag)}
                     >
-                        {tag.value}
+                        {'# ' + tag.value}
                     </TagButton>
                 ))}
             </TagsContainer>

@@ -3,16 +3,20 @@ import styled from 'styled-components';
 import axios from 'axios';
 // Axios Address Context
 import { AxiosAddrContext } from 'contextStore/AxiosAddress'; 
+// Import Library
+import { useSelector } from 'react-redux'; // Redux 사용 Library
 // component
 import MemberItem from "./MemberItem";
 import MemberInfoForm from 'component/manager/member/MemberInfoForm'
 
 const MemberManagement = () => {
-  // Axios Address
   const axiosAddress = useContext(AxiosAddrContext).axiosAddr;  
-  // Api Mapping
-  const userListUrl = '/user/list';
-  const userDeleteUrl = '/user/admin/delete/';
+  const userListUrl = '/user/list'; // 회원 목록 조회 요청 주소
+  const userDeleteUrl = '/user/admin/delete/'; // 유저 삭제 요청 주소
+  const userDetailApi = '/user/detail/';
+  // User 로그인 정보
+  const userSeq = useSelector((state) => state.authReducer.userSeq);
+  const userToken = useSelector((state) => state.authReducer.accessToken);
 
   const PAGE_SIZE = 8; // 한 페이지에 보여줄 회원 수
 
@@ -23,15 +27,18 @@ const MemberManagement = () => {
 
   // 회원 목록 불러오기
   useEffect(() => {
-    console.log("회원 조회(전체) url 주소: " + axiosAddress + userListUrl);
-    axios.post(axiosAddress + userListUrl)
+    //console.log("회원 목록 요청 주소: ", `${axiosAddress}${userListUrl}`);
+    axios.get(`${axiosAddress}${userListUrl}`, {
+      headers: {
+        Authorization: "Bearer " + userToken
+      }
+    })
       .then(response => {
-        console.log("받은 응답 => "); 
-        console.log(response);
+        console.log("회원 목록 : ", response);
         setUsers(response.data);
       })
       .catch((error) => {
-        console.log('회원 목록을 가져오는 동안 오류 발생:', error);
+        console.error('회원 목록 불러오기 오류 :', error);
       });
   }, []);
 
@@ -66,8 +73,20 @@ const MemberManagement = () => {
   };
 
   const handleShowProfile = (userSeq) => {
-    setSelectedUser(userSeq);
-    setShowProfile(true);
+    // 유저 세부 정보 요청
+    axios.get(`${axiosAddress}${userDetailApi}${Number(userSeq)}`, {
+      headers: {
+        Authorization: "Bearer " + userToken
+      }
+    })
+      .then((response) => {
+        console.log(response);
+        setSelectedUser(response.data);
+        setShowProfile(true);
+      })
+      .catch((error) => {
+        console.error('회원 세부정보를 가져오는 동안 오류 발생:', error);
+      });
   };
 
   const handleHideProfile = () => {
@@ -87,10 +106,9 @@ const MemberManagement = () => {
           <ItemContainer>
             {paginatedUsers.map((user) => (
               <MemberItem
-                handleShowProfile={() => handleShowProfile(user)}
+                handleShowProfile={() => handleShowProfile(user.userSeq)}
                 user={user}
                 handleDelete={handleDelete}
-
                 handleHideProfile={handleHideProfile}
               />
             ))}
@@ -110,7 +128,7 @@ const MemberManagement = () => {
       </SubContainer>
       <SubContainer>
         {isShowProfile ?
-          <MemberInfoForm user={selectedUser} /> : null}
+          <MemberInfoForm selectedUser={selectedUser} /> : null}
       </SubContainer>
     </MainContainer>
   );

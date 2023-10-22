@@ -1,36 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const MemberInfoForm = ({ user }) => {
+const MemberInfoForm = (selectedUser) => {
   
   return (
     <Container>
-      <ProfileImage src={user.profile || '/img/defaultProfile.png'} />
+      <ProfileImage src={selectedUser.profile || '/img/defaultProfile.png'} />
       <Title>회원 정보</Title>
       <UserInfo>
         <InfoLabel>Role:</InfoLabel>
-        <InfoValue>{user.role}</InfoValue>
+        <InfoValue>{selectedUser.role}</InfoValue>
       </UserInfo>
       <UserInfo>
         <InfoLabel>아이디:</InfoLabel>
-        <InfoValue>{user.userId}</InfoValue>
+        <InfoValue>{selectedUser.userId}</InfoValue>
       </UserInfo>
       <UserInfo>
         <InfoLabel>닉네임:</InfoLabel>
-        <InfoValue>{user.nickname}</InfoValue>
+        <InfoValue>{selectedUser.nickname}</InfoValue>
       </UserInfo>
       <UserInfo>
         <InfoLabel>소개:</InfoLabel>
-        <InfoValue>{user.comment || '없음'}</InfoValue>
+        <InfoValue>{selectedUser.comment || '없음'}</InfoValue>
       </UserInfo>
       <TagContainer>
         <UserInfo>
           <InfoLabel>선택한 태그</InfoLabel>
         </UserInfo>
         <TagsContainer>
-          {user.tags && user.tags.map(tag => (
+          {selectedUser.tags && selectedUser.tags.map(tag => (
             <TagButton
-              key={tag.value}
               fontColor={tag.fontColor}
               backColor={tag.backColor}
             >

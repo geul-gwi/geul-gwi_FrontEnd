@@ -7,6 +7,7 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 // component
 import ProfilePostList from 'component/user/profile/ProfilePostList';
+import ImageService from 'service/imageService';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const Profile = () => {
     fetchUserProfile();
   }, []);
 
-    // 이미지 데이터를 가져오는 함수
+  // 이미지 데이터를 가져오는 함수
   const fetchImageData = async (path) => {
     try {
       const encodedPath = encodeURIComponent(path);
@@ -86,7 +87,7 @@ const Profile = () => {
     <>
       <ProfileContainer>
         <ProfilePicture
-          src={userInfo.profile}
+          src={userInfo.profile ? userInfo.profile : null || '/img/defaultProfile.png'}
           onClick={onProfileClick}
         />
         <ProfileInfo>
@@ -99,7 +100,7 @@ const Profile = () => {
                 fontColor={tag.fontColor}
                 backColor={tag.backColor}
               >
-                {tag.value}
+                {'# ' + tag.value}
               </TagButton>
             ))}
           </TagsContainer>

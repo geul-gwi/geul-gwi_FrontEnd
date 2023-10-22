@@ -1,25 +1,32 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 // Axios Address Context
 import { AxiosAddrContext } from 'contextStore/AxiosAddress'; // Axios Address Context
+// Import Library
+import { useSelector } from 'react-redux'; // Redux 사용 Library
 
 const MemberItem = (props) => {
-  const { user, handleShowProfile, handleDelete } = props;
+  const { handleDelete } = props;
   // Axios Address
   const axiosAddress = useContext(AxiosAddrContext).axiosAddr;  
+  // User 로그인 정보
+  const userSeq = useSelector((state) => state.authReducer.userSeq);
+  const userToken = useSelector((state) => state.authReducer.accessToken);
+
   // Api Mapping
   const userDetailApi = '/user/detail/';
 
   const handleClick = () => {
     // 유저 세부 정보 요청
-    const userSeqNumber = Number(user.userSeq);
-    //console.log("회원 세부 조회 url 주소: " `${axiosAddress}${userDetailApi}${userSeqNumber}`);
-    axios.post(`${axiosAddress}${userDetailApi}${userSeqNumber}`)
+    axios.get(`${axiosAddress}${userDetailApi}${props.user.UserSeq}`, {
+      headers: {
+        Authorization: "Bearer " + userToken
+      }
+    })
       .then((response) => {
-        console.log("load Request => "); 
         console.log(response);
-        handleShowProfile(response.data);
+        props.handleShowProfile(response.data);
       })
       .catch((error) => {
         console.error('회원 세부정보를 가져오는 동안 오류 발생:', error);
@@ -30,13 +37,13 @@ const MemberItem = (props) => {
     <Item>
       <Container>
         <ProfileImage
-          src={user.profile || '/img/defaultProfile.png'}
+          src={props.user.profile || '/img/defaultProfile.png'}
           onClick={handleClick}
         />
-        <UserName onClick={handleClick}>{user.nickname}</UserName>
+        <UserName onClick={handleClick}>{props.user.nickname}</UserName>
       </Container>
       <ButtonContainer>
-        <DeleteButton onClick={() => handleDelete(user.userSeq)}>삭제</DeleteButton>
+        <DeleteButton onClick={() => handleDelete(props.user.userSeq)}>삭제</DeleteButton>
       </ButtonContainer>
     </Item>
   )
