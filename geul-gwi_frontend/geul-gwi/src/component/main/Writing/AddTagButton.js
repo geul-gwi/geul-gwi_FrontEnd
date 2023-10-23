@@ -32,26 +32,26 @@ const AddTagButton = (props) => {
                 {showTagList &&
                     <AddTagListContainer>
                         <AddTagListComponent
-                            FnTagSetHandler = {props.FnTagSetHandler}
+                            FnTagSetHandler={props.FnTagSetHandler}
                             onShowList={onShowList}
                             fnTags={props.fnTags}
                         />
-                    </AddTagListContainer> 
+                    </AddTagListContainer>
                 }
             </AddTagFrame>
             {/* 선택한 태그 */}
             {!showTagList &&
-            <FnTagsShowContainer>
+                <FnTagsShowContainer>
                     {props.fnTags && props.fnTags.map((tag) => (
-                    <Tag
-                        fontColor={tag.fontColor}
-                        backColor={tag.backColor}
-                    >
-                        {`#${tag.value}`}
-                    </Tag>
-                ))
-                }
-            </FnTagsShowContainer>
+                        <Tag
+                            fontColor={tag.fontColor}
+                            backColor={tag.backColor}
+                        >
+                            {`#${tag.value}`}
+                        </Tag>
+                    ))
+                    }
+                </FnTagsShowContainer>
             }
         </Fragment>
     );
@@ -62,14 +62,13 @@ const AddTagFrame = styled.div`
     display : flex;
     width : 100%;
     height : 40px;
-
     justify-content : flex-start; 
     align-items: center;
     font-size : 20px;
     color : black;//#6F6A6A;
 `
 
-// 태그 추가하기 버튼 Frame - Leevl 1
+// 태그 추가 버튼 Frame - Leevl 1
 const ShowButton = styled.div`
     position : absolute;
     display : flex;
@@ -80,7 +79,8 @@ const ShowButton = styled.div`
     border-radius: 16px;
     background: #FFF;
     box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.25);
-    align-items: center; justify-content: space-between;
+    align-items: center; 
+    justify-content: space-between;
     cursor : pointer;
     transition : 0.2s;
     &:hover{    
@@ -89,20 +89,19 @@ const ShowButton = styled.div`
 `
 // 태그 추가하는 영억 - Level 1
 const AddTagListContainer = styled.div`
-    position : absolute; display : flex;
+    position : absolute; 
+    display : flex;
     width : 100%;
-    min-height : 300px; height : auto;
-    top : 50px; right : 0px;
+    min-height : 300px; 
+    height : auto;
+    top : 50px; 
+    right : 0px;
     padding : 0px 0px 10px 0px;
-
     border-radius : 12px;
     box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.25);
     background-color : white;
-
     justify-content: center;
 `
-
-
 
 // 태그 추가하기 버튼 - 텍스트 Container - Level 2
 const ButtonTextContainer = styled.div`
@@ -135,15 +134,6 @@ const FnTagsShowContainer = styled.div`
     justify-content: flex-end;
     align-items : center;
     gap : 5px;
-`
-const FnTagItem = styled.div`
-    display : flex;
-    min-width : 20px; width : auto;
-    padding : 5px 10px 5px 10px;
-    font-size : 14px;color : white;
-    justify-content : center; align-items : center;
-    border-radius : 12px;
-    background-color : #B5B5B5;
 `
 
 export default AddTagButton;

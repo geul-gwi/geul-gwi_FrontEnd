@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const ImageUploadForm = (props) => {
     let WritingIconPath = process.env.PUBLIC_URL + "/icon/Writing/"; 
     const [urlImageList, setUrlImageList] = useState([]);
+    
     const handleImageChanged = (e) => {
         props.imageAddHandler(e);   
     }
@@ -15,7 +16,6 @@ const ImageUploadForm = (props) => {
     useEffect(() => {
         const getImageUrlList = props.returnImageList();
         setUrlImageList(getImageUrlList);
-        //console.log("image added");
     },[handleImageChanged]);
 
     return (
@@ -43,7 +43,7 @@ const ImageUploadForm = (props) => {
                             <ItemContainer>
                                 <StyledImg 
                                     key={`${idx}-${image}`} 
-                                    src={image} 
+                                    src={URL.createObjectURL(image)} 
                                     alt={`${idx}-${image}`}
                                 />
                                 <DeleteImage 

@@ -1,9 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-// css import
-//import 'css/main/Writing/WritingForm.css'
-
 const WritingForm = (props) => {
     return (
         <FormContainer>
@@ -13,9 +10,9 @@ const WritingForm = (props) => {
                 <FormNamelabel id="FormNameLabel" for={"FormName"}>글 제목</FormNamelabel>
             </FormNameInputContainer> */}
             <ContentArea 
-                class="main-writingform-textarea" 
+                //class="main-writingform-textarea" 
                 name="opinion"
-                placeholder="여기에 글 귀를 남겨주세요" 
+                placeholder="글 귀를 남겨주세요." 
                 required={true} 
                 onChange={(e) => props.FormMainTextChange(e)}
             >
@@ -37,10 +34,11 @@ const FormContainer = styled.form`
 
 // 글 작성 입력하는 textarea
 const ContentArea = styled.textarea`
-    width : 100%;
-    height : 450px;
+    width : 95%;
+    height : 300px;
     border-radius : 12px;
-    padding: 10px;
+    padding: 15px;
+    font-size: 15px;
 `
 // just frame = input태그 스타일의 기반이 되는 Container Frame
 // const InputFrame = styled.div`

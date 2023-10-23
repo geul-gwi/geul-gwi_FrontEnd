@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'; // Redux 사용 Library
 const HeaderUserMenu = () => {
     const navigate = useNavigate();
     // 유저 로그인 정보
+    const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userNickname = useSelector((state) => state.authReducer.userNickname);
     const userProfile = useSelector((state) => state.authReducer.userProfile);
     const [isButtonHidden, setIsButtonHidden] = useState(false);
@@ -20,6 +21,11 @@ const HeaderUserMenu = () => {
             navigate(path);
     };
 
+    const onClickProfile = () => {
+        navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
+    };
+
+
     return (
         
         <MenuContainer>
@@ -31,7 +37,7 @@ const HeaderUserMenu = () => {
             {isButtonHidden && (
                 <MenuButtonContainer>
                     <MenuButtonManager>
-                        <MenuItem onClick={() => onLiClicked('/main/Profile')}>
+                        <MenuItem onClick={() => onClickProfile()}>
                             프로필
                         </MenuItem>
                         <MenuItem onClick={() => onLiClicked('/')}>
@@ -41,9 +47,7 @@ const HeaderUserMenu = () => {
                     </MenuButtonManager>
                 </MenuButtonContainer>
             )}
-        
         </MenuContainer>
-        
     );
 };
 

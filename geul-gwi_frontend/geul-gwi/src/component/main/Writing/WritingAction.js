@@ -9,16 +9,13 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 const WritingAction = () => {
-    const AxiosAddress = useContext(AxiosAddrContext).axiosAddr; // Axios Address
-    // Axios Mapping 
-    const WritingApi = "/geulgwi/register/";
-    // User 로그인 정보
-    const UserSequence = useSelector((state) => state.authReducer.userSeq);
-    const UserToken = useSelector((state) => state.authReducer.accessToken);
+    const { axiosAddr } = useContext(AxiosAddrContext);
+    const { userSeq, accessToken } = useSelector((state) => state.authReducer);
+    const writingUrl = "/geulgwi/register/"; // 글 작성 요청 주소
     // State
-    const [FormMainText,setFormMainText] = useState(''); // 본문의 내용을 담는 State
-    const [fnTags,setFnTags] = useState([]); // 최종적으로 선택된 태그를 담는 List State 
-    const [urlImages,setUrlImages] = useState([]); // Url로 변환된 이미지 주소 Array
+    const [FormMainText, setFormMainText] = useState(''); // 본문의 내용을 담는 State
+    const [fnTags, setFnTags] = useState([]); // 최종적으로 선택된 태그를 담는 List State 
+    const [urlImages, setUrlImages] = useState([]); // Url로 변환된 이미지 주소 Array
 
     // Handler
     const FormMainTextHandler = (e) => {
@@ -26,86 +23,78 @@ const WritingAction = () => {
     };
 
     // Function
-    // 이미지
-     // 하위 컴포넌트에서 이미지 리스트의 최신정보를 받기 위함
-     const ReturnImageList = () => {
+    // 하위 컴포넌트에서 이미지 리스트의 최신정보를 받기 위함
+    const ReturnImageList = () => {
         return urlImages;
     }
-    // Function : 이미지 상대경로 저장
+
+    // 이미지 추가 - 상대 경로 저장
     const ImageAddHandler = (event) => {
         const selectedImages = event.target.files;
-        let imageUrlList = [...urlImages];
-        for (let i = 0; i < selectedImages.length; i++){
-            // const currentImageUrl = URL.createObjectURL(selectedImages[i]);
-            imageUrlList.push(selectedImages[i]);
-        }
-        // 이미지 갯수 제한 3개 => 3개 이외에는 slice로 짤려서 안들어감
-        if (imageUrlList.length > 3){
-            imageUrlList = imageUrlList.slice(0,3);
-        }
-        // urlImage 배열에 값 재할당
-        setUrlImages(imageUrlList);
-    }
-    // Function : 이미지 삭제
-    const ImageDeleteHandler = (idx) => {
-        setUrlImages(urlImages.filter( (_, index) => index !== idx ));
-        console.log(idx);
+        // 이미지 개수 제한 3개
+        let imageUrlList = Array.from(selectedImages).slice(0, 3);
+        setUrlImages((prevImages) => [...prevImages, ...imageUrlList]);
     }
 
-    // 태그
-    // 태그 설정 Handler
+    // 이미지 삭제
+    const ImageDeleteHandler = (idx) => {
+        setUrlImages(urlImages.filter((_, index) => index !== idx));
+        //console.log(idx);
+    }
+
     // 태그 선택 후 완료 버튼 누르면 호출
     const FnTagSetHandler = (taglist) => {
         console.log("선택한 태그 :", taglist);
         setFnTags(taglist);
     }
 
-    // 글 작성 완료 버튼
-    const OnSubmit = async() => {
-        const formData = new FormData();
-        const geulgwiRegDTO = {
-            geulgwiContent: FormMainText,
-            tagSeqs: fnTags.map(tag => tag.tagSeq),
-        };
+    // 글 작성 완료 버튼 클릭
+    const OnSubmit = async () => {
+        try {
+            const geulgwiRegDTO = {
+                geulgwiContent: FormMainText,
+                tagSeqs: fnTags.map(tag => tag.tagSeq),
+            };
 
-        formData.append("geulgwiRegDTO", new Blob([JSON.stringify(geulgwiRegDTO)], { type: "application/json" }));
-        urlImages.map(image => formData.append("files", image));  // urlImages 배열의 요소를 formData에 추가
-        
-        // 데이터 확인을 위해 FormData 객체를 콘솔에 출력합니다.
-        // console.log("글 작성 요청 formData :");
-        // for (var pair of formData.entries()) {
-        //     console.log(pair[0], pair[1]);
-        // }
-
-        //console.log("요청한 주소 : " + `${AxiosAddress}${WritingApi}${UserSequence}`);
-        await axios.post(`${AxiosAddress}${WritingApi}${UserSequence}`,
-            formData,
-            {
-                headers: {
-                    Authorization: "Bearer " + UserToken,  // 토큰 넣어주기
-                    'Content-Type': 'multipart/form-data',  // 데이터 형식 지정
-                },
+            const formData = new FormData();
+            formData.append("geulgwiRegDTO", new Blob([JSON.stringify(geulgwiRegDTO)], { type: "application/json" }));
+            
+            // 사진이 존재할 때만 formData에 추가
+            if (urlImages.length > 0) {
+                urlImages.forEach(image => formData.append("files", image));
             }
-        )
-        .then((response) => {
-            console.log("글 작성 완료 : ", response);
-        }).catch((error) => {
-            console.error("글 작성 실패 : ", error);
-        })
+            // else
+            // {
+            //     formData.append("files", null);
+            // }
+
+            // FormData의 내용을 콘솔에 출력
+            formData.forEach((value, key) => {
+                console.log(key, value);
+            });
+
+            const response = await axios.post(`${axiosAddr}${writingUrl}${userSeq}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            console.log("글 작성 완료: ", response);
+        } catch (error) {
+            console.error("글 작성 실패: ", error);
+        }
     }
 
     return (
         <Fragment>
-            <WritingComponent 
+            <WritingComponent
                 FormMainTextChange={FormMainTextHandler}
-
                 ReturnImg={ReturnImageList}
                 ImageAdd={ImageAddHandler}
                 ImageDelete={ImageDeleteHandler}
-                
                 FnTagSetHandler={FnTagSetHandler}
                 fnTags={fnTags}
-
                 Submit={OnSubmit}
             />
         </Fragment>

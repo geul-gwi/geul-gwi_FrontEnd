@@ -3,27 +3,26 @@ import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
-// Import Library
 import { useSelector } from 'react-redux'; // Redux 사용 Library
-// component
 import ProfilePostList from 'component/user/profile/ProfilePostList';
-import ImageService from 'service/imageService';
+import { Tag } from 'component/common/button/Tag'
+import { Button } from 'component/common/button/Button'
 
-const Profile = () => {
+// profileUserSeq => 보여줄 유저의 프로필 시퀀스
+const Profile = ({profileUserSeq}) => {
   const navigate = useNavigate();
-  const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
-  const userDetailUrl = '/user/detail/'; 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userInfo, setUserInfo] = useState({}); // 유저 프로필 정보
-  // 유저 로그인 정보
+  const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
   const userSeq = useSelector((state) => state.authReducer.userSeq);
   const userToken = useSelector((state) => state.authReducer.accessToken);
-  
+  const userDetailUrl = '/user/detail/'; // 유저 세부 정보 불러오기 요청 주소
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState({}); // 유저 프로필 정보
+
   useEffect(() => {
     async function fetchUserProfile() {
       try {
-        //console.log('요청 주소 : ', `${axiosAddress}${userDetailUrl}${userSeq}`);
-        const response = await Axios.get(`${axiosAddress}${userDetailUrl}${userSeq}`, {
+        const response = await Axios.get(`${axiosAddr}${userDetailUrl}${profileUserSeq}`, {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },
@@ -47,7 +46,7 @@ const Profile = () => {
   const fetchImageData = async (path) => {
     try {
       const encodedPath = encodeURIComponent(path);
-      const response = await Axios.get(`${axiosAddress}/file?file=${encodedPath}`, {
+      const response = await Axios.get(`${axiosAddr}/file?file=${encodedPath}`, {
         responseType: 'blob',
       });
 
@@ -95,16 +94,14 @@ const Profile = () => {
           <CommentText>{userInfo.comment}</CommentText>
           <TagsContainer>
             {userInfo.tags && userInfo.tags.map(tag => (
-              <TagButton
-                key={tag.value}
-                fontColor={tag.fontColor}
-                backColor={tag.backColor}
-              >
+              <Tag fontColor={tag.fontColor} backColor={tag.backColor}>
                 {'# ' + tag.value}
-              </TagButton>
+              </Tag>
             ))}
           </TagsContainer>
-          <EditButton onClick={onEditClick}>프로필 편집</EditButton>
+          {userSeq === profileUserSeq && (
+            <Button onClick={onEditClick}>프로필 편집</Button>
+          )}
         </ProfileInfo>
         {isModalOpen && (
           <ModalOverlay onClick={closeModal}>
@@ -114,9 +111,11 @@ const Profile = () => {
           </ModalOverlay>
         )}
       </ProfileContainer>
-      <ProfilePostList
-        nickname={userInfo.nickname}
-        comment={userInfo.comment}
+      <ProfilePostList 
+          profileUserSeq={profileUserSeq} 
+          profile={userInfo.profile} 
+          nickname={userInfo.nickname} 
+          comment={userInfo.comment}
       />
     </>
   );
@@ -142,27 +141,14 @@ const TagsContainer = styled.div`
     margin: 20px;
 `;
 
-const TagButton = styled.button`
-    background-color: ${props => props.backColor};
-    color: ${props => props.fontColor};
-    border: none;
-    border-radius: 20px;
-    padding: 8px 15px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
-    transition: all 0.3s ease-in-out;
-`;
-
 const ProfilePicture = styled.img`
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     cursor: pointer;
     object-fit: cover;
-    border: 1px solid gray;
+    border: 1px solid #ccc;
+    
     &:hover {
       transform: scale(1.1);
       transition: transform 0.2s ease-in-out;
@@ -176,25 +162,13 @@ const ProfileInfo = styled.div`
     margin-top: 20px;
 `;
 
-const EditButton = styled.div`
-    padding: 10px 50px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-    cursor: pointer;
-    &:hover {
-      background-color: #f2f2f2;
-    }
-`;
-
 const NameText = styled.p`
     margin: 10px 0;
-    font-size: 25px;
+    font-size: 22px;
 `;
 
 const CommentText = styled.p`
     margin: 0px;
-    margin-bottom: 15px;
     color: grey;
 `;
 

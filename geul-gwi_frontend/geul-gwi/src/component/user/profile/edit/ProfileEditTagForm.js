@@ -41,7 +41,6 @@ const ProfileEditTagForm = (props) => {
             <TagsContainer>
                 {tags && tags.map(tag => (
                     <TagButton
-                        key={tag.value}
                         fontColor={tag.fontColor}
                         backColor={tag.backColor}
                         onClick={() => handleAddTag(tag)}
@@ -54,8 +53,8 @@ const ProfileEditTagForm = (props) => {
             <TagsContainer>
                 <SelectedTagsList>
                     {props.selectedTags && props.selectedTags.map(tag => (
-                        <SelectedTag key={tag.value}>
-                            {tag.value}
+                        <SelectedTag>
+                            {'# ' + tag.value}
                             <RemoveTagButton onClick={() => handleRemoveTag(tag)}>x</RemoveTagButton>
                         </SelectedTag>
                     ))}

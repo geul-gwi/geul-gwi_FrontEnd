@@ -7,7 +7,7 @@ export const TagButton = styled.button`
     border-radius: 20px;
     padding: 8px 15px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 13px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -26,12 +26,8 @@ export const Tag = styled.div`
     color: ${props => props.fontColor};
     border: none;
     border-radius: 20px;
-    padding: 8px 15px;
-    cursor: pointer;
-    font-size: 15px;
-    display: flex;
+    padding: 8px 17px;
+    font-size: 12px;
     align-items: center;
-    justify-content: space-between;
     position: relative;
-    transition: all 0.3s ease-in-out;
 `;

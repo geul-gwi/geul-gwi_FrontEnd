@@ -7,6 +7,7 @@ import 'css/main/Writing/AddTagListComponent.css';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 // Axios Address Context
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
+import { Tag, TagButton } from 'component/common/button/Tag'
 
 const AddTagListComponent = (props) => {
     const axiosAddress = useContext(AxiosAddrContext).axiosAddr;  // Axios Address
@@ -18,18 +19,18 @@ const AddTagListComponent = (props) => {
 
     const [selectedMenu, setSelectedMenu] = useState(true); // 태그 선택 폼 On/Off
     const [defaultTags, setDefaultTags] = useState([]); // DEFAULT 전채 태그
-    const [selectedTags, setSelectedTags] = useState(props.fnTags? props.fnTags : []); // 선택한 태그 목록
+    const [selectedTags, setSelectedTags] = useState(props.fnTags ? props.fnTags : []); // 선택한 태그 목록
 
     // 사용자가 추가 중인 태그 정보 변수들
     const [tagValue, setTagValue] = useState('');
-    const [tagFontColor, setTagFontColor] = useState('white'); 
-    const [tagBackColor, setTagBackColor] = useState('#FBD929'); 
+    const [tagFontColor, setTagFontColor] = useState('white');
+    const [tagBackColor, setTagBackColor] = useState('#FBD929');
 
     // DEFAULT 전채 태그 불러오기
     useEffect(() => {
         axios.post(`${axiosAddress}${defaultTagUrl}`)
             .then(response => {
-                setDefaultTags(response.data); 
+                setDefaultTags(response.data);
             })
             .catch(error => {
                 console.log(error);
@@ -40,20 +41,18 @@ const AddTagListComponent = (props) => {
     const InputTagHandler = (e) => {
         setTagValue(e.target.value);
     }
-    
+
     // 유저가 직접 입력한 태그 Enter 이벤트 처리
     const OnEnterPress = (e) => {
-        if (e.key !== 'Enter')
-        {
+        if (e.key !== 'Enter') {
             return;
-        } 
+        }
         if (tagValue.trim() === '') {
             alert('태그를 입력하세요.');
             return;
         }
 
         // 사용자 지정 태그는 서버에 바로 요청 넣어서 시퀀스 값 받는다.
-        // 그리고 글 작성하면서 tagSeq 값 리스트로 보내주면 된다.
 
         const userAddTag = {
             fontColor: tagFontColor,
@@ -74,27 +73,23 @@ const AddTagListComponent = (props) => {
 
             }).catch((error) => {
                 console.error("사용자 지정 태그 추가 실패", error);
-            })    
+            })
     }
 
     // 선택한 태그 추가 Handler
     const TagAddHandler = (tag) => {
         // 선택 개수 3개 제한
-        if (selectedTags.length >= 3) 
-        {
+        if (selectedTags.length >= 3) {
             alert('태그는 최대 3개까지 선택 가능합니다.');
             return;
         }
         // 이미 추가한 태그인지 유효성 검사
-        if (selectedTags.some(selectedTag => selectedTag.value === tag.value))
-        {
+        if (selectedTags.some(selectedTag => selectedTag.value === tag.value)) {
             alert('이미 선택한 태그입니다.');
             return;
         }
 
-        let prevList = [...selectedTags];
-        prevList.push(tag);
-        setSelectedTags(prevList);
+        setSelectedTags([...selectedTags, tag]);
     }
 
     // 선택된 태그 삭제 Handler
@@ -125,34 +120,33 @@ const AddTagListComponent = (props) => {
                 <TagMenuItemContainer><TagMenuItem onClick={() => { setSelectedMenu(false) }}>사용자 지정</TagMenuItem></TagMenuItemContainer>
             </TagMenuContainer>
             {/* 메뉴에 따라 보여주는 콘텐츠가 다름 => 지정된태그 or 사용자지정 */}
-            { selectedMenu ?
-                    <ExistTagList>
-                        <SmallTitle_Container>사용할 태그를 선택해주세요</SmallTitle_Container>
-                        <ExistTagListItemContainer>
-                            {defaultTags && defaultTags.map((tag, idx) => (
-                                    <TagButton
-                                        key={idx}
-                                        fontColor={tag.fontColor}
-                                        backColor={tag.backColor}
-                                        onClick={() => TagAddHandler(tag)}
-                                    >
-                                        {'#' + tag.value}
-                                    </TagButton>
-                                ))
-                            }
-                        </ExistTagListItemContainer>
-                    </ExistTagList>
-                    :
-                    <UserChooseTagList>
-                        <SmallTitle_Container>원하는 태그를 설정해주세요</SmallTitle_Container>
-                        <UserChooseInputContainer>
-                            <UserChooseStyledInput
-                                type='text'
-                                placeholder="최대 10자 가능합니다."
-                                onChange={(e) => InputTagHandler(e)}
-                                onKeyPress={(e) => OnEnterPress(e)}
-                            />
-                        </UserChooseInputContainer>
+            {selectedMenu ?
+                <ExistTagList>
+                    <SmallTitle_Container>사용할 태그를 선택해주세요</SmallTitle_Container>
+                    <ExistTagListItemContainer>
+                        {defaultTags && defaultTags.map((tag) => (
+                            <Tag
+                                fontColor={tag.fontColor}
+                                backColor={tag.backColor}
+                                onClick={() => TagAddHandler(tag)}
+                            >
+                                {'# ' + tag.value}
+                            </Tag>
+                        ))
+                        }
+                    </ExistTagListItemContainer>
+                </ExistTagList>
+                :
+                <UserChooseTagList>
+                    <SmallTitle_Container>원하는 태그를 설정해주세요</SmallTitle_Container>
+                    <UserChooseInputContainer>
+                        <UserChooseStyledInput
+                            type='text'
+                            placeholder="최대 10자 가능합니다."
+                            onChange={(e) => InputTagHandler(e)}
+                            onKeyPress={(e) => OnEnterPress(e)}
+                        />
+                    </UserChooseInputContainer>
                     <ColorPickerContainer>
                         <Title>태그 글자 색상</Title>
                         <ColorPicker
@@ -167,21 +161,28 @@ const AddTagListComponent = (props) => {
                             onChange={onTagBackColorChange}
                         />
                     </ColorPickerContainer>
-                    </UserChooseTagList>
+                    <SelectedTagsPreview>
+                        <SelectedTagsContainer>
+                            <Tag fontColor={tagFontColor} backColor={tagBackColor}>
+                                {'# ' + tagValue}
+                            </Tag>
+                        </SelectedTagsContainer>
+                    </SelectedTagsPreview>
+                </UserChooseTagList>
             }
             <SelectedTagContainer>
                 <SmallTitle_Container>선택된 태그</SmallTitle_Container>
                 <SelectedTagItemContainer>
                     {selectedTags && selectedTags.map((tag, idx) => (
                         <TagButton
-                                key={idx}
-                                fontColor={tag.fontColor}
-                                backColor={tag.backColor}
-                                onClick={() => SeletedTagDeleteHandler(idx)}
-                            >
+                            key={idx}
+                            fontColor={tag.fontColor}
+                            backColor={tag.backColor}
+                            onClick={() => SeletedTagDeleteHandler(idx)}
+                        >
                             {'#' + tag.value}
                         </TagButton>
-                        ))
+                    ))
                     }
                 </SelectedTagItemContainer>
             </SelectedTagContainer>
@@ -376,29 +377,6 @@ const SelectedButton = styled.div`
         box-shadow: ${props => props.selected ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none'};
     }
 `
-
-// 재희가 만든 태그 버튼 (모든 태그가 사용함)
-const TagButton = styled.div`
-    background-color: ${props => props.backColor};
-    color: ${props => props.fontColor};
-    border: none;
-    border-radius: 20px;
-    padding: 8px 15px;
-    cursor: pointer;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
-    transition: all 0.3s ease-in-out;
-
-    &:hover {
-        background-color: ${props => props.selected ? props.backColor : '#f0f0f0'};
-        transform: translateY(-2px);
-        box-shadow: ${props => props.selected ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none'};
-    }
-`
-
 const CompleteButtonContainer = styled(ContainerFrame)`
     display : flex;
     height : 30px;
@@ -447,5 +425,18 @@ const Title = styled.span`
     font-size: 12px;
 `;
 
+// 미리보기
+const SelectedTagsPreview = styled(ContainerFrame)`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+`;
+
+const SelectedTagsContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+`;
 
 export default AddTagListComponent;

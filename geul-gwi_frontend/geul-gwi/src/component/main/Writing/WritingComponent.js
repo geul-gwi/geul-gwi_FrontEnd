@@ -11,21 +11,19 @@ const WritingComponent = (props) => {
         <Frame>
             <FlexFrame>
                 {/* Component Name TItle */}
-                <TitleContainer style={{marginBottom : '50px'}}>
-                    <ComponentName>
-                        글 작성
-                    </ComponentName>
+                <TitleContainer style={{ marginBottom: '30px' }}>
+                    <ComponentName>글 작성</ComponentName>
                     <ComponentIntro>
-                        사람들에게 당신의 <span style={{color : '#FD7474'}}>영향</span>을 전파하세요
+                        사람들에게 당신의 <span style={{ color: '#FD7474' }}>영향</span>을 전파하세요
                     </ComponentIntro>
                 </TitleContainer>
-                <WritingForm 
+                <WritingForm
                     FormNameChange={props.FormNameChange}   // Writing Action의 FormName Handler넘겨주기
                     FormMainTextChange={props.FormMainTextChange}   // Writing Action의 FormMainTtext Handler넘겨주기
                 />
                 {/* 이미지 업로드 하는 Component에 Handler 넘겨주기 */}
-                <ImageUploadForm 
-                    style={{marginBottom : '20px'}}
+                <ImageUploadForm
+                    style={{ marginBottom: '20px' }}
                     returnImageList={props.ReturnImg}
                     imageAddHandler={props.ImageAdd}
                     imageDeleteHandler={props.ImageDelete}
@@ -42,21 +40,20 @@ const WritingComponent = (props) => {
         </Frame>
     );
 };
+
 // Frame
 const Frame = styled.div`
     position : relative;
     display : flex;
     width : 100%;
     //min-height : 700px;
-
     background-color : white;
     border-radius : 16px;
-
     justify-content : center;
     padding-top: 20px; 
     padding-bottom: 20px;
-
     user-select: none;
+    margin-bottom: 80px;
 `
 
 const FlexFrame = styled.div`
@@ -82,8 +79,8 @@ const TitleContainer = styled.div`
 `
 
 // level 2
-    // Title Contanier
-    const ComponentName = styled.div`
+// Title Contanier
+const ComponentName = styled.div`
         width : 100%;
         min-height : 20px;
         height : auto;
@@ -91,9 +88,8 @@ const TitleContainer = styled.div`
         font-family: "Nanum Square";
         font-style : "bold";
     `
-    const ComponentIntro = styled.div`
+const ComponentIntro = styled.div`
         width : 100%;
-        min-height : 10px;
         height : auto;
         font-size : 14px;
         color : #BCBABA;
@@ -108,14 +104,17 @@ const SubmitContainer = styled.div`
     align-items : end;
 `
 
+// 작성 버튼
 const SubmitBtn = styled.div`
     display : flex;
     width : 100px;
     height : 30px;
     border-radius : 12px;
     background-color : #FF9E9E;
-    justify-content : center; align-items : center;
-    font-size : 14px; color : white;
+    justify-content : center; 
+    align-items : center;
+    font-size : 14px; 
+    color : white;
     box-shadow : 1px 1px 8px 0px #B5B5B5;
     cursor : pointer;
 
