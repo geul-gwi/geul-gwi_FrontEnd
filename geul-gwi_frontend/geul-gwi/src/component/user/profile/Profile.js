@@ -30,10 +30,12 @@ const Profile = ({profileUserSeq}) => {
 
         setUserInfo(response.data);
         //console.log('바디 : ', response.data);
-        //console.log('프로필 : ', response.data.profile);
+        console.log('처음에 받은 프로필 : ', response.data.profile);
 
         // 이미지 가져오는 함수를 호출
         fetchImageData(response.data.profile);
+
+       
         
       } catch (error) {
         console.log('프로필 불러오기 실패:', error);
@@ -58,6 +60,8 @@ const Profile = ({profileUserSeq}) => {
           setUserInfo((prevUserInfo) => {
             return { ...prevUserInfo, profile: profileImageUrl };
           });
+
+          console.log('서버에서 받은 주소 겟 요청 응답 : ', response.data);
         };
         reader.readAsDataURL(newFile);
       }

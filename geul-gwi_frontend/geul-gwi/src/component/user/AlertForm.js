@@ -1,41 +1,64 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Axios from 'axios';
 import styled from 'styled-components';
-import axios from 'axios';
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
+import { useSelector } from 'react-redux'; // Redux 사용 Library
 import AlertBox from "component/user/AlertBox";
 
-const generateAlertMessage = (type, commentText) => {
-    switch (type) {
-        case 'like':
-            return '님이 회원님의 게시물을 좋아합니다.';
-        case 'follow':
-            return '님이 회원님을 팔로우하기 시작했습니다.';
-        case 'comment':
-            return `님이 댓글을 남겼습니다: ${commentText}`;
-        default:
-            return '알 수 없는 알림 타입';
-    }
-};
+const TYPE = {};
+TYPE['FRIEND'] = 'friendSeq';
+TYPE['MESSAGE'] = 'meesageSeq';
+TYPE['GEULGWI'] = 'geulgwiSeq';
+TYPE['LIKE_GEULGWI'] = 'geulgwiLikeSeq';
+TYPE['CHALLENGE'] = 'challenge';
+TYPE['LIKE_CHALLENGE'] = 'challengeLickSeq';
 
 const AlertForm = () => {
-    const [alertData, setAlertData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
+    const userSeq = useSelector((state) => state.authReducer.userSeq);
+    const userToken = useSelector((state) => state.authReducer.accessToken);
+    const noticeListUrl = '/notice/list/'; // 유저 세부 정보 불러오기 요청 주소
+
+    const [noticeList, setNoticeList] = useState();
 
     useEffect(() => {
-        axios.get('/api/alertData') 
-            .then((response) => {
-                setAlertData(response.data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error('데이터 불러오기 실패:', error);
-                setLoading(false);
-            });
+        async function fetchUserProfile() {
+            try {
+                const response = await Axios.get(`${axiosAddr}${noticeListUrl}${userSeq}`, {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                });
+
+                console.log('알림 리스트 불러오기 성공 : ', response.data);
+                setNoticeList(response.data);
+
+            } catch (error) {
+                console.log('알림 리스트 불러오기 실패:', error);
+            }
+        }
+        fetchUserProfile();
     }, []);
 
     // 알림 삭제 처리 함수
-    const handleDeleteAlert = (index) => {
-        const updatedData = alertData.filter((_, idx) => idx !== index);
-        setAlertData(updatedData);
+    const handleDeleteAlert = async (index) => {
+        try {
+            const response = await Axios.delete(`${axiosAddr}${noticeListUrl}${userSeq}`, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+
+            console.log('처음에 받은 프로필 : ', response.data.profile);
+
+        } catch (error) {
+            console.log('프로필 불러오기 실패:', error);
+        }
+
+        const updatedData = noticeListUrl.filter((_, idx) => idx !== index);
+        setNoticeList(updatedData);
     };
 
     return (
@@ -44,21 +67,12 @@ const AlertForm = () => {
                 <span>알람</span>
             </TitleContainer>
             <ScrollableSubContainer>
-                {alertData.length === 0 ? (
+                {noticeList === null ? ( // noticeList가 null인 경우
                     <AlertEmptyMessage>알림이 없습니다.</AlertEmptyMessage>
                 ) : (
-                    alertData.map((element, idx) => (
+                    noticeList.map((element) => (
                         <AlertBox
-                            key={idx}
-                            index={idx}
-                            userName={element.userName}
-                            alert={generateAlertMessage(element.type, element.commentText)}
-                            profile={element.profile}
-                            time={element.time}
-                            type={element.type}
-                            isFollowing={element.isFollowing}
-                            commentText={element.commentText}
-                            onDelete={handleDeleteAlert}
+                            element={element}
                         />
                     ))
                 )}

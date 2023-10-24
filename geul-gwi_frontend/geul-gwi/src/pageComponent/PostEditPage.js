@@ -6,11 +6,11 @@ import PostEditForm from 'component/main/Writing/edit/PostEditForm';
 
 const PostEditPage = () => {
     const location = useLocation();
-    const post = location.state;
+    const data = location.state;
 
     return (
         <PostEditForm 
-            post={post} 
+            data={data} 
         />
     );
 };

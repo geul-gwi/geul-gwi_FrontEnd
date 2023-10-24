@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 // component 
-import Post from "component/main/Home/ShowPost";
+import Post from "component/user/profile/Post";
 
 // 유저 프로필 밑에 표시되는 게시물을 모두 불러오는 폼
 const ProfilePostList = (props) => {

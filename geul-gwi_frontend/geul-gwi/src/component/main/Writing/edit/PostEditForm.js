@@ -1,69 +1,164 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 // component
 import ImageUploadForm from 'component/main/Writing/edit/ImageUploadForm';
 import AddTagButtonForm from 'component/main/Writing/edit/AddTagButtonForm';
 
-const PostEditForm = ({post}) => {
+const PostEditForm = ({ data }) => {
+    const navigate = useNavigate();
     const { axiosAddr } = useContext(AxiosAddrContext);
     const { userSeq, accessToken } = useSelector((state) => state.authReducer);
     const postEditUrl = "/geulgwi/update/"; // 게시물 수정 요청 주소
-    
-    const [content, setContent] = useState(post.geulgwiContent); 
-    const [tags, setTags] = useState(post.tags); 
-    const [files, setFiles] = useState(post.files); 
 
-    // 이미지 추가
-    const ImageAddHandler = (event) => {
-        const addFiles = event.target.files;
-        // 이미지 개수 제한 3개
-        let imageUrlList = Array.from(addFiles).slice(0, 3);
-        setFiles((prevImages) => [...prevImages, ...imageUrlList]);
-    }
+    const [content, setContent] = useState(data.geulgwiContent);
+    const [tags, setTags] = useState(data.tags);
+    const [files, setFiles] = useState(data.files); // 서버에게 받은 코드는 인코딩 된 파일 => 모두 file 객체로 변환해줘야함
+    const [showFiles, setShowFiles] = useState([]); // 서버에게 받은 코드는 인코딩 된 파일
 
-    // 이미지 삭제
-    const ImageDeleteHandler = (idx) => {
-        setFiles(files.filter((_, index) => index !== idx));
-    }
+    useEffect(() => {
+        // 게시물 이미지 URL 목록을 가져오는 함수
+        const fetchImageUrls = async () => {
+            const urls = [];
+            for (const file of data.files) {
+                try {
+                    const imageUrl = await fetchImageData(file);
+                    urls.push(imageUrl);
+                } catch (error) {
+                    console.error('이미지 URL 가져오기 실패:', error);
+                }
+            }
+            setFiles(urls);
+            setShowFiles(urls);
+
+            // fetchImageUrls가 끝난 후에 createFiles 실행
+            createFiles(urls);
+        };
+
+        const createFiles = async (urls) => {
+            const newFiles = [];
+
+            for (let i = 0; i < urls.length; ++i) {
+                // 이미지 파일이 아닌 경우 Base64 문자열로 변환
+                const b64Data = urls[i]; // 이미지 데이터 가져오는 방식으로 수정 필요
+                const contentType = "image/jpeg"; // 이미지의 확장자를 지정하세요
+                const blob = b64toBlob(b64Data, contentType); // base64 -> blob
+                const fileName = "example.jpg"; // 파일 이름 설정
+                const newFile = new File([blob], fileName, { type: contentType });
+                newFiles.push(newFile);
+            }
+
+            setFiles(newFiles);
+        };
+
+        fetchImageUrls();
+    }, []);
 
     // 수정 완료 버튼 클릭
     const OnSubmit = async () => {
         try {
             const geulgwiRegDTO = {
-                geulgwiContent: content,
-                tagSeqs: tags.map(tag => tag.tagSeq),
+                "geulgwiContent": content,
+                "tagSeqs": tags.map(tag => tag.tagSeq),
             };
 
-            console.log("보낸 태그 시퀀스 : ", tags);
+            //console.log("보낸 태그 시퀀스 : ", tags);
 
-            // const formData = new FormData();
-            // formData.append("geulgwiRegDTO", new Blob([JSON.stringify(geulgwiRegDTO)], { type: "application/json" }));
+            const formData = new FormData();
+            formData.append("geulgwiRegDTO", new Blob([JSON.stringify(geulgwiRegDTO)], { type: "application/json" }));
+            console.log("최종 파일 : ", files);
 
-            // 사진이 존재할 때만 formData에 추가
-            // if (files.length > 0) {
-            //     files.forEach(image => formData.append("files", image));
-            // }
+            for (let i = 0; i < files.length; ++i) {
+                formData.append("files", files[i]);
+            }
 
             // FormData의 내용을 콘솔에 출력
             // formData.forEach((value, key) => {
             //     console.log(key, value);
             // });
-            console.log("요청 주소: ", `${axiosAddr}${postEditUrl}${post.geulgwiSeq}`);
-            const response = await axios.post(`${axiosAddr}${postEditUrl}${post.geulgwiSeq}`, geulgwiRegDTO, {
+
+            //console.log("요청 주소: ", `${axiosAddr}${postEditUrl}${post.geulgwiSeq}`);
+            const response = await axios.post(`${axiosAddr}${postEditUrl}${data.geulgwiSeq}`, formData, {
                 headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'multipart/form-data',
+                }
             });
 
-            //console.log("글 수정 완료: ", response);
-            alert("글 수정이 완료 되었습니다.");
-            
+            alert("게시물 수정이 완료되었습니다.");
+            navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
+
         } catch (error) {
             console.error("글 수정 실패: ", error);
         }
+    }
+
+    // base64를 blob으로 변환해주는 함수
+    function b64toBlob(b64Data, contentType = '', sliceSize = 512) {
+        //console.log("변환하기 전 파일: ", b64Data);
+        const image_data = atob(b64Data.split(',')[1]); // data:image/gif;base64 필요없으니 떼주고, base64 인코딩을 풀어준다
+
+        const arraybuffer = new ArrayBuffer(image_data.length);
+        const view = new Uint8Array(arraybuffer);
+
+        for (let i = 0; i < image_data.length; i++) {
+            view[i] = image_data.charCodeAt(i) & 0xff;
+        }
+        const blob = new Blob([arraybuffer], { type: contentType });
+        blob.name = 'image.jpg';
+        return blob;
+    }
+
+    // 이미지 데이터를 가져오는 함수
+    const fetchImageData = async (path) => {
+        try {
+            const encodedPath = encodeURIComponent(path);
+            const response = await axios.get(`${axiosAddr}/file?file=${encodedPath}`, {
+                responseType: 'blob',
+            });
+
+            if (response) {
+                const newFile = new File([response.data], 'image');
+                const reader = new FileReader();
+                return new Promise((resolve, reject) => {
+                    reader.onload = (event) => {
+                        const imageUrl = event.target.result;
+                        resolve(imageUrl);
+                    };
+                    reader.onerror = (error) => {
+                        reject(error);
+                    };
+                    reader.readAsDataURL(newFile);
+                });
+            }
+        } catch (error) {
+            console.error('이미지 가져오기에 실패했습니다.', error);
+            return null;
+        }
+    }
+
+    // 이미지 추가
+    const ImageAddHandler = (e) => {
+        const addFiles = e.target.files;
+        console.log("이미지 추가: ", addFiles);
+        setFiles((prevImages) => [...prevImages, ...addFiles]);
+
+        const fileURLs = [];
+        for (const file of addFiles) {
+            fileURLs.push(URL.createObjectURL(file));
+        }
+
+        setShowFiles((prevImages) => [...prevImages, ...fileURLs]);
+
+    }
+
+    // 이미지 삭제
+    const ImageDeleteHandler = (idx) => {
+        setFiles(files.filter((_, index) => index !== idx));
+        setShowFiles(showFiles.filter((_, index) => index !== idx));
     }
 
     return (
@@ -80,13 +175,14 @@ const PostEditForm = ({post}) => {
                     >
                     </ContentArea>
                 </FormContainer>
-                <ImageUploadForm 
+                <ImageUploadForm
                     imageAddHandler={ImageAddHandler}
                     imageDeleteHandler={ImageDeleteHandler}
                     files={files}
+                    showFiles={showFiles}
                 />
-                <AddTagButtonForm 
-                    setTags={setTags} 
+                <AddTagButtonForm
+                    setTags={setTags}
                     tags={tags}
                 />
                 <SubmitContainer>

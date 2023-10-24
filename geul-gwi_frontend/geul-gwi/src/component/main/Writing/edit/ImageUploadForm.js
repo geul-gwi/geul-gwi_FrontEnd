@@ -31,7 +31,7 @@ const ImageUploadForm = (props) => {
                             <DefaultImgTextContainer>추가</DefaultImgTextContainer>
                         </InputLabel>
                     </ItemContainer>
-                    {props.files && props.files.map((image,idx) => (
+                    {props.showFiles && props.showFiles.map((image,idx) => (
                             <ItemContainer>
                                 <StyledImg 
                                     key={`${idx}-${image}`} 

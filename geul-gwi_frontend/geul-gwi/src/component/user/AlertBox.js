@@ -1,45 +1,53 @@
 import React , {useState} from 'react';
 import styled from 'styled-components';
 
-// 알람 타입 : 좋아요, 팔로우, 댓글
+
+
+const TYPE = {};
+TYPE['FRIEND'] = 'friendSeq';
+TYPE['MESSAGE'] = 'messageSeq';
+TYPE['GEULGWI'] = 'geulgwiSeq';
+TYPE['LIKE_GEULGWI'] = 'geulgwiLikeSeq';
+TYPE['CHALLENGE'] = 'challenge';
+TYPE['LIKE_CHALLENGE'] = 'challengeLickSeq';
 
 const AlertBox = (props) => {
 
-    const [isFollowing, setIsFollowing] = useState(props.isFollowing);
+    const { type, noticeSeq, fromUser, nickname, profile, regDate, checked } = props;
+    const { messageSeq, friendSeq, geulgwiSeq, geulgwiLikeSeq, challengeeLikeSeq } = props; // 값 존재 or null
 
     const handleDelete = () => {
         props.onDelete(props.index);
     };
 
-    const handleToggleFollow = () => {
-
-        // 팔로우/팔로잉 동작 처리 로직 추가
-        setIsFollowing(!isFollowing);
-        
-        // 상위 컴포넌트로 팔로우 상태를 전달
-        if (props.onToggleFollow) {
-            props.onToggleFollow(!isFollowing);
+    const generateMessage = () => {
+        switch (type) {
+            case 'FRIEND':
+                return `${nickname}님이 친구 요청을 했습니다.`;
+            case 'MESSAGE':
+                return `${nickname}님이 쪽지를 보냈습니다.`;
+            case 'GEULGWI':
+                return `${nickname}님이 글 귀를 작성했습니다.`;
+            case 'LIKE_GEULGWI':
+                return `${nickname}님이 회원님의 글 귀에 좋아요를 눌렀습니다.`;
+            case 'CHALLENGE':
+                return `${nickname}님이 챌린지 글 귀를 작성했습니다.`;
+            case 'LIKE_CHALLENGE':
+                return `${nickname}님이 회원님의 챌린지에 좋아요를 눌렀습니다.`;
+            default:
+                return '알 수 없는 알림 타입';
         }
     };
 
     return (
         <Frame>
-            <ProfileImage src={props.profile || '/img/defaultProfile.png'} />
+            <ProfileImage src={profile || '/img/defaultProfile.png'} />
             <ContentContainer>
                 <TopRow>
-                    <Name>{props.userName}</Name>
-                    <Content>{props.alert}</Content>
+                    <Content>{generateMessage()}</Content>
                 </TopRow>
-                <Time>{props.time}</Time>
+                <Time>{regDate}</Time>
             </ContentContainer>
-            {props.type === "follow" && (
-                <FollowButton
-                    onClick={handleToggleFollow}
-                    isFollowing={isFollowing}
-                >
-                    {isFollowing ? "팔로잉" : "팔로우"}
-                </FollowButton>
-            )}
             <CloseButton onClick={handleDelete}>&times;</CloseButton>
         </Frame>
     );
