@@ -5,7 +5,7 @@ const initialState = {
   accessToken: null,
   userSeq: null,
   userProfile: null,
-  userUserNickname: null
+  userNickname: null
 };
 
 // 액션 타입 정의
@@ -25,7 +25,7 @@ export const logout = () => ({
   type: LOGOUT,
 });
 
-export const setuserseq = (userSequenceNumber) => ({
+export const setUserSeq = (userSequenceNumber) => ({
   type: SETUSERSEQ,
   payload: userSequenceNumber,
 });
@@ -35,9 +35,9 @@ export const setUserProfile = (userProfile) => ({
   payload: userProfile,
 });
 
-export const setUserNickname = (userUserNickname) => ({
+export const setUserNickname = (userNickname) => ({
   type: SET_USER_NICKNAME,
-  payload: userUserNickname,
+  payload: userNickname,
 });
 
 // 리듀서 함수
@@ -54,7 +54,7 @@ const authReducer = (state = initialState, action) => {
         accessToken: null,
         userSeq : null,
         userProfile: null,
-        userUserNickname: null
+        userNickname: null
       };
     case SETUSERSEQ:
       return {
@@ -65,7 +65,7 @@ const authReducer = (state = initialState, action) => {
     case SET_USER_PROFILE:
       return {
         ...state,
-        userSeq: action.payload,
+        userProfile: action.payload,
       };
 
     case SET_USER_NICKNAME:

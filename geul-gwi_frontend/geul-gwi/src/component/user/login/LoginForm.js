@@ -3,6 +3,7 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';     // 토스트 메시지를 보내기 위한 라이브러리
 
 // Axios Addres Import
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
@@ -17,7 +18,7 @@ import '../../../css/LoginForm.css';
 // Import For use Redux
 import { useDispatch, useSelector } from 'react-redux'; // Redux 사용 Library
 import { setToken, clearToken } from 'Reducer/auth';
-import { login, setUserNickname, setUserProfile, setuserseq } from 'Reducer/authReducer';
+import { login, setUserNickname, setUserProfile, setUserSeq, setuserseq } from 'Reducer/authReducer';
 
 
 
@@ -45,17 +46,16 @@ const LoginForm = () => {
             .then((response) => {
                 console.log(response);
                 console.log("data : ", response.data);
-                console.log("grantType : ", response.data.grantType);
                 console.log("token : ", response.data.accessToken);
                 
-                alert("로그인 성공..!!");
+                toast.success("로그인 성공");
 
                 // Redux의 auth에 Token값을 올림
                 dispatch(login(response.data.accessToken));
                 // User의 Sequence값을 전역으로 관리
-                dispatch(setuserseq(response.data.userSeq));
-                // dispatch(setUserNickname(response.data.userNickname));
-                // dispatch(setUserProfile(response.data.profile));
+                dispatch(setUserSeq(response.data.userSeq));
+                dispatch(setUserNickname(response.data.userNickname));
+                dispatch(setUserProfile(response.data.profile));
                 // 메인 페이지로 이동
                 navigate("/");
             })

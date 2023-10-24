@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
@@ -13,12 +13,23 @@ const SearchResultForm = (props) => {
   // public Env => 정적인 이미지
   const imagePath = process.env.PUBLIC_URL + '/img/';
   const [data, setData] = useState(props.posts);
+  
+
+  useEffect(() => {
+    setData(props.posts);
+    console.log("data => ");
+    console.log(data);
+    console.log(typeof(data[4].files))
+  },[props.posts])
 
   return (
     <Container>
       {
-        data.map((element) => (
-              element.imgPath === null ?
+        data.length === 0 ?
+        ""
+        :
+        data.map((element,elementIndex) => (
+              element.files === null ?
               // 이미지가 없는 경우
               <Item onClick={() => props.ModalOpen(element)}>
                 <HoveredContainer>
@@ -36,7 +47,15 @@ const SearchResultForm = (props) => {
               // 이미지가 있는 경우
               <Item onClick={() => props.ModalOpen(element)}>
                 {/* 글의 이미지 */}
-                <ItemImg src={imagePath + element.imgPath} alt={element.imgPath}></ItemImg>
+                {
+                  data[elementIndex].files.length > 1 ?
+                  <ItemImg src={data[elementIndex].files[0]} alt={element.geulgwiSeq}></ItemImg>
+                  :
+                  <ItemImg src={element.files} alt={element.geulgwiSeq}></ItemImg>
+                }
+                
+                
+
                 <HoveredContainer>
                   {/* 작성자 명 */}
                   <HoveredContainer_tutor>
