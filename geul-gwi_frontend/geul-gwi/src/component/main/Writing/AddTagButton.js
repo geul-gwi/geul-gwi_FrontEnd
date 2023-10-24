@@ -35,6 +35,7 @@ const AddTagButton = (props) => {
                             FnTagSetHandler={props.FnTagSetHandler}
                             onShowList={onShowList}
                             fnTags={props.fnTags}
+                            post={props.post}
                         />
                     </AddTagListContainer>
                 }

@@ -30,7 +30,7 @@ const Profile = ({profileUserSeq}) => {
 
         setUserInfo(response.data);
         //console.log('바디 : ', response.data);
-        console.log('프로필 : ', response.data.profile);
+        //console.log('프로필 : ', response.data.profile);
 
         // 이미지 가져오는 함수를 호출
         fetchImageData(response.data.profile);

@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { AiOutlineLeft, AiOutlineRight, AiOutlineEdit, AiFillHeart, AiOutlineHeart } from "react-icons/ai"; 
+import { AiOutlineLeft, AiOutlineRight, AiOutlineEdit, AiFillHeart, AiOutlineHeart, AiOutlineClose } from "react-icons/ai"; 
 import styled from 'styled-components';
 import axios from 'axios';
 import "css/main/Post.css"
+import { useNavigate } from 'react-router-dom';
 // component
 import { Tag } from 'component/common/button/Tag';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
@@ -14,11 +15,15 @@ const Post = (props) => {
     const likeUrl = '/geulgwi/like/'; // 좋아요 요청 주소
     const likeDelateUrl = '/geulgwi/unlike/'; // 좋아요 취소 요청 주소
     const postDetailUrl = '/geulgwi/search/'; // 게시물 세부 요청 주소
+    const postDeleteUrl = '/geulgwi/delete/'; // 게시물 삭제 요청 주소
+    const navigate = useNavigate();
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0); // 이미지 넘겨보기 위한 인덱스
     const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 목록을 저장할 배열
     const [isLiked, setIsLiked] = useState(props.liked);
     const [likeCount, setLikeCount] = useState(props.likeCount);
+
+    
 
     // 이미지 데이터를 가져오는 함수
     const fetchImageData = async (path) => {
@@ -56,6 +61,31 @@ const Post = (props) => {
     // 이미지를 이전으로 이동하는 함수
     const previousImage = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex - 1 + imageUrls.length) % imageUrls.length);
+    };
+
+    // 게시물 삭제 함수
+    const onDeletePost = async () => {
+        // 사용자에게 확인 메시지를 표시
+        const confirmed = window.confirm('게시물을 삭제하시겠습니까?');
+
+        // 사용자가 확인을 클릭한 경우에만 삭제 동작을 실행
+        if (confirmed) {
+            try {
+                const response = await axios.delete(`${axiosAddr}${postDeleteUrl}${props.geulgwiSeq}`, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+
+                if (response) {
+                    window.location.reload();
+                };
+
+            } catch (error) {
+                console.error('게시물 삭제 실패.', error);
+                return null;
+            }
+        }
     };
 
     useEffect(() => {
@@ -129,6 +159,18 @@ const Post = (props) => {
         }
     }
     
+    const onClickPostEdit = () => {
+        const post = {
+            geulgwiSeq: props.geulgwiSeq,
+            geulgwiContent: props.geulgwiContent,
+            tags: props.tags,
+            files: props.files,
+        }
+
+        console.log("게시물 수정 페이지 이동 : ", post);
+
+        navigate('/main/PostEdit', { state: post }); 
+    };
 
     return (
         <PostFrame>
@@ -138,9 +180,11 @@ const Post = (props) => {
                     <Name>{props.nickname}</Name>
                     <Comment>{props.comment}</Comment>
                     {userSeq === props.profileUserSeq && (
-                        <EditIcon><AiOutlineEdit size={22} color='gray' /></EditIcon>
+                        <HeaderButtonContainer>
+                            <EditIcon><AiOutlineEdit size={22} color='gray' onClick={onClickPostEdit} /></EditIcon>
+                            <EditIcon><AiOutlineClose size={22} color='gray' onClick={onDeletePost} /></EditIcon>
+                        </HeaderButtonContainer>
                     )}
-                   
                 </ProfileName>
 
             </PostProfileContainer>
@@ -151,7 +195,7 @@ const Post = (props) => {
                     </ArrowButton>
                 )}
                 {imageUrls.length > 0 && (
-                    <img src={imageUrls[currentImageIndex]} alt="Post" />
+                    <img src={imageUrls[currentImageIndex]}/>
                 )}
                 {imageUrls.length > 1 && (
                     <ArrowButton onClick={nextImage}>
@@ -184,9 +228,9 @@ const Post = (props) => {
 };
 
 const EditIcon = styled.div`
-    position: absolute; /* 아이콘의 위치를 조절하기 위해 상대 위치 설정 */
-    top: 5px; /* 원하는 위치로 조절 (상단 여백) */
-    right: 5px; /* 원하는 위치로 조절 (우측 여백) */
+    //position: absolute; /* 아이콘의 위치를 조절하기 위해 상대 위치 설정 */
+    //top: 5px; /* 원하는 위치로 조절 (상단 여백) */
+    //right: 5px; /* 원하는 위치로 조절 (우측 여백) */
     cursor: pointer;
 `;
 
@@ -257,11 +301,11 @@ const ButtonContainer = styled.div`
     align-items : center;
     width : 30px;
     height : 100%;
-     border-radius : 16px;
-
+    border-radius : 16px;
     cursor : pointer;
-    &:hover{
-        background-color : #BCBABA;
+    &:hover {
+      transform: scale(1.2);
+      transition: transform 0.2s ease-in-out;
     }
 `
 const Name = styled.div`
@@ -285,6 +329,16 @@ const TagsContainer = styled.div`
   gap: 10px; 
 `;
 
+const HeaderButtonContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  
+  flex-direction: row;
+      position: absolute; /* 아이콘의 위치를 조절하기 위해 상대 위치 설정 */
+    top: 5px; /* 원하는 위치로 조절 (상단 여백) */
+    right: 5px; /* 원하는 위치로 조절 (우측 여백) */
+`;
+
 const ArrowButton = styled.div`
     display: flex;
     justify-content: space-between;
@@ -306,6 +360,7 @@ const ArrowButton = styled.div`
         background-color: rgb(230, 230, 230);
     }
 `;
+
 
 
 export default Post;

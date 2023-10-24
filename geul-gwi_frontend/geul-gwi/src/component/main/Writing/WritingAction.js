@@ -63,10 +63,6 @@ const WritingAction = () => {
             if (urlImages.length > 0) {
                 urlImages.forEach(image => formData.append("files", image));
             }
-            // else
-            // {
-            //     formData.append("files", null);
-            // }
 
             // FormData의 내용을 콘솔에 출력
             formData.forEach((value, key) => {

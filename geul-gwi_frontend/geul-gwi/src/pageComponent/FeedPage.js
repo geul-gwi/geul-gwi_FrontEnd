@@ -10,7 +10,7 @@ const FeedPage = () => {
         <Fragment>
             <ContentManager />
             <AiContent />
-            <MainPost />
+            {/* <MainPost /> */}
         </Fragment>
     );
 };

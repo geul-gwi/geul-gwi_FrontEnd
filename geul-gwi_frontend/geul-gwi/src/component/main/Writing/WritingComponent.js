@@ -34,7 +34,7 @@ const WritingComponent = (props) => {
                 />
                 {/* 작성완료 */}
                 <SubmitContainer>
-                    <SubmitBtn onClick={() => props.Submit()}>작성</SubmitBtn>
+                    <SubmitBtn onClick={() => props.Submit()}>작성 완료</SubmitBtn>
                 </SubmitContainer>
             </FlexFrame>
         </Frame>

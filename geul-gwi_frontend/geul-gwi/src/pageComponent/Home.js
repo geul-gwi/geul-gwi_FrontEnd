@@ -19,6 +19,7 @@ import ProfileEditPage from 'pageComponent/ProfileEditPage';
 import SearchPage from 'pageComponent/SearchPage';
 import MessagePage from 'pageComponent/MessagePage';
 import MessageWritingPage from 'pageComponent/MessageWritingPage';
+import PostEditPage from 'pageComponent/PostEditPage';
 
 // src Import!
 import path from 'img/back_gradient.jpg';
@@ -82,6 +83,7 @@ const Home = () => {
                         <Route path="/Search" element={<SearchPage />}></Route>
                         <Route path="/Message" element={<MessagePage />}></Route>
                         <Route path="/MessageWriting" element={<MessageWritingPage />}></Route>
+                        <Route path="/PostEdit" element={<PostEditPage />}></Route>
                     </Routes>
 
                 </MidContainer>
