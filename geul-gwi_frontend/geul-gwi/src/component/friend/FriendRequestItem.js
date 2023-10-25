@@ -5,15 +5,7 @@ import Axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 
-const TYPE = {};
-TYPE['FRIEND'] = 'friendSeq';
-TYPE['MESSAGE'] = 'messageSeq';
-TYPE['GEULGWI'] = 'geulgwiSeq';
-TYPE["LIKE_GEULGWI"] = 'geulgwiLikeSeq';
-TYPE['CHALLENGE'] = 'challenge';
-TYPE['LIKE_CHALLENGE'] = 'challengeLickSeq';
-
-const NoticeItem = (props) => {
+const FriendRequestItem = (props) => {
     const navigate = useNavigate();
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
@@ -29,43 +21,7 @@ const NoticeItem = (props) => {
             .catch(error => {
                 console.error('이미지 가져오기에 실패했습니다.', error);
             });
-    }, [props.notice.profile]);
-
-    // 서버에서 받은 시간 표준으로 바꾸는 함수!!
-    function parseISOString(s) {
-        //  2023-10-2416:49:21.969055245
-        const year = s.slice(0, 4);
-        const month = s.slice(5, 7) - 1; // 월은 0부터 시작하므로 1을 빼줍니다.
-        const day = s.slice(8, 10);
-        const hour = s.slice(10, 12);
-        const minute = s.slice(13, 15);
-        const second = s.slice(16, 18);
-        return new Date(year, month, day, hour, minute, second);
-    }
-    // 시간 계산하는 함수!! (n분 전, n시간 전, 어제, 날짜)
-    function formatDateTime() {
-        const currentDate = new Date();
-        const messageDate = parseISOString(props.notice.regDate);
-        // console.log("변환하기 전 시간 : ", props.notice.regDate);
-        // console.log("변환한 시간 : ", messageDate);
-        const timeDiff = currentDate - messageDate;
-        const seconds = Math.floor(timeDiff / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-
-        if (seconds < 60) {
-            return "방금";
-        } else if (minutes < 60) {
-            return `${minutes}분 전`;
-        } else if (hours < 24) {
-            return `${hours}시간 전`;
-        } else if (hours >= 24 && hours < 48) {
-            return "어제";
-        } else {
-            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-            return messageDate.toLocaleDateString(undefined, options);
-        }
-    }
+    }, []);
 
     // 이미지 데이터를 가져오는 함수
     const fetchImageData = async (path) => {
@@ -96,32 +52,14 @@ const NoticeItem = (props) => {
     }
 
     const onClickDelete = () => {
-        props.noticeDeleteHandler(props.notice.noticeSeq);
+        alert(`${props.friend.nickname}님을 정말로 삭제하시겠습니까?`);
+        props.friendDeleteHandler(props.friend.userSeq);
     };
 
-    const generateMessage = () => {
-        switch (props.notice.type) {
-            case 'FRIEND':
-                return `${props.notice.nickname}님이 친구 요청을 했습니다.`;
-            case 'MESSAGE':
-                return `${props.notice.nickname}님이 쪽지를 보냈습니다.`;
-            case 'GEULGWI':
-                return `${props.notice.nickname}님이 글 귀를 작성했습니다.`;
-            case "LIKE_GEULGWI":
-                return `${props.notice.nickname}님이 회원님의 글 귀에 좋아요를 눌렀습니다.`;
-            case 'CHALLENGE':
-                return `${props.notice.nickname}님이 챌린지 글 귀를 작성했습니다.`;
-            case 'LIKE_CHALLENGE':
-                return `${props.notice.nickname}님이 회원님의 챌린지에 좋아요를 눌렀습니다.`;
-            default:
-                return 'Error';
-        }
-    };
-
-    // 프로필 클릭 => 해당 유저의 프로필로 이동한다.
+    // 프로필 클릭 => 해당 유저 프로필로 이동한다.
     const onClickProfile = () => {
-        navigate('/main/Profile', { state: { profileUserSeq: props.notice.fromUser } });
-        props.handleAlertClick(); // 닫기
+        navigate('/main/Profile', { state: { profileUserSeq: props.friend.userSeq } });
+        onClickProfile(); // 닫기
     };
 
     return (
@@ -132,13 +70,11 @@ const NoticeItem = (props) => {
             />
             <ContentContainer>
                 <TopRow>
-                    <Content>{generateMessage()}</Content>
+                    <Name>{props.friend.nickname}</Name>
                 </TopRow>
-                <Time>{formatDateTime(props.notice.regDate)}</Time>
             </ContentContainer>
             <ProfileContainer>
-                {!props.notice.checked && <RedDot /> }
-                <CloseButton onClick={onClickDelete}>&times;</CloseButton>
+                <CloseButton onClick={onClickDelete}></CloseButton>
             </ProfileContainer>
         </Frame>
     );
@@ -204,7 +140,6 @@ const ProfileContainer = styled.div`
     position: relative;
 `;
 
-
 const ContentContainer = styled.div`
     flex: 9;
 `;
@@ -245,4 +180,4 @@ const FollowButton = styled.button`
     }
 `;
 
-export default NoticeItem;
+export default FriendRequestItem;

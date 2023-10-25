@@ -107,6 +107,7 @@ const NoticeForm = (props) => {
                             key={notice.seq}
                             notice={notice}
                             noticeDeleteHandler={noticeDeleteHandler}
+                            handleAlertClick= { props.handleAlertClick}
                         />
                     ))
                 )}

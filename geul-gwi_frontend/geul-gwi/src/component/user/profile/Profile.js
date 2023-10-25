@@ -15,6 +15,7 @@ const Profile = ({profileUserSeq}) => {
   const userSeq = useSelector((state) => state.authReducer.userSeq);
   const userToken = useSelector((state) => state.authReducer.accessToken);
   const userDetailUrl = '/user/detail/'; // 유저 세부 정보 불러오기 요청 주소
+  const friendRequestUrl = '/friend/confirm'; // 친구 요청 주소
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({}); // 유저 프로필 정보
@@ -27,22 +28,16 @@ const Profile = ({profileUserSeq}) => {
             Authorization: `Bearer ${userToken}`,
           },
         });
-
         setUserInfo(response.data);
-        //console.log('바디 : ', response.data);
-        console.log('처음에 받은 프로필 : ', response.data.profile);
-
         // 이미지 가져오는 함수를 호출
         fetchImageData(response.data.profile);
-
-       
-        
       } catch (error) {
         console.log('프로필 불러오기 실패:', error);
       }
     }
     fetchUserProfile();
-  }, []);
+  
+  }, [profileUserSeq]);
 
   // 이미지 데이터를 가져오는 함수
   const fetchImageData = async (path) => {
@@ -60,8 +55,6 @@ const Profile = ({profileUserSeq}) => {
           setUserInfo((prevUserInfo) => {
             return { ...prevUserInfo, profile: profileImageUrl };
           });
-
-          console.log('서버에서 받은 주소 겟 요청 응답 : ', response.data);
         };
         reader.readAsDataURL(newFile);
       }
@@ -86,11 +79,29 @@ const Profile = ({profileUserSeq}) => {
     navigate('/main/ProfileEdit', { state: userInfo }); // 프로필 정보 넘기기
   };
 
+  // 친구 요청 클릭 
+  const sendFriendRequest = async () => {
+    try {
+      const friendDTO = {
+        'toUser' : profileUserSeq, // 요청 받는 사람
+        'fromUser' : userSeq, // 요청 보낸 사람
+      };
+      const response = await Axios.post(`${axiosAddr}${friendRequestUrl}`, friendDTO, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      console.log('친구 요청 성공 : ', response.data);
+    } catch (error) {
+      console.error('친구 요청 실패:', error);
+    }
+  };
+
   return (
     <>
       <ProfileContainer>
         <ProfilePicture
-          src={userInfo.profile ? userInfo.profile : null || '/img/defaultProfile.png'}
+          src={userInfo.profile ? userInfo.profile : '/img/defaultProfile.png'}
           onClick={onProfileClick}
         />
         <ProfileInfo>
@@ -106,6 +117,7 @@ const Profile = ({profileUserSeq}) => {
           {userSeq === profileUserSeq && (
             <Button onClick={onEditClick}>프로필 편집</Button>
           )}
+          <Button onClick={sendFriendRequest}>친구 요청</Button>
         </ProfileInfo>
         {isModalOpen && (
           <ModalOverlay onClick={closeModal}>
