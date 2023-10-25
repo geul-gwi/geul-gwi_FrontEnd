@@ -3,22 +3,24 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 // import Component
-import AlertForm from "component/user/AlertForm";
+import NoticeForm from "component/notice/NoticeForm";
+import FriendForm from "component/friend/FriendForm";
 import { MdBreakfastDining } from 'react-icons/md';
 
 
 const itemList = []
-itemList.push({"name" : "탐색", "src" : "/icon/Navigation/search.svg", "target" : "/main/Search"});
-itemList.push({"name" : "홈", "src" : "/icon/Navigation/home.svg" , "target" : "/"})
-itemList.push({"name" : "알람", "src" : "/icon/Navigation/bell.svg" , "target" : "/alarm"})
-itemList.push({"name" : "팔로우", "src" : "/icon/Navigation/users.svg" , "target" : "/"})
+itemList.push({ "name": "홈", "src": "/icon/Navigation/home.svg", "target": "/" })
+itemList.push({ "name": "탐색", "src": "/icon/Navigation/search.svg", "target": "/main/Search" });
+itemList.push({ "name": "알림", "src": "/icon/Navigation/bell.svg", "target": "/alarm" })
+itemList.push({ "name": "친구", "src": "/icon/Navigation/users.svg", "target": "/friend" })
+itemList.push({ "name": "쪽지", "src": "/icon/Navigation/users.svg", "target": "/main/message" })
 
 const Navigation = (props) => {
     // navigate Object
     const navigate = useNavigate();
     // useState
     const [isAlertFormVisible, setIsAlertFormVisible] = useState(false);
-
+    const [isFriendForm, SetisFriendForm] = useState(false);
 
     // Function
     const ComponentMove = (target) => {
@@ -26,11 +28,21 @@ const Navigation = (props) => {
             handleAlertClick();
             return;
         }
+        else if (target === "/friend") {
+            handleFriendClick();
+            return;
+        }
         navigate(`${target}`);
     }
 
     const handleAlertClick = () => {
         setIsAlertFormVisible(!isAlertFormVisible);
+        SetisFriendForm(false);
+    };
+
+    const handleFriendClick = () => {
+        SetisFriendForm(!isFriendForm);
+        setIsAlertFormVisible(false);
     };
 
 
@@ -45,7 +57,14 @@ const Navigation = (props) => {
                 ))
             }
             <AlertContainer>
-                {isAlertFormVisible && <AlertForm />}
+                {isAlertFormVisible && 
+                <NoticeForm 
+                    handleAlertClick={handleAlertClick}
+                />}
+                {isFriendForm &&
+                    <FriendForm
+                    handleFriendClick={handleFriendClick}
+                    />}
             </AlertContainer>
         </NaviFrame>
     );

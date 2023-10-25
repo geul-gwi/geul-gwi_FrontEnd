@@ -23,8 +23,6 @@ const Post = (props) => {
     const [isLiked, setIsLiked] = useState(props.liked);
     const [likeCount, setLikeCount] = useState(props.likeCount);
 
-    
-
     // 이미지 데이터를 가져오는 함수
     const fetchImageData = async (path) => {
         try {

@@ -22,7 +22,7 @@ const HeaderUserMenu = () => {
     };
 
     const onClickProfile = () => {
-        navigate('/main/Profile', { state: { profileUserSeq: 5 } });
+        navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
     };
 
 
