@@ -132,8 +132,6 @@ const RegisterContainer = (props) => {
                             <div style={{ display: 'flex', flexDirection: 'column', width: '400px', height: '100%', margin: '0 auto' }}>
                                 <h3 className='title'>회원 가입</h3>
                                 <h5 className='sub_title'>회원 정보를 입력해주세요</h5>
-
-                                <label>프로필 이미지</label>
                                 <ProfilePicture
                                     src={props.showProfile ? (props.showProfile) : null || '/img/defaultProfile.png'}
                                     onClick={props.toggleModal}
@@ -143,7 +141,7 @@ const RegisterContainer = (props) => {
                                 <ShowText id='idCheck'></ShowText>
 
                                 <label>비밀번호</label>
-                                <input type='password' value={props.Password} onChange={props.onPasswordHandler} placeholder='영문 숫자를 조합하여 8~15자의 비밀번호를 작성해주세요.'
+                                <input type='password' value={props.Password} onChange={props.onPasswordHandler} placeholder='영문, 숫자를 조합하여 8~15자'
                                     onBlur={() => {
                                         CheckPwdRegularExpression()
                                     }} />
@@ -160,7 +158,7 @@ const RegisterContainer = (props) => {
                                 <ShowText id='nicknameCheck'></ShowText>
 
                                 <label>나이</label>
-                                <input type='number' value={props.Age} onChange={props.onAgeHandler} placeholder='나이 입력' />
+                                <input type='number' value={props.Age} onChange={props.onAgeHandler} placeholder='나이' />
                                 <ShowText></ShowText>
 
                                 <label>성별</label>
@@ -210,7 +208,7 @@ const RegisterContainer = (props) => {
 
                     :
 
-                    <TagSelectContainer>
+                    <PrivacyContainer>
                         <BackButton onClick={props.ToggleMove}><MdOutlineArrowBackIosNew size={'20px'} /></BackButton>
                         <form style={{
                             display: 'flex', flexDirection:
@@ -238,7 +236,7 @@ const RegisterContainer = (props) => {
                                 회원가입
                             </SubmitButton>
                         </form>
-                    </TagSelectContainer>
+                    </PrivacyContainer>
 
             }
 
@@ -247,50 +245,23 @@ const RegisterContainer = (props) => {
     );
 };
 
-
 const RegiContainer = styled.div`
-    position : relative;
-    display : flex;
-    width : 600px;
-    height : 80%;
+    position: relative;
+    display: flex;
+    width: 600px;
+    height: 100%;
     justify-content: center;
-    /* overflow: scroll; */
-    overflow : scroll;
-    overflow-x : hidden;
-    scroll-behavior: smooth;
-    margin : 0 auto;
-    margin-top : calc((100vh - 870px)/2);
-
-    border-radius : 8px;
-    background-color : white;
-
-    &::-webkit-scrollbar{
-        border-radius : 10px;
-        background-color : white;
-        width : 10px;
-    }
-    &::-webkit-scrollbar-thumb{
-        border-radius : 4px;
-        background-color: pink;
-    }
-    &::-webkit-scrollbar-track{
-        border-radius : 4px;
-        background-color : white;
-    }
+    overflow-y: scroll;
+    margin: auto;
+    background-color: white;
 `
 const PrivacyContainer = styled.div`
     position : absolute;
     top : 5%;
-    /* left : ${ShowBox => ShowBox ? '0%' : '-100%'}; */
-    /* left : 0%; */
     width : 100%;
     height : auto;
     min-height : 70%;
     
-`
-const TagSelectContainer = styled(PrivacyContainer)`
-    /* left : ${ShowBox => ShowBox ? '100%' : '0%'}; */
-    /* left : 100%; */
 `
 const NextButton = styled.button`
     width : 250px;

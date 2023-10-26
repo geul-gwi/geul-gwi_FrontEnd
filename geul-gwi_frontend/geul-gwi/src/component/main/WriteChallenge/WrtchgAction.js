@@ -4,9 +4,8 @@ import React, { Fragment, useEffect, useState } from 'react';
 import WrtchgComponent from 'component/main/WriteChallenge/WrtchgComponent';
 
 const WrtchgAction = () => {
-
-    // State -----------------------------------------------------
-
+    const listUrl = '/challenge/admin/{challengeSeq}'; // 챌린지 목록 요청
+    const [challenges, setChallenges] = useState([]); // 챌린지 목록
     // Challenge list State => 임시로 데이터를 넣어놓음
     const [challengeList, setChallengeList] = useState([
         {"challengeName" : "제 1회 챌린지","challengeState" : "inActive" , "desc":"이번주제는 의지와 열정입니다 \n 작가님들의 의지를 잘 표현하여 모두에게 힘이되는 말을 해주세요!", "startDay" : "2023.03.02"},

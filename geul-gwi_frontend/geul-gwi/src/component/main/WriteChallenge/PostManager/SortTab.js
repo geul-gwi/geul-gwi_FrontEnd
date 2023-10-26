@@ -1,22 +1,18 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 // 정렬창을 띄우는 Component
 const SortTab = (props) => {
     return (
-        <Fragment>
-            {
-                props.sortTabShow?
+        <>
+            {props.sortTabShow &&
                 <TabFrame onMouseLeave={() => props.handleTabShowToggle()}>
                     <Item onClick={() => props.SortFunc("인기순")}>인기순</Item>
-                    <Item onClick={() => props.SortFunc("비인기순")}>비인기순</Item>
                     <Item>최신순</Item>
                     <Item>오래된순</Item>
                 </TabFrame>
-                :
-                ""
             }
-        </Fragment>
+        </>
     );
 };
 

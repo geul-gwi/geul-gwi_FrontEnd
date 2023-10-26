@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Tag } from 'component/common/button/Tag';
 
 const WrtChgInfo = (props) => {
     const ReplaceNewLine = (text) => {
@@ -38,9 +39,9 @@ const WrtChgInfo = (props) => {
                 
                 {/* 챌린지 태그 */}
                 <TagContainer>
-                    <TagItem>#사랑</TagItem>
-                    <TagItem style={{backgroundColor : "#3AE737"}}>#소중함</TagItem>
-                    <TagItem style={{backgroundColor : "#FFE60A"}}>#우정</TagItem>
+                    <Tag>#사랑</Tag>
+                    <Tag>#소중함</Tag>
+                    <Tag>#우정</Tag>
                 </TagContainer>
 
                 

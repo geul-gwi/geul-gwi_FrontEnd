@@ -16,6 +16,7 @@ const WritingAction = () => {
     const { axiosAddr } = useContext(AxiosAddrContext);
     const { userSeq, accessToken } = useSelector((state) => state.authReducer);
     const writingUrl = "/geulgwi/register/"; // 글 작성 요청 주소
+    const challengeWriteUrl = '/challenge/user/register/';
     // State
     const [FormMainText,setFormMainText] = useState(''); // 본문의 내용을 담는 State
     const [fnTags,setFnTags] = useState([]); // 최종적으로 선택된 태그를 담는 List State 
@@ -23,7 +24,11 @@ const WritingAction = () => {
     // Object
     const navigate = useNavigate(); // React Navigate = 페이지 이동
 
-
+    const [selectedTab, setSelectedTab] = useState("geulgwi");
+    // 받은 메시지와 보낸 메시지 메뉴 클릭 이벤트 핸들러
+    const handleTabClick = (tab) => {
+        setSelectedTab(tab); // 선택한 탭 설정
+    }
 
     // Handler
     const FormMainTextHandler = (e) => {
@@ -56,8 +61,8 @@ const WritingAction = () => {
         setFnTags(taglist);
     }
 
-    // 글 작성 완료 버튼 클릭
-    const OnSubmit = async () => {
+    // 글 귀 작성 처리
+    const submitGeulgwi = async () => {
         try {
             const geulgwiRegDTO = {
                 geulgwiContent: FormMainText,
@@ -90,6 +95,26 @@ const WritingAction = () => {
         }
     }
 
+    // 챌린지 작성 처리 
+    const submitChallenge = async () => {
+        try {
+            const data = {
+                challengeContent: FormMainText,
+                keywordSeq: fnTags.map(tag => tag.tagSeq),
+            };
+
+            const response = await axios.post(`${axiosAddr}${challengeWriteUrl}${userSeq}`, data, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+
+            console.log("글 작성 완료: ", response);
+        } catch (error) {
+            console.error("글 작성 실패: ", error);
+        }
+    }
+
     return (
         <Fragment>
             <WritingComponent
@@ -99,7 +124,10 @@ const WritingAction = () => {
                 ImageDelete={ImageDeleteHandler}
                 FnTagSetHandler={FnTagSetHandler}
                 fnTags={fnTags}
-                Submit={OnSubmit}
+                selectedTab={selectedTab}
+                handleTabClick={handleTabClick}
+                submitGeulgwi={submitGeulgwi}
+                submitChallenge={submitChallenge}
             />
         </Fragment>
     );

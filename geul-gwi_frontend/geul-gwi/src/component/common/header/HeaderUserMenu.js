@@ -110,13 +110,13 @@ const ProfileImage = styled.img`
 
 const UserName = styled.p`
   margin: 0;
-  margin-right: 20px;
+  margin-right: 50px;
 `;
 
 const MenuButtonContainer = styled.div`
   position: absolute;
-  right: 0px;
-  top: calc(100% + 10px);
+  right: 50px;
+  top: 100px;
   width: 200px;
   min-height: 50px;
   height: auto;

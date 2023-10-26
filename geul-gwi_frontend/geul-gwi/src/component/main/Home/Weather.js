@@ -50,7 +50,7 @@ const Weather = () => {
 
     return (
         <WeatherFrame> 
-
+            <Title>오늘의 날씨</Title>
             {/*1. 날씨 정보를 담을 Container */}
             <DisplayContainer style={{cursor : 'default'}}>
                 {/* 아이콘을 담을 Container */}
@@ -67,22 +67,22 @@ const Weather = () => {
             </DisplayContainer>
 
             {/*2. 부가 설명 Text */}
-            <AskHowYouFeel style={{cursor : 'default'}}>이런날엔 기분이 어떠세요?</AskHowYouFeel>
+            {/* <AskHowYouFeel style={{cursor : 'default'}}>이런날엔 기분이 어떠세요?</AskHowYouFeel> */}
 
             {/*3. 날씨 평가 버튼 */}
-            <WeatherLikeContainer>
-                <WeatherLikeBtn />  {/*매우 별로*/}
-                <WeatherLikeBtn />  {/*별로*/}
-                <WeatherLikeBtn />  {/*보통*/}
-                <WeatherLikeBtn />  {/*만족*/}
-                <WeatherLikeBtn />  {/*매우만족*/}
-            </WeatherLikeContainer>
+            {/* <WeatherLikeContainer>
+                <WeatherLikeBtn /> 
+                <WeatherLikeBtn />  
+                <WeatherLikeBtn />  
+                <WeatherLikeBtn />  
+                <WeatherLikeBtn />  
+            </WeatherLikeContainer> */}
 
             {/*4. 좋음 나쁨 */}
-            <WeatherLikeTextContainer style={{cursor : 'default'}}>
+            {/* <WeatherLikeTextContainer style={{cursor : 'default'}}>
                 <BadText>나쁨</BadText>
                 <GoodText>좋음</GoodText>
-            </WeatherLikeTextContainer>
+            </WeatherLikeTextContainer> */}
         </WeatherFrame>
     );
 };
@@ -90,15 +90,14 @@ const Weather = () => {
 const WeatherFrame = styled.div`
     display : flex;
     width : calc(100% -40px);
-    height : 160px;
+    height : 120px;
 
     border-radius : 16px;
     padding : 10px 20px 10px 20px;
     background-color: white;
     flex-direction : column;
-    justify-content : space-between;
     align-items: center;
-
+    justify-content: center;
     box-shadow: 0px 0px 32px 0px #FFA199;
     transition : 0.5s;
     opacity : 0.85;
@@ -106,6 +105,12 @@ const WeatherFrame = styled.div`
         opacity: 1;
     }
 `
+
+// 날씨 정보를 담을 Container
+const Title = styled.div`
+
+`
+
 // 날씨 정보를 담을 Container
 const DisplayContainer = styled.div`
     display : flex;

@@ -43,15 +43,12 @@ const LoginForm = () => {
         }
     };
 
-    // Function
-    // Login Submit
     const LoginSubmit = () => {
         const data = {
             userId: Id,
             userPassword: Password
         };
 
-        //console.log("send : " + AxiosAddress + RequestMapping);
         axios.post(AxiosAddress + RequestMapping, data)
             .then(async (response) => {
                 console.log(response.data);
@@ -68,9 +65,6 @@ const LoginForm = () => {
             });
     };
 
-
-
-
     const RegiBtnClick = () => {
         console.log("regibtn click");
         navigate("/user/register");
@@ -79,8 +73,6 @@ const LoginForm = () => {
     const logAccount = (event) => {
         event.preventDefault()
     }
-    // sub Button Click
-
 
     return (
         <div className="LoginForm">
@@ -99,18 +91,12 @@ const LoginForm = () => {
                 <form className="FormContentManage" onSubmit={logAccount}>
                     <input className='loginFormInput' type='text' placeholder='아이디' onChange={(e) => setId(e.target.value)}></input>
                     <input className='loginFormInput' type='password' placeholder='비밀번호' onChange={(e) => setPassword(e.target.value)}></input><br />
-                    <input className='loginFormButton' type='submit' value="LOGIN" onClick={LoginSubmit} />
+                    <input className='loginFormButton' type='submit' value="로그인" onClick={LoginSubmit} />
                 </form>
-                {/* 회원가입,  아이디찾기 , 비밀번호 찾기 */}
                 <div className='sub_Container'>
                     <SubSpan>아이디 찾기</SubSpan>
                     <SubSpan>비밀번호 찾기</SubSpan>
                     <SubSpan onClick={RegiBtnClick}>회원가입</SubSpan>
-
-                    <SubSpan>
-                        {/* <CheckBoxIcon src={process.env.PUBLIC_URL + '/icon/loginFormCss/no_checked.png'}></CheckBoxIcon> */}
-                        <input type='checkbox' />
-                    </SubSpan>
                 </div>
 
             </div>
@@ -132,14 +118,6 @@ const SubSpan = styled.span`
     input[type=checkBox]{
         display : none;
         border : 1px solid black;
-    }
-`
-const CheckBoxIcon = styled.img`
-    width : 15px;
-    height : 15px;
-    
-    &:hover{
-        content : url(${process.env.PUBLIC_URL + '/icon/loginFormCss/no_checked_color.png'})
     }
 `
 const IconContainer = styled.div`

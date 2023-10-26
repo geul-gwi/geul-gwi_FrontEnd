@@ -12,11 +12,11 @@ import ShowTrend from 'component/main/Home/ShowTrend';
 
 // Page Component Import
 import FeedPage from 'pageComponent/FeedPage';
+import SearchPage from 'pageComponent/SearchPage';
 import WritePage from 'pageComponent/WritePage';
 import WriteChallengePage from 'pageComponent/WriteChallengePage';
 import ProfilePage from 'pageComponent/ProfilePage';
 import ProfileEditPage from 'pageComponent/ProfileEditPage';
-import SearchPage from 'pageComponent/SearchPage';
 import MessagePage from 'pageComponent/MessagePage';
 import MessageWritingPage from 'pageComponent/MessageWritingPage';
 import PostEditPage from 'pageComponent/PostEditPage';
@@ -32,9 +32,8 @@ import { useDispatch, useSelector } from 'react-redux'; // Redux 사용 Library
 const Home = () => {
     // const userContext = useContext(userStoreContext);
     const isLogged = useSelector((state) => state.authReducer.accessToken === null ? false : true);
-    console.log("accessToken in Reducer : "+useSelector((state) => state.authReducer.accessToken));
-    console.log("Userseq in Reducer : "+useSelector((state) => state.authReducer.userSeq));
-
+   // console.log("accessToken in Reducer : "+useSelector((state) => state.authReducer.accessToken));
+    //console.log("Userseq in Reducer : "+useSelector((state) => state.authReducer.userSeq));
 
     // userContext.isLogged;
 
@@ -58,24 +57,18 @@ const Home = () => {
                 {/* <img src={process.env.PUBLIC_URL + "/icon/Navigation/home.svg"}></img> */}
                 { isLogged?
                 '' : <h1><Navigate to="/user/login" replace={true}/></h1>
-                    
                 }
-                
-                
-                {/* 헤드 Container */}
                 <HeadContainer>
                     <Header />
                 </HeadContainer>
 
-                {/* 왼쪽 Container */}
                 <LeftContainer>
                     <Navigation/>
-                    <Weather />
+                  
                 </LeftContainer>
-                {/* 가운데 Container */}
                 <MidContainer>
                     <Routes>
-                        <Route path="/" element={<FeedPage /> }></Route>
+                        <Route path="/" element={<SearchPage /> }></Route>
                         <Route path="/Writing" element={<WritePage />}></Route>
                         <Route path="/WritingChallenge" element={<WriteChallengePage />}></Route> 
                         <Route path="/Profile" element={<ProfilePage />}></Route>
@@ -89,9 +82,10 @@ const Home = () => {
                 </MidContainer>
                 {/* 오른쪽 Container */}
                 {
-                    window.innerWidth <= '1200px' ?
+                    window.innerWidth <= '1000px' ?
                     "" :
                     <RightContainer>
+                            <Weather />
                         <ShowTrend />
                     </RightContainer>
                 }
@@ -151,7 +145,7 @@ const HeadContainer = styled.div`
 `
 const ContainerFrame = styled.div`
     position : absolute;
-    width : 180px;
+    width : 200px;
     height: 700px;
     margin-top : 20px;
 `
@@ -159,10 +153,10 @@ const ContainerFrame = styled.div`
 const LeftContainer = styled(ContainerFrame)`
     position : fixed;
     display : flex;
-    left : 40px;
-    top : 100px;
+    left : 0px;
+    top : 120px;
     height : auto;
-    z-index : 1;
+    z-index : 2;
     flex-direction : column;
     justify-content: space-between;
 `

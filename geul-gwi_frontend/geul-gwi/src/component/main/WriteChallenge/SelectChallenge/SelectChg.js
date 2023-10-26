@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-// React-icons import
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 
 const SelectChg = (props) => {

@@ -2,58 +2,99 @@ import React from 'react';
 import styled from 'styled-components';
 
 // Component
-import WritingForm from 'component/main/Writing/WritingForm';
 import ImageUploadForm from 'component/main/Writing/ImageUploadForm';
 import AddTagButton from 'component/main/Writing/AddTagButton';
 
+
+
 const WritingComponent = (props) => {
+    const handleSubmit = () => {
+        if (props.selectedTab === "geulgwi") {
+            // "글귀" 탭에서 호출할 함수
+            props.submitGeulgwi();
+        } else if (props.selectedTab === "challenge") {
+            // "챌린지" 탭에서 호출할 함수
+            props.submitChallenge();
+        }
+    };
+
     return (
         <Frame>
+
             <FlexFrame>
-                {/* Component Name TItle */}
+                <Tabs>
+                    <TabButton
+                        onClick={() => props.handleTabClick("geulgwi")}
+                        active={props.selectedTab === "geulgwi"}
+                    >
+                        일반
+                    </TabButton>
+                    <TabButton
+                        onClick={() => props.handleTabClick("challenge")}
+                        active={props.selectedTab === "challenge"}
+                    >
+                        챌린지
+                    </TabButton>
+                </Tabs>
                 <TitleContainer style={{ marginBottom: '30px' }}>
-                    <ComponentName>글 작성</ComponentName>
-                    <ComponentIntro>
-                        사람들에게 당신의 <span style={{ color: '#FD7474' }}>영향</span>을 전파하세요
-                    </ComponentIntro>
+                    <ComponentName>{props.selectedTab === "geulgwi" ? "일반 글 작성" : "챌린지 작성"}</ComponentName>
+                    <ComponentIntro>나만의 글 귀를 작성하세요.</ComponentIntro>
                 </TitleContainer>
-                {/* <WritingForm
-                    FormNameChange={props.FormNameChange}   // Writing Action의 FormName Handler넘겨주기
-                    FormMainTextChange={props.FormMainTextChange}   // Writing Action의 FormMainTtext Handler넘겨주기
-                /> */}
                 <FormContainer>
                     <ContentArea
-                        placeholder="문구를 입력하세요."
+                        placeholder="글 귀를 작성하세요..."
                         onChange={(e) => props.FormMainTextChange(e)}
                     >
                     </ContentArea>
                 </FormContainer>
-                {/* 이미지 업로드 하는 Component에 Handler 넘겨주기 */}
-                <ImageUploadForm
-                    style={{ marginBottom: '20px' }}
-                    returnImageList={props.ReturnImg}
-                    imageAddHandler={props.ImageAdd}
-                    imageDeleteHandler={props.ImageDelete}
-                />
-                <AddTagButton
-                    FnTagSetHandler={props.FnTagSetHandler}     // list State값 변경하는 함수 넘겨주기
-                    fnTags={props.fnTags} // WritingAction의 list State넘겨주지
-                />
-                {/* 작성완료 */}
+                {/* 조건부 렌더링 */}
+                {props.selectedTab === "geulgwi" && (
+                    <ImageUploadForm
+                        style={{ marginBottom: '20px' }}
+                        returnImageList={props.ReturnImg}
+                        imageAddHandler={props.ImageAdd}
+                        imageDeleteHandler={props.ImageDelete}
+                    />
+                )}
+                {props.selectedTab === "geulgwi" && (
+                    <AddTagButton
+                        FnTagSetHandler={props.FnTagSetHandler}
+                        fnTags={props.fnTags}
+                    />
+                )}
                 <SubmitContainer>
-                    <SubmitBtn onClick={() => props.Submit()}>작성 완료</SubmitBtn>
+                    <SubmitBtn onClick={handleSubmit}>공유</SubmitBtn>
                 </SubmitContainer>
             </FlexFrame>
         </Frame>
     );
 };
 
-// Frame
+const Tabs = styled.div`
+   display: flex;
+   justify-content: center;
+   margin-bottom: 20px;
+`;
+
+const TabButton = styled.button`
+   background-color: ${(props) => (props.active ? "#FF9E9E" : "#ccc")};
+   color: #fff;
+   border: none;
+   padding: 10px 20px;
+   cursor: pointer;
+   margin: 0 10px;
+   border-radius: 5px;
+   transition: background-color 0.3s;
+
+   &:hover {
+      background-color: #aaa;
+   }
+`;
+
 const Frame = styled.div`
     position : relative;
     display : flex;
     width : 100%;
-    //min-height : 700px;
     background-color : white;
     border-radius : 16px;
     justify-content : center;
@@ -66,37 +107,22 @@ const Frame = styled.div`
 const FlexFrame = styled.div`
     display : flex;
     width : 90%;
-    //height : calc(100%);
     flex-direction: column;
-`
-
-// level 1
-const ItemContainer = styled.div`
-    width : 100%;
-    min-height : 20px;
-    height : auto;
 `
 
 const TitleContainer = styled.div`
     display : flex;
-    width : 100%;
-    height : 50px;
     flex-direction: column;
     justify-content : space-between;
+        height : 50px;
 `
 
-// level 2
-// Title Contanier
 const ComponentName = styled.div`
-        width : 100%;
-        min-height : 20px;
         height : auto;
         font-size: 24px;
-        font-family: "Nanum Square";
         font-style : "bold";
     `
 const ComponentIntro = styled.div`
-        width : 100%;
         height : auto;
         font-size : 14px;
         color : #BCBABA;
@@ -139,13 +165,11 @@ const FormContainer = styled.form`
     align-items: center;
 `
 
-// 글 작성 입력하는 textarea
 const ContentArea = styled.textarea`
-    width : 95%;
-    height : 300px;
-    border-radius : 12px;
-    padding: 15px;
-    font-size: 15px;
+    width : 98%;
+    height : 150px;
+    padding: 10px;
+    font-size: 14px;
 `
 
 export default WritingComponent;

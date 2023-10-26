@@ -20,8 +20,7 @@ const ImageUploadForm = (props) => {
 
     return (
         <Frame>
-            {/* 컨테이너 이름 : 이미지 추가 */}
-            <TitleContainer>사진 업로드</TitleContainer>
+            <TitleContainer>이미지 업로드</TitleContainer>
             <ItemShowContainer>
                 <ItemFlexManager>
                     <ItemContainer>

@@ -5,9 +5,7 @@ import SearchAction from 'component/Search/SearchAction'
 
 const SearchPage = () => {
     return (
-        <>
-            <SearchAction />
-        </>
+        <SearchAction />
     );
 };
 

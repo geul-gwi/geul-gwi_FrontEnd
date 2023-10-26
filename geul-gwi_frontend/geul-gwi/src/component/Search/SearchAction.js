@@ -153,6 +153,7 @@ const MainContainer = styled.div`
    gap: 10px;
    border-radius : 12px;
    width: 100%;
+   user-select: none;
 `
 
 const Container = styled.div`
@@ -166,7 +167,6 @@ const Container = styled.div`
    align-items: center;
 `
 
-// 하나의 글
 const Item = styled.div`
   position : relative;
   display : flex;
@@ -176,7 +176,6 @@ const Item = styled.div`
   background-color : white;
   box-shadow: 1px 1px 10px 2px rgba(50,50,50,0.2);
   overflow : hidden;
-
   justify-content: center;
   align-items: center;
   cursor : pointer;

@@ -25,9 +25,7 @@ const SortManager = (props) => {
         if (sortby === "인기순"){
             sortedItems.sort((a,b) => b.likeCount - a.likeCount);
         }
-        else if(sortby === "비인기순"){
-            sortedItems.sort((a,b) => a.likeCount - b.likeCount);
-        }
+
         setSortedList(sortedItems);
     }
 
