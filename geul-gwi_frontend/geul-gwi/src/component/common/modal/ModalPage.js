@@ -4,36 +4,23 @@ import clipboardCopy from 'clipboard-copy'; // 클립보드 저장용 라이브�
 import { toast } from 'react-toastify';     // 토스트 메시지를 보내기 위한 라이브러리
 import styled from 'styled-components';
 
-
 // import React icons
-import {IoMdClose} from "react-icons/io";
-import {MdOutlineContentCopy} from "react-icons/md";
-import {AiFillHeart,AiOutlineHeart} from "react-icons/ai";
-
-
+import { IoMdClose } from "react-icons/io";
+import { MdOutlineContentCopy } from "react-icons/md";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 const ModalPage = (props) => {
     const [iconShow, setIconShow] = useState(false);
-    const [data,setData] = useState(props.ModalData);
-
-    // public img Path
     const imagePath = process.env.PUBLIC_URL + '/img/';
-
-    useEffect(()=>{
-        setData(props.ModalData);
-    },[props.ModalData])
-    useEffect(() => {
-
-    }, [data]);
 
     const handleCopyClick = (text) => {
         clipboardCopy(text)
-        .then(() => {
-            toast.success("클립보드에 저장되었습니다.");
-        })
-        .catch((err) => {
-            toast.error("어떠한 오류발생..!");
-        });
+            .then(() => {
+                toast.success("클립보드에 저장되었습니다.");
+            })
+            .catch((err) => {
+                toast.error("어떠한 오류발생..!");
+            });
     }
 
 
@@ -44,42 +31,33 @@ const ModalPage = (props) => {
                 <ItemContainer>
                     {/* 이미지 영역 */}
                     {
-                        data.imgPath === null ?
-                        ""
-                        :
-                        <ImageContainer>
-                            <ImageItem src={imagePath + data.imgPath} />
-                        </ImageContainer>
+                        props.post.imgPath === null ?
+                            ""
+                            :
+                            <ImageContainer>
+                                <ImageItem src={imagePath + props.post.imgPath} />
+                            </ImageContainer>
                     }
 
-
                     {/* 작가명 */}
-                    <WriterNameContainer>
-                        {data.postUser}
-                    </WriterNameContainer>
-
-
-                    {/* 본문내용 */}
-                    <MainTextContainer isImgExist={data.imgPath === null ? false : true}>
-                         {/* ClipBoardCopy 영역 */}
-                        <MainTextCopyGround onMouseEnter={() => setIconShow(true)} onMouseLeave={() => setIconShow(false)} onClick={() => handleCopyClick(data.mainText)}>
+                    <Nickname>
+                        {props.post.nickname}
+                    </Nickname>
+                    <Content isImgExist={props.post.imgPath === null ? false : true}>
+                        {/* ClipBoardCopy 영역 */}
+                        <MainTextCopyGround onMouseEnter={() => setIconShow(true)} onMouseLeave={() => setIconShow(false)} onClick={() => handleCopyClick(props.post.geulgwi)}>
                             {
-                                iconShow ? <MdOutlineContentCopy size={30} />  : ""
+                                iconShow ? <MdOutlineContentCopy size={30} /> : ""
                             }
                         </MainTextCopyGround>
-                        {data.mainText}
-                    </MainTextContainer>
+                        {props.post.geulgwiContent}
+                    </Content>
 
-
-                    {/* 좋아요 및 좋아요 수 */}
                     <BottomContainer>
-                        {/* 좋아요 수 */}
                         <BottomLikeViewCount>
                             {/* {props.LikeCountConverter(data.likeCount)} */}
                             12k
                         </BottomLikeViewCount>
-
-                        {/* 좋아요 버튼 */}
                         <HeartBtnContainer>
                             {/* {
                                 data.isLikeClicked ?
@@ -94,20 +72,19 @@ const ModalPage = (props) => {
                             } */}
                             <AiFillHeart size={25} color={"red"} onClick={(event) => {
                                 event.stopPropagation();
-                                props.likeBtnClick(data.postNumber);
-                            }}/>
+                                props.likeBtnClick(props.post.geulgwiSeq);
+                            }} />
                         </HeartBtnContainer>
                     </BottomContainer>
                 </ItemContainer>
-
-               <CloseBox onClick={() => props.ModalClosed()}><IoMdClose size={24} color={"#444444"}/></CloseBox>
-
+                <CloseButton onClick={() => props.ModalClosed()}><IoMdClose size={24} color={"#444444"} /></CloseButton>
             </ViewPage>
         </ModelFrame>
     );
 };
 
 const ModelFrame = styled.div`
+    user-select: none;
     position : fixed;
     top : 0; left : 0;
     z-index : 998;
@@ -130,19 +107,20 @@ const ViewPage = styled.div`
 
 `
 // 닫기 버튼
-const CloseBox = styled.div`
+const CloseButton = styled.div`
     position : absolute;
     display : flex;
     top : 5px;
     right : 5px;
-    width : 30px; height : 30px;
-    border-radius : 50%;
-    justify-content : center; align-items : center;
+    width : 30px; 
+    height : 30px;
+    justify-content : center; 
+    align-items : center;
     transition : 0.2s;
     cursor : pointer;
 
     &:hover{
-        background-color : rgba(20,20,20,0.1);
+        color : black;
     }
 `
 
@@ -154,8 +132,7 @@ const ItemContainer = styled.div`
     flex-direction : column;
 `
 
-// 작가 이름
-const WriterNameContainer = styled.div`
+const Nickname = styled.div`
     display : flex;
     width : 100%;
     height : 10%;
@@ -178,7 +155,7 @@ const ImageItem = styled.img`
 `
 
 // 메인 텍스트 Container
-const MainTextContainer = styled.div`
+const Content = styled.div`
     position : relative;
     width : 100%;
     height :  ${(props) => (props.isImgExist ? `calc(20% - 20px)` : `calc(80% - 20px)`)};

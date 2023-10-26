@@ -2,23 +2,27 @@ import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
-// Axios Address Context
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 
-const TagSearchForm = () => {
+const TagSearchForm = (props) => {
   const PublicWritingIconPath = process.env.PUBLIC_URL + "/icon/Writing/";
-  const AxiosAddress = useState(useContext(AxiosAddrContext).axiosAddr);   // Axios Address
-  
-  // 전체 태그 리스트
-  const [tags, setTags] = useState([
-    { "fontColor": "white", "backColor": "#E3DFFF", "value": "#위로" },
-    { "fontColor": "white", "backColor": "#FED9D9", "value": "#동기부여" },
-    { "fontColor": "white", "backColor": "#D9F7D9", "value": "#감사" },
-    { "fontColor": "white", "backColor": "#FFEAA7", "value": "#시" },
-  ]);
+  const axiosAddress = useContext(AxiosAddrContext).axiosAddr;   // Axios Address
+  const defaultTagUrl = '/tag/list/DEFAULT';
 
-  const [searchContainerVisible, setSearchContainerVisible] = useState(false); // 필터 On/Off
+  const [tags, setTags] = useState([]); // 전체 태그 리스트
   const [selectedTag, setSelectedTag] = useState(null); // 검색하고자 하는 태그
+  const [searchContainerVisible, setSearchContainerVisible] = useState(false); // 필터 On/Off
+
+  useEffect(() => {
+    axios.post(`${axiosAddress}${defaultTagUrl}`)
+      .then(response => {
+        console.log("태그 요청 : ", response.data);
+        setTags(response.data);
+      })
+      .catch(error => {
+        console.error("태그 요청 실패: ", error);
+      });
+  }, []);
 
   const toggleSearchContainer = () => {
     setSearchContainerVisible(!searchContainerVisible);
@@ -26,14 +30,14 @@ const TagSearchForm = () => {
 
   const handleTagClick = (tagValue) => {
     if (selectedTag === tagValue) {
-      setSelectedTag(null); 
+      setSelectedTag(null);
     } else {
-      setSelectedTag(tagValue); 
+      setSelectedTag(tagValue);
     }
   };
 
   return (
-    <Container>
+    <>
       <SearchButton onClick={toggleSearchContainer}>
         <ButtonTextContainer >필터</ButtonTextContainer>
         <ButtonIconContainer>
@@ -45,28 +49,23 @@ const TagSearchForm = () => {
           <Title>검색하고 싶은 태그를 선택하세요</Title>
           <TagContainer>
             <TagsContainer>
-              {tags.map(tag => (
+              {tags && tags.map(tag => (
                 <TagButton
-                  key={tag.value}
                   fontColor={tag.fontColor}
                   backColor={tag.backColor}
                   selected={selectedTag === tag.value}
                   onClick={() => handleTagClick(tag.value)}
                 >
-                  {tag.value}
+                  {'# ' + tag.value}
                 </TagButton>
               ))}
             </TagsContainer>
           </TagContainer>
         </SearchContainer>
       )}
-    </Container>
+    </>
   )
 };
-
-const Container = styled.div`
-
-`;
 
 const SearchContainer = styled.div`
   display: flex;
