@@ -1,23 +1,29 @@
-import React, { Fragment, useContext, useState } from 'react';
+// import Library
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import styled from 'styled-components';
 import { Navigate, useNavigate } from 'react-router-dom';
 // Using Redux
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+// import axios
 import axios from 'axios';
+import { logout } from 'Reducer/authReducer';
 
 const MenuList = [];
 MenuList.push({'value' : '글 작성','componentSrc':'/main/Writing'});
 MenuList.push({'value' : '챌린지','componentSrc':'/main/WritingChallenge'});
 
 const HeaderMenu = () => {
-    const navigate = useNavigate();
     const AxiosAddress = useContext(AxiosAddrContext).axiosAddr; // Axios Address
     // User 로그인 정보
     const userToken = useSelector((state) => state.authReducer.accessToken);
     const logoutUrl = '/user/logout'; // 로그아웃 요청 주소
 
     const [isButtonHidden, setIsButtonHidden] = useState(false);
+
+    // object
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const ShowList = () => {
         setIsButtonHidden(!isButtonHidden);
@@ -39,6 +45,13 @@ const HeaderMenu = () => {
                                 {element.value}
                             </MenuItem>
                     ))}
+                    {
+                        userToken === null ?
+                        <MenuItem onClick={() => {OnLiClicked('/user/login')}}>로그인</MenuItem>
+                        :
+                        <MenuItem onClick={onLogout}>로그아웃</MenuItem>
+                    }
+                        
                 </MenuButtonManager>
             </MenuButtonContainer>
             }

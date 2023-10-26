@@ -3,6 +3,7 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';     // 토스트 메시지를 보내기 위한 라이브러리
 
 // Axios Addres Import
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';

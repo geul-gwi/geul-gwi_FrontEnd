@@ -1,4 +1,8 @@
+// import Library
 import React, { Fragment, useContext, useState } from 'react';
+import { toast } from 'react-toastify';     // 토스트 메시지를 보내기 위한 라이브러리
+import { useNavigate } from 'react-router-dom'; // 페이지 이동용 라이브러리
+
 // import Context
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 // import Page Component
@@ -13,9 +17,13 @@ const WritingAction = () => {
     const { userSeq, accessToken } = useSelector((state) => state.authReducer);
     const writingUrl = "/geulgwi/register/"; // 글 작성 요청 주소
     // State
-    const [FormMainText, setFormMainText] = useState(''); // 본문의 내용을 담는 State
-    const [fnTags, setFnTags] = useState([]); // 최종적으로 선택된 태그를 담는 List State 
-    const [urlImages, setUrlImages] = useState([]); // Url로 변환된 이미지 주소 Array
+    const [FormMainText,setFormMainText] = useState(''); // 본문의 내용을 담는 State
+    const [fnTags,setFnTags] = useState([]); // 최종적으로 선택된 태그를 담는 List State 
+    const [urlImages,setUrlImages] = useState([]); // Url로 변환된 이미지 주소 Array
+    // Object
+    const navigate = useNavigate(); // React Navigate = 페이지 이동
+
+
 
     // Handler
     const FormMainTextHandler = (e) => {

@@ -67,7 +67,13 @@ const HeaderUserMenu = () => {
                 src={userProfile ? userProfile : "/img/defaultProfile.png" }
                 onClick={showList} 
             />
-            <UserName>안녕하세요, {userNickname}님.</UserName>
+            {
+                userNickname === null ?
+                <UserName>로그인 해주세요</UserName>
+                :
+                <UserName>안녕하세요, {userNickname}님.</UserName>
+            }
+            
             {isButtonHidden && (
                 <MenuButtonContainer>
                     <MenuButtonManager>
