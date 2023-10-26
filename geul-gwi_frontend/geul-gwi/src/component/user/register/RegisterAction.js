@@ -234,7 +234,7 @@ const RegisterAction = () => {
         //props.setNewProfile(URL.createObjectURL(file)); 
         setProfile(file);
         setShowProfile(URL.createObjectURL(file));
-        
+
     };
 
     // 회원가입 Submit
@@ -252,7 +252,7 @@ const RegisterAction = () => {
             'userTagSeq': TagList
                 .filter(tag => tag.selected === true)
                 .map(tag => tag.tagSeq),
-            'email' : Email
+            'userEmail' : Email
         }
 
         console.log(joinDTO);
