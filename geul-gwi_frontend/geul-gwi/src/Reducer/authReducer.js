@@ -30,14 +30,14 @@ export const setuserseq = (userSequenceNumber) => ({
   payload: userSequenceNumber,
 });
 
-export const setUserProfile = (userProfile) => ({
+export const setProfile = (userProfile) => ({
   type: SET_USER_PROFILE,
   payload: userProfile,
 });
 
-export const setUserNickname = (userUserNickname) => ({
+export const setNickname = (userNickname) => ({
   type: SET_USER_NICKNAME,
-  payload: userUserNickname,
+  payload: userNickname,
 });
 
 // 리듀서 함수
@@ -54,7 +54,7 @@ const authReducer = (state = initialState, action) => {
         accessToken: null,
         userSeq : null,
         userProfile: null,
-        userUserNickname: null
+        userNickname: null
       };
     case SETUSERSEQ:
       return {
@@ -65,7 +65,7 @@ const authReducer = (state = initialState, action) => {
     case SET_USER_PROFILE:
       return {
         ...state,
-        userSeq: action.payload,
+        userProfile: action.payload,
       };
 
     case SET_USER_NICKNAME:

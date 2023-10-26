@@ -26,25 +26,6 @@ const HeaderMenu = () => {
         navigate(`${src}`);
     }
 
-    // 로그아웃 버튼 클릭
-    const onLogout = async () => {
-        //console.log("Current userToken : ", userToken);
-        await axios.post(`${AxiosAddress}${logoutUrl}`, {},
-            {
-                headers: {
-                    Authorization: "Bearer " + userToken,  // 토큰 넣어주기
-                },
-            }
-        )
-            .then((response) => {
-                //console.log("로그아웃 성공 : ", response);
-                navigate(`/user/login`); // 로그아웃 성공하면 메인 페이지로 이동한다.
-            }).catch((error) => {
-                console.error("로그아웃 실패 : ", error);
-            })
-      
-    }
-
     return (
         <MenuContainer>
             <IconBox onClick={ShowList}>
@@ -58,7 +39,6 @@ const HeaderMenu = () => {
                                 {element.value}
                             </MenuItem>
                     ))}
-                        <MenuItem onClick={onLogout}>로그아웃</MenuItem>
                 </MenuButtonManager>
             </MenuButtonContainer>
             }

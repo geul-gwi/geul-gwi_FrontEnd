@@ -6,26 +6,18 @@ import { useNavigate } from 'react-router-dom/';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 // css import
 import 'css/user/Register.css'
-
-
 // Import Component
 import RegisterContainer from 'component/user/register/RegisterContainer';
 
-
-
 const RegisterAction = () => {
-    // navigate
     const navigate = useNavigate();
-    
-    // Axios Address
-    const [AxiosAddress,SetAxiosAddress] = useState(useContext(AxiosAddrContext).axiosAddr);
+    const AxiosAddress = useContext(AxiosAddrContext).axiosAddr;
     // RequestMappings
     let JoinRequest = '/user/join';
     let IdChkMapping = "/user/validate";
     let NickChkMapping = "/user/validate/nickname";
     let EmailCodeRequestMapping = "/email/valid";
     let CodeValidMapping = "/email/valid/code";
-
     
     // State값들
     const [Id, setId] = useState("");
@@ -34,9 +26,10 @@ const RegisterAction = () => {
     const [NickName, setNickName] = useState("");
     const [Name, setName] = useState("");
     const [Email, setEmail] = useState("");
-    const [Age, setAge] = useState();
-    const [Gender, setGender] = useState("");
+    const [Age, setAge] = useState("");
+    const [Gender, setGender] = useState("Male");
     const [Tags, SetTags] = useState([]);
+    const [profile, setProfile] = useState(null);
 
     // 이메일 인증코드
     const [EmailValidConfirm, setEmailValidConfirm] = useState('');
@@ -220,49 +213,83 @@ const RegisterAction = () => {
 
     }
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [showProfile, setShowProfile] = useState(null);
+
+    // 프로필 사진 삭제 
+    const handleDeleteProfileImg = () => {
+        setProfile(null);
+        setShowProfile(null);
+    };
+
+    // 모달 창 ON/OFF
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
+
+    // 프로필 사진 변경
+    const handleProfileImgChange = (event) => {
+        const file = event.target.files[0];
+        //props.setNewProfile(URL.createObjectURL(file)); 
+        setProfile(file);
+        setShowProfile(URL.createObjectURL(file));
+    };
 
     // 회원가입 Submit
-    const onSubmitHandler = (event) => {
-        event.preventDefault();
+    const onSubmitHandler = async (event) => {
+        //event.preventDefault();
 
-        const data = {
-            userId : Id,
-            userPassword : Password,
-            userNickname : NickName,
-            userName : Name,
-            userAge : Age,
-            userGender : Gender,
-            userTagSeq: TagList
+        const formData = new FormData();
+        formData.append("file", profile);
+
+        const joinDTO = {
+            'userId' : Id,
+            'userPassword' : Password,
+            'userNickname' : NickName,
+            'userAge' : Age,
+            'userGender' : Gender,
+            'userTagSeq': TagList
                 .filter(tag => tag.selected === true)
-                .map(tag => tag.tagSeq)
-            // userEmail : Email
+                .map(tag => tag.tagSeq),
+            'email' : Email
         }
-        axios.post(AxiosAddress+JoinRequest, data)
+
+        console.log(joinDTO);
+
+        // 나머지 데이터를 JSON 문자열로 변환하여 FormData에 추가
+        formData.append("joinDTO", new Blob([JSON.stringify(joinDTO)], { type: "application/json" }));
+
+        formData.forEach((value, key) => {
+            console.log(key, value);
+        });
+
+        await axios.post(AxiosAddress + JoinRequest, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }})
             .then((response) => {
+                alert("회원가입을 완료했습니다.");   
                 console.log(response.data);
                 navigate('/user/login');
             })
             .catch(function(error){
                 console.log(error);
                 alert("예기치 못한 오류가 발생하였습니다.");        // 나중에 오류 처리 해줄 것
-                navigate('/user/register');
+                //navigate('/user/register');
             });
     }
-
-
-
 
     // 태그 버튼 생성 List
     let [TagList,setTagList] = useState([]);
 
-
     const tagListUrl = "/tag/list/DEFAULT";
     // Onload
     useEffect(() => {
-        console.log("url 주소: " + AxiosAddress + tagListUrl);
+        //console.log("url 주소: " + AxiosAddress + tagListUrl);
         axios.post(AxiosAddress + tagListUrl)
             .then(response => {
-                console.log(response.data);
+                //console.log(response.data);
                 const updatedList = response.data.map(tag => {
                     return {
                         ...tag,
@@ -299,6 +326,13 @@ const RegisterAction = () => {
         onAgeHandler={onAgeHandler}
         onGenderHandler={onGenderHandler}
         onSubmitHandler={onSubmitHandler}
+
+            isModalOpen={isModalOpen}
+            toggleModal={toggleModal}
+            handleDeleteProfileImg={handleDeleteProfileImg}
+            handleProfileImgChange={handleProfileImgChange}
+            showProfile={showProfile}
+
 
         // 유효성 검사
         CheckIdExist={CheckIdExist} // 아이디 중복확인

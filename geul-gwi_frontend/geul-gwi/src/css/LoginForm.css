@@ -97,6 +97,7 @@
     color:white;
     cursor: pointer;
 }
+
 .loginFormButton:hover{
     color : black;
     border: 3px solid pink;

@@ -1,24 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { FiLogOut } from 'react-icons/fi'; // 로그아웃 아이콘
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
-import { useSelector } from 'react-redux'; // Redux 사용 Library
+import { useDispatch, useSelector } from 'react-redux'; // Redux 사용 Library
+import Axios from 'axios';
+import { logout } from 'Reducer/authReducer';
 
 const HeaderUserMenu = () => {
-    const navigate = useNavigate();
-    // 유저 로그인 정보
+    const navigate = useNavigate(); // React Navigate = 페이지 이동
+    const dispatch = useDispatch(); // Redux Dispatch = 리덕스 저장소 사용
+    const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
+    const logoutUrl = '/user/logout';
+
     const userSeq = useSelector((state) => state.authReducer.userSeq);
+    const userToken = useSelector((state) => state.authReducer.accessToken);
     const userNickname = useSelector((state) => state.authReducer.userNickname);
     const userProfile = useSelector((state) => state.authReducer.userProfile);
+
     const [isButtonHidden, setIsButtonHidden] = useState(false);
+
+    // useEffect(() => {
+    //     console.log(userSeq);
+    //     console.log(userNickname);
+    //     console.log(userProfile);
+    //     console.log(userToken);
+    // }, [axiosAddr, userSeq, userToken, userNickname, userProfile]);
 
     const showList = () => {
         setIsButtonHidden(!isButtonHidden);
     };
 
     const onLiClicked = (path) => {
-            navigate(path);
+        navigate(path);
+    };
+
+    // 로그아웃
+    const onClickLogout = async () => {
+        try {
+            const response = await Axios.post(`${axiosAddr}${logoutUrl}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+            navigate('/user/login');
+            dispatch(logout());
+        
+        } catch (error) {
+            console.error('로그아웃 실패:', error);
+        }
     };
 
     const onClickProfile = () => {
@@ -40,7 +70,7 @@ const HeaderUserMenu = () => {
                         <MenuItem onClick={() => onClickProfile()}>
                             프로필
                         </MenuItem>
-                        <MenuItem onClick={() => onLiClicked('/')}>
+                        <MenuItem onClick={onClickLogout}>
                             로그아웃
                             <FiLogOut size={16} style={{ marginLeft: '8px' }} />
                         </MenuItem>
@@ -69,6 +99,7 @@ const ProfileImage = styled.img`
     margin-right: 10px;
     cursor: pointer;
     transition: transform 0.2s;
+    border: solid 1px #ccc;
 
     &:hover {
         transform: scale(1.1);

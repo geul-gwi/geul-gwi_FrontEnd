@@ -14,6 +14,8 @@ itemList.push({ "name": "탐색", "src": "/icon/Navigation/search.svg", "target"
 itemList.push({ "name": "알림", "src": "/icon/Navigation/bell.svg", "target": "/alarm" })
 itemList.push({ "name": "친구", "src": "/icon/Navigation/users.svg", "target": "/friend" })
 itemList.push({ "name": "쪽지", "src": "/icon/Navigation/users.svg", "target": "/main/message" })
+itemList.push({ "name": "챌린지", "src": "/icon/Navigation/users.svg", "target": "/main/WritingChallenge" })
+itemList.push({ "name": "글 작성", "src": "/icon/Navigation/users.svg", "target": "/main/Writing" })
 
 const Navigation = (props) => {
     // navigate Object
@@ -24,7 +26,7 @@ const Navigation = (props) => {
 
     // Function
     const ComponentMove = (target) => {
-        if (target === "/alarm"){
+        if (target === "/alarm") {
             handleAlertClick();
             return;
         }
@@ -49,21 +51,21 @@ const Navigation = (props) => {
     return (
         <NaviFrame>
             {
-                itemList.map((element,idx) => (
-                    <ItemContainer id={"NaviButton"+idx} onClick={() => ComponentMove(element.target)}>
-                        <IconBox><IconImg src={process.env.PUBLIC_URL + element.src} alt={element.name}/></IconBox>
+                itemList.map((element, idx) => (
+                    <ItemContainer id={"NaviButton" + idx} onClick={() => ComponentMove(element.target)}>
+                        <IconBox><IconImg src={process.env.PUBLIC_URL + element.src} alt={element.name} /></IconBox>
                         <TextBox>{element.name}</TextBox>
                     </ItemContainer>
                 ))
             }
             <AlertContainer>
-                {isAlertFormVisible && 
-                <NoticeForm 
-                    handleAlertClick={handleAlertClick}
-                />}
+                {isAlertFormVisible &&
+                    <NoticeForm
+                        handleAlertClick={handleAlertClick}
+                    />}
                 {isFriendForm &&
                     <FriendForm
-                    handleFriendClick={handleFriendClick}
+                        handleFriendClick={handleFriendClick}
                     />}
             </AlertContainer>
         </NaviFrame>
@@ -76,6 +78,7 @@ const AlertContainer = styled.div`
     left: calc(100% + 10px);
 `
 const NaviFrame = styled.div`
+    user-select: none;
     display : flex;
     width : 100%;
     min-height : 100px;
@@ -96,37 +99,34 @@ const NaviFrame = styled.div`
 `
 const ItemContainer = styled.div`
     display : flex;
-    width : 65%;
-    height : 40px;
+    width : 80%;
+    height : 60px;
     justify-content : center;
     align-items : center;
     cursor : pointer;
-    margin-bottom : 15px;
-    padding : 0px 10px 0px 10px;
+    margin-bottom : 10px;
     border-radius: 16px ;
+    padding: 10px 0px;
+    
     &:hover{
         background-color : #DFDFDF;
     }
 `
 const IconBox = styled.div`
     display : flex;
-    width : 40%;
-    height : 100%;
+    flex: 1;
     justify-content : center;
     align-items:  center;
 `
 const TextBox = styled.div`
     display : flex;
-    width : 59%;
-    height : 100%;
-
-    justify-content: center;
+    flex: 1;
     align-items: center;
     color : #343434;
 `
 const IconImg = styled.img`
-    width : 25px;
-    height : 25px;
+    width : 20px;
+    height : 20px;
 `
 
 

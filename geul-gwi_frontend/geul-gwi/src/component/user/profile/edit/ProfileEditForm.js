@@ -89,15 +89,11 @@ const ProfileEditForm = ({ userInfo }) => {
             formData.append("updateDTO", new Blob([JSON.stringify(updateDTO)], {type:"application/json"}));
 
             const response = await axios.post(
-                `${axiosAddress}${userUpdateUrl}${userSeq}`,
-                formData, // 사진 파일
-                {
+                `${axiosAddress}${userUpdateUrl}${userSeq}`, formData, {
                     headers: {
                         Authorization: "Bearer " + userToken,
                         'Content-Type': 'multipart/form-data',
-                    },
-                }
-            );
+            }});
             if (response) {
                 console.log('프로필 편집 성공 : ', response);
                 navigate('/main/Profile');

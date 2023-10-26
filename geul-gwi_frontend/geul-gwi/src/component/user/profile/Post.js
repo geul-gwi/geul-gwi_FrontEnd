@@ -261,14 +261,20 @@ const PostImageContainer = styled.div`
     display : flex;
     flex-direction: row;
     width : 100%;
-    height : auto;
+    height : 500px;
     justify-content : center;
     align-items : center;
     margin-bottom: 30px;
+    overflow: hidden;
+    & img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
 `
 const Content = styled.div`
     width : 100%;
-    height : auto;
+    min-height: 30px;
     margin-bottom : 25px;
     font-size: 14px;
 `
