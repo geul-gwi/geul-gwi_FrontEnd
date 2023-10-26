@@ -20,19 +20,8 @@ const HeaderUserMenu = () => {
 
     const [isButtonHidden, setIsButtonHidden] = useState(false);
 
-    // useEffect(() => {
-    //     console.log(userSeq);
-    //     console.log(userNickname);
-    //     console.log(userProfile);
-    //     console.log(userToken);
-    // }, [axiosAddr, userSeq, userToken, userNickname, userProfile]);
-
     const showList = () => {
         setIsButtonHidden(!isButtonHidden);
-    };
-
-    const onLiClicked = (path) => {
-        navigate(path);
     };
 
     // 로그아웃

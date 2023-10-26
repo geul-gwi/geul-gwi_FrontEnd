@@ -20,7 +20,7 @@ import '../../../css/LoginForm.css';
 // Import For use Redux
 import { useDispatch, useSelector } from 'react-redux'; // Redux 사용 Library
 import { setToken, clearToken } from 'Reducer/auth';
-import { login, setNickname, setProfile, setuserseq } from 'Reducer/authReducer';
+import { login, setNickname, setProfile, setUserSeq } from 'Reducer/authReducer';
 
 const LoginForm = () => {
     // AxiosAddress 
@@ -57,7 +57,7 @@ const LoginForm = () => {
                 console.log(response.data);
 
                 dispatch(login(response.data.accessToken));
-                dispatch(setuserseq(response.data.userSeq));
+                dispatch(setUserSeq(response.data.userSeq));
                 dispatch(setNickname(response.data.userNickname));
                 fetchAndSetProfileImage(response.data.profile);
 

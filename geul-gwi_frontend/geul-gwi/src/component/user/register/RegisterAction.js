@@ -170,15 +170,12 @@ const RegisterAction = () => {
     }
 
 
-    // 이메일 인증 버튼
+    // 이메일 인증을 위한 인증번호 요청 함수
     const RequestEmailCode = async (email) => {
-        // 요청을 아직 하지 않았다면,
-        console.log("Email Send : "+Email);
-        console.log("Email Request Console => "+ AxiosAddress+EmailCodeRequestMapping)
+        console.log("이메일 인증 요청");
         try{
             const response = await axios.post(AxiosAddress+EmailCodeRequestMapping, {"email" : Email});
             setShowEmailValidContainer(true);
-            alert("성공적으로 이메일 인증 요청이 완료되었습니다.");
             console.log(response);
             return true;
         }
@@ -189,19 +186,17 @@ const RegisterAction = () => {
         }
     }
 
-    // 이메일 인증코드 확인
+    // 이메일 인증번호 확인 요청 함수
     const CheckEmailValidCode = async() => {
-        console.log("Valid Confirm Step");
-        console.log("Input Code value : "+ EmailValidConfirm);
-        console.log("AxiosAddress Check : "+AxiosAddress+CodeValidMapping);
+        console.log("인증번호 확인 요청");
         try{
             const response = await axios.post(AxiosAddress+CodeValidMapping, {"code" : EmailValidConfirm});
-            alert("인증이 성공적으로 완료되었습니다.");
+            alert("이메일 인증이 완료되었습니다.");
             console.log(response);
             return true;
         }
         catch(error){
-            alert("인증코드가 틀립니다.");
+            alert("인증번호가 다릅니다.");
             console.log(error);
             return false;
         }

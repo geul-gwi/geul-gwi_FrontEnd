@@ -2,7 +2,6 @@ import React from 'react';
 import styled  from "styled-components";
 import { useNavigate } from 'react-router-dom';
 // Import Component
-import HeaderMenu from "component/common/header/HeaderMenu";
 import HeaderUserMenu from "component/common/header/HeaderUserMenu";
 
 
@@ -19,7 +18,6 @@ const Header = () => {
             </TextContainer>
             <IconContainer>
                 <HeaderUserMenu/>
-                <HeaderMenu/>
             </IconContainer>
         </Container>
     );

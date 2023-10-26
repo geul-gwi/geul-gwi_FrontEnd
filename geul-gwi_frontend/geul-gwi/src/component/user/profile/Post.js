@@ -120,7 +120,7 @@ const Post = (props) => {
             };
 
         } catch (error) {
-            console.error('좋아요 후 새로고침 실패.', error);
+            console.error('이미지 가져오기에 실패했습니다.', error);
             return null;
         }
     }
