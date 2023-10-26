@@ -128,80 +128,85 @@ const RegisterContainer = (props) => {
             {
                 props.PageStep === "page1" ?
 
-                    <PrivacyContainer>
-                        <div style={{ display: 'flex', flexDirection: 'column', width: '400px', height: '100%', margin: '0 auto' }}>
-                            <h3 className='title'>회원 가입</h3>
-                            <h5 className='sub_title'>회원 정보를 입력해주세요</h5>
-                            <label>프로필 이미지</label>
-                            <ProfilePicture
-                                src={props.showProfile? (props.showProfile) : null || '/img/defaultProfile.png'}
-                                onClick={props.toggleModal}
-                            />
-                            <label>아이디</label>
-                            <input type='text' value={props.Id} onBlur={() => CheckId()} onChange={props.onIdHandler} placeholder='아이디' />
-                            <ShowText id='idCheck'></ShowText>
+                        <PrivacyContainer>
+                            <div style={{ display: 'flex', flexDirection: 'column', width: '400px', height: '100%', margin: '0 auto' }}>
+                                <h3 className='title'>회원 가입</h3>
+                                <h5 className='sub_title'>회원 정보를 입력해주세요</h5>
 
-                            <label>비밀번호</label>
-                            <input type='password' value={props.Password} onChange={props.onPasswordHandler} placeholder='영문 숫자를 조합하여 8~15자의 비밀번호를 작성해주세요.'
-                                onBlur={() => {
-                                    CheckPwdRegularExpression()
-                                }} />
-                            <ShowText id='pwdCheck'></ShowText>
+                                <label>프로필 이미지</label>
+                                <ProfilePicture
+                                    src={props.showProfile ? (props.showProfile) : null || '/img/defaultProfile.png'}
+                                    onClick={props.toggleModal}
+                                />
+                                <label>아이디</label>
+                                <input type='text' value={props.Id} onBlur={() => CheckId()} onChange={props.onIdHandler} placeholder='아이디' />
+                                <ShowText id='idCheck'></ShowText>
 
-                            <label>비밀번호 재확인</label>
-                            <input type='password' value={props.ConfirmPassword} onChange={props.onConfirmPasswordHandler} placeholder='비밀번호 재입력'
-                                onBlur={() => CheckConfirmPassword()}
-                            />
-                            <ShowText id='pwdConfirm'></ShowText>
+                                <label>비밀번호</label>
+                                <input type='password' value={props.Password} onChange={props.onPasswordHandler} placeholder='영문 숫자를 조합하여 8~15자의 비밀번호를 작성해주세요.'
+                                    onBlur={() => {
+                                        CheckPwdRegularExpression()
+                                    }} />
+                                <ShowText id='pwdCheck'></ShowText>
 
-                            <label>닉네임</label>
-                            <input type='text' value={props.NickName} onChange={props.onNickNameHandler} placeholder='닉네임' onBlur={CheckNickname} />
-                            <ShowText id='nicknameCheck'></ShowText>
+                                <label>비밀번호 재확인</label>
+                                <input type='password' value={props.ConfirmPassword} onChange={props.onConfirmPasswordHandler} placeholder='비밀번호 재입력'
+                                    onBlur={() => CheckConfirmPassword()}
+                                />
+                                <ShowText id='pwdConfirm'></ShowText>
 
-                            <label>나이</label>
-                            <input type='number' value={props.Age} onChange={props.onAgeHandler} placeholder='나이 입력' />
-                            <ShowText></ShowText>
+                                <label>닉네임</label>
+                                <input type='text' value={props.NickName} onChange={props.onNickNameHandler} placeholder='닉네임' onBlur={CheckNickname} />
+                                <ShowText id='nicknameCheck'></ShowText>
 
-                            <label>성별</label>
-                            <select id='gender_input' onChange={props.onGenderHandler}>
-                                <option value={'Male'}>남성</option>
-                                <option value={'FeMale'}>여성</option>
-                            </select>
-                            <ShowText></ShowText>
+                                <label>나이</label>
+                                <input type='number' value={props.Age} onChange={props.onAgeHandler} placeholder='나이 입력' />
+                                <ShowText></ShowText>
 
-                            <label>이메일</label>
-                            {/* <input type='email' value={Email} onChange={onEmailHandler} placeholder='이메일 입력' style={{width : '50%;'}}/> */}
-                            <EmailValidContainer>
-                                <EmailValidRequestContainer>
-                                    <EmailInput type="email" value={props.Email} onChange={(e) => props.onEmailHandler(e)} placeholder='이메일 주소' />
-                                    <EmailValidRequestButton id="emailValidButton" onClick={() => RequestEmailValid()}>인증요청</EmailValidRequestButton>
-                                </EmailValidRequestContainer>
-                                {
-                                    props.ShowEmailValidContainer ?
-                                        <EmailValidConfirmContainer value={props.EmailValidConfirm} onChange={props.EmailValidCodeHandler} /> :
-                                        ""
-                                }
-                            </EmailValidContainer>
+                                <label>성별</label>
+                                <select id='gender_input' onChange={props.onGenderHandler}>
+                                    <option value={'Male'}>남성</option>
+                                    <option value={'FeMale'}>여성</option>
+                                </select>
+                                <ShowText></ShowText>
 
-                            <ShowText></ShowText>
+                                <label>이메일</label>
+                                {/* <input type='email' value={Email} onChange={onEmailHandler} placeholder='이메일 입력' style={{width : '50%;'}}/> */}
+                                <EmailValidContainer>
+                                    <EmailValidRequestContainer>
+                                        <EmailInput type="email" value={props.Email} onChange={(e) => props.onEmailHandler(e)} placeholder='이메일 주소' />
+                                        <EmailValidRequestButton id="emailValidButton" onClick={() => RequestEmailValid()}>인증요청</EmailValidRequestButton>
+                                    </EmailValidRequestContainer>
+                                    {
+                                        props.ShowEmailValidContainer ?
+                                            <EmailValidConfirmContainer value={props.EmailValidConfirm} onChange={props.EmailValidCodeHandler} /> :
+                                            ""
+                                    }
+                                </EmailValidContainer>
+                            <AlreadyAccountContainer>
+                                계정이 있으신가요?
+                                <LoginButton>로그인</LoginButton>
+                            </AlreadyAccountContainer>
+                                <ShowText></ShowText>
+                                <NextButton onClick={props.ToggleMove}>
+                                    다음
+                                </NextButton>
+                                {props.isModalOpen && (
+                                    <ModalOverlay>
+                                        <ModalContent>
+                                            <img src={props.showProfile} />
+                                            <ModalButtonGroup>
+                                                <input id="fileInput" type="file" accept="image/*" onChange={props.handleProfileImgChange} />
+                                                <Button onClick={props.handleDeleteProfileImg}>삭제</Button>
+                                                <Button onClick={props.toggleModal}>닫기</Button>
+                                            </ModalButtonGroup>
+                                        </ModalContent>
+                                    </ModalOverlay>
+                                )}
+                            </div>
 
-                            <NextButton onClick={props.ToggleMove}>
-                                다음
-                            </NextButton>
-                            {props.isModalOpen && (
-                                <ModalOverlay>
-                                    <ModalContent>
-                                        <img src={props.showProfile} />
-                                        <ModalButtonGroup>
-                                            <input id="fileInput" type="file" accept="image/*" onChange={props.handleProfileImgChange} />
-                                            <Button onClick={props.handleDeleteProfileImg}>삭제</Button>
-                                            <Button onClick={props.toggleModal}>닫기</Button>
-                                        </ModalButtonGroup>
-                                    </ModalContent>
-                                </ModalOverlay>
-                            )}
-                        </div>
-                    </PrivacyContainer>
+                        </PrivacyContainer>
+   
 
                     :
 
@@ -450,5 +455,22 @@ const Button = styled.button`
         background-color: #f2f2f2;
     }
 `;
+
+const AlreadyAccountContainer = styled.div`
+    margin: auto;
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: black;
+`;
+
+const LoginButton = styled.span`
+    margin-left: 5px;
+    color: skyblue;
+    cursor: pointer;
+`;
+
 
 export default RegisterContainer;

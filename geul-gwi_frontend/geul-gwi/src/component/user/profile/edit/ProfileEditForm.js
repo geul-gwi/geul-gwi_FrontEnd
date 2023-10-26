@@ -74,16 +74,16 @@ const ProfileEditForm = ({ userInfo }) => {
 
         try {
             const formData = new FormData();
-            
             formData.append("file", newProfile);
-
-            //const userSeqNumber = Number(userSeq);
             const updateDTO = {
                 password: showPasswordChange ? newPassword : userInfo.password,
                 nickname: newNickname,
                 userTagSeq: selectedTags ? selectedTags.map(tag => tag.tagSeq) : null, // 선택된 태그가 있을 때만 매핑
                 comment: newComment,
             };
+
+            console.log(updateDTO);
+            console.log('FormData:', formData);
 
             // 나머지 데이터를 JSON 문자열로 변환하여 FormData에 추가
             formData.append("updateDTO", new Blob([JSON.stringify(updateDTO)], {type:"application/json"}));
@@ -96,7 +96,7 @@ const ProfileEditForm = ({ userInfo }) => {
             }});
             if (response) {
                 console.log('프로필 편집 성공 : ', response);
-                navigate('/main/Profile');
+                navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
             }
         } catch (error) {
             console.log('프로필 편집 실패  : ', error);

@@ -13,9 +13,9 @@ itemList.push({ "name": "홈", "src": "/icon/Navigation/home.svg", "target": "/"
 itemList.push({ "name": "탐색", "src": "/icon/Navigation/search.svg", "target": "/main/Search" });
 itemList.push({ "name": "알림", "src": "/icon/Navigation/bell.svg", "target": "/alarm" })
 itemList.push({ "name": "친구", "src": "/icon/Navigation/users.svg", "target": "/friend" })
-itemList.push({ "name": "쪽지", "src": "/icon/Navigation/users.svg", "target": "/main/message" })
-itemList.push({ "name": "챌린지", "src": "/icon/Navigation/users.svg", "target": "/main/WritingChallenge" })
-itemList.push({ "name": "글 작성", "src": "/icon/Navigation/users.svg", "target": "/main/Writing" })
+itemList.push({ "name": "쪽지", "src": "/icon/Navigation/free-icon-letter-1250663.png", "target": "/main/message" })
+itemList.push({ "name": "챌린지", "src": "/icon/Navigation/free-icon-notes-622216.png", "target": "/main/WritingChallenge" })
+itemList.push({ "name": "작성", "src": "/icon/Navigation/free-icon-add-button-7324985.png", "target": "/main/Writing" })
 
 const Navigation = (props) => {
     // navigate Object
@@ -85,7 +85,7 @@ const NaviFrame = styled.div`
     height : auto;
     flex-direction : column;
     align-items : center;
-
+    gap: 10px;
     background-color: white;
     border-radius : 16px;
     padding : 20px 0px 20px 0px;
@@ -100,13 +100,11 @@ const NaviFrame = styled.div`
 const ItemContainer = styled.div`
     display : flex;
     width : 80%;
-    height : 60px;
+    height : 50px;
     justify-content : center;
     align-items : center;
     cursor : pointer;
-    margin-bottom : 10px;
     border-radius: 16px ;
-    padding: 10px 0px;
     
     &:hover{
         background-color : #DFDFDF;

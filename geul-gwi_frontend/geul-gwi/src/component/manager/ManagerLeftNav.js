@@ -15,7 +15,7 @@ const ManagerLeftNav = () => {
         <NavBar>
             <ItemContainer>
                 <Item
-                    onClick={() => handleNavigation('/manager/memberManagement')}
+                    onClick={() => handleNavigation('/manager/member')}
                     active={activeItem === 'member'}
                     onMouseEnter={() => setActiveItem('member')}
                     onMouseLeave={() => setActiveItem(null)}
@@ -25,8 +25,8 @@ const ManagerLeftNav = () => {
                     </IconContainer>
                     <ItemLabel active={activeItem === 'member'}>회원</ItemLabel>
                 </Item>
-                {/* <Item
-                    onClick={() => handleNavigation('/manager/challengeManagement')}
+                <Item
+                    onClick={() => handleNavigation('/manager/challenge')}
                     active={activeItem === 'challenge'}
                     onMouseEnter={() => setActiveItem('challenge')}
                     onMouseLeave={() => setActiveItem(null)}
@@ -35,7 +35,7 @@ const ManagerLeftNav = () => {
                         <FiTrello size={24} />
                     </IconContainer>
                     <ItemLabel active={activeItem === 'challenge'}>챌린지</ItemLabel>
-                </Item> */}
+                </Item>
                 <Item
                     onClick={() => handleNavigation('/manager')}
                     active={activeItem === 'tag'}

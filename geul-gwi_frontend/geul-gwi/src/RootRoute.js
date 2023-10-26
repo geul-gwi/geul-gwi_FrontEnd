@@ -8,7 +8,7 @@ import UserStore from 'contextStore/UserStore';
 import User from 'Routes/user/User';
 import MainRoute from 'Routes/main/MainRoute';
 import Home from 'pageComponent/Home';
-import ManagerRoute from 'Routes/manager/ManagerRoute';
+import ManagerPage from 'pageComponent/ManagerPage';
 
 const RootRoute = () => {
     return (
@@ -19,7 +19,7 @@ const RootRoute = () => {
                     <Route path='/' element={<Home />}></Route>
                     <Route path='/user/*' element={<User />}></Route>
                     <Route path='/main/*' element={<MainRoute />}></Route>
-                    <Route path='/manager/*' element={<ManagerRoute />}></Route>
+                    <Route path='/manager/*' element={<ManagerPage />}></Route>
                 </Routes>
                 
             </UserStore>

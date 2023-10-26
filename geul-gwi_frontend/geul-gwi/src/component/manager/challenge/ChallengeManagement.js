@@ -37,7 +37,7 @@ const ChallengeManagement = () => {
   return (
     <MainContainer>
       <TopContainer>
-        <Title>챌린지 관리</Title>
+        <Title>챌린지</Title>
       </TopContainer>
       <ShowButton onClick={ShowList}>
         <ButtonTextContainer>챌린지 추가</ButtonTextContainer>
@@ -95,6 +95,7 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  user-select: none;
 `
 const Button = styled.div`
   background-color: white;
@@ -116,17 +117,17 @@ const TopContainer = styled.div`
 
 const BottomContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   background-color: white;
   border-radius: 8px;
-  padding: 20px;
+  padding: 10px;
 `
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: 500px;
+  height: auto;
   margin: 20px;
   align-items: center;
 `
@@ -144,11 +145,11 @@ const TagsContainer = styled.div`
 `;
 
 const InputComent = styled.textarea`
-  width: 300px;
-  height: 300px;
+  width: 100%;
+  height: 100px;
   border-radius: 8px;
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 10px;
   resize: vertical;
   margin-top: 10px;
 `;

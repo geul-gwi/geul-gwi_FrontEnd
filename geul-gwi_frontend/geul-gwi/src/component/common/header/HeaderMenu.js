@@ -54,6 +54,7 @@ const MenuContainer = styled.div`
     height : 100%;
     justify-content : center;
     align-items : center; 
+    margin-right: 20px;
 `
 const IconBox = styled.div`
     display : flex;

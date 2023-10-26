@@ -52,8 +52,13 @@ const FriendItem = (props) => {
     }
 
     const onClickDelete = () => {
-        alert(`${props.friend.nickname}님을 정말로 삭제하시겠습니까?`);
-        props.friendDeleteHandler(props.friend.userSeq);
+        const confirmMessage = `정말로 ${props.friend.nickname}님을 삭제하시겠습니까?`;
+        // 사용자에게 확인 대화 상자를 표시
+        const userConfirmed = window.confirm(confirmMessage);
+        // 사용자가 확인을 누른 경우에만 삭제 함수를 호출
+        if (userConfirmed) {
+            props.friendDeleteHandler(props.friend.userSeq);
+        }
     };
 
     // 프로필 클릭 => 해당 유저 프로필로 이동한다.

@@ -146,7 +146,7 @@ const HeadContainer = styled.div`
     top : 0%;
     left : 0%;
     width : 100%;
-    height : 70px;
+    height : 80px;
     z-index : 1;
 `
 const ContainerFrame = styled.div`
@@ -161,7 +161,7 @@ const LeftContainer = styled(ContainerFrame)`
     display : flex;
     left : 40px;
     top : 100px;
-    height : 470px;
+    height : auto;
     z-index : 1;
     flex-direction : column;
     justify-content: space-between;

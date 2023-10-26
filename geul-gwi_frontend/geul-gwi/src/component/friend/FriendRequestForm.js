@@ -10,7 +10,7 @@ const FriendRequestForm = (props) => {
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
-    const friendRequestsUrl = '/friend/list/Pending/'; // 친구 요청 목록 요청 주소
+    const friendRequestsUrl = '/friend/list/pending/'; // 친구 요청 목록 요청 주소
 
     const [requests, setRequests] = useState([]); // 친구 요청 목록 데이터
 

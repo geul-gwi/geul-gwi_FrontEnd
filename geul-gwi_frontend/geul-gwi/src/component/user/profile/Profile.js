@@ -30,7 +30,8 @@ const Profile = ({profileUserSeq}) => {
         });
         setUserInfo(response.data);
         // 이미지 가져오는 함수를 호출
-        fetchImageData(response.data.profile);
+        if (response.data.profile !== null)
+          fetchImageData(response.data.profile);
       } catch (error) {
         console.log('프로필 불러오기 실패:', error);
       }
@@ -59,7 +60,7 @@ const Profile = ({profileUserSeq}) => {
         reader.readAsDataURL(newFile);
       }
     } catch (error) {
-      console.error('이미지 가져오기에 실패했습니다.', error);
+      console.error('프로필 이미지 가져오기에 실패했습니다.', error);
     }
   }
 
@@ -86,6 +87,7 @@ const Profile = ({profileUserSeq}) => {
         'toUser' : profileUserSeq, // 요청 받는 사람
         'fromUser' : userSeq, // 요청 보낸 사람
       };
+      console.log(friendDTO);
       const response = await Axios.post(`${axiosAddr}${friendRequestUrl}`, friendDTO, {
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -146,8 +148,8 @@ const ProfileContainer = styled.div`
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     background-color: white;
-    padding: 25px 0px;
     user-select: none;
+    padding: 20px 0;
 `;
 
 const TagsContainer = styled.div`

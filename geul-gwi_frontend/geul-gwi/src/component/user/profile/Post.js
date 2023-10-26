@@ -120,7 +120,7 @@ const Post = (props) => {
             };
 
         } catch (error) {
-            console.error('이미지 가져오기에 실패했습니다.', error);
+            console.error('좋아요 후 새로고침 실패.', error);
             return null;
         }
     }
@@ -261,20 +261,14 @@ const PostImageContainer = styled.div`
     display : flex;
     flex-direction: row;
     width : 100%;
-    height : 500px;
+    height : auto;
     justify-content : center;
     align-items : center;
     margin-bottom: 30px;
-    overflow: hidden;
-    & img {
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
-    }
 `
 const Content = styled.div`
     width : 100%;
-    min-height: 30px;
+    height : auto;
     margin-bottom : 25px;
     font-size: 14px;
 `

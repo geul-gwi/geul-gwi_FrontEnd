@@ -20,16 +20,26 @@ const NoticeItem = (props) => {
     const userToken = useSelector((state) => state.authReducer.accessToken);
 
     const [profile, setProfile] = useState();
+    const [friendStatus, setFriendStatus] = useState(null);
+
+    const friendAcceptUrl = '/friend/confirm'; // 친구 요청 확인 요청 주소
+    const friendStatusUrl = '/friend/status'; // 친구 상태 요청 주소
 
     useEffect(() => {
         fetchImageData(props.notice.profile)
             .then(imageUrl => {
                 setProfile(imageUrl);
+
+                if (friendStatus === null) {
+                    CheckFriendStatus().then((status) => {
+                        setFriendStatus(status);
+                    });
+                }
             })
             .catch(error => {
                 console.error('이미지 가져오기에 실패했습니다.', error);
             });
-    }, [props.notice.profile]);
+    }, [props.notice.profile, friendStatus]);
 
     // 서버에서 받은 시간 표준으로 바꾸는 함수!!
     function parseISOString(s) {
@@ -102,7 +112,7 @@ const NoticeItem = (props) => {
     const generateMessage = () => {
         switch (props.notice.type) {
             case 'FRIEND':
-                return `${props.notice.nickname}님이 친구 요청을 했습니다.`;
+                return `${props.notice.nickname}님이 친구를 요청했습니다.`;
             case 'MESSAGE':
                 return `${props.notice.nickname}님이 쪽지를 보냈습니다.`;
             case 'GEULGWI':
@@ -118,10 +128,54 @@ const NoticeItem = (props) => {
         }
     };
 
+    // 친구 상태인지 체크하는 함수
+    const CheckFriendStatus = async () => {
+        try {
+            const friendDTO = {
+                'toUser': props.notice.fromUser, // 확인하고 싶은 사람
+                'fromUser': userSeq, // 나
+            };
+            console.log(`관계 확인 : `, friendDTO);
+            const response = await Axios.post(`${axiosAddr}${friendStatusUrl}`, friendDTO, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+            console.log(response.data);
+
+            return response.data;
+
+        } catch (error) {
+            console.error('친구 상태 확인 실패 : ', error);
+        }
+    };
+
     // 프로필 클릭 => 해당 유저의 프로필로 이동한다.
     const onClickProfile = () => {
         navigate('/main/Profile', { state: { profileUserSeq: props.notice.fromUser } });
         props.handleAlertClick(); // 닫기
+    };
+
+    // 친구 요청 수락
+    const onFriendRequestAccept = async () => {
+        // 이미 친구 상태인지 확인한다.
+        if (CheckFriendStatus() === 'friend') return;
+
+        // try {
+        //     const friendDTO = {
+        //         'toUser': props.notice.fromUser, // 나에게 요청 보낸 사람
+        //         'fromUser': userSeq, // 나
+        //     };
+        //     const response = await Axios.post(`${axiosAddr}${friendAcceptUrl}`, friendDTO, {
+        //         headers: {
+        //             Authorization: `Bearer ${userToken}`,
+        //         },
+        //     });
+        //     console.log('친구 요청 수락 완료 : ', response);
+           
+        // } catch (error) {
+        //     console.error('친구 요청 수락 실패 : ', error);
+        // }
     };
 
     return (
@@ -137,6 +191,7 @@ const NoticeItem = (props) => {
                 <Time>{formatDateTime(props.notice.regDate)}</Time>
             </ContentContainer>
             <ProfileContainer>
+                {friendStatus !== 'friend' && <Button onClick={onFriendRequestAccept}>확인</Button>}
                 {!props.notice.checked && <RedDot /> }
                 <CloseButton onClick={onClickDelete}>&times;</CloseButton>
             </ProfileContainer>
@@ -178,9 +233,8 @@ const RedDot = styled.div`
 `;
 
 const ProfileImage = styled.img`
-    /* 이미지 스타일 */
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 1px solid #ccc;
     margin-right: 10px;
@@ -200,13 +254,13 @@ const ProfileContainer = styled.div`
     height: 100%;
     align-items: center;
     justify-content: center;
-    flex: 1;
+    flex: 3;
     position: relative;
 `;
 
 
 const ContentContainer = styled.div`
-    flex: 9;
+    flex: 8;
 `;
 
 const Name = styled.div`
@@ -230,11 +284,11 @@ const CloseButton = styled.div`
     cursor: pointer;
 `;
 
-const FollowButton = styled.button`
+const Button = styled.button`
     background-color: ${props => props.isFollowing ? "#f2f2f2" : "#3498db"};
     color: ${props => props.isFollowing ? "#333" : "white"}; 
     border: none;
-    padding: 5px 15px;
+    padding: 5px 20px;
     border-radius: 8px;
     cursor: pointer;
     font-size: 12px;
@@ -244,5 +298,7 @@ const FollowButton = styled.button`
         background-color: ${props => props.isFollowing ? "#e0e0e0" : "#2380c1"};
     }
 `;
+
+
 
 export default NoticeItem;

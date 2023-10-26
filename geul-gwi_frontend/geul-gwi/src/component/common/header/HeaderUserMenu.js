@@ -55,6 +55,10 @@ const HeaderUserMenu = () => {
         navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
     };
 
+    const onClickManagement = () => {
+        navigate('/manager');
+    };
+
 
     return (
         
@@ -67,6 +71,9 @@ const HeaderUserMenu = () => {
             {isButtonHidden && (
                 <MenuButtonContainer>
                     <MenuButtonManager>
+                        <MenuItem onClick={onClickManagement}>
+                            사이트 관리
+                        </MenuItem>
                         <MenuItem onClick={() => onClickProfile()}>
                             프로필
                         </MenuItem>

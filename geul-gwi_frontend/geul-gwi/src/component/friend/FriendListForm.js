@@ -11,7 +11,7 @@ const FriendListForm = (props) => {
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
-    const friendListUrl = '/friend/list/Friend/'; // 친구 목록 요청 주소
+    const friendListUrl = '/friend/list/friend/'; // 친구 목록 요청 주소
     const friendDeleteUrl = '/friend/delete'; // 친구 삭제 요청 주소
 
     const [friends, setFriends] = useState([]); // 친구 목록 데이터
@@ -51,9 +51,8 @@ const FriendListForm = (props) => {
 
     return (
         <Frame>
-            {friends.map((friend) => (
+            {friends && friends.map((friend) => (
                 <FriendItem
-                    key={friend.userSeq} 
                     friend={friend}
                     friendDeleteHandler={friendDeleteHandler}
                 />

@@ -17,10 +17,17 @@ const WritingComponent = (props) => {
                         사람들에게 당신의 <span style={{ color: '#FD7474' }}>영향</span>을 전파하세요
                     </ComponentIntro>
                 </TitleContainer>
-                <WritingForm
+                {/* <WritingForm
                     FormNameChange={props.FormNameChange}   // Writing Action의 FormName Handler넘겨주기
                     FormMainTextChange={props.FormMainTextChange}   // Writing Action의 FormMainTtext Handler넘겨주기
-                />
+                /> */}
+                <FormContainer>
+                    <ContentArea
+                        placeholder="문구를 입력하세요."
+                        onChange={(e) => props.FormMainTextChange(e)}
+                    >
+                    </ContentArea>
+                </FormContainer>
                 {/* 이미지 업로드 하는 Component에 Handler 넘겨주기 */}
                 <ImageUploadForm
                     style={{ marginBottom: '20px' }}
@@ -121,6 +128,24 @@ const SubmitBtn = styled.div`
     &:hover{
         background-color : #FFB1B1;
     }
+`
+
+const FormContainer = styled.form`
+    display : flex;
+    width : 100%;
+    height : auto;
+    flex-direction: column;
+    margin-bottom : 10px;
+    align-items: center;
+`
+
+// 글 작성 입력하는 textarea
+const ContentArea = styled.textarea`
+    width : 95%;
+    height : 300px;
+    border-radius : 12px;
+    padding: 15px;
+    font-size: 15px;
 `
 
 export default WritingComponent;

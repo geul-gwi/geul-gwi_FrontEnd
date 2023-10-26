@@ -234,15 +234,15 @@ const RegisterAction = () => {
         //props.setNewProfile(URL.createObjectURL(file)); 
         setProfile(file);
         setShowProfile(URL.createObjectURL(file));
+        
     };
 
     // 회원가입 Submit
     const onSubmitHandler = async (event) => {
-        //event.preventDefault();
+        event.preventDefault();
 
         const formData = new FormData();
         formData.append("file", profile);
-
         const joinDTO = {
             'userId' : Id,
             'userPassword' : Password,
