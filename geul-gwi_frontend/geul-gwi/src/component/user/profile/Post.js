@@ -210,7 +210,7 @@ const PostFrame = styled.div`
     width : calc(85% - 40px);
     height : auto;
     padding : 20px; 
-    border-radius : 8px;
+    border-radius : 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     background-color : white;
     flex-direction: column;

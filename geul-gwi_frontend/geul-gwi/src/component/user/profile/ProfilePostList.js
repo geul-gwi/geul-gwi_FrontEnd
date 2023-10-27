@@ -97,5 +97,5 @@ const Container = styled.div`
     height : auto;
     flex-direction : column;
     align-items : center;
-    padding-bottom : 50px;
+    padding-bottom : 30px;
 `

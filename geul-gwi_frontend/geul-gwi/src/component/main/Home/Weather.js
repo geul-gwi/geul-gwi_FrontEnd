@@ -63,26 +63,7 @@ const Weather = () => {
                     <TextWeatherName>{weatherState.weather}</TextWeatherName>
                     <TextWeatherState>{weatherState.temp}</TextWeatherState>
                 </DisplayTextContainer> 
-
             </DisplayContainer>
-
-            {/*2. 부가 설명 Text */}
-            {/* <AskHowYouFeel style={{cursor : 'default'}}>이런날엔 기분이 어떠세요?</AskHowYouFeel> */}
-
-            {/*3. 날씨 평가 버튼 */}
-            {/* <WeatherLikeContainer>
-                <WeatherLikeBtn /> 
-                <WeatherLikeBtn />  
-                <WeatherLikeBtn />  
-                <WeatherLikeBtn />  
-                <WeatherLikeBtn />  
-            </WeatherLikeContainer> */}
-
-            {/*4. 좋음 나쁨 */}
-            {/* <WeatherLikeTextContainer style={{cursor : 'default'}}>
-                <BadText>나쁨</BadText>
-                <GoodText>좋음</GoodText>
-            </WeatherLikeTextContainer> */}
         </WeatherFrame>
     );
 };
@@ -101,6 +82,8 @@ const WeatherFrame = styled.div`
 
 // 날씨 정보를 담을 Container
 const Title = styled.div`
+    padding: 20px 5px 20px 5px;
+    border-bottom: 1px solid #ccc;
 
 `
 
