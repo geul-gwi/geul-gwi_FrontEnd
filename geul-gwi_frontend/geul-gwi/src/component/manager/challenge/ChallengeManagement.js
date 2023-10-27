@@ -1,38 +1,65 @@
-import { React, useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import Axios from 'axios';
 import styled from 'styled-components';
-
-const TagList = [
-  { "fontColor": "#7A6B8A", "backColor": "#E3DFFF", "value": "#위로" },
-  { "fontColor": "#7A6B8A", "backColor": "#FED9D9", "value": "#동기부여" },
-  { "fontColor": "#7A6B8A", "backColor": "#D9F7D9", "value": "#감사" },
-  { "fontColor": "#7A6B8A", "backColor": "#FFEAA7", "value": "#시" },
-  { "fontColor": "#7A6B8A", "backColor": "#B2F5EA", "value": "#현실직시" },
-  { "fontColor": "#7A6B8A", "backColor": "#F0E68C", "value": "#자연" },
-  { "fontColor": "#7A6B8A", "backColor": "#B0C4DE", "value": "#명언" },
-  { "fontColor": "#7A6B8A", "backColor": "#F5DEB3", "value": "#소설속명언" },
-  { "fontColor": "#7A6B8A", "backColor": "#FFB6C1", "value": "#열정" },
-  { "fontColor": "#7A6B8A", "backColor": "#FFA07A", "value": "#사랑" }
-];
-
-
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
+import { useSelector } from 'react-redux'; // Redux 사용 Library
 const ChallengeManagement = () => {
+  const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
+  const userSeq = useSelector((state) => state.authReducer.userSeq);
+  const userToken = useSelector((state) => state.authReducer.accessToken);
   const PublicWritingIconPath = process.env.PUBLIC_URL + "/icon/Writing/"
   const [showTagList, setShowTagList] = useState(true);
+  const challengeAddUrl = '/challenge/admin/event/register';
+
+  // 챌린치 등록을 위한 변수
+  const [comment, setComment] = useState(""); // 내용
+  const [keywords, setKeywords] = useState(["", "", ""]); // 초기에 3개의 빈 문자열로 초기화
+  const [startDate, setStartDate] = useState(""); // 시작 날짜
+  const [endDate, setEndDate] = useState(""); // 종료 날짜
+
+  const handleKeywordChange = (index, value) => {
+    // keywords 상태를 업데이트할 때 사용할 함수
+    setKeywords(prevKeywords => {
+      const newKeywords = [...prevKeywords];
+      newKeywords[index] = value;
+      return newKeywords;
+    });
+  };
+
+  const handleStartDateChange = (event) => {
+    setStartDate(event.target.value);
+  };
+
+  const handleEndDateChange = (event) => {
+    setEndDate(event.target.value);
+  };
+
   const ShowList = () => {
     setShowTagList(!showTagList);
   }
-  const [selectedTags, setSelectedTags] = useState([]);
 
-  const handleAddTag = (tag) => {
-    if (selectedTags.length >= 3 || selectedTags.some(selectedTag => selectedTag.value === tag.value)) {
-      return;
+  // 챌린지 등록 버튼 
+  const onClickAddChallenge = async () => {
+    try {
+      const ChallengeFormDTO = {
+        comment: comment,
+        start: startDate,
+        end: endDate,
+        keyword: keywords
+      };
+      console.log("챌린지 등록 : ", ChallengeFormDTO);
+      const response = await Axios.post(`${axiosAddr}${challengeAddUrl}`, ChallengeFormDTO, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      if (response) {
+        console.log("챌린지 등록: ", response.data);
+      }
+    } catch (error) {
+      console.error('챌린지 등록: ', error);
     }
-    setSelectedTags([...selectedTags, tag]);
-  };
-
-  const handleRemoveTag = (tag) => {
-    setSelectedTags(selectedTags.filter(selectedTag => selectedTag.value !== tag.value));
-  };
+  }
 
   return (
     <MainContainer>
@@ -45,164 +72,132 @@ const ChallengeManagement = () => {
           <Iconimg src={PublicWritingIconPath + "plus.svg"} />
         </ButtonIconContainer>
       </ShowButton>
-      { showTagList ? "" :
-      <BottomContainer>
-        <Container>
-          <Title>코멘트 작성</Title>
-          <InputComent></InputComent>
-        </Container>
-        <Container>
-        <Title>태그 목록</Title>
-        <p>챌린지로 등록할 태그 3개 선택해 주세요</p>
-        <TagsContainer>
-          {TagList.map(tag => (
-            <TagButton
-              key={tag.value}
-              fontColor={tag.fontColor}
-              backColor={tag.backColor}
-              selected={selectedTags.some(selectedTag => selectedTag.value === tag.value)}
-              onClick={() => selectedTags.some(selectedTag => selectedTag.value === tag.value)
-                ? handleRemoveTag(tag)
-                : handleAddTag(tag)}
-            >
-              {tag.value}
-            </TagButton>
-          ))}
-        </TagsContainer>
-          <Title>선택한 태그</Title>
-          <TagsContainer>
-            <SelectedTagsList>
-              {selectedTags.map(tag => (
-                <SelectedTag key={tag.value}>
-                  {tag.value}
-                  <RemoveTagButton onClick={() => handleRemoveTag(tag)}>x</RemoveTagButton>
-                </SelectedTag>
+      {showTagList ? "" :
+        <BottomContainer>
+          <Container>
+            <InputComent placeholder='내용' onChange={(e) => setComment(e.target.value)}/>
+          </Container>
+          <Container>
+            <Title>키워드</Title>
+            <KeywordInputContainer>
+              {keywords.map((keyword, index) => (
+                <KeywordInput key={index} type="text" placeholder={`키워드 ${index + 1}`}
+                  value={keyword}
+                  onChange={(e) => handleKeywordChange(index, e.target.value)}
+                />
               ))}
-            </SelectedTagsList>
-          </TagsContainer>
-            <Button>추가</Button>
-        </Container>
-
-      </BottomContainer>
-      }        
-
+            </KeywordInputContainer>
+          </Container>
+          <DateContainer>
+            <DateTitle>시작 날짜</DateTitle>
+            <DateInput type="date" value={startDate} onChange={handleStartDateChange}/>
+            ~
+            <DateTitle>종료 날짜</DateTitle>
+            <DateInput type="date" value={endDate} onChange={handleEndDateChange}/>
+          </DateContainer>
+          <Button onClick={onClickAddChallenge}>등록</Button>
+        </BottomContainer>
+      }
     </MainContainer>
   );
 };
-
 
 const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   user-select: none;
+  width: 800px;
+  margin: auto;
 `
-const Button = styled.div`
-  background-color: white;
-  border-radius: 8px;
-  border: 1px solid gray;
-  padding: 10px 50px;
+const DateContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  user-select: none;
+  padding: 20px;
+  gap: 10px;
+`
+
+const DateTitle = styled.p`
+  font-size: 14px;
+`
+
+const DateInput = styled.input`
+  width: 140px;
+  height: 34px;
+  font-size: 15px;
+  color: gray;
 `
 
 const TopContainer = styled.div`
-  
   background-color: white;
-  width: 600px;
-  height: 350px;
-  margin: auto;
+  width: 100%;
   margin-bottom: 20px;
-  padding: 20px;
-  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 10px;
 `
 
 const BottomContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: white;
-  border-radius: 8px;
-  padding: 10px;
+  width: 500px;
+  padding: 40px 20px 30px 20px;
+  margin-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   height: auto;
-  margin: 20px;
+  margin: 10px;
   align-items: center;
 `
 
 const Title = styled.span`
   font-size: 18px;
+`;
+
+const KeywordInputContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 10px;
+`;
+
+const KeywordInput = styled.input`
+  width: 100%;
+  height: 30px;
+  border: 1px solid #ddd;
+  padding: 5px;
+  font-size: 16px;
   margin-top: 10px;
 `;
 
-const TagsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px;
-`;
+const Button = styled.div`
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 8px 40px;
+  cursor: pointer;
+  :hover{
+
+  }
+`
 
 const InputComent = styled.textarea`
   width: 100%;
-  height: 100px;
-  border-radius: 8px;
+  height: 80px;
   border: 1px solid #ddd;
   padding: 10px;
   resize: vertical;
-  margin-top: 10px;
+  font-size: 15px;
 `;
-
-const TagButton = styled.button`
-    background-color: ${props => props.backColor};
-    color: ${props => props.fontColor};
-    border: none;
-    border-radius: 20px;
-    padding: 8px 15px;
-    cursor: pointer;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
-    transition: all 0.3s ease-in-out;
-   
-
-    &:hover {
-        background-color: ${props => props.selected ? props.backColor : '#f0f0f0'};
-        transform: translateY(-2px);
-        box-shadow: ${props => props.selected ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none'};
-    }
-`;
-
-const SelectedTagsList = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
-`;
-
-const SelectedTag = styled.div`
-    background-color: #F0F2F5;
-    color: #7A6B8A;
-    border-radius: 20px;
-    padding: 8px 15px;
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    position: relative;
-`;
-
-const RemoveTagButton = styled.button`
-    background: none;
-    border: none;
-    color: red;
-    cursor: pointer;
-    margin-left: 8px;
-    font-size: 18px;
-`;
-
 
 const ShowButton = styled.div`
     display : flex;
@@ -220,7 +215,7 @@ const ShowButton = styled.div`
         background-color : mistyrose;
     }
 `
- const ButtonTextContainer = styled.div`
+const ButtonTextContainer = styled.div`
     display : flex;
     width : 100px;
     height : 80px;
@@ -228,14 +223,14 @@ const ShowButton = styled.div`
     align-items: center;
     font-size : 12px; color : black;
 `
- const ButtonIconContainer = styled.div`
+const ButtonIconContainer = styled.div`
     display : flex;
     width : 15px;
     height : 15px;
     justify-content: center;
     align-items: center;
 `
- const Iconimg = styled.img`
+const Iconimg = styled.img`
     width : 100%;
     height : 100%;
     object-fit: contain;

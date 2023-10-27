@@ -9,9 +9,9 @@ import { useSelector } from 'react-redux'; // Redux 사용 Library
 const MessageWritingForm = ({ receiverSeq, receiverNickName }) => {
    const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
    const receiverDeleteUrl = '/message/send';
-   // 유저 로그인 정보
    const userSeq = useSelector((state) => state.authReducer.userSeq);
    const userToken = useSelector((state) => state.authReducer.accessToken);
+   
    const [message, setMessage] = useState({ title: '', content: '' });
 
    // 메시지 전송 요청

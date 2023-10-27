@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'; // Redux 사용 Library
 import Axios from 'axios';
 import { logout } from 'Reducer/authReducer';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
+
 // component
 import NoticeForm from "component/notice/NoticeForm";
 import FriendForm from "component/friend/FriendForm";
@@ -90,20 +91,22 @@ const Navigation = () => {
     return (
         <NaviFrame>
             <TextContainer style={{ fontFamily: "Maru Buri", fontStyle: "semi-bold" }} onClick={goHome}>
-                Geulgwi
+                <Logo src={process.env.PUBLIC_URL + "/img/Logo.png"}></Logo>
             </TextContainer>
-            {menus.map((element, idx) => (
-                <Item id={"NaviButton" + idx} onClick={() => ComponentMove(element.target)}>
-                    <IconBox><IconImg src={process.env.PUBLIC_URL + element.src} /></IconBox>
-                    <TextBox>{element.name}</TextBox>
+            <Container>
+                {menus.map((element, idx) => (
+                    <Item id={"NaviButton" + idx} onClick={() => ComponentMove(element.target)}>
+                        <IconBox><IconImg src={process.env.PUBLIC_URL + element.src} /></IconBox>
+                        <TextBox>{element.name}</TextBox>
+                    </Item>
+                ))}
+                <Item>
+                    <IconBox>
+                        <ProfileImage src={userProfile ? userProfile : "/img/defaultProfile.png"}/>
+                    </IconBox>
+                    <TextBox onClick={() => onClickProfile()}>프로필</TextBox>
                 </Item>
-            ))}
-            <Item>
-                <IconBox>
-                    <ProfileImage src={userProfile ? userProfile : "/img/defaultProfile.png"}/>
-                </IconBox>
-                <TextBox onClick={() => onClickProfile()}>프로필</TextBox>
-            </Item>
+            </Container>
             <MoreButton onClick={handleMoreButtonClick}>
                 <Item>
                     <IconBox><IconImg src={process.env.PUBLIC_URL + "/icon/Navigation/free-icon-menu-1828859.png"} /></IconBox>
@@ -143,6 +146,22 @@ const NaviFrame = styled.div`
     align-items: center;
     background-color: white;
     width: 320px;
+`
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+        align-items: center;
+    margin-top: 40px;
+    width: 100%;
+`
+
+const Logo = styled.img`
+    position: relative;
+    top: -50px;
+    left: -20px;
+    height: 220px;
+    width: 240px;
 `
 
 const AlertContainer = styled.div`

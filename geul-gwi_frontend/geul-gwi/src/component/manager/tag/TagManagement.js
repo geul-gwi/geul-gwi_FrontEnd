@@ -78,7 +78,7 @@ const TagManagement = () => {
         fontColor: tagFontColor,
         backColor: tagBackColor,
         value: tag,
-      };
+      }
       await axios.post(AxiosAddress + addTagApiMapping + `${UserSequence}`, 
         newTag,
         {
@@ -143,7 +143,7 @@ const TagManagement = () => {
 };
 
 const InputTag = styled.input`
-  width: 150px;
+  width: 200px;
   margin-bottom: 10px;
   padding: 0 10px;
   border: 2px solid #ccc;
@@ -159,10 +159,9 @@ const ButtonGroup = styled.div`
 const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 400px;
-  height: 600px;
-  padding: 10px 50px;
-  border-radius: 8px;
+  height: 900px;
+  width: 600px;
+  padding: 20px 50px;
   text-align: center;
   background-color: white;
   margin: auto;
@@ -170,9 +169,9 @@ const MainContainer = styled.div`
 `;
 
 const TagContainer = styled.div`
+margin-top: 20px;
   width: 100%;
   height: 90%;
-  margin-bottom: 30px;
 `;
 
 const TagsContainer = styled.div`
@@ -201,13 +200,13 @@ const TagInputContainer = styled.div`
 const ColorPicker = styled.input`
   width: 30px;
   height: 30px;
-
   border: none;
   cursor: pointer;
 `;
 
 const Title = styled.p`
   font-size: 20px;
+
 `;
 
 const SubTitle = styled.span`
@@ -222,7 +221,6 @@ const ColorPickerContainer = styled.div`
   align-items: center;
   width: 100%;
   height: auto;
-  margin-left: 10px;
 `;
 
 export default TagManagement;

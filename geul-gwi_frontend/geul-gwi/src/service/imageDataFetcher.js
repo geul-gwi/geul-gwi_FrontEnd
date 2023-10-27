@@ -1,6 +1,8 @@
 import Axios from 'axios';
 
 const imageDataFetcher = async (axiosAddr, path) => {
+    if (path === null)
+        return null;
     try {
         const encodedPath = encodeURIComponent(path);
         const response = await Axios.get(`${axiosAddr}/file?file=${encodedPath}`, {

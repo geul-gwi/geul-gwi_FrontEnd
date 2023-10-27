@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { FiUsers, FiTrello, FiTag } from 'react-icons/fi';
 
+
 const ManagerLeftNav = () => {
     const navigate = useNavigate();
     const [activeItem, setActiveItem] = useState(null);
@@ -13,6 +14,7 @@ const ManagerLeftNav = () => {
 
     return (
         <NavBar>
+          
             <ItemContainer>
                 <Item
                     onClick={() => handleNavigation('/manager/member')}
@@ -58,7 +60,7 @@ const NavBar = styled.div`
     width: 80px;
     height: 50vh;
     top: 25%;
-    left: 0;
+    right: 0;
     margin: auto;
     background-color: white;
     border-radius: 8px;

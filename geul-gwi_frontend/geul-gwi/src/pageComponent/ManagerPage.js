@@ -7,12 +7,13 @@ import ManagerLeftNav from 'component/manager/ManagerLeftNav';
 import TagManagement from 'component/manager/tag/TagManagement';
 import MemberManagement from 'component/manager/member/MemberManagement';
 import ChallengeManagement from 'component/manager/challenge/ChallengeManagement';
-
+import Navigation from 'component/main/Home/Navigation';
 import path from 'img/back_gradient.jpg';
 
 const ManagerPage = () => {
     return (
-        <div style={{height : "auto"}}>
+        <MainContainer>
+            <Navigation/>
             <ManagerLeftNav />
             <HeadBackImg />
             <MainContainaer>
@@ -22,9 +23,13 @@ const ManagerPage = () => {
                     <Route path="/member/*" element={<MemberManagement />}></Route>
                 </Routes>
             </MainContainaer>
-        </div>
+        </MainContainer>
     );
 };
+
+const MainContainer = styled.div`
+    height: 100vh;
+`
 
 const HeadBackImg = styled.div`
     position : absolute;

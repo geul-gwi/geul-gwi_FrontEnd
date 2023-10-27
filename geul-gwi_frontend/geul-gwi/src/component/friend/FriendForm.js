@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
-import Axios from 'axios';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { AxiosAddrContext } from 'contextStore/AxiosAddress';
-import { useSelector } from 'react-redux'; // Redux 사용 Library
+
 import { AiOutlineClose } from 'react-icons/ai';
 // component
 import FriendListForm from 'component/friend/FriendListForm';
@@ -10,49 +8,7 @@ import FriendRequestForm from 'component/friend/FriendRequestForm';
 
 
 const FriendForm = (props) => {
-    //const navigate = useNavigate();
-    const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
-    const userSeq = useSelector((state) => state.authReducer.userSeq);
-    const userToken = useSelector((state) => state.authReducer.accessToken);
-    const friendListUrl = '/friend/list/'; // 친구 목록 요청 주소
-    const friendRequestsUrl = '/friend/list/'; // 친구 목록 요청 주소
-    const friendDeleteUrl = '/friend/delete'; // 친구 삭제 요청 주소
-
-    const [friends, setFriends] = useState([]); // 친구 목록 데이터
     const [menu, setMenu] = useState('list'); // 현재 선택된 메뉴 ('list' 또는 'requests')
-
-    useEffect(() => {
-        // 친구 목록 요청
-        async function fetchUserProfile() {
-            try {
-                const response = await Axios.get(`${axiosAddr}${friendListUrl}${userSeq}`, {
-                    headers: {
-                        Authorization: `Bearer ${userToken}`,
-                    },
-                });
-                //console.log('친구 목록 요청 성공 : ', response.data);
-                setFriends(response.data);
-            } catch (error) {
-                console.error('친구 목록 요청 실패:', error);
-            }
-        }
-        fetchUserProfile();
-    }, []);
-
-    // 친구 삭제 처리
-    const friendDeleteHandler = async (friendSeq) => {
-        try {
-            const response = await Axios.delete(`${axiosAddr}${friendDeleteUrl}`, {
-                headers: {
-                    Authorization: `Bearer ${userToken}`,
-                },
-            });
-            console.log('친구 삭제 완료 : ', response);
-            setFriends((prevNotices) => prevNotices.filter((friends) => friends.userSeq !== friendSeq));
-        } catch (error) {
-            console.error('알림 삭제 실패 : ', error);
-        }
-    };
 
     // 닫기 버튼 클릭
     const onClickCloseButton = async () => {
@@ -100,11 +56,11 @@ const CloseButton = styled.div` // 닫기 버튼
     cursor: pointer;
 `;
 
-const AlertEmptyMessage = styled.div` 
-  margin-top: 20px;
-  font-size: 13px;
-  color: gray;
-`;
+// const AlertEmptyMessage = styled.div` 
+//   margin-top: 20px;
+//   font-size: 13px;
+//   color: gray;
+// `;
 
 const TitleContainer = styled.div`
   display: flex;

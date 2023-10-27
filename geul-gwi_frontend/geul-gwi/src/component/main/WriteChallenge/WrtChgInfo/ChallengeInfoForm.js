@@ -2,13 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Tag } from 'component/common/button/Tag';
 
-const WrtChgInfo = (props) => {
-    const ReplaceNewLine = (text) => {
-        var newText = text;
-        newText = newText.replace("<br>","\n");
-        return newText;
-    }
-
+// 챌린지 대가리 부분
+const ChallengeInfoForm = (props) => {
     return (
         <Frame>
             <FlexContainer>
@@ -126,4 +121,4 @@ const TagItem = styled.div`
     font-size : 14px; color : white; background-color : #FB5B5B;
 `
 
-export default WrtChgInfo;
+export default ChallengeInfoForm;

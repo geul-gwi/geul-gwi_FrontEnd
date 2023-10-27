@@ -11,28 +11,35 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux';
 import imageDataFetcher from 'service/imageDataFetcher';
 
-import ModalPage from 'component/common/modal/ModalPage'
+import PostModal from 'component/common/modal/PostModal'
 
 
 const SearchForm = () => {
    //const navigate = useNavigate();
    const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
-   const userToken = useSelector((state) => state.authReducer.accessToken);
    const userSeq = useSelector((state) => state.authReducer.userSeq);
+   const userToken = useSelector((state) => state.authReducer.accessToken);
    const postListApi = '/geulgwi/list'; // 게시물 목록 요청 주소
-   const postDetailApi = '/geulgwi/search/';
+   const postDetailUrl = '/geulgwi/search/'; // 게시물 세부 요청 주소
+   const tagSearchPostUrl = '/geulgwi/search';
 
    const [posts, setPosts] = useState([]); // 글 전체 리스트
    const [viewPosts, setViewPosts] = useState([]); // 글 전체 리스트
    const [viewPost, setViewPost] = useState(null); // 모달창 게시물 데이터
    const [ModalState, setModalState] = useState(false);
 
+   const [selectedTag, setSelectedTag] = useState(null); // 검색하고자 하는 태그
+
    useEffect(() => {
+      if(selectedTag !== null)
+         return;
+      //console.log("글귀 목록 요청");
+      //console.log("토큰@@@@@@@@@: " ,userToken);
       // 전체 게시물 목록 불러오기
       Axios.get(axiosAddr + postListApi, {
          headers: {
             Authorization: `Bearer ${userToken}`,
-         },
+         }
       })
          .then((response) => {
             console.log("글 목록 요청 성공 : ", response);
@@ -42,38 +49,52 @@ const SearchForm = () => {
          .catch((error) => {
             console.error("글 목록 요청 실패", error);
          });
-   }, []);
+   }, [selectedTag]);
 
-   // 모달창을 띄우는 함수
-   const ModalOpen = (index) => {
-      setModalState(true);
-      setViewPost(posts[index]);
-   }
-   // 모달창을 닫는 함수
-   const ModalClosed = () => {
+   const tagSearchHandler = async () => {
+      try {
+         console.log("태그 검색 요청", selectedTag.tagSeq);
+         const response = await Axios.get(`${axiosAddr}${tagSearchPostUrl}?tagSeq=${selectedTag.tagSeq}`, {
+            headers: {
+               Authorization: `Bearer ${userToken}`,
+            },
+         });
+         if (response) {
+            console.log("태그 검색 성공 : ", response.data);
+            setPosts(response.data);
+            ReFactData(response.data);
+         }
+      } catch (error) {
+         console.error('태그 검색 실패.', error);
+      }
+   };
+
+   // 팝업 띄우는 함수
+   const ModalOpen = async (geulgwiSeq) => {
+      try {
+         const response = await Axios.get(`${axiosAddr}${postDetailUrl}${geulgwiSeq}?viewSeq=${userSeq}`, {
+            headers: {
+               Authorization: `Bearer ${userToken}`,
+            },
+         });
+         if (response) {
+            console.log("팝업 창에 세부 게시물 : ", response.data);
+            setViewPost(response.data);
+            setModalState(true); // 데이터가 로드된 후에 모달을 열도록 변경
+         }
+      } catch (error) {
+         console.error('팝업 창 세부 게시물 불러오기 실패.', error);
+      }
+   };
+
+   const ModalClose = () => {
       setModalState(false);
-   }
-
-   // geulgwiContent
-   // :
-   // "안녀아세요 맹수 햄토스입니다."
-   // geulgwiSeq
-   // :
-   // 1
-   // nickname
-   // :
-   // "햄토스"
-   // regDate
-   // :
-   // "2023-10-26 13:44:25"
-   // userSeq
-   // :
-   // 1
+   };
 
    const ReFactData = async (posts) => {
       try {
          const updatedPosts = await Promise.all(posts.map(async (post) => {
-            const response = await Axios.get(axiosAddr + postDetailApi + post.geulgwiSeq + "?viewSeq=" + userSeq, {
+            const response = await Axios.get(`${axiosAddr}${postDetailUrl}${post.geulgwiSeq}` + "?viewSeq=" + userSeq, {
                headers: {
                   Authorization: `Bearer ${userToken}`,
                }
@@ -101,30 +122,36 @@ const SearchForm = () => {
 
    return (
       <MainContainer>
-         <TagSearchForm />
+         <TagSearchForm 
+            selectedTag={selectedTag}
+            setSelectedTag={setSelectedTag}
+            tagSearchHandler={tagSearchHandler}
+         />
+         <BottomContainer>
+            <ResultContainer>{viewPosts.length}개의 검색 결과</ResultContainer>
             <ItemsContainer>
-            {viewPosts && viewPosts.map((post, index) => (
-               <Item onClick={() => ModalOpen(index)}>
-                  {post.files && <ItemImg src={post.files[0]}></ItemImg>}
-                  <HoveredContainer>
-                     <Nickname>
-                        {post.nickname}
-                     </Nickname>
-                     <Content>
-                        {post.geulgwiContent}
-                     </Content>
-                  </HoveredContainer>
-                  <HoveredBack />
-               </Item>
-            ))}
+               {viewPosts && viewPosts.map((post) => (
+                  <Item onClick={() => ModalOpen(post.geulgwiSeq)}>
+                     {post.files && <ItemImg src={post.files[0]}></ItemImg>}
+                     <HoveredContainer>
+                        <Nickname>
+                           {post.nickname}
+                        </Nickname>
+                        <Content>
+                           {post.geulgwiContent}
+                        </Content>
+                     </HoveredContainer>
+                     <HoveredBack />
+                  </Item>
+               ))}
             </ItemsContainer>
-            {ModalState &&
-            <ModalPage
-
-            userSeq={viewPost.userSeq}
-               geulgwiSeq={viewPost.geulgwiSeq}
+         </BottomContainer>
+         {ModalState && viewPost && 
+            <PostModal 
+               post={viewPost} 
+               ModalClose={ModalClose}
             />
-            }
+         }
       </MainContainer>
    )
 };
@@ -132,19 +159,27 @@ const SearchForm = () => {
 const MainContainer = styled.div`
    display: flex;
    flex-direction: column;
-   width: 100%;
+   width: 655px;
    user-select: none;
-   height: auto;
    justify-content: center;
    align-items: center;
+`
+
+const BottomContainer = styled.div`
+      background-color: white;
+      padding: 15px;
+      margin-top: 20px;
+`
+
+const ResultContainer = styled.div`
+   margin-bottom: 10px;
 `
 
 const Item = styled.div`
   position : relative;
   display : flex;
-  width : 230px;
-  height : 240px;
-  border-radius : 2px;
+  width : 220px;
+  height : 230px;
   overflow : hidden;
   justify-content: center;
   align-items: center;
@@ -183,16 +218,18 @@ const HoveredContainer = styled.div`
 `
 
 const ItemsContainer = styled.div`
- align-items: center;
+ min-width: 655px;
+
+  align-items: center;
   justify-content: center;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 2px;
-  border-radius: 2px;
-  padding: 20px;
-  justify-items: center;
-  align-items: center;
+
+   grid-column: span 3;
+   background-color: white;
 `;
+
 const Nickname = styled.div`
   display : flex;
   width : 100%;

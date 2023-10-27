@@ -95,19 +95,14 @@ const RegisterAction = () => {
         
     }
 
-
-
     // 이메일 인증확인 코드 Handler
     const EmailValidCodeHandler = (event) => {
         setEmailValidConfirm(event.currentTarget.value);
     }
 
     // 다음버튼 Click
-    // const [ShowBox, setShowBox] = useState(true) // true => leftbox , false => rightbox
     const [PageStep, SetPageStep] = useState("page1");
     const ToggleMove = () => {
-        // console.log("ShowBox : " + ShowBox);
-        // setShowBox(!ShowBox);
         if (PageStep === "page1"){
             SetPageStep("page2");
         }
@@ -119,9 +114,8 @@ const RegisterAction = () => {
     // 아이디 유효성 검사
     const CheckIdExist = async () => {
         // 아무것도 입력안했으면 return
-        if (Id.length === 0){return false;}
-
-        console.log("Axios Shoot : "+AxiosAddress+IdChkMapping+"/"+Id);
+        if (Id.length === 0) return false;
+        // console.log("Axios Shoot : "+AxiosAddress+IdChkMapping+"/"+Id);
         try{
             const response = await axios.post(AxiosAddress+IdChkMapping+"/"+Id,null);
             return response.data;

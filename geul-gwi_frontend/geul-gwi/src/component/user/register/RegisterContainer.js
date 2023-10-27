@@ -130,8 +130,7 @@ const RegisterContainer = (props) => {
 
                         <PrivacyContainer>
                             <div style={{ display: 'flex', flexDirection: 'column', width: '400px', height: '100%', margin: '0 auto' }}>
-                                <h3 className='title'>회원 가입</h3>
-                                <h5 className='sub_title'>회원 정보를 입력해주세요</h5>
+                                <h2 className='title'>회원 가입</h2>
                                 <ProfilePicture
                                     src={props.showProfile ? (props.showProfile) : null || '/img/defaultProfile.png'}
                                     onClick={props.toggleModal}
@@ -167,19 +166,13 @@ const RegisterContainer = (props) => {
                                     <option value={'FeMale'}>여성</option>
                                 </select>
                                 <ShowText></ShowText>
-
                                 <label>이메일</label>
-                                {/* <input type='email' value={Email} onChange={onEmailHandler} placeholder='이메일 입력' style={{width : '50%;'}}/> */}
                                 <EmailValidContainer>
                                     <EmailValidRequestContainer>
                                         <EmailInput type="email" value={props.Email} onChange={(e) => props.onEmailHandler(e)} placeholder='이메일 주소' />
                                         <EmailValidRequestButton id="emailValidButton" onClick={() => RequestEmailValid()}>인증요청</EmailValidRequestButton>
                                     </EmailValidRequestContainer>
-                                    {
-                                        props.ShowEmailValidContainer ?
-                                            <EmailValidConfirmContainer value={props.EmailValidConfirm} onChange={props.EmailValidCodeHandler} /> :
-                                            ""
-                                    }
+                                    {props.ShowEmailValidContainer && <EmailValidConfirmContainer value={props.EmailValidConfirm} onChange={props.EmailValidCodeHandler} />}
                                 </EmailValidContainer>
                             <AlreadyAccountContainer>
                                 계정이 있으신가요?
@@ -204,8 +197,6 @@ const RegisterContainer = (props) => {
                             </div>
 
                         </PrivacyContainer>
-   
-
                     :
 
                     <PrivacyContainer>
@@ -218,10 +209,8 @@ const RegisterContainer = (props) => {
                             <h5 className='sub_title'>선호하는 태그를 선택해주세요. (3개)</h5>
 
                             <TagsContainer>
-
-                                {props.TagList.map((element, idx) => (
+                                {props.TagList&& props.TagList.map((element, idx) => (
                                     <TagButton
-                                        id={"tag" + idx}
                                         fontColor={element.fontColor}
                                         backColor={element.backColor}
                                         value={element.value}
@@ -230,8 +219,6 @@ const RegisterContainer = (props) => {
                                     />
                                 ))}
                             </TagsContainer>
-
-
                             <SubmitButton onClick={(e) => props.onSubmitHandler(e)}>
                                 회원가입
                             </SubmitButton>
@@ -248,12 +235,13 @@ const RegisterContainer = (props) => {
 const RegiContainer = styled.div`
     position: relative;
     display: flex;
-    width: 600px;
+    width: 700px;
     height: 100%;
     justify-content: center;
     overflow-y: scroll;
     margin: auto;
     background-color: white;
+    user-select: none;
 `
 const PrivacyContainer = styled.div`
     position : absolute;

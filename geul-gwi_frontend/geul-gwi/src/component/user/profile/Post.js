@@ -38,7 +38,6 @@ const Post = (props) => {
     const onDeletePost = async () => {
         // 사용자에게 확인 메시지를 표시
         const confirmed = window.confirm('게시물을 삭제하시겠습니까?');
-
         // 사용자가 확인을 클릭한 경우에만 삭제 동작을 실행
         if (confirmed) {
             try {
@@ -199,9 +198,6 @@ const Post = (props) => {
 };
 
 const EditIcon = styled.div`
-    //position: absolute; /* 아이콘의 위치를 조절하기 위해 상대 위치 설정 */
-    //top: 5px; /* 원하는 위치로 조절 (상단 여백) */
-    //right: 5px; /* 원하는 위치로 조절 (우측 여백) */
     cursor: pointer;
 `;
 
