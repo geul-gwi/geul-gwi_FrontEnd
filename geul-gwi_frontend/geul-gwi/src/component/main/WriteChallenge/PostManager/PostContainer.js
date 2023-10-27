@@ -7,8 +7,6 @@ import {AiFillHeart,AiOutlineHeart} from "react-icons/ai";
 
 const PostContainer = (props) => {
     // LikeCount 1000 단위로 보여주기
-    
-
     return (
         <PostManager>
             {

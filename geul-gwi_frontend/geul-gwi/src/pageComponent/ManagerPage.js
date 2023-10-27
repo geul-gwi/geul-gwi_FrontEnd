@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Routes, Route } from 'react-router-dom';
 import ManagerLeftNav from 'component/manager/ManagerLeftNav';
-import Header from 'component/common/header/HeaderUserMenu'
+
 import TagManagement from 'component/manager/tag/TagManagement';
 import MemberManagement from 'component/manager/member/MemberManagement';
 import ChallengeManagement from 'component/manager/challenge/ChallengeManagement';
@@ -15,9 +15,6 @@ const ManagerPage = () => {
         <div style={{height : "auto"}}>
             <ManagerLeftNav />
             <HeadBackImg />
-            <HeadContainer>
-                <Header />
-            </HeadContainer>
             <MainContainaer>
                 <Routes>
                     <Route path="/" element={<TagManagement />} ></Route>

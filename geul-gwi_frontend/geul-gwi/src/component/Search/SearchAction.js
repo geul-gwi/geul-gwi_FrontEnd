@@ -16,7 +16,7 @@ import ModalPage from 'component/common/modal/ModalPage'
 
 const SearchForm = () => {
    //const navigate = useNavigate();
-   const axiosAddr = useContext(AxiosAddrContext).axiosAddr; 
+   const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
    const userToken = useSelector((state) => state.authReducer.accessToken);
    const userSeq = useSelector((state) => state.authReducer.userSeq);
    const postListApi = '/geulgwi/list'; // 게시물 목록 요청 주소
@@ -61,25 +61,7 @@ const SearchForm = () => {
       setModalState(false);
    }
 
-   // 좋아요 눌렀을 때 새로고침
-   const reload = async (geulgwiSeq) => {
-      try {
-         const response = await Axios.get(`${axiosAddr}${postDetailUrl}${geulgwiSeq}?viewSeq=${userSeq}`, {
-            headers: {
-               Authorization: `Bearer ${userToken}`,
-            },
-         });
 
-         if (response) {
-            setLikeCount(response.data.likeCount);
-            setIsLiked(response.data.liked);
-         };
-
-      } catch (error) {
-         console.error('이미지 가져오기에 실패했습니다.', error);
-         return null;
-      }
-   }
 
    const ReFactData = async (posts) => {
       try {
@@ -113,36 +95,33 @@ const SearchForm = () => {
    return (
       <MainContainer>
          <TagSearchForm />
-         <Container>
-            {posts.map((post, idx) => (
-                  // 이미지가 있는 경우
-                  <Item onClick={() => ModalOpen(post)}>
+            <ItemsContainer>
+            {posts && posts.map((post) => (
+               <Item onClick={() => ModalOpen(post)}>
                   {post.files && post.files.length > 1 ?
-                     <ItemImg src={post.files[0]} alt={post.geulgwiSeq}></ItemImg>
-                        :
-                        <ItemImg src={post.files} alt={post.geulgwiSeq}></ItemImg>
+                     <ItemImg src={post.files[0]}></ItemImg>
+                     :
+                     <ItemImg src={post.files}></ItemImg>
                   }
-                     <HoveredContainer>
-                        <HoveredContainer_tutor>
-                           {post.nickname}
-                        </HoveredContainer_tutor>
-                        <Content>
-                           {post.geulgwiContent}
-                        </Content>
-                     </HoveredContainer>
-                     <HoveredBack />
-                  </Item>
+                  <HoveredContainer>
+                     <HoveredContainer_tutor>
+                        {post.nickname}
+                     </HoveredContainer_tutor>
+                     <Content>
+                        {post.geulgwiContent}
+                     </Content>
+                  </HoveredContainer>
+                  <HoveredBack />
+               </Item>
             ))
             }
+            </ItemsContainer>
             {ModalState &&
                <ModalPage
-                  ModalClosed={ModalClosed} // 모달 닫는 함수
-                  post={viewPost}     // 모달이 열릴 때, 전달할 Object State 함수
-                //likeBtnClick = {onClickLikeButton} // 좋아요 처리 함수
-               // LikeCountConverter={props.LikeCountConverter}
+                  ModalClosed={ModalClosed} 
+                  post={viewPost}    
                />
             }
-         </Container>
       </MainContainer>
    )
 };
@@ -150,49 +129,35 @@ const SearchForm = () => {
 const MainContainer = styled.div`
    display: flex;
    flex-direction: column;
-   gap: 10px;
-   border-radius : 12px;
    width: 100%;
    user-select: none;
-`
-
-const Container = styled.div`
-   display: flex;
-   width: 100%;
-   background-color: white;
-   border-radius : 12px;
-   padding: 20px;
-   gap: 20px;
-   justify-items: center;
+   height: auto;
+   justify-content: center;
    align-items: center;
 `
 
 const Item = styled.div`
   position : relative;
   display : flex;
-  width : 190px;
-  height : 190px;
-  border-radius : 12px;
-  background-color : white;
-  box-shadow: 1px 1px 10px 2px rgba(50,50,50,0.2);
+  width : 230px;
+  height : 240px;
+  border-radius : 2px;
   overflow : hidden;
   justify-content: center;
   align-items: center;
   cursor : pointer;
   transition : 0.3s;
 
-  &:hover{
-    box-shadow : 10px 10px 10px 2px rgba(50,50,50,0.5);
+ &:hover {
+    filter: brightness(70%); /* 아이템을 어둡게 만드는 CSS */
   }
 `
 const ItemImg = styled.img`
+  background-color : white;
   width : 100%;
   height : 100%;
   object-fit: cover;
-  object-position: center center;
 `
-
-// 하얀색 블라인드 배경
 const HoveredBack = styled.div`
   position : absolute;
   width : 100%;
@@ -205,13 +170,26 @@ const HoveredContainer = styled.div`
   display : flex;
   position : absolute;
   width : 90%;
-  max-height : 90%; height : auto;
+  max-height : 90%; 
+  height : auto;
   z-index : 2;
   flex-direction: column;
   justify-content : center;
   align-items : flex-start;
   gap : 10px;
 `
+
+const ItemsContainer = styled.div`
+ align-items: center;
+  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2px;
+  border-radius: 2px;
+  padding: 20px;
+  justify-items: center;
+  align-items: center;
+`;
 const HoveredContainer_tutor = styled.div`
   display : flex;
   width : 100%;
@@ -226,7 +204,8 @@ const HoveredContainer_tutor = styled.div`
 const Content = styled.div`
   display : flex;
   width : 100%;
-  max-height : calc(100% - 10px); height : auto;
+  max-height : calc(100% - 10px); 
+  height : auto;
   font-size : 13px;
   font-family: "Nanum Square Round";
   font-style : "normal";

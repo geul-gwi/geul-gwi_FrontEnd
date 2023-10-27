@@ -160,8 +160,8 @@ const TagsContainer = styled.div`
 `;
 
 const ProfilePicture = styled.img`
-    width: 140px;
-    height: 140px;
+    width: 145px;
+    height: 150px;
     border-radius: 50%;
     cursor: pointer;
     object-fit: cover;

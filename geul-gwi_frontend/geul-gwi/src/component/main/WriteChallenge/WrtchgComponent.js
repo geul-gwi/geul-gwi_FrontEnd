@@ -50,10 +50,10 @@ const WrtchgComponent = (props) => {
 const Frame = styled.div`
     display : flex;
     width : 100%;
-    min-height : 500px; height : auto;
-    border-radius : 16px;
-    background-color: white ;
+    height : auto;
+    background-color: white;
     justify-content: center;
+    user-select: none;
 `
 const FlexManager = styled.div`
     display : flex;
@@ -64,7 +64,6 @@ const FlexManager = styled.div`
     flex-direction: column;
     align-items : center;
     gap : 20px;
-    /* justify-content: space-between; */
 `
 
 

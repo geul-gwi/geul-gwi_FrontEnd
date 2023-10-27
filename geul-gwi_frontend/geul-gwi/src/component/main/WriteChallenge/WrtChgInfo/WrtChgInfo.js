@@ -12,7 +12,6 @@ const WrtChgInfo = (props) => {
     return (
         <Frame>
             <FlexContainer>
-                {/* 챌린지 이름 */}
                 <ChallengeTitleContainer>
                     <ChallengeTitle>
                         {props.selectedChallenge.challengeName}
@@ -32,19 +31,13 @@ const WrtChgInfo = (props) => {
                 </ChallengeStartDay>
                 {/* 챌린지 설명 */}
                 <ChallengeDesc>
-                    {
-                        props.selectedChallenge.desc
-                    }
+                    { props.selectedChallenge.desc}
                 </ChallengeDesc>
-                
-                {/* 챌린지 태그 */}
                 <TagContainer>
                     <Tag>#사랑</Tag>
                     <Tag>#소중함</Tag>
                     <Tag>#우정</Tag>
                 </TagContainer>
-
-                
             </FlexContainer>
         </Frame>
     );
@@ -70,43 +63,47 @@ const FlexContainer = styled.div`
 const ChallengeTitleContainer = styled.div`
     display : flex;
     width : 100%;
-    height : 40px;
+    height : 30px;
     flex-direction: row;
-    justify-content : flex-start; align-items : center;
+    justify-content : flex-start; 
+    align-items : center;
 `
 const ChallengeTitle = styled.span`
     display : inline-flex;
-    min-width : 10px; width : auto;
+    width : auto;
     height : 100%;
-    justify-content: center; align-items : center;
+    justify-content: center; 
+    align-items : center;
     padding : 0px 5px 0px 5px;
-    font-size : 20px; font-style : "bold"; color : rgb(70,70,70);
+    font-size : 23px; 
+    font-style : "bold"; 
+    color : rgb(70,70,70);
 `
 const ChallengeState = styled.span`
     display : inline-flex;
-    min-width : 10px; width : auto;
-    height : 100%;
-    top : 0px; right : 20px;
-    justify-content: center; align-items: center;
+    width : auto;
+    justify-content: center; 
+    align-items: center;
     padding : 0px 0px 0px 5px;
-    font-size : 14px;
+    font-size : 15px;
 `
 
-// Challenge Start Day
-const ChallengeStartDay = styled.div`
+const ChallengeStartDay = styled.span`
     display : flex;
-    width : 100%; height : 30px;
-    justify-content: flex-start; align-items: center;
-    padding : 0px 0px 0px 5px;
-    font-size : 12px; color : rgba(200,200,200,0.9);
+    margin: none;
+    padding : 5px 0px 0px 5px;
+    justify-content: flex-start; 
+    align-items: center;
+    font-size : 13px; 
+    color : gray;
 `
 
 const ChallengeDesc = styled.div`
-    width : 100%;
-    min-height : 10px; height : auto;
     padding : 10px 0px 10px 5px;
     white-space: pre-line;
-    line-height : 24px; font-size : 14px; color : rgba(100,100,100,0.9);
+    line-height : 25px; 
+    font-size : 15px; 
+    color : rgba(100,100,100,0.9);
 `
 
 // 선정된 TagList

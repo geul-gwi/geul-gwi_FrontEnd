@@ -88,7 +88,7 @@ const Frame = styled.div`
   width: 450px;
   height: 600px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  border-radius: 0 10px 10px 0;
   background-color: white;
   padding: 5px;
   user-select: none;
@@ -126,8 +126,7 @@ const Menu = styled.div`
     width: 100%;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
-    font-weight: ${props => props.active ? 'bold' : 'default'};
+    font-size: 14px;
     flex: 1;
     background-image: linear-gradient(90deg,#F66767,#F66767);
     background-size : 0% 1px;

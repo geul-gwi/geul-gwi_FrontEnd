@@ -26,7 +26,7 @@ const FormContainer = styled.form`
 const ContentArea = styled.textarea`
     width : 95%;
     height : 300px;
-    border-radius : 12px;
+    border-radius : 5px;
     padding: 15px;
     font-size: 15px;
 `

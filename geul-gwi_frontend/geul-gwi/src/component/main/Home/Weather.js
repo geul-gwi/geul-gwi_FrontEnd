@@ -50,7 +50,7 @@ const Weather = () => {
 
     return (
         <WeatherFrame> 
-            <Title>오늘의 날씨</Title>
+            <Title>실시간 날씨</Title>
             {/*1. 날씨 정보를 담을 Container */}
             <DisplayContainer style={{cursor : 'default'}}>
                 {/* 아이콘을 담을 Container */}
@@ -88,22 +88,15 @@ const Weather = () => {
 };
 
 const WeatherFrame = styled.div`
+    user-select: none;
     display : flex;
-    width : calc(100% -40px);
-    height : 120px;
-
-    border-radius : 16px;
-    padding : 10px 20px 10px 20px;
+    height : 140px;
+    border-radius : 8px;
     background-color: white;
     flex-direction : column;
     align-items: center;
     justify-content: center;
     box-shadow: 0px 0px 32px 0px #FFA199;
-    transition : 0.5s;
-    opacity : 0.85;
-    &:hover {
-        opacity: 1;
-    }
 `
 
 // 날씨 정보를 담을 Container
@@ -114,14 +107,14 @@ const Title = styled.div`
 // 날씨 정보를 담을 Container
 const DisplayContainer = styled.div`
     display : flex;
-    width : 100%;
-    height : 70px;
+    width : 70%;
+    height : 80px;
     align-items : center;
 `
 const DisplayIconContainer = styled.div`
     margin-left : 10px;
     display : flex;
-    width : 50%;
+    width : 70%;
     height : 100%;
     justify-content: center;
     align-items: center;
@@ -129,7 +122,7 @@ const DisplayIconContainer = styled.div`
 const DisplayTextContainer = styled.div`
     margin-right : 10px;
     display : flex;
-    width : 50%;
+    width : 70%;
     height : 70%;
     flex-direction: column;
     justify-content : center;

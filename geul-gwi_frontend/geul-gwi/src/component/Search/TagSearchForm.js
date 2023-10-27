@@ -39,14 +39,14 @@ const TagSearchForm = (props) => {
   return (
     <>
       <SearchButton onClick={toggleSearchContainer}>
-        <ButtonTextContainer >필터</ButtonTextContainer>
+        <ButtonTextContainer >태그 필터</ButtonTextContainer>
         <ButtonIconContainer>
           <Iconimg src={PublicWritingIconPath + "plus.svg"} />
         </ButtonIconContainer>
       </SearchButton>
       {searchContainerVisible && (
         <SearchContainer>
-          <Title>검색하고 싶은 태그를 선택하세요</Title>
+          <Title>검색하고 싶은 태그를 선택하세요.</Title>
           <TagContainer>
             <TagsContainer>
               {tags && tags.map(tag => (

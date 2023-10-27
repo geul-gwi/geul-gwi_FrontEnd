@@ -104,10 +104,9 @@ const NoticeForm = (props) => {
                 ) : (
                     notices.map((notice) => (
                         <NoticeItem
-                            key={notice.seq}
                             notice={notice}
                             noticeDeleteHandler={noticeDeleteHandler}
-                            handleAlertClick= { props.handleAlertClick}
+                            handleAlertClick={props.handleAlertClick}
                         />
                     ))
                 )}
@@ -120,9 +119,9 @@ const Frame = styled.div`
   display: flex;
   flex-direction: column;
   width: 450px;
-  height: 600px;
+  height: 100vh;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  border-radius: 0px 10px 10px 0px;
   background-color: white;
   padding: 5px;
   user-select: none;

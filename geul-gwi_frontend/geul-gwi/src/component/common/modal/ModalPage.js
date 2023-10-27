@@ -1,18 +1,33 @@
-// Import Library
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import clipboardCopy from 'clipboard-copy'; // 클립보드 저장용 라이브러리
 import { toast } from 'react-toastify';     // 토스트 메시지를 보내기 위한 라이브러리
 import styled from 'styled-components';
-
+import Axios from 'axios';
+import { Tag } from 'component/common/button/Tag'
+import { AiOutlineLeft, AiOutlineRight, AiOutlineEdit, AiFillHeart, AiOutlineHeart, AiOutlineClose } from "react-icons/ai"; 
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
+import { useSelector } from 'react-redux'; // Redux 사용 Library
 // import React icons
 import { IoMdClose } from "react-icons/io";
 import { MdOutlineContentCopy } from "react-icons/md";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import Post from 'component/user/profile/Post';
 
 const ModalPage = (props) => {
+    //const navigate = useNavigate();
+    const { axiosAddr } = useContext(AxiosAddrContext);
+    const { userSeq, userToken } = useSelector((state) => state.authReducer);
     const [iconShow, setIconShow] = useState(false);
     const imagePath = process.env.PUBLIC_URL + '/img/';
+    const likeUrl = '/geulgwi/like/'; // 좋아요 요청 주소
+    const likeDelateUrl = '/geulgwi/unlike/'; // 좋아요 취소 요청 주소
+    const postDetailUrl = '/geulgwi/search/'; // 게시물 세부 요청 주소
 
+    const [currentImageIndex, setCurrentImageIndex] = useState(0); // 이미지 넘겨보기 위한 인덱스
+    const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 목록을 저장할 배열
+    const [isLiked, setIsLiked] = useState(props.post.isLiked);
+    const [likeCount, setLikeCount] = useState(props.post.likeCount);
+
+    // 글 복사
     const handleCopyClick = (text) => {
         clipboardCopy(text)
             .then(() => {
@@ -23,61 +38,77 @@ const ModalPage = (props) => {
             });
     }
 
-
     return (
         <ModelFrame onClick={() => props.ModalClosed()}>
             <ViewPage onClick={(event) => event.stopPropagation()}>
-                {/* 아이템을 아래로 나열해주는 Flex Container */}
-                <ItemContainer>
-                    {/* 이미지 영역 */}
-                    {
-                        props.post.imgPath === null ?
+                <Post
+                    profileUserSeq={props.post.profileUserSeq}
+                    profile={props.post.profile}
+                    nickname={props.post.nickname}
+                    comment={props.post.comment}
+                    geulgwiContent={props.post.geulgwiContent}
+                    userSeq={props.post.userSeq}
+                    regDate={props.post.regDate}
+                    files={props.post.files}
+                    tags={props.post.tags}
+                    likeCount={props.post.likeCount}
+                    liked={props.post.liked}
+                    geulgwiSeq={props.post.geulgwiSeq}
+                />
+                {/* <ItemContainer>
+                    { props.post.files === null ?
                             ""
                             :
                             <ImageContainer>
-                                <ImageItem src={imagePath + props.post.imgPath} />
+                                {props.post.files.length > 1 && (
+                                    <ArrowButton onClick={previousImage}>
+                                        <AiOutlineLeft />
+                                    </ArrowButton>
+                                )}
+                                {props.post.files.length > 0 && (
+                                    <img src={props.post.files[currentImageIndex]} />
+                                )}
+                                {props.post.files.length > 1 && (
+                                    <ArrowButton onClick={nextImage}>
+                                        <AiOutlineRight />
+                                    </ArrowButton>
+                                )}
                             </ImageContainer>
                     }
-
-                    {/* 작가명 */}
                     <Nickname>
                         {props.post.nickname}
                     </Nickname>
                     <Content isImgExist={props.post.imgPath === null ? false : true}>
-                        {/* ClipBoardCopy 영역 */}
                         <MainTextCopyGround onMouseEnter={() => setIconShow(true)} onMouseLeave={() => setIconShow(false)} onClick={() => handleCopyClick(props.post.geulgwi)}>
-                            {
-                                iconShow ? <MdOutlineContentCopy size={30} /> : ""
-                            }
+                            { iconShow && <MdOutlineContentCopy size={30} /> }
                         </MainTextCopyGround>
                         {props.post.geulgwiContent}
                     </Content>
 
                     <BottomContainer>
                         <BottomLikeViewCount>
-                            {/* {props.LikeCountConverter(data.likeCount)} */}
-                            12k
+                            {likeCount}
                         </BottomLikeViewCount>
                         <HeartBtnContainer>
-                            {/* {
-                                data.isLikeClicked ?
-                                <AiFillHeart size={25} color={"red"} onClick={(event) => {
+                            { isLiked ?
+                                <AiFillHeart size={25} color={"red"} 
+                                    onClick={(event) => {
                                     event.stopPropagation();
-                                    props.likeBtnClick(data.postNumber);
+                                        onClickLikeButton();
                                 }}/> :
-                                <AiOutlineHeart size={25} color={"#444444"} onClick={(event) => {
+                                <AiOutlineHeart size={25} color={"#444444"} 
+                                    onClick={(event) => {
                                     event.stopPropagation();
-                                    props.likeBtnClick(data.postNumber);
+                                        onClickLikeButton();
                                 }}/>
-                            } */}
+                            }
                             <AiFillHeart size={25} color={"red"} onClick={(event) => {
                                 event.stopPropagation();
-                                props.likeBtnClick(props.post.geulgwiSeq);
+                                props.likeBtnClick();
                             }} />
                         </HeartBtnContainer>
                     </BottomContainer>
-                </ItemContainer>
-                <CloseButton onClick={() => props.ModalClosed()}><IoMdClose size={24} color={"#444444"} /></CloseButton>
+                </ItemContainer> */}
             </ViewPage>
         </ModelFrame>
     );
@@ -98,12 +129,12 @@ const ModelFrame = styled.div`
 const ViewPage = styled.div`
     position : relative;
     display : flex;
-    width : 50%;
-    height : 80%;
+    width: 500px;
+    height: 600px;
     z-index:  999;
     border-radius : 16px;
-    background-color : white;
-    justify-content : center; align-items : center;
+    justify-content : center; 
+    align-items : center;
 
 `
 // 닫기 버튼
@@ -143,15 +174,10 @@ const Nickname = styled.div`
 // 이미지 Container
 const ImageContainer = styled.div`
     display : flex;
-    width : 100%;
-    height : 60%;
+    width : 500px;
+    height : 600px;
     justify-content: center;
     align-items: center;;
-`
-const ImageItem = styled.img`
-    max-width : 90%; width : auto;
-    max-height : 90%; height : auto;
-    object-fit : contain;
 `
 
 // 메인 텍스트 Container
@@ -203,6 +229,27 @@ const HeartBtnContainer = styled.div`
         background-color : rgba(40,40,40,0.1);
     }
 `
+const ArrowButton = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    background-color: rgb(250, 250, 250);
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 100%;
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  
+    svg { // 세모 화살표 아이콘 스타일
+    width: 16px;
+    height: 16px;
+    }
+
+    &:hover {
+        background-color: rgb(230, 230, 230);
+    }
+`;
 
 
 export default ModalPage;

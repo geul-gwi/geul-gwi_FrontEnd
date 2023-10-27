@@ -7,11 +7,8 @@ const SelectChg = (props) => {
     return (
         <Frame>
             <FlexContainer>
-                {/* 왼쪽 화살표 */}
                 <ArrowContainer onClick={() => props.prevButtonClick()}><BsChevronLeft /></ArrowContainer>
-                {/* 챌린지 선택 버튼 */}
                 <ChallengeSelectContainer>{props.selectedChallenge.challengeName}</ChallengeSelectContainer>
-                {/* 오른쪽 화살표 */}
                 <ArrowContainer onClick={() => props.nextButtonClick()}><BsChevronRight /></ArrowContainer> 
             </FlexContainer>
         </Frame>

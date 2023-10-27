@@ -96,7 +96,7 @@ const Frame = styled.div`
     display : flex;
     width : 100%;
     background-color : white;
-    border-radius : 16px;
+    border-radius : 5px;
     justify-content : center;
     padding-top: 20px; 
     padding-bottom: 20px;
