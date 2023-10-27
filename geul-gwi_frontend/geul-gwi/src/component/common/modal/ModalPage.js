@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';     // 토스트 메시지를 보내기 
 import styled from 'styled-components';
 import Axios from 'axios';
 import { Tag } from 'component/common/button/Tag'
-import { AiOutlineLeft, AiOutlineRight, AiOutlineEdit, AiFillHeart, AiOutlineHeart, AiOutlineClose } from "react-icons/ai"; 
+import { AiOutlineLeft, AiOutlineRight, AiOutlineEdit, AiFillHeart, AiOutlineHeart, AiOutlineClose } from "react-icons/ai";
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 // import React icons
@@ -18,14 +18,8 @@ const ModalPage = (props) => {
     const { userSeq, userToken } = useSelector((state) => state.authReducer);
     const [iconShow, setIconShow] = useState(false);
     const imagePath = process.env.PUBLIC_URL + '/img/';
-    const likeUrl = '/geulgwi/like/'; // 좋아요 요청 주소
-    const likeDelateUrl = '/geulgwi/unlike/'; // 좋아요 취소 요청 주소
     const postDetailUrl = '/geulgwi/search/'; // 게시물 세부 요청 주소
-
-    const [currentImageIndex, setCurrentImageIndex] = useState(0); // 이미지 넘겨보기 위한 인덱스
-    const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 목록을 저장할 배열
-    const [isLiked, setIsLiked] = useState(props.post.isLiked);
-    const [likeCount, setLikeCount] = useState(props.post.likeCount);
+    const [post, setPost] = useState(null);
 
     // 글 복사
     const handleCopyClick = (text) => {
@@ -38,22 +32,44 @@ const ModalPage = (props) => {
             });
     }
 
+    useEffect(() => {
+        async function fetchUserProfile() {
+            try {
+                const response = await Axios.get(`${axiosAddr}${postDetailUrl}${props.geulgwiSeq}?viewSeq=${userSeq}`, {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                });
+
+                if (response) {
+                    console.log("모달 창에 띄울 게시물 : ", response.data);
+                    setPost(response.data);
+                };
+
+            } catch (error) {
+                console.error('모달 창에 띄울 게시물 불러오기 실패.', error);
+                return null;
+            }
+        }
+        fetchUserProfile();
+    }, [post]);
+
     return (
         <ModelFrame onClick={() => props.ModalClosed()}>
             <ViewPage onClick={(event) => event.stopPropagation()}>
                 <Post
-                    profileUserSeq={props.post.profileUserSeq}
-                    profile={props.post.profile}
-                    nickname={props.post.nickname}
-                    comment={props.post.comment}
-                    geulgwiContent={props.post.geulgwiContent}
-                    userSeq={props.post.userSeq}
-                    regDate={props.post.regDate}
-                    files={props.post.files}
-                    tags={props.post.tags}
-                    likeCount={props.post.likeCount}
-                    liked={props.post.liked}
-                    geulgwiSeq={props.post.geulgwiSeq}
+                    profileUserSeq={props.userSeq}
+                    //profile={post.profile}
+                    nickname={post.nickname}
+                    //comment={post.comment}
+                    geulgwiContent={post.geulgwiContent}
+                    userSeq={post.userSeq}
+                    regDate={post.regDate}
+                    files={post.files}
+                    tags={post.tags}
+                    likeCount={post.likeCount}
+                    liked={post.liked}
+                    geulgwiSeq={props.geulgwiSeq}
                 />
                 {/* <ItemContainer>
                     { props.post.files === null ?

@@ -5,11 +5,14 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 // component 
 import Post from "component/user/profile/Post";
+import imageDataFetcher from 'service/imageDataFetcher';
 
 // 유저 프로필 밑에 표시되는 게시물을 모두 불러오는 폼
 const ProfilePostList = (props) => {
-    const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
+    const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userPostsUrl = '/geulgwi/list/';
+    const postListApi = '/geulgwi/list'; // 게시물 목록 요청 주소
+    const postDetailApi = '/geulgwi/search/';
     // 유저 로그인 정보
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
@@ -20,19 +23,49 @@ const ProfilePostList = (props) => {
         async function fetchUserPosts() {
             try {
                 //console.log('요청 주소 : ', `${axiosAddress}${userPostsUrl}${userSeq}`);
-                const response = await Axios.get(`${axiosAddress}${userPostsUrl}${props.profileUserSeq}?viewSeq=${userSeq}`, {
+                const response = await Axios.get(`${axiosAddr}${userPostsUrl}${props.profileUserSeq}?viewSeq=${userSeq}`, {
                     headers: {
                         Authorization: `Bearer ${userToken}`,
                     },
                 });
-                console.log('게시물 목록 불러오기 성공 : ', response.data);
+                //console.log('게시물 목록 불러오기 성공 : ', response.data);
                 setPosts(response.data);
+                ReFactData(response.data);
             } catch (error) {
-                console.log('게시물 목록 불러오기 실패:', error);
+                console.log('프로필 게시물 목록 불러오기 실패:', error);
             }
         }
         fetchUserPosts();
     }, []);
+
+    const ReFactData = async (posts) => {
+        try {
+            const updatedPosts = await Promise.all(posts.map(async (post) => {
+                const response = await Axios.get(axiosAddr + postDetailApi + post.geulgwiSeq + "?viewSeq=" + userSeq, {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`,
+                    }
+                });
+                const files = response.data.files;
+                const imageSrcs = await Promise.all(files.map(async (file) => {
+                    try {
+                        return await imageDataFetcher(axiosAddr, file);
+                    } catch (error) {
+                        console.log("getFileError : " + error);
+                        return null;
+                    }
+                }));
+                return {
+                    ...post,
+                    files: imageSrcs,
+                };
+            }));
+
+            setPosts(updatedPosts);
+        } catch (error) {
+            console.error("Error in ReFactData:", error);
+        }
+    };
 
     return (
         <Container>

@@ -21,17 +21,10 @@ const SearchForm = () => {
    const userSeq = useSelector((state) => state.authReducer.userSeq);
    const postListApi = '/geulgwi/list'; // 게시물 목록 요청 주소
    const postDetailApi = '/geulgwi/search/';
-   const likeUrl = '/geulgwi/like/'; // 좋아요 요청 주소
-   const likeDelateUrl = '/geulgwi/unlike/'; // 좋아요 취소 요청 주소
-   const postDetailUrl = '/geulgwi/search/'; // 게시물 세부 요청 주소
-   const postDeleteUrl = '/geulgwi/delete/'; // 게시물 삭제 요청 주소
 
    const [posts, setPosts] = useState([]); // 글 전체 리스트
+   const [viewPosts, setViewPosts] = useState([]); // 글 전체 리스트
    const [viewPost, setViewPost] = useState(null); // 모달창 게시물 데이터
-
-   const [likeCount, setLikeCount] = useState(null);
-   const [isLiked, setIsLiked] = useState(null);
-
    const [ModalState, setModalState] = useState(false);
 
    useEffect(() => {
@@ -42,7 +35,7 @@ const SearchForm = () => {
          },
       })
          .then((response) => {
-            //console.log("글 목록 요청 성공 : ", response);
+            console.log("글 목록 요청 성공 : ", response);
             setPosts(response.data);
             ReFactData(response.data);
          })
@@ -52,16 +45,30 @@ const SearchForm = () => {
    }, []);
 
    // 모달창을 띄우는 함수
-   const ModalOpen = (post) => {
+   const ModalOpen = (index) => {
       setModalState(true);
-      setViewPost(post);
+      setViewPost(posts[index]);
    }
    // 모달창을 닫는 함수
    const ModalClosed = () => {
       setModalState(false);
    }
 
-
+   // geulgwiContent
+   // :
+   // "안녀아세요 맹수 햄토스입니다."
+   // geulgwiSeq
+   // :
+   // 1
+   // nickname
+   // :
+   // "햄토스"
+   // regDate
+   // :
+   // "2023-10-26 13:44:25"
+   // userSeq
+   // :
+   // 1
 
    const ReFactData = async (posts) => {
       try {
@@ -86,7 +93,7 @@ const SearchForm = () => {
             };
          }));
 
-         setPosts(updatedPosts);
+         setViewPosts(updatedPosts);
       } catch (error) {
          console.error("Error in ReFactData:", error);
       }
@@ -96,31 +103,27 @@ const SearchForm = () => {
       <MainContainer>
          <TagSearchForm />
             <ItemsContainer>
-            {posts && posts.map((post) => (
-               <Item onClick={() => ModalOpen(post)}>
-                  {post.files && post.files.length > 1 ?
-                     <ItemImg src={post.files[0]}></ItemImg>
-                     :
-                     <ItemImg src={post.files}></ItemImg>
-                  }
+            {viewPosts && viewPosts.map((post, index) => (
+               <Item onClick={() => ModalOpen(index)}>
+                  {post.files && <ItemImg src={post.files[0]}></ItemImg>}
                   <HoveredContainer>
-                     <HoveredContainer_tutor>
+                     <Nickname>
                         {post.nickname}
-                     </HoveredContainer_tutor>
+                     </Nickname>
                      <Content>
                         {post.geulgwiContent}
                      </Content>
                   </HoveredContainer>
                   <HoveredBack />
                </Item>
-            ))
-            }
+            ))}
             </ItemsContainer>
             {ModalState &&
-               <ModalPage
-                  ModalClosed={ModalClosed} 
-                  post={viewPost}    
-               />
+            <ModalPage
+
+            userSeq={viewPost.userSeq}
+               geulgwiSeq={viewPost.geulgwiSeq}
+            />
             }
       </MainContainer>
    )
@@ -190,7 +193,7 @@ const ItemsContainer = styled.div`
   justify-items: center;
   align-items: center;
 `;
-const HoveredContainer_tutor = styled.div`
+const Nickname = styled.div`
   display : flex;
   width : 100%;
   height : 10px;

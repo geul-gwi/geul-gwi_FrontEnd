@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Tag } from 'component/common/button/Tag';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
+import imageDataFetcher from 'service/imageDataFetcher';
 
 const Post = (props) => {
     const { axiosAddr } = useContext(AxiosAddrContext);
@@ -22,36 +23,6 @@ const Post = (props) => {
     const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 목록을 저장할 배열
     const [isLiked, setIsLiked] = useState(props.liked);
     const [likeCount, setLikeCount] = useState(props.likeCount);
-
-    
-
-    // 이미지 데이터를 가져오는 함수
-    const fetchImageData = async (path) => {
-        try {
-            const encodedPath = encodeURIComponent(path);
-            const response = await axios.get(`${axiosAddr}/file?file=${encodedPath}`, {
-                responseType: 'blob',
-            });
-
-            if (response) {
-                const newFile = new File([response.data], 'image');
-                const reader = new FileReader();
-                return new Promise((resolve, reject) => {
-                    reader.onload = (event) => {
-                        const imageUrl = event.target.result;
-                        resolve(imageUrl);
-                    };
-                    reader.onerror = (error) => {
-                        reject(error);
-                    };
-                    reader.readAsDataURL(newFile);
-                });
-            }
-        } catch (error) {
-            console.error('이미지 가져오기에 실패했습니다.', error);
-            return null;
-        }
-    }
 
     // 이미지를 다음으로 이동하는 함수
     const nextImage = () => {
@@ -94,7 +65,7 @@ const Post = (props) => {
             const urls = [];
             for (const file of props.files) {
                 try {
-                    const imageUrl = await fetchImageData(file);
+                    const imageUrl = await imageDataFetcher(axiosAddr, file);
                     urls.push(imageUrl);
                 } catch (error) {
                     console.error('이미지 URL 가져오기 실패:', error);
@@ -165,7 +136,6 @@ const Post = (props) => {
             geulgwiContent: props.geulgwiContent,
             tags: props.tags,
             files: props.files,
-            profileUserSeq: props.profileUserSeq
         }
 
        // console.log("게시물 수정 페이지 이동 : ", data);
