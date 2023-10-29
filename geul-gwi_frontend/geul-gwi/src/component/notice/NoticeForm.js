@@ -33,14 +33,14 @@ const NoticeForm = (props) => {
                         Authorization: `Bearer ${userToken}`,
                     },
                 });
-                console.log('알림 목록 불러오기 성공 : ', response.data);
-                setNotices(response.data);
+                //console.log('알림 목록: ', response.data);
+                setNotices(response.data.reverse());
             } catch (error) {
-                console.error('알림 목록 불러오기 실패:', error);
+                console.error('알림 목록:', error);
             }
         }
         fetchUserProfile();
-    }, [axiosAddr, noticeListUrl, userSeq, userToken]);
+    }, []);
 
     // 알림 삭제 처리
     const noticeDeleteHandler = async (noticeSeq) => {
@@ -50,7 +50,7 @@ const NoticeForm = (props) => {
                     Authorization: `Bearer ${userToken}`,
                 },
             });
-            console.log('알림 삭제 완료 : ', response);
+            // console.log('알림 삭제 완료 : ', response);
             setNotices((prevNotices) => prevNotices.filter((notice) => notice.noticeSeq !== noticeSeq));
         } catch (error) {
             console.error('알림 삭제 실패 : ', error);
@@ -70,7 +70,7 @@ const NoticeForm = (props) => {
             console.error('알림 업데이트 실패:', error);
         }
         setNotices((prevNotices) => prevNotices.map((notice) =>
-            notice.seq === noticeSeq ? { ...notice, checked: true } : notice
+            notice.seq === noticeSeq ? { ...notice, checked: 'T' } : notice
         ));
     };
 
@@ -78,7 +78,7 @@ const NoticeForm = (props) => {
     const onClickCloseButton = async () => {
         // checked가 false인 알림 아이템들의 noticeSeq 모으기
         const uncheckedNoticeSeqs = notices
-            .filter((notice) => !notice.checked)
+            .filter((notice) => 'F')
             .map((notice) => notice.noticeSeq);
 
         // 요청 보내기

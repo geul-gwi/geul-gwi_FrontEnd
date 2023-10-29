@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import Post from 'component/user/profile/Post';
 import imageDataFetcher from 'service/imageDataFetcher';
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 
 const PostModal = (props) => {
+    const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
+
     return (
         <ModelFrame onClick={() => props.ModalClose()}>
             <ViewPage onClick={(event) => event.stopPropagation()}>
                 <Post
-                    profile={imageDataFetcher(props.post.userProfile)}
+                    profile={imageDataFetcher(axiosAddr, props.post.userProfile)}
                     nickname={props.post.nickname}
                     comment={props.post.comment}
                     geulgwiContent={props.post.geulgwiContent}

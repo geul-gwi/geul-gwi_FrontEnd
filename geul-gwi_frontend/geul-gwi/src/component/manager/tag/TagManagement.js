@@ -86,12 +86,10 @@ const TagManagement = () => {
             Authorization : "Bearer "+UserToken
         },
       }).then((response) => {
-        console.log("Tag 등록 성공");
         console.log(response);
         
       }).catch((error) => {
-        console.log("Tag 등록 실패");
-        console.log(error);
+        console.error("태그 등록", error);
       })
       TagsRefresh();
     }
@@ -102,10 +100,8 @@ const TagManagement = () => {
       <Title>태그 목록</Title>
       <TagContainer>
         <TagsContainer>
-          {tags.map(tag => (
-            <TagButton
-              fontColor={tag.fontColor}
-              backColor={tag.backColor}
+          {tags && tags.map(tag => (
+            <TagButton fontColor={tag.fontColor} backColor={tag.backColor}
               onClick={() => handleRemoveTag(tag.tagSeq)}
             >
               {'# '+ tag.value} x
@@ -160,7 +156,7 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 900px;
-  width: 600px;
+  width: 500px;
   padding: 20px 50px;
   text-align: center;
   background-color: white;

@@ -25,7 +25,7 @@ const FriendListForm = (props) => {
                         Authorization: `Bearer ${userToken}`,
                     },
                 });
-                //console.log('친구 목록 요청 성공 : ', response.data);
+                console.log('친구 목록 요청 성공 : ', response.data);
                 setFriends(response.data);
             } catch (error) {
                 console.error('친구 목록 요청 실패:', error);

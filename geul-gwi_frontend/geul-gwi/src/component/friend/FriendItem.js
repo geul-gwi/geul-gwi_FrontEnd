@@ -1,58 +1,36 @@
 import React, { useEffect, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import Axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
+import imageDataFetcher from 'service/imageDataFetcher';
+import Axios from 'axios';
+import { faVolumeMute, faVolumeUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const FriendItem = (props) => {
     const navigate = useNavigate();
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
-
     const [profile, setProfile] = useState();
+    const [isSubscribed, setIsSubscribed] = useState(props.friend.isSubscribed); // 구독 상태 여부
 
     useEffect(() => {
-        fetchImageData(props.notice.profile)
-            .then(imageUrl => {
+        const fetchProfileImage = async () => {
+            try {
+                const imageUrl = await imageDataFetcher(axiosAddr, props.notice.profile);
                 setProfile(imageUrl);
-            })
-            .catch(error => {
-                console.error('이미지 가져오기에 실패했습니다.', error);
-            });
+            } catch (error) {
+                console.error('친구 프로필 이미지 가져오기 실패.', error);
+            }
+        };
+
+        fetchProfileImage();
     }, []);
 
-    // 이미지 데이터를 가져오는 함수
-    const fetchImageData = async (path) => {
-        try {
-            const encodedPath = encodeURIComponent(path);
-            const response = await Axios.get(`${axiosAddr}/file?file=${encodedPath}`, {
-                responseType: 'blob',
-            });
-
-            if (response) {
-                const newFile = new File([response.data], 'image');
-                const reader = new FileReader();
-                return new Promise((resolve, reject) => {
-                    reader.onload = (event) => {
-                        const imageUrl = event.target.result;
-                        resolve(imageUrl);
-                    };
-                    reader.onerror = (error) => {
-                        reject(error);
-                    };
-                    reader.readAsDataURL(newFile);
-                });
-            }
-        } catch (error) {
-            console.error('이미지 가져오기에 실패했습니다.', error);
-            return null;
-        }
-    }
-
     const onClickDelete = () => {
-        const confirmMessage = `정말로 ${props.friend.nickname}님을 삭제하시겠습니까?`;
+        const confirmMessage = `정말로 ${props.friend.nickname}님과 친구를 끊으시겠습니까?`;
         // 사용자에게 확인 대화 상자를 표시
         const userConfirmed = window.confirm(confirmMessage);
         // 사용자가 확인을 누른 경우에만 삭제 함수를 호출
@@ -67,26 +45,65 @@ const FriendItem = (props) => {
         onClickProfile(); // 닫기
     };
 
+    const toggleSubscription = async () => {
+        let confirmMessage = ''; // 변수를 let으로 변경
+        if (isSubscribed === 'T') {
+            confirmMessage = `${props.friend.nickname}님의 소식을 받지 않겠습니까?`;
+        } else {
+            confirmMessage = `${props.friend.nickname}님의 소식을 받겠습니까?`;
+        }
+
+        const userConfirmed = window.confirm(confirmMessage);
+        if (userConfirmed) {
+            try {
+                const friendDTO = {
+                    'toUser': props.friend.userSeq, // 요청 받는 사람
+                    'fromUser': userSeq, // 요청 보낸 사람
+                };
+                console.log(friendDTO);
+                const response = await Axios.post(`${axiosAddr}/friend/subscribe`, friendDTO, {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                });
+                console.log('구독:', response);
+                setIsSubscribed(isSubscribed === 'T' ? 'F' : 'T');
+            } catch (error) {
+                console.error('구독:', error);
+            }
+        }
+    };
+
     return (
         <Frame>
-            <ProfileImage 
-                src={profile || '/img/defaultProfile.png'} 
+            <ProfileImage
+                src={profile || '/img/defaultProfile.png'}
                 onClick={onClickProfile}
             />
             <ContentContainer>
                 <TopRow>
-                    <Name>{props.friend.nickname}</Name>
+                    <Name onClick={onClickProfile}>{props.friend.nickname}</Name>
                 </TopRow>
             </ContentContainer>
             <ProfileContainer>
-                <CloseButton onClick={onClickDelete}></CloseButton>
+                <CloseButton onClick={onClickDelete}>친구 끊기</CloseButton>
+                <SubscribeButton onClick={toggleSubscription}>
+                    {isSubscribed === 'T' ?
+                        < img src={process.env.PUBLIC_URL + "/icon/free-icon-notification-2326147.png"}
+                            style={{ width: '30px', height: '30px' }}
+                        ></img>
+                        : <img src={process.env.PUBLIC_URL + "/icon/free-icon-notification-2326010.png"}
+                            style={{ width: '30px', height: '30px' }}
+                        ></img>
+                    }
+                </SubscribeButton>
             </ProfileContainer>
         </Frame>
     );
 };
 
-const Frame = styled.div`
 
+const Frame = styled.div`
     display: flex;
     align-items: center;
     width: 100%;
@@ -94,11 +111,21 @@ const Frame = styled.div`
     background-color: white;
     transition: background-color 0.2s;
     font-size: 14px;
-    padding: 5px;
+    padding: 3px;
     border-radius: 16px;
+`;
+
+const SubscribeButton = styled.button`
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 25px;
+    color: black;
+    background-color: white;
+    border: none;
+
     &:hover {
-        cursor: pointer;
-        background-color: rgb(245, 245, 245);
+        transform: scale(1.1);
+        transition: transform 0.2s ease-in-out;
     }
 `;
 
@@ -108,20 +135,9 @@ const TopRow = styled.div`
     margin-bottom: 4px;
 `;
 
-const RedDot = styled.div`
-        position: absolute; 
-        top: 18px; /* 원하는 위치 조절 */
-        right: 30px; /* 원하는 위치 조절 */
-        width: 8px; /* 원하는 크기 조절 */
-        height: 8px; /* 원하는 크기 조절 */
-        background-color: rgb(220,0,0);
-        border-radius: 50%;
-`;
-
 const ProfileImage = styled.img`
-    /* 이미지 스타일 */
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 1px solid #ccc;
     margin-right: 10px;
@@ -145,45 +161,25 @@ const ProfileContainer = styled.div`
     position: relative;
 `;
 
-
 const ContentContainer = styled.div`
-    flex: 9;
+    flex: 8;
 `;
 
 const Name = styled.div`
     font-weight: bold;
     margin-bottom: 2px;
-`;
-
-const Content = styled.div`
-    color: #333;
-    margin-bottom: 4px;
-`;
-
-const Time = styled.div`
-    color: rgb(150, 150, 150);
-    font-size: 12px;
-`;
-
-const CloseButton = styled.div`
-    margin-left: 5px;
-    font-size: 20px;
     cursor: pointer;
 `;
 
-const FollowButton = styled.button`
-    background-color: ${props => props.isFollowing ? "#f2f2f2" : "#3498db"};
-    color: ${props => props.isFollowing ? "#333" : "white"}; 
-    border: none;
-    padding: 5px 15px;
+const CloseButton = styled.button`
+    width: 100px;
+    height: 30px;
+    background-color: white;
     border-radius: 8px;
+    margin-left: 5px;
     cursor: pointer;
-    font-size: 12px;
-    transition: background-color 0.3s, color 0.3s;
-    
-    &:hover {
-        background-color: ${props => props.isFollowing ? "#e0e0e0" : "#2380c1"};
-    }
+    border-color: #ccc;
 `;
+
 
 export default FriendItem;

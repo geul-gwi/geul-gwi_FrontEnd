@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
+import imageDataFetcher from 'service/imageDataFetcher';
+import { AiOutlineClose } from 'react-icons/ai';
 
 const TYPE = {};
 TYPE['FRIEND'] = 'friendSeq';
@@ -20,44 +22,47 @@ const NoticeItem = (props) => {
     const userToken = useSelector((state) => state.authReducer.accessToken);
 
     const [profile, setProfile] = useState();
-    const [friendStatus, setFriendStatus] = useState(null);
 
     const friendAcceptUrl = '/friend/confirm'; // 친구 요청 확인 요청 주소
     const friendStatusUrl = '/friend/status'; // 친구 상태 요청 주소
 
+    const [friendStatus, setFriendStatus] = useState(null);
+
     useEffect(() => {
-        fetchImageData(props.notice.profile)
+        imageDataFetcher(axiosAddr, props.notice.profile)
             .then(imageUrl => {
                 setProfile(imageUrl);
-
-                if (friendStatus === null) {
-                    CheckFriendStatus().then((status) => {
-                        setFriendStatus(status);
-                    });
-                }
             })
             .catch(error => {
-                console.error('이미지 가져오기에 실패했습니다.', error);
+                console.error('상대 프로필 이미지 가져오기에 실패했습니다.', error);
             });
-    }, [props.notice.profile, friendStatus]);
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const status = await CheckFriendStatus();
+            setFriendStatus(status);
+        };
+        fetchData();
+    }, [props.notice.fromUser]);
 
     // 서버에서 받은 시간 표준으로 바꾸는 함수!!
     function parseISOString(s) {
-        //  2023-10-2416:49:21.969055245
+        // 2023-10-28 04:57:51
         const year = s.slice(0, 4);
         const month = s.slice(5, 7) - 1; // 월은 0부터 시작하므로 1을 빼줍니다.
         const day = s.slice(8, 10);
-        const hour = s.slice(10, 12);
-        const minute = s.slice(13, 15);
-        const second = s.slice(16, 18);
+        const hour = s.slice(11, 13);
+        const minute = s.slice(14, 16);
+        const second = s.slice(17, 19);
         return new Date(year, month, day, hour, minute, second);
     }
     // 시간 계산하는 함수!! (n분 전, n시간 전, 어제, 날짜)
     function formatDateTime() {
         const currentDate = new Date();
         const messageDate = parseISOString(props.notice.regDate);
-        // console.log("변환하기 전 시간 : ", props.notice.regDate);
-        // console.log("변환한 시간 : ", messageDate);
+        //console.log("변환하기 전 시간 : ", props.notice.regDate);
+        //console.log("변환한 시간 : ", messageDate);
         const timeDiff = currentDate - messageDate;
         const seconds = Math.floor(timeDiff / 1000);
         const minutes = Math.floor(seconds / 60);
@@ -77,56 +82,61 @@ const NoticeItem = (props) => {
         }
     }
 
-    // 이미지 데이터를 가져오는 함수
-    const fetchImageData = async (path) => {
-        try {
-            const encodedPath = encodeURIComponent(path);
-            const response = await Axios.get(`${axiosAddr}/file?file=${encodedPath}`, {
-                responseType: 'blob',
-            });
-
-            if (response) {
-                const newFile = new File([response.data], 'image');
-                const reader = new FileReader();
-                return new Promise((resolve, reject) => {
-                    reader.onload = (event) => {
-                        const imageUrl = event.target.result;
-                        resolve(imageUrl);
-                    };
-                    reader.onerror = (error) => {
-                        reject(error);
-                    };
-                    reader.readAsDataURL(newFile);
-                });
-            }
-        } catch (error) {
-            console.error('이미지 가져오기에 실패했습니다.', error);
-            return null;
-        }
-    }
-
     const onClickDelete = () => {
         props.noticeDeleteHandler(props.notice.noticeSeq);
     };
 
+    // 알림 타입에 따라서 내용 변환하는 함수
+    // 알림 타입에 따라서 내용 변환하는 함수
     const generateMessage = () => {
         switch (props.notice.type) {
             case 'FRIEND':
-                return `${props.notice.nickname}님이 친구를 요청했습니다.`;
+                return (
+                    <span>
+                        <Nickname>{props.notice.nickname}</Nickname>
+                        {'님에게 친구 요청이 왔습니다.'}
+                    </span>
+                );
             case 'MESSAGE':
-                return `${props.notice.nickname}님이 쪽지를 보냈습니다.`;
+                return (
+                    <span>
+                        <Nickname>{props.notice.nickname}</Nickname>
+                        {'님이 쪽지를 보냈습니다.'}
+                    </span>
+                );
             case 'GEULGWI':
-                return `${props.notice.nickname}님이 글 귀를 작성했습니다.`;
-            case "LIKE_GEULGWI":
-                return `${props.notice.nickname}님이 회원님의 글 귀에 좋아요를 눌렀습니다.`;
+                return (
+                    <span>
+                        <Nickname>{props.notice.nickname}</Nickname>
+                        {'님이 글 귀를 작성했습니다.'}
+                    </span>
+                );
+            case 'LIKE_GEULGWI':
+                return (
+                    <span>
+                        <Nickname>{props.notice.nickname}</Nickname>
+                        {'님이 회원님의 글 귀에 좋아요를 눌렀습니다.'}
+                    </span>
+                );
             case 'CHALLENGE':
-                return `${props.notice.nickname}님이 챌린지 글 귀를 작성했습니다.`;
+                return (
+                    <span>
+                        <Nickname>{props.notice.nickname}</Nickname>
+                        {'님이 챌린지 글 귀를 작성했습니다.'}
+                    </span>
+                );
             case 'LIKE_CHALLENGE':
-                return `${props.notice.nickname}님이 회원님의 챌린지에 좋아요를 눌렀습니다.`;
+                return (
+                    <span>
+                        <Nickname>{props.notice.nickname}</Nickname>
+                        {'님이 회원님의 챌린지에 좋아요를 눌렀습니다.'}
+                    </span>
+                );
             default:
                 return 'Error';
         }
     };
+
 
     // 친구 상태인지 체크하는 함수
     const CheckFriendStatus = async () => {
@@ -135,13 +145,13 @@ const NoticeItem = (props) => {
                 'toUser': props.notice.fromUser, // 확인하고 싶은 사람
                 'fromUser': userSeq, // 나
             };
-            console.log(`관계 확인 : `, friendDTO);
+            //console.log(`관계 확인 : `, friendDTO);
             const response = await Axios.post(`${axiosAddr}${friendStatusUrl}`, friendDTO, {
                 headers: {
                     Authorization: `Bearer ${userToken}`,
                 },
             });
-            console.log(response.data);
+            //console.log(response.data);
 
             return response.data;
 
@@ -159,23 +169,25 @@ const NoticeItem = (props) => {
     // 친구 요청 수락
     const onFriendRequestAccept = async () => {
         // 이미 친구 상태인지 확인한다.
-        if (CheckFriendStatus() === 'friend') return;
-
-        // try {
-        //     const friendDTO = {
-        //         'toUser': props.notice.fromUser, // 나에게 요청 보낸 사람
-        //         'fromUser': userSeq, // 나
-        //     };
-        //     const response = await Axios.post(`${axiosAddr}${friendAcceptUrl}`, friendDTO, {
-        //         headers: {
-        //             Authorization: `Bearer ${userToken}`,
-        //         },
-        //     });
-        //     console.log('친구 요청 수락 완료 : ', response);
+        if (friendStatus === 'friend') {
+            alert("이미 친구 상태입니다.");
+            return;
+        }
+        try {
+            const friendDTO = {
+                'toUser': props.notice.fromUser, // 나에게 요청 보낸 사람
+                'fromUser': userSeq, // 나
+            };
+            const response = await Axios.post(`${axiosAddr}${friendAcceptUrl}`, friendDTO, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+            //console.log('친구 요청 수락 완료 : ', response);
            
-        // } catch (error) {
-        //     console.error('친구 요청 수락 실패 : ', error);
-        // }
+        } catch (error) {
+            console.error('친구 요청 수락 실패 : ', error);
+        }
     };
 
     return (
@@ -191,16 +203,18 @@ const NoticeItem = (props) => {
                 <Time>{formatDateTime(props.notice.regDate)}</Time>
             </ContentContainer>
             <ProfileContainer>
-                {friendStatus !== 'friend' && <Button onClick={onFriendRequestAccept}>확인</Button>}
-                {!props.notice.checked && <RedDot /> }
-                <CloseButton onClick={onClickDelete}>&times;</CloseButton>
+                {friendStatus !== 'friend' && props.notice.type === 'FRIEND' &&
+                <Button onClick={onFriendRequestAccept}>확인</Button>}
+                {props.notice.checked === 'F' && <RedDot /> }
+                <CloseButton onClick={onClickDelete}> 
+                    <AiOutlineClose size={12} color='gray' />
+                 </CloseButton>
             </ProfileContainer>
         </Frame>
     );
 };
 
 const Frame = styled.div`
-
     display: flex;
     align-items: center;
     width: 100%;
@@ -208,7 +222,7 @@ const Frame = styled.div`
     background-color: white;
     transition: background-color 0.2s;
     font-size: 14px;
-    padding: 5px;
+    padding: 10px;
     border-radius: 16px;
     &:hover {
         cursor: pointer;
@@ -228,7 +242,7 @@ const RedDot = styled.div`
         right: 30px; /* 원하는 위치 조절 */
         width: 8px; /* 원하는 크기 조절 */
         height: 8px; /* 원하는 크기 조절 */
-        background-color: rgb(220,0,0);
+        background-color: rgb(242,151,165);
         border-radius: 50%;
 `;
 
@@ -260,12 +274,11 @@ const ProfileContainer = styled.div`
 
 
 const ContentContainer = styled.div`
-    flex: 8;
+    flex: 9;
 `;
 
-const Name = styled.div`
+const Nickname = styled.span`
     font-weight: bold;
-    margin-bottom: 2px;
 `;
 
 const Content = styled.div`
@@ -275,27 +288,30 @@ const Content = styled.div`
 
 const Time = styled.div`
     color: rgb(150, 150, 150);
-    font-size: 12px;
+    font-size: 13px;
 `;
 
 const CloseButton = styled.div`
+    position: absolute;
     margin-left: 5px;
-    font-size: 20px;
     cursor: pointer;
+    right: 3px;
 `;
 
 const Button = styled.button`
-    background-color: ${props => props.isFollowing ? "#f2f2f2" : "#3498db"};
-    color: ${props => props.isFollowing ? "#333" : "white"}; 
+    position: absolute;
+    right: 25px;
+    background-color: "#3498db";
+    color: "white"; 
     border: none;
-    padding: 5px 20px;
+    padding: 7px 23px;
     border-radius: 8px;
     cursor: pointer;
     font-size: 12px;
     transition: background-color 0.3s, color 0.3s;
     
-    &:hover {
-        background-color: ${props => props.isFollowing ? "#e0e0e0" : "#2380c1"};
+    :hover{
+        background-color: rgb(230, 230, 230);
     }
 `;
 

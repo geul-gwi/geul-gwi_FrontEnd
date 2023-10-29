@@ -78,8 +78,7 @@ const LoginForm = () => {
         <div className="LoginForm">
             <div className="LeftContainer">
                 <div className="TitleContainer">
-                    <h1><Link to="/" style={{ color: "black" }}>글 귀</Link></h1>
-                    <h5>당신의 따뜻한 말을 담다</h5>
+                    <Logo src={process.env.PUBLIC_URL + "/img/Logo.png"}></Logo>
                 </div>
             </div>
             <div className="RightContainer" style={{ position: 'relative' }}>
@@ -91,7 +90,7 @@ const LoginForm = () => {
                 <form className="FormContentManage" onSubmit={logAccount}>
                     <input className='loginFormInput' type='text' placeholder='아이디' onChange={(e) => setId(e.target.value)}></input>
                     <input className='loginFormInput' type='password' placeholder='비밀번호' onChange={(e) => setPassword(e.target.value)}></input><br />
-                    <input className='loginFormButton' type='submit' value="로그인" onClick={LoginSubmit} />
+                    <Button onClick={LoginSubmit}>로그인</Button>
                 </form>
                 <div className='sub_Container'>
                     <SubSpan>아이디 찾기</SubSpan>
@@ -105,6 +104,7 @@ const LoginForm = () => {
 };
 
 const SubSpan = styled.span`
+    user-select: none;
     margin-top: 5px;
     display : inline-block;
     font-size : 10px;
@@ -132,14 +132,35 @@ const IconContainer = styled.div`
     transform: translateX(-50%);
 
     flex-direction: column;
-    flex-wrap : wrap;
     justify-content: center;
     align-items: center;
+    user-select: none;
 `
 const IconText = styled.span`
     margin-top: 10px;
     color : #444444;
     font-size : 16px;
+`
+const Logo = styled.img`
+    position: relative;
+    user-select: none;
+    height: 250px;
+    width: 260px;
+`
+
+const Button = styled.button`
+    width: 97%;
+    height: 38px;
+    border-radius: 8px;
+    background-color: rgb(255, 194, 160);
+    color: white;
+    cursor: pointer;
+    border: 2px solid rgb(255, 194, 160);
+    
+    :hover{
+        color: black;
+        background-color: white;
+    }
 `
 
 export default LoginForm;

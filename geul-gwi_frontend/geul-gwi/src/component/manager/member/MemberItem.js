@@ -5,6 +5,7 @@ import axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress'; // Axios Address Context
 // Import Library
 import { useSelector } from 'react-redux'; // Redux 사용 Library
+import imageDataFetcher from 'service/imageDataFetcher';
 
 const MemberItem = (props) => {
   const { handleDelete } = props;
@@ -19,7 +20,7 @@ const MemberItem = (props) => {
 
   const handleClick = () => {
     // 유저 세부 정보 요청
-    axios.get(`${axiosAddress}${userDetailApi}${props.user.UserSeq}`, {
+    axios.get(`${axiosAddress}${userDetailApi}${props.user.userSeq}`, {
       headers: {
         Authorization: "Bearer " + userToken
       }
@@ -37,7 +38,7 @@ const MemberItem = (props) => {
     <Item>
       <Container>
         <ProfileImage
-          src={props.user.profile || '/img/defaultProfile.png'}
+          src={imageDataFetcher(axiosAddress, props.user.profile) || '/img/defaultProfile.png'}
           onClick={handleClick}
         />
         <UserName onClick={handleClick}>{props.user.nickname}</UserName>
@@ -57,6 +58,11 @@ const Item = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 10px 0px;
+  padding: 10px;
+  border-radius: 16px;
+  :hover{
+    background-color: rgb(240, 240, 240);
+  }
 `;
 
 const Container = styled.div`
@@ -75,7 +81,7 @@ const ProfileImage = styled.img`
 `;
 
 const UserName = styled.p`
-    margin-left: 10px;
+    margin-left: 15px;
     font-size: 15px;
         :hover{
       cursor: pointer;

@@ -136,16 +136,14 @@ const Post = (props) => {
             tags: props.tags,
             files: props.files,
         }
-
-       // console.log("게시물 수정 페이지 이동 : ", data);
-
+        
         navigate('/main/PostEdit', { state: data }); 
     };
 
     return (
         <PostFrame>
             <PostProfileContainer>
-                <ProfileImage><img src={props.profile}></img></ProfileImage>
+                <ProfileImage><img src={props.profile ? props.profile : '/img/defaultProfile.png'}></img></ProfileImage>
                 <ProfileName>
                     <Name>{props.nickname}</Name>
                     <Comment>{props.comment}</Comment>

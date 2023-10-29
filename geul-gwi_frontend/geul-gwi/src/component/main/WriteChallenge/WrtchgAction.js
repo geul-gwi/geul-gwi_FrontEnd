@@ -1,63 +1,172 @@
-import React, { Fragment, useEffect, useState } from 'react';
-
-// Import Component
+import React, { Fragment, useEffect, useContext, useState } from 'react';
+import Axios from 'axios';
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
+import { useSelector } from 'react-redux';
+// component
 import WrtchgComponent from 'component/main/WriteChallenge/WrtchgComponent';
 
 const WrtchgAction = () => {
-    const listUrl = '/challenge/admin/{challengeSeq}'; // 챌린지 목록 요청
+    const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
+    const userSeq = useSelector((state) => state.authReducer.userSeq);
+    const userToken = useSelector((state) => state.authReducer.accessToken);
+
+    const challengeListUrl = '/challenge/list'; // 챌린지 목록 요청
+    const postListUrl = '/challenge/list/';
+    const challengeStatusChange = '/challenge/status';
+
     const [challenges, setChallenges] = useState([]); // 챌린지 목록
-    // Challenge list State => 임시로 데이터를 넣어놓음
-    const [challengeList, setChallengeList] = useState([
-        {"challengeName" : "제 1회 챌린지","challengeState" : "inActive" , "desc":"이번주제는 의지와 열정입니다 \n 작가님들의 의지를 잘 표현하여 모두에게 힘이되는 말을 해주세요!", "startDay" : "2023.03.02"},
-        {"challengeName" : "제 2회 챌린지","challengeState" : "inActive", "desc" : "제 2회 챌린지 desc", "startDay" : "2023.05.01"},
-        {"challengeName" : "제 3회 챌린지","challengeState" : "active", "desc" : "요즘 사회가 많이 삭막해져 가고 있습니다 \n 정겨웠던 옛날을 생각하며 따뜻한 정을 같이 공유해봅시다 :)", "startDay":"2023.08.01"}
-    ]);
-    // Challenge의 글 List State => 해당 챌린지의 글들을 담아놓습니다.
-    const [challengePosts, setChallengePosts] = useState([
-        {"postNumber" : 12021, "postUser" : "한작가", "mainText" : "한 번 사는 인생이다, 남에게 휘물리지 말며 원하는 것을 마음껏 이루어라.", "likeCount" : 12400 , "isLikeClicked" : false},
-        {"postNumber" : 12022, "postUser" : "안작가", "mainText" : "사람들 정말 열심히 살잖아요, 잠까지 줄여가며, 그렇다고 너무 조급해하지 말아요. 당신은 꾸준히 나아가고 있으니까", "likeCount" : 3260 , "isLikeClicked" : false},
-        {"postNumber" : 12023, "postUser" : "박작가", "mainText" : "가끔 혹은 자주 마음이 진정되지 않을 때는 어디한 곳을 바라봅니다. 저는 하늘을 바라보고 있으면 진정되더라구요", "likeCount" : 9274 , "isLikeClicked" : false},
-        {"postNumber" : 12024, "postUser" : "김작가", "mainText" : "이상한 글 올리지 마요, 당신만 이상해져요", "likeCount" : 112345 , "isLikeClicked" : false},
-        {"postNumber" : 12025, "postUser" : "허망", "mainText" : "허망해요, 정말너무 허망해요, 이렇게 살다가 삶이 끝났을 때 무슨 의미가 남을까 싶어요.. 여러분도 그런생각하나요? 우린 같은 생각을 하네요, 그만그만그만그만그만그만그마아아아아", "likeCount" : 99999 , "isLikeClicked" : false},
-        {"postNumber" : 12026, "postUser" : "허망한작가", "mainText" : "이상한 글 올리지 마요, 당신만 이상해져요", "likeCount" : 70229, "isLikeClicked" : false}
-    ])
-    // 선택된 Challenge
-    const [selectedIndex, setSeletedIndex] = useState(0);
-    const [selectedChallenge,setSelectedChallenge] = useState([]);
-    // ModelState
+    const [posts, setPosts] = useState([]); // 챌린지 게시물 목록
+    const [selectedIndex, setSeletedIndex] = useState(0); // 보여주고 있는 챌린지 인덱스
+    const [selectedChallengeSeq, setSelectedChallengeSeq] = useState(null); // 보여주고 있는 챌린지 시퀀스
+
+    const [selectedChallenge, setSelectedChallenge] = useState([]); // 보여주고 있는 챌린지
+
     const [ModalState, setModalState] = useState(false);
     const [ModalData, setModalData] = useState(null);
     
+    // 챌린지 목록과 진행 중인 챌린지 가져오기
+    useEffect(() => {
+        const fetchChallenges = async () => {
+            try {
+                // 챌린지 목록 요청
+                const listResponse = await Axios.get(`${axiosAddr}${challengeListUrl}`, {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                });
+
+                if (listResponse) {
+                    console.log("챌린지 회차 목록: ", listResponse.data);
+                    //const reversedChallenges = listResponse.data.slice().reverse();
+                    //console.log("역순: ", reversedChallenges);
+                    const updatedChallenges = await checkChallengeStatus(listResponse.data);
+                    setChallenges(updatedChallenges);
+
+                    // 진행 중인 챌린지 요청
+                    const ongoingResponse = await Axios.get(`${axiosAddr}/challenge/ongoing`, {
+                        headers: {
+                            Authorization: `Bearer ${userToken}`,
+                        },
+                    });
+
+                    if (ongoingResponse) {
+                        //console.log("진행 중인 회차 가져오기: ", ongoingResponse.data);
+                        const ongoingChallenge = ongoingResponse.data;
+                        setSelectedChallengeSeq(ongoingResponse.data.challengeAdminSeq);
+                        // challenges 배열에서 해당 챌린지의 index 찾기
+                        const ongoingChallengeIndex = listResponse.data.findIndex(
+                            challenge => challenge.challengeAdminSeq === ongoingChallenge.challengeAdminSeq
+                        );
+
+                        // index를 selectedIndex로 설정
+                        if (ongoingChallengeIndex !== -1) {
+                            //console.log("진행중인회차 인덱스", ongoingChallengeIndex)
+                            setSeletedIndex(ongoingChallengeIndex);
+                        }
+
+                        // 선택된 챌린지 정보를 설정
+                        setSelectedChallenge(ongoingChallenge);
+                    }
+                }
+            } catch (error) {
+                console.error('챌린지 목록 및 진행 중인 회차 가져오기 에러:', error);
+            }
+        };
+
+        fetchChallenges();
+    }, []);
 
 
-    // Index값이 바뀌면 Challenge를 재할당 해준다 + 맨 처음(초기화) 에도 호출이 됨
-    useEffect(() =>{
-        setSelectedChallenge(challengeList[selectedIndex]);
-    }, [selectedIndex]);
+    const checkChallengeStatus = async (challenges) => {
+        const today = new Date(); 
+        const updatedChallenges = await Promise.all(challenges.map(async (challenge) => {
+            const startDate = new Date(challenge.start);
+            const endDate = new Date(challenge.end);
+            if (challenge.status === 'ONGOING' && today >= endDate) {
+                console.log("진행중인 챌린지 종료됨!!", endDate);
+                challenge.status = 'FINISHED'; 
+                await statusChangeHandler(challenge.challengeAdminSeq, 'FINISHED');
+            } else if (challenge.status === 'UPCOMING' && today >= startDate) {
+                if (today >= endDate) {
+                    console.log("예정중인 챌린지 종료됨!!", endDate);
+                    challenge.status = 'FINISHED'; 
+                    await statusChangeHandler(challenge.challengeAdminSeq, 'FINISHED');
+                } else {
+                    console.log("예정중인 챌린지 시작됨!!", startDate);
+                    challenge.status = 'ONGOING'; 
+                    await statusChangeHandler(challenge.challengeAdminSeq, 'ONGOING');
+                }
+            }
 
+            return challenge;
+        }));
 
+        return updatedChallenges;
+    };
 
-    // Function --------------------------------------------------
+    const statusChangeHandler = async (challengeAdminSeq, status) => {
+        try {
+            const response = await Axios.post(`${axiosAddr}${challengeStatusChange}?challengeAdminSeq=${challengeAdminSeq}&status=${status}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+            if (response) {
+                //console.log("챌린지 상태 변경 : ", response.data);
+            }
+        } catch (error) {
+            console.error('챌린지 상태 변경.', error);
+        }
+    };
+
+    // 해당 회차 글 목록 가져오기
+    useEffect(() => {
+        if (selectedChallengeSeq === null)
+            return;
+        const tagSearchHandler = async () => {
+            try {
+                const response = await Axios.get(`${axiosAddr}${postListUrl}${selectedChallengeSeq}?viewSeq=${userSeq}`, {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                });
+                if (response) {
+                    console.log("해당 챌린지 글 목록 : ", response.data);
+                    setPosts(response.data);
+                }
+            } catch (error) {
+                console.error('해당 챌린지 글 목록.', error);
+            }
+        };
+        tagSearchHandler();
+    }, [selectedChallengeSeq]);
+
     // 이전 버튼
     const PrevButtonClick = () => {
-        if (selectedIndex > 0){
-            setSeletedIndex(selectedIndex => selectedIndex - 1);
+        if (challenges.length > 0 && selectedIndex > 0) {
+            //console.log("이전 버튼 클릭", selectedIndex);
+            const newIndex = selectedIndex - 1;
+            setSelectedChallengeSeq(challenges[newIndex].challengeAdminSeq);
+            setSelectedChallenge(challenges[newIndex]);
+            setSeletedIndex(newIndex);
         }
-
     }
     // 다음 버튼
     const NextButtonClick = () => {
-        if (selectedIndex < (challengeList.length-1)){
-            setSeletedIndex(selectedIndex => selectedIndex + 1);
+        if (challenges.length > 0 && selectedIndex < challenges.length - 1) {
+            //console.log("다음 버튼 클릭", selectedIndex);
+            const newIndex = selectedIndex + 1;
+            setSelectedChallengeSeq(challenges[newIndex].challengeAdminSeq);
+            setSelectedChallenge(challenges[newIndex]);
+            setSeletedIndex(newIndex);
         }
     }
-    // 백엔드와의 추가적인 작업 요망
-    const LikeButtonClick = (postNumber) => {
-        // !!! 추가 작업 !!!
-        // 좋아요 버튼 State에 따라 , 좋아요 취소 / 좋아요 클릭 됨  => 백엔드에게 전달하기
-        const index = challengePosts.indexOf(challengePosts.find((post) => post.postNumber === postNumber));
 
-        setChallengePosts((prevPosts) => {
+    const LikeButtonClick = (postNumber) => {
+        // 좋아요 버튼 State에 따라 , 좋아요 취소 / 좋아요 클릭 됨  => 백엔드에게 전달하기
+        const index = posts.indexOf(posts.find((post) => post.postNumber === postNumber));
+
+        setPosts((prevPosts) => {
             // 해당 인덱스의 post 객체를 복사합니다.
             const updatedPost = { ...prevPosts[index] };
 
@@ -77,41 +186,26 @@ const WrtchgAction = () => {
         setModalState(true);
         setModalData(element);
     }
+
     // 모달창을 닫는 함수
     const ModalClosed = () => {
         setModalState(false);
     }
 
-    // LikeCount를 1000단위로 k로 표시함
-    const LikeCountConverter = (number) => {
-        if (number >= 1000){
-            const convertedNumber = (number/1000).toFixed(1);
-            return `${convertedNumber}k`;
-        }
-        else{
-            return number.toString();
-        }
-    }
-
-
     return (
         <Fragment>
             <WrtchgComponent 
-            prevButtonClick={PrevButtonClick}
-            nextButtonClick={NextButtonClick}
-
-            challengeList = {challengeList}
-            selectedChallenge = {selectedChallenge}
-            
-            postList = {challengePosts}
-            likeBtnClick = {LikeButtonClick}
-
-            ModalOpen = {ModalOpen}     // 모달을 여는 함수
-            ModalClosed = {ModalClosed} // 모달 닫는 함수
-            ModalState = {ModalState}   // 모달의 현재 상태를 알리는 State 변수
-            ModalData = {ModalData}     // 모달이 열릴 때, 전달할 Object State 함수
-            
-            LikeCountConverter={LikeCountConverter}
+                challengeList={challenges} // 챌린지 회차 목록
+                posts={posts} // 해당 회차 게시물 목록
+                prevButtonClick={PrevButtonClick}
+                nextButtonClick={NextButtonClick}
+                selectedIndex={selectedIndex}
+                selectedChallenge = {selectedChallenge}
+                likeBtnClick = {LikeButtonClick}
+                ModalOpen = {ModalOpen}     // 모달을 여는 함수
+                ModalClosed = {ModalClosed} // 모달 닫는 함수
+                ModalState = {ModalState}   // 모달의 현재 상태를 알리는 State 변수
+                ModalData = {ModalData}     // 모달이 열릴 때, 전달할 Object State 함수
             />
         </Fragment>
     );

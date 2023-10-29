@@ -47,23 +47,21 @@ const MemberManagement = () => {
   const handleDelete = (userSeq) => {
     const confirmDelete = window.confirm('정말로 이 사용자를 삭제하시겠습니까?');
     if (confirmDelete) {
-       // userSeq를 숫자로 변환
-    const userSeqNumber = Number(userSeq);
-      // 회원 삭제 요청
-      //console.log("회원 삭제 url 주소 : " `${axiosAddress}${userDeleteUrl}${userSeqNumber}`);
-      axios.delete(`${axiosAddress}${userDeleteUrl}${userSeqNumber}`)
+      axios.delete(`${axiosAddress}${userDeleteUrl}${userSeq}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
         .then((response) => {
-          console.log("받은 응답 => ");  
           console.log(response);
           if (response) {
-            // 삭제 성공, 사용자 목록에서 해당 회원 제거
             const updatedUsers = users.filter((user) => user.userSeq !== userSeq);
             setUsers(updatedUsers);
             setShowProfile(false);
           } 
         })
         .catch((error) => {
-          console.log('유저 삭제 요청 중 오류 발생:', error);
+          console.error('유저 삭제 요청 중 오류 발생:', error);
         });
     }
   };
@@ -137,7 +135,7 @@ const MemberManagement = () => {
 const MainContainer = styled.div`
     display: flex;
     justify-content: center;
-    width: 1000px;
+    width: 900px;
     margin: auto;
 `;
 
@@ -148,10 +146,9 @@ const LeftContainer = styled.div`
   align-items: start;
   background-color: white;
   margin: auto;
-  gap: 20px;
   width: 350px;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 20px;
+  height: 90vh;
   user-select: none;
 `;
 

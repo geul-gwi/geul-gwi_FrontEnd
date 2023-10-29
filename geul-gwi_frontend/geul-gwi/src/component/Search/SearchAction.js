@@ -42,7 +42,7 @@ const SearchForm = () => {
          }
       })
          .then((response) => {
-            console.log("글 목록 요청 성공 : ", response);
+            //console.log("글 목록 요청 성공 : ", response);
             setPosts(response.data);
             ReFactData(response.data);
          })

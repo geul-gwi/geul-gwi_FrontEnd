@@ -13,7 +13,6 @@ const UserForm = (props) => {
             <Circle2 />
             <Circle3 />
             <Circle4 />
-            {/* <Register /> */}
             {props.action ? <LoginForm /> : <Register />}
         </div>
         

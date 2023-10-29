@@ -1,5 +1,5 @@
 // import Library
-import React, { Fragment, useContext, useState } from 'react';
+import React, { useEffect, Fragment, useContext, useState } from 'react';
 import { toast } from 'react-toastify';     // 토스트 메시지를 보내기 위한 라이브러리
 import { useNavigate } from 'react-router-dom'; // 페이지 이동용 라이브러리
 
@@ -16,7 +16,8 @@ const WritingAction = () => {
     const { axiosAddr } = useContext(AxiosAddrContext);
     const { userSeq, accessToken } = useSelector((state) => state.authReducer);
     const writingUrl = "/geulgwi/register/"; // 글 작성 요청 주소
-    const challengeWriteUrl = '/challenge/user/register/';
+    const challengeWriteUrl = '/challenge/register/';
+    const challengeOngoingSeq = '/challenge/ongoing';
     // State
     const [FormMainText,setFormMainText] = useState(''); // 본문의 내용을 담는 State
     const [fnTags,setFnTags] = useState([]); // 최종적으로 선택된 태그를 담는 List State 
@@ -24,7 +25,29 @@ const WritingAction = () => {
     // Object
     const navigate = useNavigate(); // React Navigate = 페이지 이동
 
+    const [challenge, setChallenge] = useState(null);
+
     const [selectedTab, setSelectedTab] = useState("geulgwi");
+
+    useEffect(() => {
+        const getOngoingChallenge = async () => {
+            try {
+                const response = await axios.get(`${axiosAddr}${challengeOngoingSeq}`, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+
+                console.log("진행 중인 회차 가져오기: ", response.data);
+                setChallenge(response.data); // 진행중인 챌린지 정보 반환
+            } catch (error) {
+                console.error("진행 중인 회차 가져오기: ", error);
+            }
+        }
+        getOngoingChallenge();
+    }, []);
+
+
     // 받은 메시지와 보낸 메시지 메뉴 클릭 이벤트 핸들러
     const handleTabClick = (tab) => {
         setSelectedTab(tab); // 선택한 탭 설정
@@ -98,20 +121,23 @@ const WritingAction = () => {
     // 챌린지 작성 처리 
     const submitChallenge = async () => {
         try {
-            const data = {
-                challengeContent: FormMainText,
-                keywordSeq: fnTags.map(tag => tag.tagSeq),
-            };
+            if (challenge.challengeAdminSeq) {
+                const data = {
+                    challengeContent: FormMainText,
+                    challengeAdminSeq: challenge.challengeAdminSeq,
+                };
 
-            const response = await axios.post(`${axiosAddr}${challengeWriteUrl}${userSeq}`, data, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-
-            console.log("글 작성 완료: ", response);
+                const response = await axios.post(`${axiosAddr}${challengeWriteUrl}${userSeq}`, data, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+                console.log("챌린지 작성: ", response);
+            } else {
+                console.log("진행중인 챌린지가 없습니다.");
+            }
         } catch (error) {
-            console.error("글 작성 실패: ", error);
+            console.error("챌린지 작성: ", error);
         }
     }
 

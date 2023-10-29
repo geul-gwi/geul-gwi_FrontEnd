@@ -6,5 +6,6 @@
     background: url('/src/img/back_gradient.jpg');
     align-items: center;
     color: #b3b3b3;
+        user-select: none;
 
 }

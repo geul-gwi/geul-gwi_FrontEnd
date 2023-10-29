@@ -77,7 +77,7 @@ const SearchContainer = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   background-color: white;
   user-select: none;
-  padding: 20px; /* 패딩을 추가하려면 여기서 조절합니다. */
+  padding: 20px; 
 `;
 
 const Title = styled.p`

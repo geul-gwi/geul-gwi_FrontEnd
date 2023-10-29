@@ -8,12 +8,17 @@ import SortTab from 'component/main/WriteChallenge/PostManager/SortTab';
 // import Button
 import SortButton from 'component/main/WriteChallenge/PostManager/SortButton';
 
+// List < ChallengeSrchDTO > {
+//     seq(Long),
+//     challengeContent(String),
+//     regDate(String),
+//     likeCount(int),
+//     isLiked(boolean)
+// }
 
 const SortManager = (props) => {
-    const [sortedList, setSortedList] = useState([...props.postList]);
+    const [sortedList, setSortedList] = useState(props.posts);
     const [sortTabShow, setSortTabShow] = useState(false);
-    useEffect(() => {
-    }, [sortedList]);
 
     const handleTabShowToggle = () => {
         setSortTabShow(!sortTabShow);
@@ -25,32 +30,22 @@ const SortManager = (props) => {
         if (sortby === "인기순"){
             sortedItems.sort((a,b) => b.likeCount - a.likeCount);
         }
-
         setSortedList(sortedItems);
     }
 
-
     return (
         <Frame>
-            {/* 정렬 버튼 Container */}
             <ManagerFrame>
-                {/* Sort Button 누르면 absolute로 아래에 정렬창 띄우기 */}
                 <SortButton handleTabShowToggle={handleTabShowToggle}/>
                 <SortTab
-                sortTabShow={sortTabShow}
-                handleTabShowToggle={handleTabShowToggle}
-                SortFunc={SortFunc}
+                    sortTabShow={sortTabShow}
+                    handleTabShowToggle={handleTabShowToggle}
+                    SortFunc={SortFunc}
                 />
             </ManagerFrame>
-            {/* 글 들을 나열할 Container */}
             <PostContainer
-                postList = {sortedList}
-                likeBtnClick = {props.likeBtnClick}
-
-                ModalOpen = {props.ModalOpen}     // 모달을 여는 함수
-                LikeCountConverter={props.LikeCountConverter} // LikeView 숫자를 Refactoring해줌
+                posts={props.posts}
             />
-
         </Frame>
     );
 };

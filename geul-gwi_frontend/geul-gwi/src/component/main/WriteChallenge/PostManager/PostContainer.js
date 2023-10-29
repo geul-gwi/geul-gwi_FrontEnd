@@ -1,42 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-
-// import React icons
-import {AiFillHeart,AiOutlineHeart} from "react-icons/ai";
-
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import axios from 'axios';
+import { useSelector } from 'react-redux'; // Redux 사용 Library
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
+import { useNavigate } from 'react-router-dom';
 
 const PostContainer = (props) => {
-    // LikeCount 1000 단위로 보여주기
+    const navigate = useNavigate();
+
+    const { axiosAddr } = useContext(AxiosAddrContext);
+    const { userSeq, accessToken } = useSelector((state) => state.authReducer);
+    const likeUrl = '/challenge/like/';
+    const unlikeUrl = '/challenge/unlike/';
+
+    const onClickLikeButton = async (challengeSeq, isLiked) => {
+        if (isLiked) {
+            try {
+                const response = await axios.delete(`${axiosAddr}${unlikeUrl}${challengeSeq}/${userSeq}`, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+                if (response) {
+                    console.log("좋아요 취소: ", response);
+                }
+            } catch (error) {
+                console.error("좋아요 취소: ", error);
+            }
+        } else {
+            try {
+                const response = await axios.post(`${axiosAddr}${likeUrl}${challengeSeq}/${userSeq}`, {}, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+                if (response) {
+                    console.log("좋아요: ", response);
+                }
+            } catch (error) {
+                console.error("좋아요: ", error);
+            }
+        }
+    }
+
+    const onClickPostEdit = () => {
+        const data = {
+
+        }
+
+        navigate('/main/PostEdit', { state: data });
+    };
+
     return (
         <PostManager>
-            {
-                props.postList.map((element, idx) => (
-                    <PostItem onClick={() => props.ModalOpen(element)}>
-                        {/* 글의 Title , Profile */}
-                        <ItemProfile>{element.postUser}</ItemProfile>
-                        {/* 글의 본문 */}
-                        <ItemMainText>{element.mainText}</ItemMainText>
-                        {/* 글의 하단부분 */}
-                        <ItemBottom>
-                            <LikeViewCount>{props.LikeCountConverter(element.likeCount)}</LikeViewCount>
-                            <LikeButtonContainer>
-                                {
-                                    element.isLikeClicked ? <AiFillHeart class="likebtn" size={20} color={"red"} onClick={(event) => {
-                                        event.stopPropagation();
-                                        props.likeBtnClick(element.postNumber);
-                                    }}/>
+            {props.posts && props.posts.map((post) => (
+                <PostItem>
+                    <ItemProfile>{post.nickname}</ItemProfile>
+                    <ItemMainText>{post.challengeContent}</ItemMainText>
+                    <ItemBottom>
+                        <LikeViewCount>{post.likeCount}</LikeViewCount>
+                        <LikeButtonContainer>
+                            {
+                                post.isLiked ? <AiFillHeart class="likebtn" size={20} color={"red"} onClick={(event) => {
+                                    event.stopPropagation();
+                                    onClickLikeButton(post.seq, post.isLiked);
+                                }} />
                                     :
                                     <AiOutlineHeart size={20} color={"#444444"} onClick={(event) => {
                                         event.stopPropagation();
-                                        props.likeBtnClick(element.postNumber);
-                                    }}/>
-                                }
-                            </LikeButtonContainer>
-                        </ItemBottom>
-                    </PostItem>
-                ))
+                                        onClickLikeButton(post.seq, post.isLiked);
+                                    }} />
+                            }
+                        </LikeButtonContainer>
+                    </ItemBottom>
+                </PostItem>
+            ))
             }
-
         </PostManager>
     );
 };
@@ -79,7 +119,7 @@ const ItemProfile = styled(PartFrame)`
 const ItemMainText = styled(PartFrame)`
     height : 70px;
     color : rgba(120,120,120,1);
-    font-size : 12px;
+    font-size : 14px;
     line-height : 20px;
 `
 // PostItem의 하단 부분 ( 좋아요 , 좋아요 갯수 )
@@ -96,7 +136,8 @@ const LikeViewCount = styled.div`
     min-width : 10px; width : auto;
     padding : 0px 0px 0px 5px;
     align-items : center;
-    color : rgba(10,10,10,0.7); font-size : 10px;
+    color : rgba(10,10,10,0.7); 
+    font-size : 15px;
 `
 const LikeButtonContainer = styled.div`
     display : flex;

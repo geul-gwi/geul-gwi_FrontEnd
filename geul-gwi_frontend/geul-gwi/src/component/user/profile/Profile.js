@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'; // Redux 사용 Library
 import ProfilePostList from 'component/user/profile/ProfilePostList';
 import { Tag } from 'component/common/button/Tag'
 import { Button } from 'component/common/button/Button'
+import imageDataFetcher from 'service/imageDataFetcher';
 
 // profileUserSeq => 보여줄 유저의 프로필 시퀀스
 const Profile = ({profileUserSeq}) => {
@@ -14,11 +15,15 @@ const Profile = ({profileUserSeq}) => {
   const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
   const userSeq = useSelector((state) => state.authReducer.userSeq);
   const userToken = useSelector((state) => state.authReducer.accessToken);
+
   const userDetailUrl = '/user/detail/'; // 유저 세부 정보 불러오기 요청 주소
   const friendRequestUrl = '/friend/confirm'; // 친구 요청 주소
+  const friendDeleteUrl = '/friend/delete'; // 친구 삭제 요청 주소
+  const friendStatusUrl = '/friend/status'; // 친구 상태 요청 주소
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({}); // 유저 프로필 정보
+  const [friendStatus, setFriendStatus] = useState(null);
 
   useEffect(() => {
     async function fetchUserProfile() {
@@ -30,8 +35,10 @@ const Profile = ({profileUserSeq}) => {
         });
         setUserInfo(response.data);
         // 이미지 가져오는 함수를 호출
-        if (response.data.profile !== null)
-          fetchImageData(response.data.profile);
+        const profileImageUrl = await imageDataFetcher(response.data.profile);
+        setUserInfo((prevUserInfo) => {
+          return { ...prevUserInfo, profile: profileImageUrl };
+        });
       } catch (error) {
         console.log('프로필 불러오기 실패:', error);
       }
@@ -40,29 +47,13 @@ const Profile = ({profileUserSeq}) => {
   
   }, [profileUserSeq]);
 
-  // 이미지 데이터를 가져오는 함수
-  const fetchImageData = async (path) => {
-    try {
-      const encodedPath = encodeURIComponent(path);
-      const response = await Axios.get(`${axiosAddr}/file?file=${encodedPath}`, {
-        responseType: 'blob',
-      });
-
-      if (response) {
-        const newFile = new File([response.data], 'profile');
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const profileImageUrl = event.target.result;
-          setUserInfo((prevUserInfo) => {
-            return { ...prevUserInfo, profile: profileImageUrl };
-          });
-        };
-        reader.readAsDataURL(newFile);
-      }
-    } catch (error) {
-      console.error('프로필 이미지 가져오기에 실패했습니다.', error);
-    }
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      const status = await CheckFriendStatus();
+      setFriendStatus(status);
+    };
+    fetchData();
+  }, [profileUserSeq]);
 
   // 프로필 사진 클릭
   const onProfileClick = () => {
@@ -75,12 +66,12 @@ const Profile = ({profileUserSeq}) => {
     setIsModalOpen(false);
   };
 
-  // 프로필 편집 버튼 클릭
+  // 프로필 편집 
   const onEditClick = () => {
     navigate('/main/ProfileEdit', { state: userInfo }); // 프로필 정보 넘기기
   };
 
-  // 친구 요청 클릭 
+  // 친구 요청 
   const sendFriendRequest = async () => {
     try {
       const friendDTO = {
@@ -96,6 +87,44 @@ const Profile = ({profileUserSeq}) => {
       console.log('친구 요청 성공 : ', response.data);
     } catch (error) {
       console.error('친구 요청 실패:', error);
+    }
+  };
+
+  // 친구 끊기 
+  const onClickFriendDelete = async () => {
+    try {
+      console.log("친삭: ", `${axiosAddr}${friendDeleteUrl}toUser=${profileUserSeq}&fromUser=${userSeq}`);
+      const response = await Axios.delete(`${axiosAddr}${friendDeleteUrl}?toUser=${profileUserSeq}&fromUser=${userSeq}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      console.log('친구 삭제: ', response.data);
+      
+    } catch (error) {
+      console.error('친구 삭제:', error);
+    }
+  };
+
+  // 친구 상태인지 체크하는 함수
+  const CheckFriendStatus = async () => {
+    try {
+      const friendDTO = {
+        'toUser': profileUserSeq, // 확인하고 싶은 사람
+        'fromUser': userSeq, // 나
+      };
+      //console.log(`관계 확인 : `, friendDTO);
+      const response = await Axios.post(`${axiosAddr}${friendStatusUrl}`, friendDTO, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      console.log(response.data);
+
+      return response.data;
+
+    } catch (error) {
+      console.error('친구 상태 확인 실패 : ', error);
     }
   };
 
@@ -116,10 +145,23 @@ const Profile = ({profileUserSeq}) => {
               </Tag>
             ))}
           </TagsContainer>
-          {userSeq === profileUserSeq && (
-            <Button onClick={onEditClick}>프로필 편집</Button>
-          )}
-          <Button onClick={sendFriendRequest}>친구 요청</Button>
+          <ButtonContainer>
+            {userSeq === profileUserSeq && (
+              <Button onClick={onEditClick}>프로필 편집</Button>
+            )}
+            {userSeq !== profileUserSeq && (
+              <Button>쪽지</Button>
+            )}
+            {userSeq !== profileUserSeq && friendStatus === 'stranger' && (
+              <Button onClick={sendFriendRequest}>친구 요청</Button>
+            )}
+            {userSeq !== profileUserSeq && friendStatus === 'pending' && (
+              <Button onClick={sendFriendRequest}>친구 대기 중</Button>
+            )}
+            {userSeq !== profileUserSeq && friendStatus === 'friend' && (
+              <Button onClick={onClickFriendDelete}>친구 끊기</Button>
+            )}
+          </ButtonContainer>
         </ProfileInfo>
         {isModalOpen && (
           <ModalOverlay onClick={closeModal}>
@@ -150,6 +192,15 @@ const ProfileContainer = styled.div`
     background-color: white;
     user-select: none;
     padding: 20px 0;
+`;
+
+const ButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    gap: 10px;
 `;
 
 const TagsContainer = styled.div`

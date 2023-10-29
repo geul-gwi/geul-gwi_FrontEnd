@@ -9,7 +9,7 @@ const ChallengeManagement = () => {
   const userToken = useSelector((state) => state.authReducer.accessToken);
   const PublicWritingIconPath = process.env.PUBLIC_URL + "/icon/Writing/"
   const [showTagList, setShowTagList] = useState(true);
-  const challengeAddUrl = '/challenge/admin/event/register';
+  const challengeAddUrl = '/challenge/admin/register';
 
   // 챌린치 등록을 위한 변수
   const [comment, setComment] = useState(""); // 내용
