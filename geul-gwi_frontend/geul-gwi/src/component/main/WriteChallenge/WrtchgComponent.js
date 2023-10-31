@@ -144,7 +144,6 @@ const WrtchgComponent = () => {
     // 이전 버튼
     const PrevButtonClick = () => {
         if (challenges.length > 0 && selectedIndex > 0) {
-            //console.log("이전 버튼 클릭", selectedIndex);
             const newIndex = selectedIndex - 1;
             setSelectedChallengeSeq(challenges[newIndex].challengeAdminSeq);
             setSelectedChallenge(challenges[newIndex]);
@@ -154,7 +153,6 @@ const WrtchgComponent = () => {
     // 다음 버튼
     const NextButtonClick = () => {
         if (challenges.length > 0 && selectedIndex < challenges.length - 1) {
-            //console.log("다음 버튼 클릭", selectedIndex);
             const newIndex = selectedIndex + 1;
             setSelectedChallengeSeq(challenges[newIndex].challengeAdminSeq);
             setSelectedChallenge(challenges[newIndex]);
