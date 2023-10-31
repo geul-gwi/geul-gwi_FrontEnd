@@ -1,21 +1,22 @@
-import React, { Fragment, useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import Axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { Tag } from 'component/common/button/Tag';
+// component
+import ChallengeComponent from 'component/main/WriteChallenge/ChallengeComponent';
 
-
-const ChallengeInfoForm = (props) => {
+// 챌린지 폼 관련 함수, 변수 관리
+const WrtchgAction = () => {
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
 
-    const challengeListUrl = '/challenge/list'; // 챌린지 목록 요청
-    const postListUrl = '/challenge/list/';
-    const challengeStatusChange = '/challenge/status';
+    const listUrl = '/challenge/list'; // 챌린지 목록 or 해당 회차 글 요청 주소
+    const statusChangeUrl = '/challenge/status'; // 챌린지 상태 변경 요청 주소
+    const challengeOngoing = '/challenge/ongoing'
 
-    const [challenges, setChallenges] = useState([]); // 챌린지 목록
+    const [challenges, setChallenges] = useState([]); // 챌린지 회차 목록
+    const [posts, setPosts] = useState([]); // 해당 회차 챌린지 게시물 목록
     const [selectedIndex, setSeletedIndex] = useState(0); // 보여주고 있는 챌린지 인덱스
     const [selectedChallengeSeq, setSelectedChallengeSeq] = useState(null); // 보여주고 있는 챌린지 시퀀스
 
@@ -26,7 +27,7 @@ const ChallengeInfoForm = (props) => {
         const fetchChallenges = async () => {
             try {
                 // 챌린지 목록 요청
-                const listResponse = await Axios.get(`${axiosAddr}${challengeListUrl}`, {
+                const listResponse = await Axios.get(`${axiosAddr}${listUrl}`, {
                     headers: {
                         Authorization: `Bearer ${userToken}`,
                     },
@@ -34,13 +35,11 @@ const ChallengeInfoForm = (props) => {
 
                 if (listResponse) {
                     console.log("챌린지 회차 목록: ", listResponse.data);
-                    //const reversedChallenges = listResponse.data.slice().reverse();
-                    //console.log("역순: ", reversedChallenges);
                     const updatedChallenges = await checkChallengeStatus(listResponse.data);
                     setChallenges(updatedChallenges);
 
                     // 진행 중인 챌린지 요청
-                    const ongoingResponse = await Axios.get(`${axiosAddr}/challenge/ongoing`, {
+                    const ongoingResponse = await Axios.get(`${axiosAddr}${challengeOngoing}`, {
                         headers: {
                             Authorization: `Bearer ${userToken}`,
                         },
@@ -75,22 +74,22 @@ const ChallengeInfoForm = (props) => {
 
 
     const checkChallengeStatus = async (challenges) => {
-        const today = new Date();
+        const today = new Date(); 
         const updatedChallenges = await Promise.all(challenges.map(async (challenge) => {
             const startDate = new Date(challenge.start);
             const endDate = new Date(challenge.end);
             if (challenge.status === 'ONGOING' && today >= endDate) {
                 console.log("진행중인 챌린지 종료됨!!", endDate);
-                challenge.status = 'FINISHED';
+                challenge.status = 'FINISHED'; 
                 await statusChangeHandler(challenge.challengeAdminSeq, 'FINISHED');
             } else if (challenge.status === 'UPCOMING' && today >= startDate) {
                 if (today >= endDate) {
                     console.log("예정중인 챌린지 종료됨!!", endDate);
-                    challenge.status = 'FINISHED';
+                    challenge.status = 'FINISHED'; 
                     await statusChangeHandler(challenge.challengeAdminSeq, 'FINISHED');
                 } else {
                     console.log("예정중인 챌린지 시작됨!!", startDate);
-                    challenge.status = 'ONGOING';
+                    challenge.status = 'ONGOING'; 
                     await statusChangeHandler(challenge.challengeAdminSeq, 'ONGOING');
                 }
             }
@@ -103,7 +102,7 @@ const ChallengeInfoForm = (props) => {
 
     const statusChangeHandler = async (challengeAdminSeq, status) => {
         try {
-            const response = await Axios.post(`${axiosAddr}${challengeStatusChange}?challengeAdminSeq=${challengeAdminSeq}&status=${status}`, {}, {
+            const response = await Axios.post(`${axiosAddr}${statusChangeUrl}?challengeAdminSeq=${challengeAdminSeq}&status=${status}`, {}, {
                 headers: {
                     Authorization: `Bearer ${userToken}`,
                 },
@@ -116,98 +115,58 @@ const ChallengeInfoForm = (props) => {
         }
     };
 
+    // 해당 회차 글 목록 가져오기
+    useEffect(() => {
+        if (selectedChallengeSeq === null)
+            return;
+        const tagSearchHandler = async () => {
+            try {
+                const response = await Axios.get(`${axiosAddr}${listUrl}/${selectedChallengeSeq}?viewSeq=${userSeq}`, {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                });
+                if (response) {
+                    console.log("해당 챌린지 글 목록 : ", response.data);
+                    setPosts(response.data);
+                }
+            } catch (error) {
+                console.error('해당 챌린지 글 목록.', error);
+            }
+        };
+        tagSearchHandler();
+    }, [selectedChallengeSeq]);
+
+    // 이전 버튼
+    const PrevButtonClick = () => {
+        console.log("이전글",challenges);
+        if (challenges.length > 0 && selectedIndex > 0) {
+            const newIndex = selectedIndex - 1;
+            setSelectedChallengeSeq(challenges[newIndex].challengeAdminSeq);
+            setSelectedChallenge(challenges[newIndex]);
+            setSeletedIndex(newIndex);
+        }
+    }
+    // 다음 버튼
+    const NextButtonClick = () => {
+        if (challenges.length > 0 && selectedIndex < challenges.length - 1) {
+            const newIndex = selectedIndex + 1;
+            setSelectedChallengeSeq(challenges[newIndex].challengeAdminSeq);
+            setSelectedChallenge(challenges[newIndex]);
+            setSeletedIndex(newIndex);
+        }
+    }
+
     return (
-        <Frame>
-            <FlexContainer>
-                <ChallengeTitleContainer>
-                    <ChallengeTitle>{selectedIndex + 1 + "회차 챌린지"}</ChallengeTitle>
-                    <ChallengeState>
-                        {selectedChallenge.status === "FINISHED" && <span style={{color : "red"}}>종료</span>}
-                        {selectedChallenge.status === "ONGOING" && <span style={{ color: "blue" }}>진행 중</span>}
-                        {selectedChallenge.status === "UPCOMING" && <span style={{ color: "green" }}>예정</span>}
-                    </ChallengeState>
-                </ChallengeTitleContainer>
-                    <Date>{selectedChallenge.start + " ~ " + selectedChallenge.end}</Date> 
-                <ChallengeDesc>{selectedChallenge.comment}</ChallengeDesc>
-                <TagContainer>
-                    {selectedChallenge.keyword && selectedChallenge.keyword.map((keyword, index) => (
-                        <Tag key={index}>{"# "+ keyword}</Tag>
-                    ))}
-                </TagContainer>
-            </FlexContainer>
-        </Frame>
+        <ChallengeComponent 
+                challengeList={challenges} // 챌린지 회차 목록
+                posts={posts} // 해당 회차 게시물 목록
+            PrevButtonClick={PrevButtonClick}
+            NextButtonClick={NextButtonClick}
+                selectedIndex={selectedIndex}
+                selectedChallenge = {selectedChallenge}
+            />
     );
 };
 
-const Frame = styled.div`
-    display : flex;
-    width : 100%;
-    min-height : 100px; height : auto;
-    padding : 10px 0px 10px 0px;
-    justify-content: center;
-`
-const FlexContainer = styled.div`
-    display : flex;
-    width : 100%;
-    min-height : 100%; height : auto;
-    flex-direction: column;
-    justify-content: space-between;
-    font-family: "Nanum Square";
-`
-const ChallengeTitleContainer = styled.div`
-    display : flex;
-    width : 100%;
-    height : 30px;
-    flex-direction: row;
-    justify-content : flex-start; 
-    align-items : center;
-`
-const ChallengeTitle = styled.span`
-    display : inline-flex;
-    width : auto;
-    height : 100%;
-    justify-content: center; 
-    align-items : center;
-    padding : 0px 5px 0px 5px;
-    font-size : 23px; 
-    font-style : "bold"; 
-    color : rgb(70,70,70);
-`
-const ChallengeState = styled.span`
-    display : inline-flex;
-    width : auto;
-    justify-content: center; 
-    align-items: center;
-    padding : 0px 0px 0px 5px;
-    font-size : 15px;
-`
-
-const Date = styled.span`
-    display : flex;
-    margin: none;
-    padding : 5px 0px 0px 5px;
-    justify-content: flex-start; 
-    align-items: center;
-    font-size : 13px; 
-    color : gray;
-`
-
-const ChallengeDesc = styled.div`
-    padding : 10px 0px 10px 5px;
-    white-space: pre-line;
-    line-height : 25px; 
-    font-size : 15px; 
-    color : rgba(100,100,100,0.9);
-`
-
-// 선정된 TagList
-const TagContainer = styled.div`
-    display : flex;
-    width : 100%; 
-    flex-direction: row; justify-content: flex-start;
-    flex-wrap: wrap;
-    gap : 10px;
-    padding : 10px 0px 10px 0px;
-`
-
-export default ChallengeInfoForm;
+export default WrtchgAction;

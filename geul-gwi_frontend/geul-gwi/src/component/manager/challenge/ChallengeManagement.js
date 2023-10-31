@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; 
 
+import WritingComponent from 'component/main/WriteChallenge/ChallengeComponent';
+
 const ChallengeManagement = () => {
   const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
   const userSeq = useSelector((state) => state.authReducer.userSeq);
@@ -55,7 +57,8 @@ const ChallengeManagement = () => {
         },
       });
       if (response) {
-        console.log("챌린지 등록: ", response.data);
+        //console.log("챌린지 등록: ", response.data);
+        alert("챌린지 등록이 완료되었습니다.")
       }
     } catch (error) {
       console.error('챌린지 등록: ', error);
@@ -64,9 +67,7 @@ const ChallengeManagement = () => {
 
   return (
     <MainContainer>
-      <TopContainer>
-        <Title>챌린지</Title>
-      </TopContainer>
+      {/* <WritingComponent/> */}
       <ShowButton onClick={ShowList}>
         <ButtonTextContainer>챌린지 추가</ButtonTextContainer>
         <ButtonIconContainer>
@@ -201,6 +202,7 @@ const InputComent = styled.textarea`
 `;
 
 const ShowButton = styled.div`
+    margin-top: 20px;
     display : flex;
     width : 140px;
     height : 50px;

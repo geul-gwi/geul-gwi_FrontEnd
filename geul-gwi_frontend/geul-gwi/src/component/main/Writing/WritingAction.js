@@ -15,9 +15,11 @@ import axios from 'axios';
 const WritingAction = () => {
     const { axiosAddr } = useContext(AxiosAddrContext);
     const { userSeq, accessToken } = useSelector((state) => state.authReducer);
-    const writingUrl = "/geulgwi/register/"; // 글 작성 요청 주소
-    const challengeWriteUrl = '/challenge/register/';
-    const challengeOngoingSeq = '/challenge/ongoing';
+
+    const writingUrl = "/geulgwi/register/"; // 일반 글 작성 요청 주소
+    const challengeWriteUrl = '/challenge/register/'; // 챌린지 글 작성 요청 주소
+    const challengeOngoingSeq = '/challenge/ongoing'; // 진행 중인 챌린지 정보 요청 주소
+
     // State
     const [FormMainText,setFormMainText] = useState(''); // 본문의 내용을 담는 State
     const [fnTags,setFnTags] = useState([]); // 최종적으로 선택된 태그를 담는 List State 
@@ -154,6 +156,7 @@ const WritingAction = () => {
                 handleTabClick={handleTabClick}
                 submitGeulgwi={submitGeulgwi}
                 submitChallenge={submitChallenge}
+                challenge={challenge}
             />
         </Fragment>
     );

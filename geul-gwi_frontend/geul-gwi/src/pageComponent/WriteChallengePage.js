@@ -1,13 +1,11 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 // import Component
-import WrtchgAction from 'component/main/WriteChallenge/WrtchgAction';
+import ChallengeAction from 'component/main/WriteChallenge/ChallengeAction';
 
 const WriteChallengePage = () => {
     return (
-        <Fragment>
-            <WrtchgAction />
-        </Fragment>
+            <ChallengeAction />
     );
 };
 

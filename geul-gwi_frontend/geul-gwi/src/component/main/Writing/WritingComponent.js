@@ -19,54 +19,73 @@ const WritingComponent = (props) => {
     };
 
     return (
-        <Frame>
+        <>
+            {props.selectedTab !== "geulgwi" && (
+                <ChallengeHeaderContainer>
+                    1번째 챌린지입니다.
+                    많은 참여부탁드립니다!!!!
+                    <KeywordContainer>
+                        <Keyword># 햄콩이</Keyword>
+                        <Keyword># 햄스터</Keyword>
+                        <Keyword># 캐슈넛</Keyword>
+                    </KeywordContainer>
+                </ChallengeHeaderContainer>
+            )}
+            <Frame>
 
-            <FlexFrame>
-                <Tabs>
-                    <TabButton
-                        onClick={() => props.handleTabClick("geulgwi")}
-                        active={props.selectedTab === "geulgwi"}
-                    >
-                        일반
-                    </TabButton>
-                    <TabButton
-                        onClick={() => props.handleTabClick("challenge")}
-                        active={props.selectedTab === "challenge"}
-                    >
-                        챌린지
-                    </TabButton>
-                </Tabs>
-                <TitleContainer style={{ marginBottom: '30px' }}>
-                    <ComponentName>{props.selectedTab === "geulgwi" ? "일반 글 작성" : "챌린지 작성"}</ComponentName>
-                    <ComponentIntro>나만의 글 귀를 작성하세요.</ComponentIntro>
-                </TitleContainer>
-                <FormContainer>
-                    <ContentArea
-                        placeholder="글 귀를 작성하세요..."
-                        onChange={(e) => props.FormMainTextChange(e)}
-                    >
-                    </ContentArea>
-                </FormContainer>
-                {/* 조건부 렌더링 */}
-                {props.selectedTab === "geulgwi" && (
-                    <ImageUploadForm
-                        style={{ marginBottom: '20px' }}
-                        returnImageList={props.ReturnImg}
-                        imageAddHandler={props.ImageAdd}
-                        imageDeleteHandler={props.ImageDelete}
-                    />
-                )}
-                {props.selectedTab === "geulgwi" && (
-                    <AddTagButton
-                        FnTagSetHandler={props.FnTagSetHandler}
-                        fnTags={props.fnTags}
-                    />
-                )}
-                <SubmitContainer>
-                    <SubmitBtn onClick={handleSubmit}>공유</SubmitBtn>
-                </SubmitContainer>
-            </FlexFrame>
-        </Frame>
+                <FlexFrame>
+                    <Tabs>
+                        <TabButton
+                            onClick={() => props.handleTabClick("geulgwi")}
+                            active={props.selectedTab === "geulgwi"}
+                        >
+                            일반
+                        </TabButton>
+                        <TabButton
+                            onClick={() => props.handleTabClick("challenge")}
+                            active={props.selectedTab === "challenge"}
+                        >
+                            챌린지
+                        </TabButton>
+                    </Tabs>
+
+                    <TitleContainer style={{ marginBottom: '30px' }}>
+                        <ComponentName>{props.selectedTab === "geulgwi" ? "일반 글 작성" : "챌린지 작성"}</ComponentName>
+                        <ComponentIntro>
+                            {props.selectedTab === "geulgwi" ?
+                                "나만의 글 귀를 작성해주세요."
+                                : "모든 키워드가 들어가도록 나만의 글 귀를 작성해주세요."}.
+                        </ComponentIntro>
+                    </TitleContainer>
+
+                    <FormContainer>
+                        <ContentArea
+                            placeholder="글 귀를 작성하세요..."
+                            onChange={(e) => props.FormMainTextChange(e)}
+                        >
+                        </ContentArea>
+                    </FormContainer>
+                    {/* 조건부 렌더링 */}
+                    {props.selectedTab === "geulgwi" && (
+                        <ImageUploadForm
+                            style={{ marginBottom: '20px' }}
+                            returnImageList={props.ReturnImg}
+                            imageAddHandler={props.ImageAdd}
+                            imageDeleteHandler={props.ImageDelete}
+                        />
+                    )}
+                    {props.selectedTab === "geulgwi" && (
+                        <AddTagButton
+                            FnTagSetHandler={props.FnTagSetHandler}
+                            fnTags={props.fnTags}
+                        />
+                    )}
+                    <SubmitContainer>
+                        <SubmitBtn onClick={handleSubmit}>공유</SubmitBtn>
+                    </SubmitContainer>
+                </FlexFrame>
+            </Frame>
+        </>
     );
 };
 
@@ -96,13 +115,37 @@ const Frame = styled.div`
     display : flex;
     width : 100%;
     background-color : white;
-    border-radius : 5px;
     justify-content : center;
     padding-top: 20px; 
     padding-bottom: 20px;
     user-select: none;
     margin-bottom: 80px;
+        padding: 18px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `
+// 진행 중인 챌린지 헤더 컨테이너
+const ChallengeHeaderContainer = styled.div`
+    width: 100%;
+    height: auto;
+    padding: 18px;
+    background-color: white;
+    margin-bottom: 22px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    user-select: none;
+`
+
+const KeywordContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 10px 0px;
+    gap: 10px;
+`
+
+const Keyword = styled.div`
+    font-size: 18px;
+`
+
 
 const FlexFrame = styled.div`
     display : flex;

@@ -1,20 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-
-
-// import Component
+// component
 import PostContainer from 'component/main/WriteChallenge/PostManager/PostContainer';
-import SortTab from 'component/main/WriteChallenge/PostManager/SortTab';
-// import Button
 import SortButton from 'component/main/WriteChallenge/PostManager/SortButton';
-
-// List < ChallengeSrchDTO > {
-//     seq(Long),
-//     challengeContent(String),
-//     regDate(String),
-//     likeCount(int),
-//     isLiked(boolean)
-// }
 
 const SortManager = (props) => {
     const [sortedList, setSortedList] = useState(props.posts);
@@ -37,11 +25,13 @@ const SortManager = (props) => {
         <Frame>
             <ManagerFrame>
                 <SortButton handleTabShowToggle={handleTabShowToggle}/>
-                <SortTab
-                    sortTabShow={sortTabShow}
-                    handleTabShowToggle={handleTabShowToggle}
-                    SortFunc={SortFunc}
-                />
+                {sortTabShow &&
+                    <TabFrame onMouseLeave={handleTabShowToggle}>
+                        <Item onClick={() => SortFunc("인기순")}>인기순</Item>
+                        <Item>최신순</Item>
+                        <Item>오래된순</Item>
+                    </TabFrame>
+                }
             </ManagerFrame>
             <PostContainer
                 posts={props.posts}
@@ -68,6 +58,36 @@ const ManagerFrame = styled.div`
     min-height : 10px; height : auto;
     justify-content : flex-end;
 `
-
+const TabFrame = styled.div`
+    position : absolute;
+    top : calc(100% + 5px);
+    right : 0px;
+    display : flex;
+    position : absolute;
+    z-index : 5;
+    width : 90px;
+    min-height: 20px; height : auto;
+    background-color: white;
+    border-radius : 16px;
+    box-shadow : 1px 1px 10px 2px rgba(40,40,40,0.4);
+    padding : 10px 5px 10px 5px;
+    flex-direction : column;
+    justify-content : center;
+    align-items : center;
+    gap : 15px;
+`
+const Item = styled.div`
+    display : flex;
+    width : 100%;
+    height : 20px;
+    padding : 5px 0px 5px 0px;
+    justify-content : center; align-items : center;
+    border-radius : 12px;
+    font-size : 14px;
+    cursor : pointer;
+    &:hover{
+        background-color : rgba(40,40,40,0.1);
+    }
+`
 
 export default SortManager;
