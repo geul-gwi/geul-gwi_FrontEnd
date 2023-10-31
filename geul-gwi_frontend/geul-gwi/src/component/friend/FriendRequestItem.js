@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
+import imageDataFetcher from 'service/imageDataFetcher';
 
 const FriendRequestItem = (props) => {
     const navigate = useNavigate();
@@ -11,55 +12,48 @@ const FriendRequestItem = (props) => {
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
 
+    const friendAcceptUrl = '/friend/confirm'; // 친구 요청 확인 요청 주소
+
     const [profile, setProfile] = useState();
 
     useEffect(() => {
-        fetchImageData(props.notice.profile)
-            .then(imageUrl => {
+        const fetchProfileImage = async () => {
+            try {
+                const imageUrl = await imageDataFetcher(axiosAddr, props.friend.profile);
                 setProfile(imageUrl);
-            })
-            .catch(error => {
-                console.error('이미지 가져오기에 실패했습니다.', error);
-            });
-    }, []);
-
-    // 이미지 데이터를 가져오는 함수
-    const fetchImageData = async (path) => {
-        try {
-            const encodedPath = encodeURIComponent(path);
-            const response = await Axios.get(`${axiosAddr}/file?file=${encodedPath}`, {
-                responseType: 'blob',
-            });
-
-            if (response) {
-                const newFile = new File([response.data], 'image');
-                const reader = new FileReader();
-                return new Promise((resolve, reject) => {
-                    reader.onload = (event) => {
-                        const imageUrl = event.target.result;
-                        resolve(imageUrl);
-                    };
-                    reader.onerror = (error) => {
-                        reject(error);
-                    };
-                    reader.readAsDataURL(newFile);
-                });
+            } catch (error) {
+                console.error('친구 프로필 이미지 가져오기 실패.', error);
             }
-        } catch (error) {
-            console.error('이미지 가져오기에 실패했습니다.', error);
-            return null;
-        }
-    }
+        };
 
-    const onClickDelete = () => {
-        alert(`${props.friend.nickname}님을 정말로 삭제하시겠습니까?`);
-        props.friendDeleteHandler(props.friend.userSeq);
-    };
+        fetchProfileImage();
+    }, [props.friend.profile]);
 
     // 프로필 클릭 => 해당 유저 프로필로 이동한다.
     const onClickProfile = () => {
         navigate('/main/Profile', { state: { profileUserSeq: props.friend.userSeq } });
         onClickProfile(); // 닫기
+    };
+
+    // 친구 요청 수락
+    const onFriendRequestAccept = async () => {
+        try {
+            const friendDTO = {
+                'toUser': props.friend.userSeq, // 나에게 요청 보낸 사람
+                'fromUser': userSeq, // 나
+            };
+            const response = await Axios.post(`${axiosAddr}${friendAcceptUrl}`, friendDTO, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+            //console.log('친구 요청 수락 완료 : ', response);
+            props.setMenu('list');
+        
+
+        } catch (error) {
+            console.error('친구 요청 수락 실패 : ', error);
+        }
     };
 
     return (
@@ -74,23 +68,23 @@ const FriendRequestItem = (props) => {
                 </TopRow>
             </ContentContainer>
             <ProfileContainer>
-                <CloseButton onClick={onClickDelete}></CloseButton>
+                <Button onClick={onFriendRequestAccept}>확인</Button>
             </ProfileContainer>
         </Frame>
     );
 };
 
 const Frame = styled.div`
-
     display: flex;
     align-items: center;
-    width: 100%;
+    width: 95%;
     height: auto;
     background-color: white;
     transition: background-color 0.2s;
     font-size: 14px;
     padding: 5px;
     border-radius: 16px;
+        border-bottom: 1px solid rgb(240, 240, 240);
     &:hover {
         cursor: pointer;
         background-color: rgb(245, 245, 245);
@@ -101,16 +95,6 @@ const TopRow = styled.div`
     display: flex;
     align-items: center;
     margin-bottom: 4px;
-`;
-
-const RedDot = styled.div`
-        position: absolute; 
-        top: 18px; /* 원하는 위치 조절 */
-        right: 30px; /* 원하는 위치 조절 */
-        width: 8px; /* 원하는 크기 조절 */
-        height: 8px; /* 원하는 크기 조절 */
-        background-color: rgb(220,0,0);
-        border-radius: 50%;
 `;
 
 const ProfileImage = styled.img`
@@ -149,35 +133,22 @@ const Name = styled.div`
     margin-bottom: 2px;
 `;
 
-const Content = styled.div`
-    color: #333;
-    margin-bottom: 4px;
-`;
 
-const Time = styled.div`
-    color: rgb(150, 150, 150);
-    font-size: 12px;
-`;
-
-const CloseButton = styled.div`
-    margin-left: 5px;
-    font-size: 20px;
-    cursor: pointer;
-`;
-
-const FollowButton = styled.button`
-    background-color: ${props => props.isFollowing ? "#f2f2f2" : "#3498db"};
-    color: ${props => props.isFollowing ? "#333" : "white"}; 
-    border: none;
-    padding: 5px 15px;
+const Button = styled.div`
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
     border-radius: 8px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: background-color 0.3s, color 0.3s;
-    
+    width: 100px;
+    height: 30px;
+
     &:hover {
-        background-color: ${props => props.isFollowing ? "#e0e0e0" : "#2380c1"};
+        cursor: pointer;
+        background-color: rgb(245, 245, 245);
     }
 `;
+
 
 export default FriendRequestItem;

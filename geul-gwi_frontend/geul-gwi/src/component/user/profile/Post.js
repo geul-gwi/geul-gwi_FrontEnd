@@ -11,13 +11,15 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import imageDataFetcher from 'service/imageDataFetcher';
 
 const Post = (props) => {
+    const navigate = useNavigate();
+
     const { axiosAddr } = useContext(AxiosAddrContext);
     const { userSeq, accessToken } = useSelector((state) => state.authReducer);
+
     const likeUrl = '/geulgwi/like/'; // 좋아요 요청 주소
     const likeDelateUrl = '/geulgwi/unlike/'; // 좋아요 취소 요청 주소
     const postDetailUrl = '/geulgwi/search/'; // 게시물 세부 요청 주소
     const postDeleteUrl = '/geulgwi/delete/'; // 게시물 삭제 요청 주소
-    const navigate = useNavigate();
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0); // 이미지 넘겨보기 위한 인덱스
     const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 목록을 저장할 배열
@@ -140,12 +142,17 @@ const Post = (props) => {
         navigate('/main/PostEdit', { state: data }); 
     };
 
+    const onClickProfile = () => {
+        navigate('/main/Profile', { state: { profileUserSeq: props.userSeq } });
+    };
+
+
     return (
         <PostFrame>
             <PostProfileContainer>
-                <ProfileImage><img src={props.profile ? props.profile : '/img/defaultProfile.png'}></img></ProfileImage>
+                <ProfileImage onClick={onClickProfile}><img src={props.profile ? props.profile : '/img/defaultProfile.png'}></img></ProfileImage>
                 <ProfileName>
-                    <Name>{props.nickname}</Name>
+                    <Name onClick={onClickProfile}>{props.nickname}</Name>
                     <Comment>{props.comment}</Comment>
                     {userSeq === props.profileUserSeq && (
                         <HeaderButtonContainer>
@@ -154,7 +161,6 @@ const Post = (props) => {
                         </HeaderButtonContainer>
                     )}
                 </ProfileName>
-
             </PostProfileContainer>
             <PostImageContainer>
                 {imageUrls.length > 1 && (
@@ -247,6 +253,11 @@ const ProfileImage = styled.div`
         border-radius : 70%;
         overflow: hidden;
         border: 1px solid #ccc;
+        cursor: pointer;
+            &:hover {
+      transform: scale(1.2);
+      transition: transform 0.2s ease-in-out;
+    }
     `
 const ProfileName = styled.div`
         display : flex;
@@ -268,10 +279,7 @@ const ButtonContainer = styled.div`
     height : 100%;
     border-radius : 16px;
     cursor : pointer;
-    &:hover {
-      transform: scale(1.2);
-      transition: transform 0.2s ease-in-out;
-    }
+
 `
 const Name = styled.div`
     width : 100%;
@@ -279,6 +287,7 @@ const Name = styled.div`
     font-style : "bold";
     font-size : 16px;
     color : #5F5F5F;
+            cursor: pointer;
 `
 
 const Comment = styled.div`

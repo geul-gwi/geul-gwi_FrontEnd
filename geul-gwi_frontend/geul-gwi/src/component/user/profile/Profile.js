@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
-import { useSelector } from 'react-redux'; // Redux 사용 Library
+import { useSelector } from 'react-redux'; 
 import ProfilePostList from 'component/user/profile/ProfilePostList';
 import { Tag } from 'component/common/button/Tag'
 import { Button } from 'component/common/button/Button'
@@ -21,7 +21,7 @@ const Profile = ({ profileUserSeq }) => {
   const friendDeleteUrl = '/friend/delete'; // 친구 삭제 요청 주소
   const friendStatusUrl = '/friend/status'; // 친구 상태 요청 주소
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // 프로필 사진 팝업창 on/off
   const [userInfo, setUserInfo] = useState({}); // 유저 프로필 정보
   const [friendStatus, setFriendStatus] = useState(null);
 

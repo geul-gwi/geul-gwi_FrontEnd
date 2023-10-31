@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
-import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; 
 
-import WritingComponent from 'component/main/WriteChallenge/ChallengeComponent';
+// component
+import ChallengeInfo from 'component/challenge/ChallengeInfo';
 
 const ChallengeManagement = () => {
-  const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
-  const userSeq = useSelector((state) => state.authReducer.userSeq);
-  const userToken = useSelector((state) => state.authReducer.accessToken);
+  const { axiosAddr, userToken } = useSelector((state) => state.authReducer);
   const PublicWritingIconPath = process.env.PUBLIC_URL + "/icon/Writing/"
-  const [showTagList, setShowTagList] = useState(true);
+
   const challengeAddUrl = '/challenge/admin/register';
+
+  const [showTagList, setShowTagList] = useState(true);
 
   // 챌린치 등록을 위한 변수
   const [comment, setComment] = useState(""); // 내용
@@ -20,21 +20,14 @@ const ChallengeManagement = () => {
   const [startDate, setStartDate] = useState(""); // 시작 날짜
   const [endDate, setEndDate] = useState(""); // 종료 날짜
 
+  // 키워드 입력 업데이트
   const handleKeywordChange = (index, value) => {
-    // keywords 상태를 업데이트할 때 사용할 함수
-    setKeywords(prevKeywords => {
-      const newKeywords = [...prevKeywords];
-      newKeywords[index] = value;
-      return newKeywords;
-    });
+    setKeywords(prevKeywords => prevKeywords.map((keyword, i) => i === index ? value : keyword));
   };
 
-  const handleStartDateChange = (event) => {
-    setStartDate(event.target.value);
-  };
-
-  const handleEndDateChange = (event) => {
-    setEndDate(event.target.value);
+  // 시작 날짜 및 종료 날짜 업데이트
+  const handleDateChange = (event, setter) => {
+    setter(event.target.value);
   };
 
   const ShowList = () => {
@@ -45,20 +38,17 @@ const ChallengeManagement = () => {
   const onClickAddChallenge = async () => {
     try {
       const ChallengeFormDTO = {
-        comment: comment,
+        comment,
         start: startDate,
         end: endDate,
         keyword: keywords
       };
-      console.log("챌린지 등록 : ", ChallengeFormDTO);
       const response = await Axios.post(`${axiosAddr}${challengeAddUrl}`, ChallengeFormDTO, {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
+        headers: { Authorization: `Bearer ${userToken}` }
       });
       if (response) {
-        //console.log("챌린지 등록: ", response.data);
-        alert("챌린지 등록이 완료되었습니다.")
+        ShowList();
+        alert("챌린지 등록이 완료되었습니다.");
       }
     } catch (error) {
       console.error('챌린지 등록: ', error);
@@ -67,14 +57,14 @@ const ChallengeManagement = () => {
 
   return (
     <MainContainer>
-      {/* <WritingComponent/> */}
+      <ChallengeInfo/>
       <ShowButton onClick={ShowList}>
         <ButtonTextContainer>챌린지 추가</ButtonTextContainer>
         <ButtonIconContainer>
           <Iconimg src={PublicWritingIconPath + "plus.svg"} />
         </ButtonIconContainer>
       </ShowButton>
-      {showTagList ? "" :
+      {showTagList ? null :
         <BottomContainer>
           <Container>
             <InputComent placeholder='내용' onChange={(e) => setComment(e.target.value)}/>
@@ -83,7 +73,10 @@ const ChallengeManagement = () => {
             <Title>키워드</Title>
             <KeywordInputContainer>
               {keywords.map((keyword, index) => (
-                <KeywordInput key={index} type="text" placeholder={`키워드 ${index + 1}`}
+                <KeywordInput
+                  key={index}
+                  type="text"
+                  placeholder={`키워드 ${index + 1}`}
                   value={keyword}
                   onChange={(e) => handleKeywordChange(index, e.target.value)}
                 />
@@ -92,10 +85,18 @@ const ChallengeManagement = () => {
           </Container>
           <DateContainer>
             <DateTitle>시작 날짜</DateTitle>
-            <DateInput type="date" value={startDate} onChange={handleStartDateChange}/>
+            <DateInput
+              type="date"
+              value={startDate}
+              onChange={(event) => handleDateChange(event, setStartDate)}
+            />
             ~
             <DateTitle>종료 날짜</DateTitle>
-            <DateInput type="date" value={endDate} onChange={handleEndDateChange}/>
+            <DateInput
+              type="date"
+              value={endDate}
+              onChange={(event) => handleDateChange(event, setEndDate)}
+            />
           </DateContainer>
           <Button onClick={onClickAddChallenge}>등록</Button>
         </BottomContainer>
@@ -111,6 +112,7 @@ const MainContainer = styled.div`
   user-select: none;
   width: 800px;
   margin: auto;
+  height: 90vh;
 `
 const DateContainer = styled.div`
   display: flex;
@@ -131,15 +133,6 @@ const DateInput = styled.input`
   font-size: 15px;
   color: gray;
 `
-
-const TopContainer = styled.div`
-  background-color: white;
-  width: 100%;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  padding: 10px;
-`
-
 const BottomContainer = styled.div`
   display: flex;
   flex-direction: column;

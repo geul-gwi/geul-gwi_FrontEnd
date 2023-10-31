@@ -71,12 +71,12 @@ const ProfilePostList = (props) => {
         <Container>
             {posts && posts.map((post) => (
                 <Post 
-                    profileUserSeq={props.profileUserSeq}
+                    userSeq={props.userSeq}
                     profile={props.profile}
                     nickname={props.nickname}
                     comment={props.comment}
                     geulgwiContent={post.geulgwiContent}
-                    userSeq={post.userSeq}
+
                     regDate={post.regDate}
                     files={post.files}
                     tags={post.tags}

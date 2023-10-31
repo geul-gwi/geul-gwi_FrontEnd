@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Navigation from 'component/main/Home/Navigation';
 import Weather from "component/main/Home/Weather"
 import ShowTrend from 'component/main/Home/ShowTrend';
+import ChallengeRank from 'component/main/ChallengeRank';
 
 // page
 import SearchPage from 'pageComponent/SearchPage';
@@ -51,6 +52,7 @@ const Home = () => {
                         "" :
                         <RightContainer>
                             <Weather />
+                            <ChallengeRank/>
                             <ShowTrend />
                         </RightContainer>
                 }
@@ -110,10 +112,10 @@ const RightContainer = styled(ContainerFrame)`
     position : fixed;
     display : flex;
     width : 250px;
-    right : 40px;
-    top : 100px;
+    right : 50px;
+    top : 25px;
     flex-direction : column;
-    justify-content: space-between;
+    gap: 20px;
 `
 
 export default Home;

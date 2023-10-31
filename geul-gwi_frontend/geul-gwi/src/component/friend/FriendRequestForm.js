@@ -55,6 +55,7 @@ const Frame = styled.div`
   background-color: white;
   padding: 5px;
   user-select: none;
+  align-items: center;
 `;
 
 export default FriendRequestForm;

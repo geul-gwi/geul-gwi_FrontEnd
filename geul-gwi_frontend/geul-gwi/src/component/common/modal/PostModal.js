@@ -21,7 +21,7 @@ const PostModal = (props) => {
                     likeCount={props.post.likeCount}
                     liked={props.post.liked}
                     geulgwiSeq={props.post.geulgwiSeq}
-                    profileUserSeq={props.post.userSeq}
+                    userSeq={props.post.userSeq}
                 />
             </ViewPage>
         </ModelFrame>

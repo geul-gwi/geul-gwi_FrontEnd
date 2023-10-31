@@ -32,7 +32,8 @@ const FriendForm = (props) => {
                 </Menu>
             </MenuContainer>
             <ScrollableSubContainer>
-                {menu === 'list' ? <FriendListForm /> : <FriendRequestForm />}
+                {menu === 'list' ? <FriendListForm /> : 
+            <FriendRequestForm setMenu={setMenu}/>}
             </ScrollableSubContainer>
         </Frame>
     );

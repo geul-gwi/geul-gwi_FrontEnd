@@ -37,15 +37,16 @@ const FriendListForm = (props) => {
     // 친구 삭제 처리
     const friendDeleteHandler = async (friendSeq) => {
         try {
-            const response = await Axios.delete(`${axiosAddr}${friendDeleteUrl}`, {
+            ///friend/delete?toUser={toUser}&fromUser={fromUser}
+            const response = await Axios.delete(`${axiosAddr}${friendDeleteUrl}?toUser=${friendSeq}&fromUser=${userSeq}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`,
                 },
             });
-            console.log('친구 삭제 완료 : ', response);
+            console.log('친구 삭제: ', response);
             setFriends((prevNotices) => prevNotices.filter((friends) => friends.userSeq !== friendSeq));
         } catch (error) {
-            console.error('알림 삭제 실패 : ', error);
+            console.error('친구 삭제: ', error);
         }
     };
 

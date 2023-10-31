@@ -7,6 +7,11 @@ const ChallengeInfoForm = (props) => {
     return (
         <Frame>
             <FlexContainer>
+                <SelectContainer>
+                        <ArrowContainer onClick={props.PrevButtonClick}><BsChevronLeft /></ArrowContainer>
+                        <ChallengeSelectContainer>{props.selectedIndex + 1 + "회차 챌린지"}</ChallengeSelectContainer>
+                        <ArrowContainer onClick={props.NextButtonClick}><BsChevronRight /></ArrowContainer>
+                </SelectContainer>
                 <ChallengeTitleContainer>
                     <ChallengeTitle>{props.selectedIndex + 1 + "회차 챌린지"}</ChallengeTitle>
                     <ChallengeState>
@@ -130,5 +135,6 @@ const ChallengeSelectContainer = styled.div`
         background-color: rgba(244,244,244,0.9);
     }
 `
+
 
 export default ChallengeInfoForm;
