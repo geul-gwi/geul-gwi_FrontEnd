@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux'; // Redux 사용 Library
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineEdit, AiFillHeart, AiOutlineHeart, AiOutlineClose } from "react-icons/ai"; 
-import { async } from 'q';
 
 const PostContainer = (props) => {
     const navigate = useNavigate();

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Tag } from 'component/common/button/Tag';
 
+
 const MemberInfoForm = ({user}) => {
   
   return (

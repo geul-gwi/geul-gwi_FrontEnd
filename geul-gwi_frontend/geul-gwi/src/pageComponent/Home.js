@@ -117,7 +117,8 @@ const RightContainer = styled(ContainerFrame)`
     right : 50px;
     top : 25px;
     flex-direction : column;
-    gap: 20px;
+    gap: 25px;
+    z-index : 5;
 `
 
 export default Home;

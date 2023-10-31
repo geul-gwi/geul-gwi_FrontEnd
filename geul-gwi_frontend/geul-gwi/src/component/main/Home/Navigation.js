@@ -107,7 +107,11 @@ const Navigation = () => {
                     </IconBox>
                     <TextBox onClick={() => onClickProfile()}>프로필</TextBox>
                 </Item>
+
             </Container>
+            <subscribeContainer>
+                    구독
+            </subscribeContainer>
             <MoreButton onClick={handleMoreButtonClick}>
                 <Item>
                     <IconBox><IconImg src={process.env.PUBLIC_URL + "/icon/Navigation/free-icon-menu-1828859.png"} /></IconBox>
@@ -137,6 +141,16 @@ const Navigation = () => {
         </NaviFrame>
     );
 };
+
+const subscribeContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    width: 100%;
+    align-items: center;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+`
 
 const NaviFrame = styled.div`
     position: absolute;
@@ -233,7 +247,6 @@ const Item = styled.div`
 
     &:hover{
         background-color : rgb(240, 240, 240);
-        transform: scale(1.1); 
     }
 `
 const IconBox = styled.div`
