@@ -2,11 +2,9 @@ import React, { useEffect, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
-import { useSelector } from 'react-redux'; // Redux 사용 Library
-import imageDataFetcher from 'service/imageDataFetcher';
+import { useSelector } from 'react-redux'; 
 import Axios from 'axios';
-import { faVolumeMute, faVolumeUp } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import imageDataFetcher from 'service/imageDataFetcher';
 
 const FriendItem = (props) => {
     const navigate = useNavigate();
@@ -19,7 +17,7 @@ const FriendItem = (props) => {
     useEffect(() => {
         const fetchProfileImage = async () => {
             try {
-                const imageUrl = await imageDataFetcher(axiosAddr, props.notice.profile);
+                const imageUrl = await imageDataFetcher(axiosAddr, props.friend.profile);
                 setProfile(imageUrl);
             } catch (error) {
                 console.error('친구 프로필 이미지 가져오기 실패.', error);
@@ -27,13 +25,11 @@ const FriendItem = (props) => {
         };
 
         fetchProfileImage();
-    }, []);
+    }, [props.friend.profile]);
 
+    // 친구 삭제
     const onClickDelete = () => {
-        const confirmMessage = `정말로 ${props.friend.nickname}님과 친구를 끊으시겠습니까?`;
-        // 사용자에게 확인 대화 상자를 표시
-        const userConfirmed = window.confirm(confirmMessage);
-        // 사용자가 확인을 누른 경우에만 삭제 함수를 호출
+        const userConfirmed = window.confirm(`정말로 ${props.friend.nickname}님과 친구를 끊으시겠습니까?`);  
         if (userConfirmed) {
             props.friendDeleteHandler(props.friend.userSeq);
         }
@@ -42,11 +38,10 @@ const FriendItem = (props) => {
     // 프로필 클릭 => 해당 유저 프로필로 이동한다.
     const onClickProfile = () => {
         navigate('/main/Profile', { state: { profileUserSeq: props.friend.userSeq } });
-        onClickProfile(); // 닫기
     };
 
     const toggleSubscription = async () => {
-        let confirmMessage = ''; // 변수를 let으로 변경
+        let confirmMessage = ''; 
         if (isSubscribed === 'T') {
             confirmMessage = `${props.friend.nickname}님의 소식을 받지 않겠습니까?`;
         } else {
@@ -81,9 +76,7 @@ const FriendItem = (props) => {
                 onClick={onClickProfile}
             />
             <ContentContainer>
-                <TopRow>
                     <Name onClick={onClickProfile}>{props.friend.nickname}</Name>
-                </TopRow>
             </ContentContainer>
             <ProfileContainer>
                 <CloseButton onClick={onClickDelete}>친구 끊기</CloseButton>
@@ -102,17 +95,17 @@ const FriendItem = (props) => {
     );
 };
 
-
 const Frame = styled.div`
     display: flex;
     align-items: center;
-    width: 100%;
+    width: 92%;
     height: auto;
     background-color: white;
-    transition: background-color 0.2s;
+
     font-size: 14px;
-    padding: 3px;
+    padding:5px;
     border-radius: 16px;
+    border-bottom: 1px solid rgb(240, 240, 240);
 `;
 
 const SubscribeButton = styled.button`
@@ -129,19 +122,12 @@ const SubscribeButton = styled.button`
     }
 `;
 
-const TopRow = styled.div`
-    display: flex;
-    align-items: center;
-    margin-bottom: 4px;
-`;
-
 const ProfileImage = styled.img`
     width: 40px;
     height: 40px;
     border-radius: 50%;
     border: 1px solid #ccc;
     margin-right: 10px;
-    margin-left: 10px;
     cursor: pointer;
     object-fit: cover;
 
@@ -171,7 +157,9 @@ const Name = styled.div`
     cursor: pointer;
 `;
 
-const CloseButton = styled.button`
+const CloseButton = styled.div`
+    display: flex;
+    border: 1px solid #ccc;
     width: 100px;
     height: 30px;
     background-color: white;
@@ -179,6 +167,13 @@ const CloseButton = styled.button`
     margin-left: 5px;
     cursor: pointer;
     border-color: #ccc;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s;
+
+    :hover{
+        background-color: rgb(240, 240, 240);
+    }
 `;
 
 

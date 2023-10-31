@@ -2,8 +2,7 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
-// Import Library
-import { useSelector } from 'react-redux'; // Redux 사용 Library
+import { useSelector } from 'react-redux'; 
 
 // 받는 사람 userSeq랑 nickname 보내주기
 const MessageWritingForm = ({ receiverSeq, receiverNickName }) => {

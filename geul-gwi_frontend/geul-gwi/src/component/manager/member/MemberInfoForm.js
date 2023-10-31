@@ -1,40 +1,47 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Tag } from 'component/common/button/Tag';
 
-const MemberInfoForm = (selectedUser) => {
+const MemberInfoForm = ({user}) => {
   
   return (
     <Container>
-      <ProfileImage src={selectedUser.profile || '/img/defaultProfile.png'} />
+      <ProfileImage src={user.profile || '/img/defaultProfile.png'} />
       <Title>회원 정보</Title>
       <UserInfo>
         <InfoLabel>Role:</InfoLabel>
-        <InfoValue>{selectedUser.role}</InfoValue>
+        <InfoValue>{user.role}</InfoValue>
       </UserInfo>
       <UserInfo>
         <InfoLabel>아이디:</InfoLabel>
-        <InfoValue>{selectedUser.userId}</InfoValue>
+        <InfoValue>{user.userId}</InfoValue>
+      </UserInfo>
+      <UserInfo>
+        <InfoLabel>비밀번호:</InfoLabel>
+        <InfoValue>{user.password}</InfoValue>
       </UserInfo>
       <UserInfo>
         <InfoLabel>닉네임:</InfoLabel>
-        <InfoValue>{selectedUser.nickname}</InfoValue>
+        <InfoValue>{user.nickname}</InfoValue>
       </UserInfo>
       <UserInfo>
         <InfoLabel>소개:</InfoLabel>
-        <InfoValue>{selectedUser.comment || '없음'}</InfoValue>
+        <InfoValue>{user.comment || '없음'}</InfoValue>
+      </UserInfo>
+      <UserInfo>
+        <InfoLabel>이메일:</InfoLabel>
+        <InfoValue>{user.email}</InfoValue>
       </UserInfo>
       <TagContainer>
         <UserInfo>
           <InfoLabel>선택한 태그</InfoLabel>
         </UserInfo>
         <TagsContainer>
-          {selectedUser.tags && selectedUser.tags.map(tag => (
-            <TagButton
-              fontColor={tag.fontColor}
-              backColor={tag.backColor}
+          {user.tags && user.tags.map(tag => (
+            <Tag fontColor={tag.fontColor} backColor={tag.backColor}
             >
-              {tag.value}
-            </TagButton>
+              {"# " + tag.value}
+            </Tag>
           ))}
         </TagsContainer>
       </TagContainer>
@@ -82,20 +89,6 @@ const InfoValue = styled.span`
 const TagContainer = styled.div`
   margin-top: 30px;
   width: 100%;
-`;
-
-const TagButton = styled.button`
-    background-color: ${props => props.backColor};
-    color: ${props => props.fontColor};
-    border: none;
-    border-radius: 20px;
-    padding: 8px 15px;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
-    transition: all 0.3s ease-in-out;
 `;
 
 const TagsContainer = styled.div`

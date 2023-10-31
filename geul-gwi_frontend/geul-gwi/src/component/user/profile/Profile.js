@@ -10,7 +10,7 @@ import { Button } from 'component/common/button/Button'
 import imageDataFetcher from 'service/imageDataFetcher';
 
 // profileUserSeq => 보여줄 유저의 프로필 시퀀스
-const Profile = ({profileUserSeq}) => {
+const Profile = ({ profileUserSeq }) => {
   const navigate = useNavigate();
   const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
   const userSeq = useSelector((state) => state.authReducer.userSeq);
@@ -34,7 +34,6 @@ const Profile = ({profileUserSeq}) => {
           },
         });
         setUserInfo(response.data);
-        // 이미지 가져오는 함수를 호출
         const profileImageUrl = await imageDataFetcher(response.data.profile);
         setUserInfo((prevUserInfo) => {
           return { ...prevUserInfo, profile: profileImageUrl };
@@ -44,7 +43,7 @@ const Profile = ({profileUserSeq}) => {
       }
     }
     fetchUserProfile();
-  
+
   }, [profileUserSeq]);
 
   useEffect(() => {
@@ -71,12 +70,26 @@ const Profile = ({profileUserSeq}) => {
     navigate('/main/ProfileEdit', { state: userInfo }); // 프로필 정보 넘기기
   };
 
+    // 쪽지 보내기
+    const onClickMessageSend = () => {
+      navigate('/main/messageWriting', { 
+        receiverSeq: profileUserSeq, 
+        receiverNickname: userInfo.nickname
+      });
+    };
+    
   // 친구 요청 
   const sendFriendRequest = async () => {
+    if('pending' === friendStatus)
+    {
+      alert("현재 친구 요청 대기중입니다.");
+      return;
+    }
+
     try {
       const friendDTO = {
-        'toUser' : profileUserSeq, // 요청 받는 사람
-        'fromUser' : userSeq, // 요청 보낸 사람
+        'toUser': profileUserSeq, // 요청 받는 사람
+        'fromUser': userSeq, // 요청 보낸 사람
       };
       console.log(friendDTO);
       const response = await Axios.post(`${axiosAddr}${friendRequestUrl}`, friendDTO, {
@@ -100,7 +113,7 @@ const Profile = ({profileUserSeq}) => {
         },
       });
       console.log('친구 삭제: ', response.data);
-      
+
     } catch (error) {
       console.error('친구 삭제:', error);
     }
@@ -150,7 +163,7 @@ const Profile = ({profileUserSeq}) => {
               <Button onClick={onEditClick}>프로필 편집</Button>
             )}
             {userSeq !== profileUserSeq && (
-              <Button>쪽지</Button>
+              <Button onClick={onClickMessageSend}>쪽지</Button>
             )}
             {userSeq !== profileUserSeq && friendStatus === 'stranger' && (
               <Button onClick={sendFriendRequest}>친구 요청</Button>
@@ -171,11 +184,11 @@ const Profile = ({profileUserSeq}) => {
           </ModalOverlay>
         )}
       </ProfileContainer>
-      <ProfilePostList 
-          profileUserSeq={profileUserSeq} 
-          profile={userInfo.profile} 
-          nickname={userInfo.nickname} 
-          comment={userInfo.comment}
+      <ProfilePostList
+        profileUserSeq={profileUserSeq}
+        profile={userInfo.profile}
+        nickname={userInfo.nickname}
+        comment={userInfo.comment}
       />
     </>
   );

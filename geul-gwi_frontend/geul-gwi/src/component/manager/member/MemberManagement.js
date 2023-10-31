@@ -7,7 +7,8 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 // component
 import MemberItem from "./MemberItem";
-import MemberInfoForm from 'component/manager/member/MemberInfoForm'
+import MemberInfoForm from 'component/manager/member/MemberInfoForm';
+import imageDataFetcher from 'service/imageDataFetcher';
 
 const MemberManagement = () => {
   const axiosAddress = useContext(AxiosAddrContext).axiosAddr;  
@@ -27,21 +28,28 @@ const MemberManagement = () => {
 
   // 회원 목록 불러오기
   useEffect(() => {
-    //console.log("회원 목록 요청 주소: ", `${axiosAddress}${userListUrl}`);
     axios.get(`${axiosAddress}${userListUrl}`, {
       headers: {
         Authorization: "Bearer " + userToken
       }
     })
-      .then(response => {
+      .then(async response => {
         console.log("회원 목록 : ", response);
-        setUsers(response.data);
+        const usersData = response.data;
+  
+        const updatedUsers = await Promise.all(
+          usersData.map(async user => {
+            const profileImage = await imageDataFetcher(axiosAddress, user.profile);
+            return { ...user, profile: profileImage };
+          })
+        );
+  
+        setUsers(updatedUsers);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error('회원 목록 불러오기 오류 :', error);
       });
   }, []);
-
 
   // 회원 삭제
   const handleDelete = (userSeq) => {
@@ -58,10 +66,11 @@ const MemberManagement = () => {
             const updatedUsers = users.filter((user) => user.userSeq !== userSeq);
             setUsers(updatedUsers);
             setShowProfile(false);
+            alert("회원 삭제가 완료되었습니다.");
           } 
         })
         .catch((error) => {
-          console.error('유저 삭제 요청 중 오류 발생:', error);
+          console.error('유저 삭제:', error);
         });
     }
   };
@@ -70,20 +79,20 @@ const MemberManagement = () => {
     setCurrentPage(pageNumber);
   };
 
+  // 세부 정보 확인하기
   const handleShowProfile = (userSeq) => {
-    // 유저 세부 정보 요청
     axios.get(`${axiosAddress}${userDetailApi}${Number(userSeq)}`, {
       headers: {
         Authorization: "Bearer " + userToken
       }
     })
       .then((response) => {
-        console.log(response);
+        //console.log("회원 세부정보: ", response.data);
         setSelectedUser(response.data);
         setShowProfile(true);
       })
       .catch((error) => {
-        console.error('회원 세부정보를 가져오는 동안 오류 발생:', error);
+        console.error('회원 세부정보:', error);
       });
   };
 
@@ -126,7 +135,7 @@ const MemberManagement = () => {
       </SubContainer>
       <SubContainer>
         {isShowProfile ?
-          <MemberInfoForm selectedUser={selectedUser} /> : null}
+          <MemberInfoForm user={selectedUser} /> : null}
       </SubContainer>
     </MainContainer>
   );
@@ -141,9 +150,8 @@ const MainContainer = styled.div`
 
 const LeftContainer = styled.div`
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr;
   justify-items: center;
-  align-items: start;
   background-color: white;
   margin: auto;
   width: 350px;
@@ -153,7 +161,7 @@ const LeftContainer = styled.div`
 `;
 
 const Title = styled.span`
-  font-size: 18px;
+  font-size: 20px;
   margin-top: 10px;
 `;
 

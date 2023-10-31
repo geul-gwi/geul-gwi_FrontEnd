@@ -1,10 +1,11 @@
 import React from 'react';
 
-// import Component
+// component
 import WritingActionFeed from 'component/main/Writing/WritingAction';
+
 const WritePage = () => {
     return (
-        <WritingActionFeed/>
+        <WritingActionFeed />
     );
 };
 

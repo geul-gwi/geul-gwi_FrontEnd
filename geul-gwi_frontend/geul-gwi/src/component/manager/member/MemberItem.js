@@ -1,50 +1,54 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
-// Axios Address Context
-import { AxiosAddrContext } from 'contextStore/AxiosAddress'; // Axios Address Context
-// Import Library
+import Axios from 'axios';
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 import imageDataFetcher from 'service/imageDataFetcher';
 
 const MemberItem = (props) => {
-  const { handleDelete } = props;
-  // Axios Address
   const axiosAddress = useContext(AxiosAddrContext).axiosAddr;  
-  // User 로그인 정보
-  const userSeq = useSelector((state) => state.authReducer.userSeq);
   const userToken = useSelector((state) => state.authReducer.accessToken);
-
-  // Api Mapping
   const userDetailApi = '/user/detail/';
+  const [profile, setProfile] = useState(null);
 
-  const handleClick = () => {
-    // 유저 세부 정보 요청
-    axios.get(`${axiosAddress}${userDetailApi}${props.user.userSeq}`, {
-      headers: {
-        Authorization: "Bearer " + userToken
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const profileImage = await imageDataFetcher(axiosAddress, props.user.profile);
+        setProfile(profileImage);
+      } catch (error) {
+        console.error('세부 프로필 이미지:', error);
       }
-    })
-      .then((response) => {
-        console.log(response);
-        props.handleShowProfile(response.data);
-      })
-      .catch((error) => {
-        console.error('회원 세부정보를 가져오는 동안 오류 발생:', error);
+    };
+  
+    fetchProfileImage();
+  }, [axiosAddress, props.user.profile]);
+
+  const handleClick = async () => {
+    try {
+      const response = await Axios.get(`${axiosAddress}${userDetailApi}${props.user.userSeq}`, {
+        headers: {
+          Authorization: "Bearer " + userToken
+        }
       });
+      //console.log("회원 세부정보: ", response);
+      props.handleShowProfile(response.data);
+    } catch (error) {
+      console.error('회원 세부정보: ', error);
+    }
   };
 
   return (
     <Item>
       <Container>
         <ProfileImage
-          src={imageDataFetcher(axiosAddress, props.user.profile) || '/img/defaultProfile.png'}
+          src={profile || '/img/defaultProfile.png'}
           onClick={handleClick}
         />
         <UserName onClick={handleClick}>{props.user.nickname}</UserName>
       </Container>
       <ButtonContainer>
-        <DeleteButton onClick={() => handleDelete(props.user.userSeq)}>삭제</DeleteButton>
+        <DeleteButton onClick={() => props.handleDelete(props.user.userSeq)}>삭제</DeleteButton>
       </ButtonContainer>
     </Item>
   )
@@ -57,7 +61,6 @@ const Item = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 10px 0px;
   padding: 10px;
   border-radius: 16px;
   :hover{
