@@ -12,6 +12,7 @@ const ChallengeInfo = () => {
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
+    const role = useSelector((state) => state.authReducer.role);
 
     const listUrl = '/challenge/list'; // 챌린지 목록 or 해당 회차 글 요청 주소
     const statusChangeUrl = '/challenge/status'; // 챌린지 상태 변경 요청 주소
@@ -232,7 +233,7 @@ const ChallengeInfo = () => {
                         ))}
                     </TagContainer>
                 </BottomContainer>
-                    <EditButton onClick={onClickEdit}>편집</EditButton>
+                    {role === 'ADMIN' && <EditButton onClick={onClickEdit}>편집</EditButton>}
             </FlexContainer>
             :
                 <EditContainer>

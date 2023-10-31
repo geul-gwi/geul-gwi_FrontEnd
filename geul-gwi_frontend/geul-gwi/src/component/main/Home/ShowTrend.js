@@ -12,10 +12,7 @@ TagList.push({"tagname" : "연인사랑", "search" : 8929, "postCount" : 832})
 const ShowTrend = () => {
     return (
         <TrendFrame>
-            {/* 타이틀 이름 */}
             <TitleName>태그 트렌드</TitleName>
-            
-            {/* Item관리 Container (flex) */}
             <ItemManager>
                 {
                     TagList.map((element,idx) => (

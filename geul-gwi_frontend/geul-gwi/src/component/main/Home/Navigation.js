@@ -6,10 +6,12 @@ import { useDispatch, useSelector } from 'react-redux'; // Redux 사용 Library
 import Axios from 'axios';
 import { logout } from 'Reducer/authReducer';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
+import imageDataFetcher from 'service/imageDataFetcher';
 
 // component
 import NoticeForm from "component/notice/NoticeForm";
 import FriendForm from "component/friend/FriendForm";
+import SubscribeItem from 'component/main/Home/SubscribeItem';
 
 const menus = []
 menus.push({ "name": "홈", "src": "/icon/Navigation/home.svg", "target": "/" })
@@ -24,11 +26,40 @@ const Navigation = () => {
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
+
     const logoutUrl = '/user/logout';
+    const subscribeListUrl = '/friend/list/subscribe/';
+
     const navigate = useNavigate();
 
     const [isAlertFormVisible, setIsAlertFormVisible] = useState(false);
     const [isFriendForm, SetisFriendForm] = useState(false);
+
+    const [subscribes, setSubscribes] = useState([]);
+
+    useEffect(() => {
+        Axios.get(`${axiosAddr}${subscribeListUrl}${userSeq}`, {
+          headers: {
+            Authorization: "Bearer " + userToken
+          }
+        })
+          .then(async response => {
+            console.log("구독자 목록: ", response.data);
+            const usersData = response.data;
+      
+            const updatedUsers = await Promise.all(
+              usersData.map(async user => {
+                const profileImage = await imageDataFetcher(axiosAddr, user.profile);
+                return { ...user, profile: profileImage };
+              })
+            );
+      
+            setSubscribes(updatedUsers);
+          })
+          .catch(error => {
+            console.error('구독자 목록:', error);
+          });
+      }, []);
 
     const ComponentMove = (target) => {
         if (target === "/alarm") {
@@ -107,11 +138,17 @@ const Navigation = () => {
                     </IconBox>
                     <TextBox onClick={() => onClickProfile()}>프로필</TextBox>
                 </Item>
-
             </Container>
-            <subscribeContainer>
-                    구독
-            </subscribeContainer>
+
+                <SubscribersListContainer>
+                     <SubscribersHeader>구독</SubscribersHeader>
+                     <subscribersItemContainer>                     
+                        {subscribes.map((subscribe, index) => (
+                        <SubscribeItem key={index} user={subscribe} />
+                        ))}
+                    </subscribersItemContainer>
+                </SubscribersListContainer>
+
             <MoreButton onClick={handleMoreButtonClick}>
                 <Item>
                     <IconBox><IconImg src={process.env.PUBLIC_URL + "/icon/Navigation/free-icon-menu-1828859.png"} /></IconBox>
@@ -142,15 +179,28 @@ const Navigation = () => {
     );
 };
 
-const subscribeContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    height: 300px;
-    width: 100%;
-    align-items: center;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-`
+const SubscribersListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding: 5px;
+  border-top: 1px solid #ccc;
+  margin: 10px;
+`;
+
+const subscribersItemContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  justify-content: center;
+  align-items: center;
+`;
+
+
+const SubscribersHeader = styled.p`
+  margin-bottom: 10px;
+  margin-left:30px;
+`;
 
 const NaviFrame = styled.div`
     position: absolute;

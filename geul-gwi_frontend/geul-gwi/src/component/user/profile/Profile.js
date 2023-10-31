@@ -211,8 +211,8 @@ const ButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     width: 100%;
-    height: auto;
     gap: 10px;
 `;
 
