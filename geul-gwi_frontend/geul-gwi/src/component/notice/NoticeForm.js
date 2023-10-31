@@ -33,7 +33,7 @@ const NoticeForm = (props) => {
                         Authorization: `Bearer ${userToken}`,
                     },
                 });
-                //console.log('알림 목록: ', response.data);
+                // console.log('알림 목록: ', response.data);
                 setNotices(response.data.reverse());
             } catch (error) {
                 console.error('알림 목록:', error);

@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux'; 
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 
 // component
 import ChallengeInfo from 'component/challenge/ChallengeInfo';
 
 const ChallengeManagement = () => {
-  const { axiosAddr, userToken } = useSelector((state) => state.authReducer);
+  const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
+  const userSeq = useSelector((state) => state.authReducer.userSeq);
+  const userToken = useSelector((state) => state.authReducer.accessToken);
   const PublicWritingIconPath = process.env.PUBLIC_URL + "/icon/Writing/"
 
   const challengeAddUrl = '/challenge/admin/register';
@@ -43,7 +46,8 @@ const ChallengeManagement = () => {
         end: endDate,
         keyword: keywords
       };
-      const response = await Axios.post(`${axiosAddr}${challengeAddUrl}`, ChallengeFormDTO, {
+      console.log("주소:", `${axiosAddr}/challenge/admin/register`);
+      const response = await Axios.post(`${axiosAddr}/challenge/admin/register`, ChallengeFormDTO, {
         headers: { Authorization: `Bearer ${userToken}` }
       });
       if (response) {

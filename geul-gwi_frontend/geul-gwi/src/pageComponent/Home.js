@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Navigation from 'component/main/Home/Navigation';
 import Weather from "component/main/Home/Weather"
 import ShowTrend from 'component/main/Home/ShowTrend';
-import ChallengeRank from 'component/main/ChallengeRank';
+import ChallengeRank from 'component/main/Home/ChallengeRank';
 
 // page
 import SearchPage from 'pageComponent/SearchPage';
@@ -17,6 +17,7 @@ import ProfileEditPage from 'pageComponent/ProfileEditPage';
 import MessagePage from 'pageComponent/MessagePage';
 import MessageWritingPage from 'pageComponent/MessageWritingPage';
 import PostEditPage from 'pageComponent/PostEditPage';
+import ChallengePostEditPage from 'pageComponent/ChallengePostEditPage';
 
 import path from 'img/back_gradient.jpg';
 
@@ -45,6 +46,7 @@ const Home = () => {
                         <Route path="/Message" element={<MessagePage />}></Route>
                         <Route path="/MessageWriting" element={<MessageWritingPage />}></Route>
                         <Route path="/PostEdit" element={<PostEditPage />}></Route>
+                        <Route path="/ChallengePostEdit" element={<ChallengePostEditPage />}></Route>
                     </Routes>
                 </MidContainer>
                 {

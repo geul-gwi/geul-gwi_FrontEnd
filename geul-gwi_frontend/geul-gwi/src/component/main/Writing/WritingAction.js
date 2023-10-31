@@ -17,7 +17,7 @@ const WritingAction = () => {
     const { userSeq, accessToken } = useSelector((state) => state.authReducer);
 
     const writingUrl = "/geulgwi/register/"; // 일반 글 작성 요청 주소
-    const challengeWriteUrl = '/challenge/register/'; // 챌린지 글 작성 요청 주소
+    const challengeWriteUrl = '/challenge/register'; // 챌린지 글 작성 요청 주소
     const challengeOngoingSeq = '/challenge/ongoing'; // 진행 중인 챌린지 정보 요청 주소
 
     // State
@@ -82,7 +82,7 @@ const WritingAction = () => {
 
     // 태그 선택 후 완료 버튼 누르면 호출
     const FnTagSetHandler = (taglist) => {
-        console.log("선택한 태그 :", taglist);
+        //console.log("선택한 태그 :", taglist);
         setFnTags(taglist);
     }
 
@@ -103,9 +103,9 @@ const WritingAction = () => {
             }
 
             // FormData의 내용을 콘솔에 출력
-            formData.forEach((value, key) => {
-                console.log(key, value);
-            });
+            // formData.forEach((value, key) => {
+            //     console.log(key, value);
+            // });
 
             const response = await axios.post(`${axiosAddr}${writingUrl}${userSeq}`, formData, {
                 headers: {
@@ -114,7 +114,9 @@ const WritingAction = () => {
                 },
             });
 
-            console.log("글 작성 완료: ", response);
+            //console.log("글 작성 완료: ", response);
+            alert("글 작성이 완료되었습니다.");
+            navigate("/");
         } catch (error) {
             console.error("글 작성 실패: ", error);
         }
@@ -124,17 +126,20 @@ const WritingAction = () => {
     const submitChallenge = async () => {
         try {
             if (challenge.challengeAdminSeq) {
-                const data = {
+                const ChallengeRegDTO = {
                     challengeContent: FormMainText,
                     challengeAdminSeq: challenge.challengeAdminSeq,
+                    userSeq: userSeq
                 };
 
-                const response = await axios.post(`${axiosAddr}${challengeWriteUrl}${userSeq}`, data, {
+                const response = await axios.post(`${axiosAddr}${challengeWriteUrl}`, ChallengeRegDTO, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
                 });
-                console.log("챌린지 작성: ", response);
+                alert("글 작성이 완료되었습니다.");
+                navigate("/");
+                
             } else {
                 console.log("진행중인 챌린지가 없습니다.");
             }

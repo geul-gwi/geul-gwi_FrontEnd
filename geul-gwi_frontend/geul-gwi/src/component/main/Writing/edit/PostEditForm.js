@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 // component
 import ImageUploadForm from 'component/main/Writing/edit/ImageUploadForm';
 import AddTagButtonForm from 'component/main/Writing/edit/AddTagButtonForm';
+import imageDataFetcher from 'service/imageDataFetcher';
 
 const PostEditForm = ({ data }) => {
     const navigate = useNavigate();
@@ -25,7 +26,7 @@ const PostEditForm = ({ data }) => {
             const urls = [];
             for (const file of data.files) {
                 try {
-                    const imageUrl = await fetchImageData(file);
+                    const imageUrl = await imageDataFetcher(file);
                     urls.push(imageUrl);
                 } catch (error) {
                     console.error('이미지 URL 가져오기 실패:', error);
@@ -64,8 +65,6 @@ const PostEditForm = ({ data }) => {
                 "geulgwiContent": content,
                 "tagSeqs": tags.map(tag => tag.tagSeq),
             };
-
-            //console.log("보낸 태그 시퀀스 : ", tags);
 
             const formData = new FormData();
             formData.append("geulgwiRegDTO", new Blob([JSON.stringify(geulgwiRegDTO)], { type: "application/json" }));
@@ -110,34 +109,6 @@ const PostEditForm = ({ data }) => {
         const blob = new Blob([arraybuffer], { type: contentType });
         blob.name = 'image.jpg';
         return blob;
-    }
-
-    // 이미지 데이터를 가져오는 함수
-    const fetchImageData = async (path) => {
-        try {
-            const encodedPath = encodeURIComponent(path);
-            const response = await axios.get(`${axiosAddr}/file?file=${encodedPath}`, {
-                responseType: 'blob',
-            });
-
-            if (response) {
-                const newFile = new File([response.data], 'image');
-                const reader = new FileReader();
-                return new Promise((resolve, reject) => {
-                    reader.onload = (event) => {
-                        const imageUrl = event.target.result;
-                        resolve(imageUrl);
-                    };
-                    reader.onerror = (error) => {
-                        reject(error);
-                    };
-                    reader.readAsDataURL(newFile);
-                });
-            }
-        } catch (error) {
-            console.error('이미지 가져오기에 실패했습니다.', error);
-            return null;
-        }
     }
 
     // 이미지 추가

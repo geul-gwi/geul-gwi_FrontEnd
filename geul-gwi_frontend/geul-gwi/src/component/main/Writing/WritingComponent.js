@@ -4,7 +4,7 @@ import styled from 'styled-components';
 // Component
 import ImageUploadForm from 'component/main/Writing/ImageUploadForm';
 import AddTagButton from 'component/main/Writing/AddTagButton';
-
+import ChallengeInfo from 'component/challenge/ChallengeInfo';
 
 
 const WritingComponent = (props) => {
@@ -19,36 +19,25 @@ const WritingComponent = (props) => {
     };
 
     return (
-        <>
+        <MainContainer>
             {props.selectedTab !== "geulgwi" && (
-                <ChallengeHeaderContainer>
-                    1번째 챌린지입니다.
-                    많은 참여부탁드립니다!!!!
-                    <KeywordContainer>
-                        <Keyword># 햄콩이</Keyword>
-                        <Keyword># 햄스터</Keyword>
-                        <Keyword># 캐슈넛</Keyword>
-                    </KeywordContainer>
-                </ChallengeHeaderContainer>
+                <ChallengeInfo />
+
             )}
             <Frame>
-
                 <FlexFrame>
                     <Tabs>
-                        <TabButton
-                            onClick={() => props.handleTabClick("geulgwi")}
+                        <TabButton onClick={() => props.handleTabClick("geulgwi")}
                             active={props.selectedTab === "geulgwi"}
                         >
                             일반
                         </TabButton>
-                        <TabButton
-                            onClick={() => props.handleTabClick("challenge")}
+                        <TabButton onClick={() => props.handleTabClick("challenge")}
                             active={props.selectedTab === "challenge"}
                         >
                             챌린지
                         </TabButton>
                     </Tabs>
-
                     <TitleContainer style={{ marginBottom: '30px' }}>
                         <ComponentName>{props.selectedTab === "geulgwi" ? "일반 글 작성" : "챌린지 작성"}</ComponentName>
                         <ComponentIntro>
@@ -60,7 +49,7 @@ const WritingComponent = (props) => {
 
                     <FormContainer>
                         <ContentArea
-                            placeholder="글 귀를 작성하세요..."
+                            placeholder="글 귀를 작성하세요"
                             onChange={(e) => props.FormMainTextChange(e)}
                         >
                         </ContentArea>
@@ -85,7 +74,7 @@ const WritingComponent = (props) => {
                     </SubmitContainer>
                 </FlexFrame>
             </Frame>
-        </>
+        </MainContainer>
     );
 };
 
@@ -113,39 +102,15 @@ const TabButton = styled.button`
 const Frame = styled.div`
     position : relative;
     display : flex;
-    width : 100%;
+    width : 98%;
     background-color : white;
     justify-content : center;
     padding-top: 20px; 
     padding-bottom: 20px;
     user-select: none;
     margin-bottom: 80px;
-        padding: 18px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-`
-// 진행 중인 챌린지 헤더 컨테이너
-const ChallengeHeaderContainer = styled.div`
-    width: 100%;
-    height: auto;
-    padding: 18px;
-    background-color: white;
-    margin-bottom: 22px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    user-select: none;
 `
-
-const KeywordContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    padding: 10px 0px;
-    gap: 10px;
-`
-
-const Keyword = styled.div`
-    font-size: 18px;
-`
-
 
 const FlexFrame = styled.div`
     display : flex;
@@ -158,6 +123,14 @@ const TitleContainer = styled.div`
     flex-direction: column;
     justify-content : space-between;
         height : 50px;
+`
+
+const MainContainer = styled.div`
+    gap: 20px;
+    display : flex;
+    flex-direction: column;
+    justify-content : space-between;
+    align-items: center;
 `
 
 const ComponentName = styled.div`
@@ -209,7 +182,7 @@ const FormContainer = styled.form`
 `
 
 const ContentArea = styled.textarea`
-    width : 98%;
+    width : 96%;
     height : 150px;
     padding: 10px;
     font-size: 14px;

@@ -81,6 +81,9 @@ const ChallengeInfo = () => {
                     const updatedChallenges = await checkChallengeStatus(listResponse.data);
                     setChallenges(updatedChallenges);
 
+                    if(updatedChallenges.length === 0)
+                        return;
+
                     // 진행 중인 챌린지 요청
                     const ongoingResponse = await Axios.get(`${axiosAddr}${challengeOngoing}`, {
                         headers: {

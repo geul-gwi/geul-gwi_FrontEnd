@@ -62,6 +62,7 @@ const Navigation = () => {
 
     const userNickname = useSelector((state) => state.authReducer.userNickname);
     const userProfile = useSelector((state) => state.authReducer.userProfile);
+    const role = useSelector((state) => state.authReducer.role);
 
     // 로그아웃
     const onClickLogout = async () => {
@@ -115,7 +116,7 @@ const Navigation = () => {
             </MoreButton>
             {isMoreMenuVisible && <MenuButtonContainer>
                 <MenuButtonManager>
-                    <MenuItem onClick={onClickManagement}>사이트 관리</MenuItem>
+                    {role === 'ADMIN' && <MenuItem onClick={onClickManagement}>사이트 관리</MenuItem>}
                     <MenuItem onClick={onClickLogout}>로그아웃
                         <FiLogOut size={16} style={{ marginLeft: '8px' }} />
                     </MenuItem>

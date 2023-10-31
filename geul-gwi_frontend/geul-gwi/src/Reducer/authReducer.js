@@ -5,7 +5,8 @@ const initialState = {
   accessToken: null,
   userSeq: null,
   userProfile: null,
-  userNickname: null
+  userNickname: null,
+  role: null
 };
 
 // 액션 타입 정의
@@ -14,6 +15,7 @@ const LOGOUT = 'auth/LOGOUT';
 const SETUSERSEQ = 'auth/SETUSERSEQ';
 const SET_USER_PROFILE = 'auth/SET_USER_PROFILE';
 const SET_USER_NICKNAME = 'auth/SET_USER_NICKNAME';
+const ROLE = 'auth/ROLE';
 
 // 액션 생성자 함수
 export const login = (accessToken) => ({
@@ -40,6 +42,11 @@ export const setNickname = (userNickname) => ({
   payload: userNickname,
 });
 
+export const setRole = (role) => ({
+  type: ROLE,
+  payload: role,
+});
+
 // 리듀서 함수
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -52,9 +59,10 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         accessToken: null,
-        userSeq : null,
+        userSeq: null,
         userProfile: null,
-        userNickname: null
+        userNickname: null,
+        role: null,
       };
     case SETUSERSEQ:
       return {
@@ -66,6 +74,12 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         userProfile: action.payload,
+      };
+
+    case ROLE:
+      return {
+        ...state,
+        role: action.payload,
       };
 
     case SET_USER_NICKNAME:
