@@ -1,13 +1,21 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
-// Component
+// component
 import MessageWritingForm from 'component/message/MessageWritingForm';
 
 const MessagePage = () => {
+    const location = useLocation();
+    // Check if location.state is not null or undefined
+    const receiverSeq = location.state && location.state.receiverSeq;
+    const receiverNickname = location.state && location.state.receiverNickname;
+
+  
     return (
-        <>
-            <MessageWritingForm />
-        </>
+        <MessageWritingForm
+            receiverSeq={receiverSeq}
+            receiverNickname={receiverNickname}
+        />
     );
 };
 

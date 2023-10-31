@@ -1,20 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { AxiosAddrContext } from 'contextStore/AxiosAddress';
-// Library
-import { useSelector } from 'react-redux'; // Redux 사용 Library
+import { AxiosAddrContext } from 'contextStore/AxiosAddress'; 
+import { useSelector } from 'react-redux';
 // component
 import MessageWritingForm from 'component/message/MessageWritingForm';
 
 const MessageForm = () => {
    const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
-   const receiverDeleteUrl = '/message/receiver/delete/';
-   const senderDeleteUrl = '/message/sender/delete/'; 
+   const receiverDeleteUrl = '/message/receiver/delete/'; // 받은 사람이 메시지 삭제 
+   const senderDeleteUrl = '/message/sender/delete/'; // 보낸 사람이 메시지 삭제 
    const receiveListUrl = '/message/receiver/list/'; // 받은 메시지 리스트 요청 주소
    const sendListUrl = '/message/sender/list/'; // 보낸 메시지 리스트 요청 주소
 
-   // 유저 로그인 정보
    const userSeq = useSelector((state) => state.authReducer.userSeq);
    const userToken = useSelector((state) => state.authReducer.accessToken);
    
@@ -119,10 +117,7 @@ const MessageForm = () => {
             {messages && messages.map((message) => (
                <MessageItem key={message.messageSeq}>
                   {selectedTab === "received" ? (
-                     // 받은 쪽지함에서는 답장하기 버튼 표시
-                     <>
                         <Sender>보낸 사람: {message.senderNickname}</Sender>
-                     </>
                   ) : (
                      <Recipient>받는 사람: {message.receiverNickname}</Recipient>
                   )}
@@ -152,7 +147,6 @@ const Container = styled.div`
    width: 100%;
    user-select: none;
    padding: 20px;
-   border-radius: 10px;
    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
    background-color: white;
    margin-bottom: 20px;
