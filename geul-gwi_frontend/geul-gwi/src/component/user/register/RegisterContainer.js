@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
-// React-icons import
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
-// Import Component
-import TagButton from 'component/user/register/TagButton';
-
+// Component
+import { TagButton } from 'component/common/button/Tag';
 
 const RegisterContainer = (props) => {
-    // ValidRequested State => 이메일 인증 스텝
     const [IsValidRequested, setIsValidRequested] = useState(false);
-
-    useEffect(() => {
-    }, []);
 
     // 아이디 유효성 검사
     const CheckId = () => {
         const CheckText = document.getElementById("idCheck");
-        // CheckIdExsit는 await으로 return값이 Object Promise타입입니다.
+        if (props.Id == "") {
+            CheckText.innerHTML = "아이디를 입력해주세요.";
+            CheckText.style.color = "red";
+            return;
+        }
+
         const result = props.CheckIdExist();
+
         result.then(result => {
             if (result === true) {
                 CheckText.innerHTML = "사용 가능한 아이디입니다.";
@@ -30,6 +29,7 @@ const RegisterContainer = (props) => {
             }
         });
     }
+
     // 비밀번호 패턴 체크
     const CheckPwdRegularExpression = () => {
         let pwdConfirm = document.getElementById("pwdCheck");
@@ -60,9 +60,14 @@ const RegisterContainer = (props) => {
     // 비밀번호 확인
     const CheckConfirmPassword = () => {
         let pwdConfirm = document.getElementById("pwdConfirm");
-        let result = props.CheckPwdConfirm();
-        console.log("pwd chk : " + result);
-        if (result === true) {
+
+        if (props.ConfirmPassword == "") {
+            pwdConfirm.innerHTML = "비밀번호 다시 입력해주세요.";
+            pwdConfirm.style.color = "red";
+            return;
+        }
+
+        if (props.CheckPwdConfirm()) {
             pwdConfirm.innerHTML = "일치한 비밀번호입니다.";
             pwdConfirm.style.color = "green";
         }
@@ -71,9 +76,17 @@ const RegisterContainer = (props) => {
             pwdConfirm.style.color = "red";
         }
     }
+
     // 닉네임 중복 확인
     const CheckNickname = () => {
         let nickCheckHtml = document.getElementById("nicknameCheck");
+
+        if (props.NickName == "") {
+            nickCheckHtml.innerHTML = "닉네임을 입력해주세요.";
+            nickCheckHtml.style.color = "red";
+            return;
+        }
+
         // NickNameCheck는 await으로 return값이 Object Promise타입입니다.
         props.NickNameCheck().then(result => {
             if (result === true) {
@@ -85,149 +98,163 @@ const RegisterContainer = (props) => {
                 nickCheckHtml.style.color = "red";
             }
         });
-
     }
-    // 이메일 인증코드 발송
-    const RequestEmailValid = () => {
-        let ButtonObj = document.getElementById("emailValidButton");
-        if (IsValidRequested === false) {
-            let result = props.RequestEmailCode(props.Email);
-            result.then(result => {
-                console.log("result : " + result);
-                if (result === true) {
-                    setIsValidRequested(true);
-                    ButtonObj.innerHTML = "인증확인";
-                }
-                else {
-                    console.log("value 오류");
-                }
-            })
-        }
-        else if (IsValidRequested === true) {
-            let result = props.RequestEmailCode(props.Email);
-            result.then(result => {
-                console.log("result : " + result);
-                if (result === true) {
-                    ButtonObj.innerHTML = "인증완료";
-                    ButtonObj.style.backgroundColor = "green";
-                }
-                else {
 
-                }
-            })
+    // 이메일 중복 확인
+    const EmailCheck = () => {
+        let email = document.getElementById("emailCheck");
+
+        if (props.Email == "") {
+            email.innerHTML = "이메일을 입력해주세요.";
+            email.style.color = "red";
+            return;
         }
-        // 버튼 Obj 받음 => innertext를 바꾸기 위함
+
+        props.EmailCheck().then(result => {
+            if (result === true) {
+                email.innerHTML = "사용 가능한 이메일입니다.";
+                email.style.color = "green";
+            }
+            else {
+                email.innerHTML = "사용 중인 이메일입니다.";
+                email.style.color = "red";
+            }
+        });
+    }
+
+    // 이메일 인증코드 발송
+    const RequestEmailValid = async () => {
+        // 이메일 유효성 검사
+        const isEmailValid = await props.EmailCheck();
+
+        // 유효한 이메일이 아닌 경우 경고 표시
+        if (!isEmailValid) {
+            alert("유효한 이메일 주소를 입력해주세요.");
+            return;
+        }
+
+        const ButtonObj = document.getElementById("emailValidButton");
+
+        // 이미 인증 코드를 요청했는지 확인
+        if (!IsValidRequested) {
+            const result = await props.RequestEmailCode(props.Email);
+
+            // 요청 결과에 따라 버튼 텍스트 변경
+            if (result) {
+                setIsValidRequested(true);
+                ButtonObj.innerHTML = "인증 확인";
+            } else {
+                console.log("value 오류");
+            }
+        } else {
+            const result = await props.RequestEmailCode(props.Email);
+
+            // 인증이 이미 완료된 경우 버튼 스타일 및 텍스트 변경
+            if (result) {
+                ButtonObj.innerHTML = "인증 완료";
+                alert("이메일 인증이 완료되었습니다.");
+            } else {
+                // 실패 시의 동작
+            }
+        }
 
         setIsValidRequested(true);
-    }
+    };
 
     return (
         <RegiContainer>
 
-            {/* Page1 ...! */}
-            {
-                props.PageStep === "page1" ?
+            <PrivacyContainer>
+                <div style={{ display: 'flex', flexDirection: 'column', width: '400px', height: '100%', margin: '0 auto' }}>
+                    <h2 className='title'>회원 가입</h2>
+                    <AlreadyAccountContainer>
+                        계정이 있으신가요?
+                        <LoginButton>로그인</LoginButton>
+                    </AlreadyAccountContainer>
+                    <ProfilePicture
+                        src={props.showProfile ? (props.showProfile) : null || '/img/defaultProfile.png'}
+                        onClick={props.toggleModal}
+                    />
+                    <label>아이디</label>
+                    <input type='text' value={props.Id} onBlur={() => CheckId()} onChange={props.onIdHandler} placeholder='아이디' />
+                    <ShowText id='idCheck'></ShowText>
 
-                        <PrivacyContainer>
-                            <div style={{ display: 'flex', flexDirection: 'column', width: '400px', height: '100%', margin: '0 auto' }}>
-                                <h2 className='title'>회원 가입</h2>
-                                <ProfilePicture
-                                    src={props.showProfile ? (props.showProfile) : null || '/img/defaultProfile.png'}
-                                    onClick={props.toggleModal}
-                                />
-                                <label>아이디</label>
-                                <input type='text' value={props.Id} onBlur={() => CheckId()} onChange={props.onIdHandler} placeholder='아이디' />
-                                <ShowText id='idCheck'></ShowText>
+                    <label>비밀번호</label>
+                    <input type='password' value={props.Password} onChange={props.onPasswordHandler} placeholder='영문, 숫자를 조합하여 8~15자'
+                        onBlur={() => {
+                            CheckPwdRegularExpression()
+                        }} />
+                    <ShowText id='pwdCheck'></ShowText>
 
-                                <label>비밀번호</label>
-                                <input type='password' value={props.Password} onChange={props.onPasswordHandler} placeholder='영문, 숫자를 조합하여 8~15자'
-                                    onBlur={() => {
-                                        CheckPwdRegularExpression()
-                                    }} />
-                                <ShowText id='pwdCheck'></ShowText>
+                    <label>비밀번호 재확인</label>
+                    <input type='password' value={props.ConfirmPassword} onChange={props.onConfirmPasswordHandler} placeholder='비밀번호 재입력'
+                        onBlur={() => CheckConfirmPassword()}
+                    />
+                    <ShowText id='pwdConfirm'></ShowText>
 
-                                <label>비밀번호 재확인</label>
-                                <input type='password' value={props.ConfirmPassword} onChange={props.onConfirmPasswordHandler} placeholder='비밀번호 재입력'
-                                    onBlur={() => CheckConfirmPassword()}
-                                />
-                                <ShowText id='pwdConfirm'></ShowText>
+                    <label>닉네임</label>
+                    <input type='text' value={props.NickName} onChange={props.onNickNameHandler} placeholder='닉네임' onBlur={CheckNickname} />
+                    <ShowText id='nicknameCheck'></ShowText>
 
-                                <label>닉네임</label>
-                                <input type='text' value={props.NickName} onChange={props.onNickNameHandler} placeholder='닉네임' onBlur={CheckNickname} />
-                                <ShowText id='nicknameCheck'></ShowText>
+                    <label>나이</label>
+                    <input type='number' value={props.Age} onChange={props.onAgeHandler} placeholder='나이' />
+                    <ShowText></ShowText>
 
-                                <label>나이</label>
-                                <input type='number' value={props.Age} onChange={props.onAgeHandler} placeholder='나이' />
-                                <ShowText></ShowText>
-
-                                <label>성별</label>
-                                <select id='gender_input' onChange={props.onGenderHandler}>
-                                    <option value={'Male'}>남성</option>
-                                    <option value={'FeMale'}>여성</option>
-                                </select>
-                                <ShowText></ShowText>
-                                <label>이메일</label>
-                                <EmailValidContainer>
-                                    <EmailValidRequestContainer>
-                                        <EmailInput type="email" value={props.Email} onChange={(e) => props.onEmailHandler(e)} placeholder='이메일 주소' />
-                                        <EmailValidRequestButton id="emailValidButton" onClick={() => RequestEmailValid()}>인증요청</EmailValidRequestButton>
-                                    </EmailValidRequestContainer>
-                                    {props.ShowEmailValidContainer && <EmailValidConfirmContainer value={props.EmailValidConfirm} onChange={props.EmailValidCodeHandler} />}
-                                </EmailValidContainer>
-                            <AlreadyAccountContainer>
-                                계정이 있으신가요?
-                                <LoginButton>로그인</LoginButton>
-                            </AlreadyAccountContainer>
-                                <ShowText></ShowText>
-                                <NextButton onClick={props.ToggleMove}>
-                                    다음
-                                </NextButton>
-                                {props.isModalOpen && (
-                                    <ModalOverlay>
-                                        <ModalContent>
-                                            <img src={props.showProfile} />
-                                            <ModalButtonGroup>
-                                                <input id="fileInput" type="file" accept="image/*" onChange={props.handleProfileImgChange} />
-                                                <Button onClick={props.handleDeleteProfileImg}>삭제</Button>
-                                                <Button onClick={props.toggleModal}>닫기</Button>
-                                            </ModalButtonGroup>
-                                        </ModalContent>
-                                    </ModalOverlay>
-                                )}
-                            </div>
-
-                        </PrivacyContainer>
-                    :
-
-                    <PrivacyContainer>
-                        <BackButton onClick={props.ToggleMove}><MdOutlineArrowBackIosNew size={'20px'} /></BackButton>
-                        <form style={{
-                            display: 'flex', flexDirection:
-                                'column', width: '400px', height: '100%', margin: '0 auto'
-                        }} onSubmit={(e) => props.onSubmitHandler(e)}>
-                            <h3 className='title'>태그 선택</h3>
-                            <h5 className='sub_title'>선호하는 태그를 선택해주세요. (3개)</h5>
-
-                            <TagsContainer>
-                                {props.TagList&& props.TagList.map((element, idx) => (
-                                    <TagButton
-                                        fontColor={element.fontColor}
-                                        backColor={element.backColor}
-                                        value={element.value}
-                                        selected={element.selected}
-                                        TagClick={(element) => props.TagClick(element)}
-                                    />
-                                ))}
-                            </TagsContainer>
-                            <SubmitButton onClick={(e) => props.onSubmitHandler(e)}>
-                                회원가입
-                            </SubmitButton>
-                        </form>
-                    </PrivacyContainer>
-
-            }
-
-
+                    <label>성별</label>
+                    <select id='gender_input' onChange={props.onGenderHandler}>
+                        <option value={'Male'}>남성</option>
+                        <option value={'FeMale'}>여성</option>
+                    </select>
+                    <ShowText></ShowText>
+                    <label>이메일</label>
+                    <EmailValidContainer>
+                        <EmailValidRequestContainer>
+                            <EmailInput type="email" onBlur={() => EmailCheck()} value={props.Email} onChange={(e) => props.onEmailHandler(e)} placeholder='이메일 주소' />
+                            <EmailValidRequestButton id="emailValidButton" onClick={() => RequestEmailValid()}>인증번호 요청</EmailValidRequestButton>
+                        </EmailValidRequestContainer>
+                        <ShowText id='emailCheck'></ShowText>
+                        {props.ShowEmailValidContainer &&
+                            <EmailValidConfirmContainer
+                                placeholder='인증번호'
+                                value={props.EmailValidConfirm}
+                                onChange={props.EmailValidCodeHandler}
+                            />
+                        }
+                    </EmailValidContainer>
+                    {props.isModalOpen && (
+                        <ModalOverlay>
+                            <ModalContent>
+                                <img src={props.showProfile} />
+                                <ModalButtonGroup>
+                                    <input id="fileInput" type="file" accept="image/*" onChange={props.handleProfileImgChange} />
+                                    <Button onClick={props.handleDeleteProfileImg}>삭제</Button>
+                                    <Button onClick={props.toggleModal}>닫기</Button>
+                                </ModalButtonGroup>
+                            </ModalContent>
+                        </ModalOverlay>
+                    )}
+                </div>
+                <TitleContainer>
+                    <Title>태그 선택</Title>
+                    <SubTitle >원하는 태그를 선택해주세요.</SubTitle>
+                </TitleContainer>
+                <BottomContainer>
+                    <TagContainer>
+                        <TagsContainer>
+                            {props.TagList && props.TagList.map((tag) => (
+                                <TagButton 
+                                    fontColor={tag.selected? 'black' : tag.fontColor} 
+                                    backColor={tag.selected? 'rgb(240, 240, 240)' : tag.backColor}
+                                    onClick={() => props.TagClick(tag)}
+                                >
+                                    {tag.selected?  "# " + tag.value + " x" : "# " + tag.value}
+                                </TagButton>
+                            ))}
+                        </TagsContainer>
+                    </TagContainer>
+                    <SubmitButton onClick={props.onSubmitHandler}>회원가입</SubmitButton>
+                </BottomContainer>
+            </PrivacyContainer>
         </RegiContainer>
     );
 };
@@ -235,13 +262,39 @@ const RegisterContainer = (props) => {
 const RegiContainer = styled.div`
     position: relative;
     display: flex;
-    width: 700px;
-    height: 100%;
+    width: 650px;
+    height: 95vh;
     justify-content: center;
     overflow-y: scroll;
     margin: auto;
     background-color: white;
     user-select: none;
+`
+
+const BottomContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+`
+
+const TitleContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+`
+
+const Title = styled.p`
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    margin: none;
+    padding: none;
+`
+const SubTitle = styled.p`
+    margin: none;
+    padding: none;
 `
 const PrivacyContainer = styled.div`
     position : absolute;
@@ -270,19 +323,9 @@ const NextButton = styled.button`
         background-color : white;
     }
 `
-const SubmitButton = styled(NextButton)``
-const BackButton = styled.button`
-    position : absolute;
-    top : 0px;
-    left : 20px;
-    display : flex;
-    width : 50px;
-    height : 50px;
-    justify-content : center;
-    align-items: center;
-    border : none;
-    background-color : white;
-    cursor : pointer;
+const SubmitButton = styled(NextButton)`
+margin-top: 100px;
+
 `
 
 // 유효성 검사 결과 표시를 위한 Container
@@ -290,22 +333,26 @@ const ShowText = styled.div`
     display : inline-block;
     width : 100%;
     height : 30px;
-    padding-left : 6px;
-    padding-top : 2px;
-    /* align-items: center; */
-    text-align : right;
-    font-size : 12px;
+    padding-left : 5px;
+    padding-top : 5px;
+    text-align : left;
+    font-size : 13px;
 `
 
 // 태그들을 담을 Flex Container
 const TagsContainer = styled.div`
-    display : flex;
-    flex-wrap : wrap;
-    flex-direction : row;
-    width : 100%;
-    height : auto;
-    justify-content : space-between;
-    gap : 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; 
+`
+
+const TagContainer = styled.div`
+display: flex;
+justify-content: center;
+  margin-top: 30px;
+  width: 100%;
+  height: 90%;
+
 `
 
 // 이메일 인증 공간
@@ -417,12 +464,12 @@ const Button = styled.button`
 
 const AlreadyAccountContainer = styled.div`
     margin: auto;
-    margin-top: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
     color: black;
+    margin-bottom: 20px;
 `;
 
 const LoginButton = styled.span`

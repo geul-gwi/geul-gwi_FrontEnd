@@ -1,21 +1,25 @@
 import React from "react";
-import '../../../css/Login.css'
+import 'css/Login.css'
 import styled from "styled-components";
+import {Routes, Route} from 'react-router-dom';
 
-// component Import
+// component
 import Register from "component/user/register/RegisterAction";
-import LoginForm from "./LoginForm";
+import LoginForm from "component/user/login/LoginForm";
+import PasswordRecoveryForm from 'component/user/login/PasswordRecoveryForm';
+import IDRecoveryForm from "component/user/login/IDRecoveryForm";
 
-const UserForm = (props) => {
+const Account = () => {
     return (
         <div className="Login" style={{overflow : "hidden"}}>
-            <Circle1 />
-            <Circle2 />
-            <Circle3 />
-            <Circle4 />
-            {props.action ? <LoginForm /> : <Register />}
+            <Circle1 /><Circle2 /><Circle3 /><Circle4 />
+        <Routes>
+            <Route path="/" element={<LoginForm />}></Route>
+            <Route path="/register/*" element={<Register />}></Route>
+            <Route path="/id/*" element={<IDRecoveryForm />}></Route>
+            <Route path="/password/*" element={<PasswordRecoveryForm />}></Route>
+        </Routes>
         </div>
-        
     );
 };
 
@@ -64,4 +68,4 @@ const Circle3=styled(R_Circle_frame)`
 const Circle4=styled(R_Circle_frame)`
     animation: wave 4s infinite 2s linear;
 `
-export default UserForm;
+export default Account;

@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import UserStore from 'contextStore/UserStore';
 
 // Component Import
-import User from 'Routes/user/User';
+import Account from 'Routes/Account';
 import MainRoute from 'Routes/main/MainRoute';
 import Home from 'pageComponent/Home';
 import ManagerPage from 'pageComponent/ManagerPage';
@@ -17,11 +17,10 @@ const RootRoute = () => {
             <UserStore>
                 <Routes>
                     <Route path='/' element={<Home />}></Route>
-                    <Route path='/user/*' element={<User />}></Route>
+                    <Route path='/accounts/*' element={<Account />}></Route>
                     <Route path='/main/*' element={<MainRoute />}></Route>
                     <Route path='/manager/*' element={<ManagerPage />}></Route>
                 </Routes>
-                
             </UserStore>
         </BrowserRouter>
     );

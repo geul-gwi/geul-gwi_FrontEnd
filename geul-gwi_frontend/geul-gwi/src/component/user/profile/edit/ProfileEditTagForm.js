@@ -40,9 +40,7 @@ const ProfileEditTagForm = (props) => {
             <Title>태그 설정</Title>
             <TagsContainer>
                 {tags && tags.map(tag => (
-                    <TagButton
-                        fontColor={tag.fontColor}
-                        backColor={tag.backColor}
+                    <TagButton fontColor={tag.fontColor} backColor={tag.backColor}
                         onClick={() => handleAddTag(tag)}
                     >
                         {'# ' + tag.value}

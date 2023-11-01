@@ -14,18 +14,14 @@ import { faUser as RegularUser } from '@fortawesome/free-regular-svg-icons'
 
 import imageDataFetcher from 'service/imageDataFetcher';
 
-// Import Css
 import '../../../css/LoginForm.css';
-
-// Import For use Redux
-import { useDispatch, useSelector } from 'react-redux'; // Redux 사용 Library
+import { useDispatch, useSelector } from 'react-redux'; 
 import { setToken, clearToken } from 'Reducer/auth';
 import { login, setNickname, setProfile, setUserSeq, setRole } from 'Reducer/authReducer';
 
 const LoginForm = () => {
-    // AxiosAddress 
-    const [AxiosAddress, SetAxiosAddress] = useState(useContext(AxiosAddrContext).axiosAddr);
-    const [RequestMapping, SetRequestMapping] = useState('/user/login');
+    const AxiosAddress = useContext(AxiosAddrContext).axiosAddr;
+    const RequestMapping = '/user/login';
 
     const [Id, setId] = useState('');
     const [Password, setPassword] = useState('');
@@ -33,7 +29,6 @@ const LoginForm = () => {
     const navigate = useNavigate(); // React Navigate = 페이지 이동
     const dispatch = useDispatch(); // Redux Dispatch = 리덕스 저장소 사용
 
-    // Function to fetch and set profile image
     const fetchAndSetProfileImage = async (profilePath) => {
         try {
             const profileImageUrl = await imageDataFetcher(AxiosAddress, profilePath);
@@ -66,9 +61,8 @@ const LoginForm = () => {
             });
     };
 
-    const RegiBtnClick = () => {
-        console.log("regibtn click");
-        navigate("/user/register");
+    const onClickLink = (path) => {
+        navigate('/accounts/' + path);
     }
 
     const logAccount = (event) => {
@@ -87,16 +81,15 @@ const LoginForm = () => {
                     <FontAwesomeIcon size="2xl" color={'#444444'} title='계정' icon={RegularUser} />
                     <IconText>로그인</IconText>
                 </IconContainer>
-                {/* Test */}
                 <form className="FormContentManage" onSubmit={logAccount}>
                     <input className='loginFormInput' type='text' placeholder='아이디' onChange={(e) => setId(e.target.value)}></input>
                     <input className='loginFormInput' type='password' placeholder='비밀번호' onChange={(e) => setPassword(e.target.value)}></input><br />
                     <Button onClick={LoginSubmit}>로그인</Button>
                 </form>
                 <div className='sub_Container'>
-                    <SubSpan>아이디 찾기</SubSpan>
-                    <SubSpan>비밀번호 찾기</SubSpan>
-                    <SubSpan onClick={RegiBtnClick}>회원가입</SubSpan>
+                    <SubSpan onClick={() => onClickLink("id")}>아이디 찾기</SubSpan>
+                    <SubSpan onClick={() => onClickLink("password")}>비밀번호 찾기</SubSpan>
+                    <SubSpan onClick={() => onClickLink("register")}>회원가입</SubSpan>
                 </div>
 
             </div>
@@ -106,9 +99,9 @@ const LoginForm = () => {
 
 const SubSpan = styled.span`
     user-select: none;
-    margin-top: 5px;
+    margin-top: 7px;
     display : inline-block;
-    font-size : 10px;
+    font-size : 11px;
     color : grey;
     cursor : pointer;
     padding : 0px 7px 0px 7px;

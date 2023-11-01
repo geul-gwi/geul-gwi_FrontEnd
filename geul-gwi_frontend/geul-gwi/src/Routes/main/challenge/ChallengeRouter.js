@@ -2,10 +2,8 @@ import Home from "component/main/Home";
 import React from "react";
 import { Route, Router, Routes } from "react-router-dom";
 
-
 // Import Component
 import WriteChallenge from "./WriteChallenge";
-
 
 const ChallengeRouter = () => {
     return (

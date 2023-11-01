@@ -1,9 +1,6 @@
 import './css/App.css'
 import RootRoute from './RootRoute'
 
-// UseEffect
-import { useEffect } from 'react';
-
 // Toast관련 라이브러리
 import 'react-toastify/dist/ReactToastify.css'; // Toast를 제대로 사용하기 위한 css 파일
 import { ToastContainer, toast } from 'react-toastify';     // 토스트 메시지 Container
@@ -17,10 +14,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Provider, useDispatch } from 'react-redux';
 import store from 'Reducer/store';
 
-
 // 변수
 const persistor = persistStore(store);
-
 
 <link href="https://hangeul.pstatic.net/hangeul_static/css/maru-buri.css" rel="stylesheet"></link>
 
@@ -34,7 +29,6 @@ function App() {
         </PersistGate>
       </Provider>
        
-      {/* 토스트를 띄워줄 Library Container */}
       <ToastContainer
       position="top-right"
       autoClose={3000}

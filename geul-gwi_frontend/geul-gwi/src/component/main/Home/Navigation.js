@@ -103,7 +103,7 @@ const Navigation = () => {
                     Authorization: `Bearer ${userToken}`,
                 },
             });
-            navigate('/user/login');
+            navigate('/accounts');
             dispatch(logout());
 
         } catch (error) {
@@ -122,9 +122,7 @@ const Navigation = () => {
 
     return (
         <NaviFrame>
-            <TextContainer style={{ fontFamily: "Maru Buri", fontStyle: "semi-bold" }} onClick={goHome}>
-                <Logo src={process.env.PUBLIC_URL + "/img/Logo.png"}></Logo>
-            </TextContainer>
+            <Logo src={process.env.PUBLIC_URL + "/Logo.png"}></Logo>
             <Container>
                 {menus.map((element, idx) => (
                     <Item id={"NaviButton" + idx} onClick={() => ComponentMove(element.target)}>
@@ -136,17 +134,14 @@ const Navigation = () => {
                     <IconBox>
                         <ProfileImage src={userProfile ? userProfile : "/img/defaultProfile.png"}/>
                     </IconBox>
-                    <TextBox onClick={() => onClickProfile()}>프로필</TextBox>
+                    <TextBox onClick={onClickProfile}>프로필</TextBox>
                 </Item>
             </Container>
-
                 <SubscribersListContainer>
-                     <SubscribersHeader>구독</SubscribersHeader>
-                     <subscribersItemContainer>                     
+                     <SubscribersHeader>구독</SubscribersHeader>                 
                         {subscribes.map((subscribe, index) => (
                         <SubscribeItem key={index} user={subscribe} />
                         ))}
-                    </subscribersItemContainer>
                 </SubscribersListContainer>
 
             <MoreButton onClick={handleMoreButtonClick}>
@@ -188,15 +183,6 @@ const SubscribersListContainer = styled.div`
   margin: 10px;
 `;
 
-const subscribersItemContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 90%;
-  justify-content: center;
-  align-items: center;
-`;
-
-
 const SubscribersHeader = styled.p`
   margin-bottom: 10px;
   margin-left:30px;
@@ -216,15 +202,15 @@ const NaviFrame = styled.div`
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-        align-items: center;
-    margin-top: 40px;
+    align-items: center;
+    margin-top: 70px;
     width: 100%;
 `
 
 const Logo = styled.img`
     position: relative;
-    top: -50px;
-    left: -20px;
+    top: 30px;
+    left: 0px;
     height: 220px;
     width: 240px;
 `
@@ -265,9 +251,10 @@ const MenuItem = styled.div`
   font-size: 14px;
   padding: 0 5px;
   transition: background-color 0.2s;
-  border-radius: 8px ;
+  border-radius: 8px;
+
   &:hover {
-    background-color : rgb(240, 240, 240);
+    background-color:'#F9F7DA';
   }
 `;
 

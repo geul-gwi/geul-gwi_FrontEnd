@@ -1,6 +1,6 @@
 import React from 'react';
 
-// import Component
+// component
 import ChallengeAction from 'component/main/WriteChallenge/ChallengeAction';
 
 const WriteChallengePage = () => {
