@@ -26,10 +26,10 @@ const Account = () => {
 
 // StyleComponent CSS 
 const Circle_frame=styled.div`
-    width : 25px;
-    height : 25px;
+    width : 30px;
+    height : 30px;
     border-radius: 50%;
-    background-color: white;
+    background-color: #acd48e;
     opacity: 0;
 
     @keyframes wave{
@@ -41,7 +41,7 @@ const Circle_frame=styled.div`
             opacity : 0.3;
         }
         100%{
-            scale: 2000%;
+            scale: 2500%;
             opacity: 0;
         }
     }

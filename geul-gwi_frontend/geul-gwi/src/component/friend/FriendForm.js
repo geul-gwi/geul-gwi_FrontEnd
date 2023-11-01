@@ -90,7 +90,7 @@ const Menu = styled.div`
     background-repeat :no-repeat;
     background-position : bottom;
     transition : background-size 200ms ease;
-    border-bottom: ${props => props.active ? '1px solid #F66767' : 'none'};
+    border-bottom: ${props => props.active ? '1px solid #F2C936 ' : 'none'};
     &:hover{
         background-color: rgb(245, 245, 245);
     }

@@ -19,7 +19,7 @@ import MessageWritingPage from 'pageComponent/MessageWritingPage';
 import PostEditPage from 'pageComponent/PostEditPage';
 import ChallengePostEditPage from 'pageComponent/ChallengePostEditPage';
 
-import path from 'img/back_gradient.jpg';
+import path from 'img/background.jpg';
 
 // Redux Import
 import { useSelector } from 'react-redux'; // Redux 사용 Library
@@ -31,7 +31,7 @@ const Home = () => {
         <div>
             <BackImg />
             <Frame>
-                {isLogged ? '' : <h1><Navigate to="/user/login" replace={true} /></h1>}
+                {isLogged ? '' : <h1><Navigate to="/accounts" replace={true} /></h1>}
                 <LeftContainer>
                     <Navigation />
                 </LeftContainer>
@@ -69,19 +69,18 @@ const Frame = styled.div`
     height: auto;
     min-height : 100vh;
     margin : 0 auto;
+    
 `
 
 const BackImg = styled.div`
     position : fixed;
     width : 100%;
-    height : 100vh;
     top: 0;
     left : 0;
     z-index: -1;
-    background-image: url(${path});
-    background-position : "center";
-    background-repeat : "no-repeat";
-    background-size: cover;
+    //background: linear-gradient(to right, #F9F7DA, #F5ED98);
+    height: 100vh;
+    background:#F9F7DA
 `
 
 const ContainerFrame = styled.div`

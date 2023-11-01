@@ -304,10 +304,10 @@ const PrivacyContainer = styled.div`
     min-height : 70%;
     
 `
-const NextButton = styled.button`
+const SubmitButton = styled.button`
     width : 250px;
     height : 40px;
-    background-color : #ffc2b3;
+    background-color : #ccebb5;
     border-radius : 12px;
     border : none;
     margin : 0 auto;
@@ -315,16 +315,13 @@ const NextButton = styled.button`
     margin-bottom : 15px;
     color : white;
     cursor : pointer;
+    border : 3px solid #ccebb5;
     transition : 0.2s;
+    margin-top: 30px;
     &:hover{
-        transition : 0.2s;
-        color : black;
-        border : 4px solid pink;
+        color : gray;  
         background-color : white;
     }
-`
-const SubmitButton = styled(NextButton)`
-margin-top: 100px;
 
 `
 
@@ -383,16 +380,19 @@ const EmailValidRequestButton = styled.div`
     display : flex;
     width : 100px;
     height : 40px;
-    justify-content : center; align-items : center;
-    background-color : #ffc2b3;
+    justify-content : center; 
+    align-items : center;
+    background-color : #ccebb5;
     color : white;
     border: 2px solid white;
-    font-size : 12px; cursor: pointer; border-radius : 12px;
+    font-size : 12px; cursor: pointer; 
+    border-radius : 12px;
     transition : 0.2s;
+    border : 3px solid #ccebb5;
     &:hover{
         background-color : white;
-        border : 2px solid pink;
-        color : black;
+
+        color : gray;
     }
 `
 

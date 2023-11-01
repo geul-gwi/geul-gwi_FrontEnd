@@ -77,7 +77,7 @@ const WeatherFrame = styled.div`
     flex-direction : column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 0px 32px 0px #FFA199;
+    box-shadow: 0px 0px 16px 0px rgba(153, 255, 228, 0.5);
 `
 
 // 날씨 정보를 담을 Container

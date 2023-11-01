@@ -128,7 +128,7 @@ const SearchForm = () => {
             tagSearchHandler={tagSearchHandler}
          />
          <BottomContainer>
-            <ResultContainer>{viewPosts.length}개의 검색 결과</ResultContainer>
+            <ResultContainer>{viewPosts.length}개의 결과</ResultContainer>
             <ItemsContainer>
                {viewPosts && viewPosts.map((post) => (
                   <Item onClick={() => ModalOpen(post.geulgwiSeq)}>
@@ -159,20 +159,25 @@ const SearchForm = () => {
 const MainContainer = styled.div`
    display: flex;
    flex-direction: column;
-   width: 655px;
+   width: 100%;
    user-select: none;
    justify-content: center;
    align-items: center;
+   
 `
 
 const BottomContainer = styled.div`
-      background-color: white;
-      padding: 15px;
-      margin-top: 20px;
+   background-color: white;
+   padding: 40px;
+   margin-top: 20px;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+   min-height: 100vh;
+   border-radius: 16px;
 `
 
 const ResultContainer = styled.div`
    margin-bottom: 10px;
+   
 `
 
 const Item = styled.div`
@@ -185,21 +190,25 @@ const Item = styled.div`
   align-items: center;
   cursor : pointer;
   transition : 0.3s;
+  border-radius: 16px;
 
  &:hover {
-    filter: brightness(70%); /* 아이템을 어둡게 만드는 CSS */
+    filter: brightness(90%); /* 아이템을 어둡게 만드는 CSS */
   }
 `
 const ItemImg = styled.img`
   background-color : white;
   width : 100%;
   height : 100%;
+  border-radius: 16px;
   object-fit: cover;
+  //background-image: url(${process.env.PUBLIC_URL + "/Logo.png"});
 `
 const HoveredBack = styled.div`
   position : absolute;
   width : 100%;
   height : 100%;
+  border-radius: 16px;
   background-color: rgba(255,255,255,0.3);
   z-index : 1;
 `

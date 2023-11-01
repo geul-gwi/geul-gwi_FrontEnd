@@ -85,7 +85,7 @@ const Tabs = styled.div`
 `;
 
 const TabButton = styled.button`
-   background-color: ${(props) => (props.active ? "#FF9E9E" : "#ccc")};
+   background-color: ${(props) => (props.active ? "#ccebb5" : "#ccc")};
    color: #fff;
    border: none;
    padding: 10px 20px;
@@ -159,7 +159,7 @@ const SubmitBtn = styled.div`
     width : 100px;
     height : 30px;
     border-radius : 12px;
-    background-color : #FF9E9E;
+    background-color : #ccebb5;
     justify-content : center; 
     align-items : center;
     font-size : 14px; 
@@ -168,7 +168,7 @@ const SubmitBtn = styled.div`
     cursor : pointer;
 
     &:hover{
-        background-color : #FFB1B1;
+        background-color : #ccebb5;
     }
 `
 

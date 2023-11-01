@@ -5,13 +5,10 @@ import axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 
 const TagSearchForm = (props) => {
-  const PublicWritingIconPath = process.env.PUBLIC_URL + "/icon/Writing/";
   const axiosAddress = useContext(AxiosAddrContext).axiosAddr;   // Axios Address
   const defaultTagUrl = '/tag/list/DEFAULT';
 
   const [tags, setTags] = useState([]); // 전체 태그 리스트
-
-  const [searchContainerVisible, setSearchContainerVisible] = useState(false); // 필터 On/Off
 
   useEffect(() => {
     axios.post(`${axiosAddress}${defaultTagUrl}`)
@@ -23,10 +20,6 @@ const TagSearchForm = (props) => {
         console.error("태그 요청 실패: ", error);
       });
   }, []);
-
-  const toggleSearchContainer = () => {
-    setSearchContainerVisible(!searchContainerVisible);
-  };
 
   const handleTagClick = (tag) => {
     if (props.selectedTag === tag) {
@@ -42,13 +35,6 @@ const TagSearchForm = (props) => {
 
   return (
     <SearchContainer>
-      <SearchButton onClick={toggleSearchContainer}>
-        <ButtonTextContainer >태그 필터</ButtonTextContainer>
-        <ButtonIconContainer>
-          <Iconimg src={PublicWritingIconPath + "plus.svg"} />
-        </ButtonIconContainer>
-      </SearchButton>
-      {searchContainerVisible && (<>
         <Title>검색하고 싶은 태그를 선택하세요.</Title>
         <TagContainer>
           <TagsContainer>
@@ -63,8 +49,6 @@ const TagSearchForm = (props) => {
           </TagsContainer>
         </TagContainer>
         <Button onClick={onClickSearchButton}>적용</Button>
-      </>
-      )}
     </SearchContainer>
   )
 };
@@ -72,18 +56,19 @@ const TagSearchForm = (props) => {
 const SearchContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 675px;
   height: auto;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   background-color: white;
   user-select: none;
-  padding: 20px; 
+  padding: 30px;
+  border-radius: 16px;
 `;
 
 const Title = styled.p`
-  margin: 0px;
-  font-size: 15px;
-  margin-bottom: 10px;
+  margin: 0;
+  font-size: 16px;
+  margin-bottom: 30px;
 `;
 
 const TagContainer = styled.div`

@@ -197,6 +197,7 @@ const NaviFrame = styled.div`
     align-items: center;
     background-color: white;
     width: 320px;
+    box-shadow: 0px 0px 32px 0px #F2C936;
 `
 
 const Container = styled.div`
@@ -244,18 +245,12 @@ const MenuButtonManager = styled.div`
 const MenuItem = styled.div`
   display: flex;
   align-items: center;
-  height: 40px;
   justify-content: space-between;
   color: #343434;
   cursor: pointer;
-  font-size: 14px;
   padding: 0 5px;
   transition: background-color 0.2s;
   border-radius: 8px;
-
-  &:hover {
-    background-color:'#F9F7DA';
-  }
 `;
 
 const ProfileImage = styled.img`
@@ -275,7 +270,7 @@ const ProfileImage = styled.img`
 const Item = styled.div`
     display : flex;
     width : 90%;
-    height : 55px;
+    height : 50px;
     justify-content : center;
     align-items : center;
     cursor : pointer;
@@ -311,16 +306,6 @@ const IconImg = styled.img`
     height : 20px;
 
 
-`
-const TextContainer = styled.div`
-    margin-top: 35px;
-    display : flex;
-    left : 0px;
-    width : auto;
-    color : #FFB6B2;
-    font-size: 40px;
-    height: 120px;
-    cursor : pointer;
 `
 const MoreButton = styled.div`
     position: absolute;

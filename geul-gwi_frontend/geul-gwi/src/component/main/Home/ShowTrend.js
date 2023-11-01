@@ -43,7 +43,7 @@ const TrendFrame = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    box-shadow: 0px 0px 32px 0px #FF9989;
+    box-shadow: 0px 0px 32px 0px rgba(153, 255, 228, 0.5);
     transition : 0.5s;
     &:hover { 
         opacity: 1;

@@ -32,9 +32,7 @@ const IDRecoveryForm = () => {
     return (
         <div className="LoginForm">
             <div className="LeftContainer">
-                <div className="TitleContainer">
-                    <Logo src={process.env.PUBLIC_URL + "/img/Logo.png"}></Logo>
-                </div>
+                <Logo src={process.env.PUBLIC_URL + "/Logo.png"}></Logo>
             </div>
             <div className="RightContainer" style={{ position: 'relative' }}>
                 <IconContainer>
@@ -57,27 +55,23 @@ const IDRecoveryForm = () => {
 };
 
 const SubSpan = styled.span`
-    user-select: none;
-    margin-top: 7px;
-    display : inline-block;
-    font-size : 12px;
+    margin-top: 8px;
+    font-size : 15px;
     color : grey;
     cursor : pointer;
     padding : 0px 7px 0px 7px;
+
     &:hover{
         color : black;
     }
-
-    input[type=checkBox]{
-        display : none;
-        border : 1px solid black;
-    }
 `
+
 const IconContainer = styled.div`
     position : absolute;
     display : flex;
     top : 5%;
     left : 50%;
+    width : auto;
     min-width : 50px;
     height : auto;
     min-height : 60px;
@@ -87,31 +81,41 @@ const IconContainer = styled.div`
     align-items: center;
     user-select: none;
 `
+
 const IconText = styled.span`
     margin-top: 10px;
     color : #444444;
-    font-size : 14px;
+    font-size : 16px;
 `
+
 const Logo = styled.img`
     position: relative;
     user-select: none;
-    height: 250px;
-    width: 260px;
+    height: 300px;
+    width: 300px;
 `
 
 const Button = styled.button`
     width: 97%;
-    height: 38px;
+    height: 45px;
     border-radius: 8px;
-    background-color: rgb(255, 194, 160);
+    background-color: #ccebb5;
     color: white;
     cursor: pointer;
-    border: 2px solid rgb(255, 194, 160);
-    
+    border: 3px solid #ccebb5;
+    transition: 0.2s;
+    font-size: 16px;
+
     :hover{
-        color: black;
         background-color: white;
+        color: gray;
     }
 `
+
+const FormContentManage = styled.form`
+    text-align: center;
+    width: 70%;
+`;
+
 
 export default IDRecoveryForm;

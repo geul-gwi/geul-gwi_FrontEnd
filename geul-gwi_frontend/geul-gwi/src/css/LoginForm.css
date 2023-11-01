@@ -1,9 +1,9 @@
 /* 로그인 페이지에서 가운데 폼 css */
 .LoginForm{
     display: flex;
-    min-width: 600px;
-    height:  50%;
-    min-height: 475px;
+    min-width: 900px;
+    height: 50%;
+    min-height: 563px;
     background-color: white;
     border-radius: 16px;
     box-shadow: 8px 8px 0 0 rgba(143, 143, 143, 0.747);
@@ -72,41 +72,19 @@
 
 /* FormContentManage의 input태그 */
 .loginFormInput{
-    /* border : 1px solid pink;
-    transition : 1s; */
-    height : 32px;
+    height : 44px;
     width : 90%;
     margin-bottom : 15px;
-    border-radius: 12px;
+    border-radius: 16px;
     border : none;
     padding : 4px 10px 0px 10px;
     box-shadow: 1px 1px 4px rgba(128, 128, 128, 0.473);
-        user-select: none;
-
+    user-select: none;
+    font-size: 16px;
 }
+
 .loginFormInput:focus{
-    outline: 1px solid pink;
-}
-/* FormContentManage의 Button태그 */
-.loginFormButton{
-    width : 97%; 
-    height : 38px;
-    border-radius: 8px;
-    background-color: rgb(255, 194, 160);
-    border : none;
-    color:white;
-    cursor: pointer;
+    outline: 1px solid #ccebb5;
 }
 
-.loginFormButton:hover{
-    color : black;
-    border: 3px solid pink;
-    background-color: white;
-}
 
-/* 오른쪽 sub-container내에 체크박스 사이즈 설정 */
-.sub_Container img{
-    width : 15px;
-    height : 15px;
-        user-select: none;
-}
