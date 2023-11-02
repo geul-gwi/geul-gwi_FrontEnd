@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// Import Library
-import { useSelector } from 'react-redux'; // Redux 사용 Library
+import { useSelector } from 'react-redux'; 
 import styled from 'styled-components';
 import {AxiosAddrContext} from 'contextStore/AxiosAddress';
 // component
@@ -14,7 +13,7 @@ const ProfileEditForm = ({ userInfo }) => {
     const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
     const userUpdateUrl = '/user/update/';
     const userDeleteUrl = '/user/delete/';
-    // User 로그인 정보
+
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
 
@@ -74,7 +73,10 @@ const ProfileEditForm = ({ userInfo }) => {
 
         try {
             const formData = new FormData();
+
             formData.append("file", newProfile);
+            console.log(newProfile);
+            
             const updateDTO = {
                 password: showPasswordChange ? newPassword : userInfo.password,
                 nickname: newNickname,
@@ -82,11 +84,16 @@ const ProfileEditForm = ({ userInfo }) => {
                 comment: newComment,
             };
 
-            console.log(updateDTO);
-            console.log('FormData:', formData);
+            //console.log(updateDTO);
 
             // 나머지 데이터를 JSON 문자열로 변환하여 FormData에 추가
             formData.append("updateDTO", new Blob([JSON.stringify(updateDTO)], {type:"application/json"}));
+
+
+            // FormData 내용 확인
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
 
             const response = await axios.post(
                 `${axiosAddress}${userUpdateUrl}${userSeq}`, formData, {
@@ -96,10 +103,12 @@ const ProfileEditForm = ({ userInfo }) => {
             }});
             if (response) {
                 console.log('프로필 편집 성공 : ', response);
+                alert("프로필 편집을 완료했습니다.");
                 navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
             }
         } catch (error) {
             console.log('프로필 편집 실패  : ', error);
+            alert("프로필 편집을 실패했습니다.\n다시 시도해주세요.");
         }
     };
 

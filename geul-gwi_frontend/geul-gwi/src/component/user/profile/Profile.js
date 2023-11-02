@@ -33,18 +33,23 @@ const Profile = ({ profileUserSeq }) => {
             Authorization: `Bearer ${userToken}`,
           },
         });
-        setUserInfo(response.data);
-        const profileImageUrl = await imageDataFetcher(response.data.profile);
+  
+        console.log("프로필:", response.data);
+        const userData = response.data;
+        const profileImageUrl = await imageDataFetcher(axiosAddr, userData.profile);
+  
         setUserInfo((prevUserInfo) => {
-          return { ...prevUserInfo, profile: profileImageUrl };
+          return { ...userData, profile: profileImageUrl };
         });
       } catch (error) {
         console.log('프로필 불러오기 실패:', error);
       }
     }
-    fetchUserProfile();
-
-  }, [profileUserSeq]);
+  
+    if (profileUserSeq) {
+      fetchUserProfile();
+    }
+  }, [profileUserSeq, userToken]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -205,6 +210,7 @@ const ProfileContainer = styled.div`
     background-color: white;
     user-select: none;
     padding: 20px 0;
+    border-radius: 16px;
 `;
 
 const ButtonContainer = styled.div`

@@ -22,7 +22,6 @@ const ProfileEditUser = (props) => {
     // 프로필 사진 변경
     const handleProfileImgChange = (event) => {
         const file = event.target.files[0];
-        //props.setNewProfile(URL.createObjectURL(file)); 
         props.setNewProfile(file);
         setShoeProfileImage(URL.createObjectURL(file));
     };
@@ -133,6 +132,7 @@ const ErrorMessage = styled.div`
     height: auto;
     padding: 30px 0px;
     user-select: none;
+    border-radius: 16px;
 `;
 
  const Tittle = styled.span`

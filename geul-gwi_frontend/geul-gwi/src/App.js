@@ -1,4 +1,4 @@
-import './css/App.css'
+import 'css/App.css'
 import RootRoute from './RootRoute'
 
 // Toast관련 라이브러리

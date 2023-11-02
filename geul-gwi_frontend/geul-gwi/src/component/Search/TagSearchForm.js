@@ -35,20 +35,20 @@ const TagSearchForm = (props) => {
 
   return (
     <SearchContainer>
-        <Title>검색하고 싶은 태그를 선택하세요.</Title>
-        <TagContainer>
-          <TagsContainer>
-            {tags && tags.map(tag => (
-              <TagButton fontColor={tag.fontColor} backColor={tag.backColor}
-                selected={props.selectedTag === tag}
-                onClick={() => handleTagClick(tag)}
-              >
-                {'# ' + tag.value}
-              </TagButton>
-            ))}
-          </TagsContainer>
-        </TagContainer>
-        <Button onClick={onClickSearchButton}>적용</Button>
+      <Title>검색하고 싶은 태그를 선택하세요.</Title>
+      <TagContainer>
+        <TagsContainer>
+          {tags && tags.map(tag => (
+            <TagButton fontColor={tag.fontColor} backColor={tag.backColor}
+              selected={props.selectedTag === tag}
+              onClick={() => handleTagClick(tag)}
+            >
+              {props.selectedTag === tag ? '# ' + tag.value + " x" : '# ' + tag.value}
+            </TagButton>
+          ))}
+        </TagsContainer>
+      </TagContainer>
+      <Button onClick={onClickSearchButton}>적용</Button>
     </SearchContainer>
   )
 };
@@ -116,46 +116,5 @@ const TagsContainer = styled.div`
   flex-wrap: wrap;
   gap: 10px;
 `;
-
-const SearchButton = styled.div`
-    display : flex;
-    background: white;
-    width : 100px;
-    height : 45px;
-    padding : 0px 10px;
-    border-radius: 18px;
-    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.25);
-    align-items: center; 
-    justify-content: space-between;
-    cursor : pointer;
-    transition : 0.2s;
-    margin-bottom: 10px;
-    user-select: none;
-    &:hover {
-        background-color: #f2f2f2;
-    }
-`
-
-const ButtonTextContainer = styled.div`
-    display : flex;
-    width : 80px;
-    height : 75px;
-    justify-content: center; 
-    align-items: center;
-    font-size : 14px; 
-`
-const ButtonIconContainer = styled.div`
-    display : flex;
-    width : 15px;
-    height : 15px;
-    justify-content: center;
-    align-items: center;
-`
-
-const Iconimg = styled.img`
-    width : 100%;
-    height : 100%;
-    object-fit: contain;
-`
 
 export default TagSearchForm;

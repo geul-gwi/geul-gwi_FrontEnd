@@ -14,7 +14,7 @@ import FriendForm from "component/friend/FriendForm";
 import SubscribeItem from 'component/main/Home/SubscribeItem';
 
 const menus = []
-menus.push({ "name": "홈", "src": "/icon/Navigation/home.svg", "target": "/" })
+menus.push({ "name": "홈", "src": "/icon/Navigation/home.svg", "target": "/main" })
 menus.push({ "name": "알림", "src": "/icon/Navigation/bell.svg", "target": "/alarm" })
 menus.push({ "name": "친구", "src": "/icon/Navigation/users.svg", "target": "/friend" })
 menus.push({ "name": "쪽지함", "src": "/icon/Navigation/free-icon-letter-1250663.png", "target": "/main/message" })
@@ -119,10 +119,14 @@ const Navigation = () => {
         navigate('/manager');
     };
 
+    const onCllickLogo = () => {
+        navigate('/main');
+    };
+
 
     return (
         <NaviFrame>
-            <Logo src={process.env.PUBLIC_URL + "/Logo.png"}></Logo>
+            <Logo onClick={onCllickLogo} src={process.env.PUBLIC_URL + "/Logo.png"}></Logo>
             <Container>
                 {menus.map((element, idx) => (
                     <Item id={"NaviButton" + idx} onClick={() => ComponentMove(element.target)}>
@@ -214,6 +218,7 @@ const Logo = styled.img`
     left: 0px;
     height: 220px;
     width: 240px;
+    cursor: pointer;
 `
 
 const AlertContainer = styled.div`

@@ -70,35 +70,31 @@ const RegisterAction = () => {
         setEmail(event.currentTarget.value);
     }
 
-    const TagHandler = (tag) => {
-        if (Tags.includes(tag)) {
-        // 이미 선택한 값이면 선택 취소
-        const updatedValues = Tags.filter((value) => value !== tag.value);
-        SetTags(updatedValues);
-        } else if (Tags.length < 3) {
-        // 최대 3개까지만 선택 가능
-        SetTags((prevSelectedValues) => [...prevSelectedValues, tag]);
-        }
-    }
-
     // 태그 클릭 처리
-    const TagClick = (tag) => {
-        if (Tags.length < 3) {
-            const idx = TagList.findIndex((item) => item.value === tag.value);
-            if (idx !== -1) {
-                const updatedList = [...TagList];
-                const updateItem = { ...updatedList[idx] };
-                updateItem.selected = !updateItem.selected;
-                updatedList[idx] = updateItem;
-                setTagList(updatedList);
-            }
+    const onClickTagButton = (tag) => {
+        const isTagSelected = tag.selected;
+        const maxTagsSelected = Tags.length === 3;
+    
+        if (isTagSelected) {
+            const updatedTags = Tags.filter((selectedTag) => selectedTag.value !== tag.value);
+            const updatedList = TagList.map((item) =>
+                item.value === tag.value ? { ...item, selected: false } : item
+            );
+    
+            SetTags(updatedTags);
+            setTagList(updatedList);
+        } else if (!maxTagsSelected) {
+            const updatedList = TagList.map((item) =>
+                item.value === tag.value ? { ...item, selected: true } : item
+            );
+    
+            setTagList(updatedList);
+            SetTags((prevSelectedValues) => [...prevSelectedValues, tag]);
         } else {
-            alert("3개까지만 지정 가능합니다.");
+            alert("태그는 3개까지 선택 가능합니다.");
         }
-
-        // Handler에게 값을 넘김으로써 Register Submit이 작동할 때 보낼 데이터를 담음
-        TagHandler(tag);
-    }
+    };
+    
 
     // 이메일 인증확인 코드 Handler
     const EmailValidCodeHandler = (event) => {
@@ -239,6 +235,12 @@ const RegisterAction = () => {
 
     // 회원 가입 처리
     const onSubmitHandler = async () => {
+        if(Tags.length === 0)
+        {
+            alert("최소 태그 1개를 선택해주세요");
+            return;
+        }
+        
         const formData = new FormData();
 
         if (profile != null)
@@ -354,7 +356,7 @@ const RegisterAction = () => {
         // TagList
         TagList={TagList}
         // TagClick
-        TagClick={TagClick}
+        TagClick={onClickTagButton}
         />
     );
 };

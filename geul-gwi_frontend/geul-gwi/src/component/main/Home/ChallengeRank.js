@@ -4,15 +4,16 @@ import Axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux';
 
-let icons = []
-icons.push("icon/Rank/free-icon-medal-2583344.png");
-icons.push("icon/Rank/free-icon-medal-2583319.png");
-icons.push("icon/Rank/free-icon-medal-2583434.png");
-
 const ChallengeRank = () => {
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
+
+    const icons = [
+        "/icon/Rank/free-icon-medal-2583344.png",
+        "/icon/Rank/free-icon-medal-2583319.png",
+        "/icon/Rank/free-icon-medal-2583434.png"
+    ];
 
     const listUrl = '/challenge/list'; // 챌린지 목록 or 해당 회차 글 요청 주소
     const statusChangeUrl = '/challenge/status'; // 챌린지 상태 변경 요청 주소
@@ -148,10 +149,11 @@ const ChallengeRank = () => {
             <Title>챌린지 랭킹</Title>
             {topThreeDetails.map((detail, idx) => (
                 <Item key={idx}>
-                    <Icon src={process.env.PUBLIC_URL + icons[idx]} />
+                    <Icon src={`${process.env.PUBLIC_URL}${icons[idx]}`} />
                     <Nickname>{detail.nickname}</Nickname>
                     <LikeCount>좋아요 {detail.likeCount}개</LikeCount>
                 </Item>
+                
             ))}
         </MainContainer>
     );
@@ -167,6 +169,7 @@ const MainContainer = styled.div`
     position: relative;
     padding-bottom: 10px;
     align-items: center;
+    border-radius: 16px;
 `;
 
 const Title = styled.div`

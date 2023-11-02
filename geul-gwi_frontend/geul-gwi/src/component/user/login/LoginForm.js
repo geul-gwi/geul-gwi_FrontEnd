@@ -55,7 +55,8 @@ const LoginForm = () => {
                 navigate("/main"); 
             })
             .catch(function (error) {
-                console.log(error);
+                console.error(error);
+                alert(`로그인을 실패했습니다.\n아이디와 비밀번호를 다시 입력해주세요.`);
             });
     };
 

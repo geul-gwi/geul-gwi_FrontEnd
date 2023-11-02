@@ -240,7 +240,7 @@ const Content = styled.div`
     width : 100%;
     height : auto;
     margin-bottom : 25px;
-    font-size: 14px;
+    font-size: 16px;
 `
 const TagButtonContainer = styled.div`
     display : flex;
@@ -248,17 +248,18 @@ const TagButtonContainer = styled.div`
     height : 30px;
 `
 const ProfileImage = styled.div`
-        width : 50px;
-        height : 100%;
-        border-radius : 70%;
-        overflow: hidden;
-        border: 1px solid #ccc;
-        cursor: pointer;
-            &:hover {
+    width : 50px;
+    height : 100%;
+    border-radius : 70%;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    cursor: pointer;
+
+    &:hover {
       transform: scale(1.2);
       transition: transform 0.2s ease-in-out;
     }
-    `
+`
 const ProfileName = styled.div`
         display : flex;
         width : calc(100% - 60px);
