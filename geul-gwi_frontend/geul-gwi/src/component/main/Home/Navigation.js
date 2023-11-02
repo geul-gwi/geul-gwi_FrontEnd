@@ -11,7 +11,6 @@ import imageDataFetcher from 'service/imageDataFetcher';
 // component
 import NoticeForm from "component/notice/NoticeForm";
 import FriendForm from "component/friend/FriendForm";
-import SubscribeItem from 'component/main/Home/SubscribeItem';
 
 const menus = []
 menus.push({ "name": "홈", "src": "/icon/Navigation/home.svg", "target": "/main" })
@@ -39,27 +38,27 @@ const Navigation = () => {
 
     useEffect(() => {
         Axios.get(`${axiosAddr}${subscribeListUrl}${userSeq}`, {
-          headers: {
-            Authorization: "Bearer " + userToken
-          }
+            headers: {
+                Authorization: "Bearer " + userToken
+            }
         })
-          .then(async response => {
-            console.log("구독자 목록: ", response.data);
-            const usersData = response.data;
-      
-            const updatedUsers = await Promise.all(
-              usersData.map(async user => {
-                const profileImage = await imageDataFetcher(axiosAddr, user.profile);
-                return { ...user, profile: profileImage };
-              })
-            );
-      
-            setSubscribes(updatedUsers);
-          })
-          .catch(error => {
-            console.error('구독자 목록:', error);
-          });
-      }, []);
+            .then(async response => {
+                console.log("구독자 목록: ", response.data);
+                const usersData = response.data;
+
+                const updatedUsers = await Promise.all(
+                    usersData.map(async user => {
+                        const profileImage = await imageDataFetcher(axiosAddr, user.profile);
+                        return { ...user, profile: profileImage };
+                    })
+                );
+
+                setSubscribes(updatedUsers);
+            })
+            .catch(error => {
+                console.error('구독자 목록:', error);
+            });
+    }, []);
 
     const ComponentMove = (target) => {
         if (target === "/alarm") {
@@ -123,6 +122,11 @@ const Navigation = () => {
         navigate('/main');
     };
 
+    // 프로필 클릭 => 해당 유저 프로필로 이동한다.
+    const onClickSubscribeProfile = (userSeq) => {
+        navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
+    };
+
 
     return (
         <NaviFrame>
@@ -132,13 +136,13 @@ const Navigation = () => {
                     <Item id={"NaviButton" + idx} onClick={() => ComponentMove(element.target)}>
                         <IconBox><IconImg src={process.env.PUBLIC_URL + element.src} /></IconBox>
                         {window.innerWidth >= 1000 && (
-                        <TextBox>{element.name}</TextBox>
+                            <TextBox>{element.name}</TextBox>
                         )}
                     </Item>
                 ))}
                 <Item>
                     <IconBox>
-                        <ProfileImage 
+                        <ProfileImage
                             src={userProfile ? userProfile : "/img/defaultProfile.png"}
                             onClick={onClickProfile}
                         />
@@ -149,28 +153,37 @@ const Navigation = () => {
             </Container>
             {window.innerWidth >= 1300 && (
                 <SubscribersListContainer>
-                     <SubscribersHeader>구독</SubscribersHeader>                 
-                        {subscribes.map((subscribe, index) => (
-                        <SubscribeItem key={index} user={subscribe} />
-                        ))}
-                </SubscribersListContainer> 
+                    <SubscribersHeader>구독</SubscribersHeader>
+                    {subscribes.map((subscribe, index) => (
+                        <Item>
+                            <IconBox>
+                                <ProfileImage
+                                    src={subscribe.profile ? subscribe.profile : "/img/defaultProfile.png"}
+                                    onClick={() => onClickSubscribeProfile(subscribe.userSeq)}
+                                />
+                            </IconBox>
+                            <TextBox onClick={() => onClickSubscribeProfile(subscribe.userSeq)}>{subscribe.nickname}</TextBox>
+                        </Item>
+                    ))}
+
+                </SubscribersListContainer>
             )}
 
             <MoreButton onClick={handleMoreButtonClick}>
                 <Item>
                     <IconBox><IconImg src={"/icon/Navigation/free-icon-menu-1828859.png"} /></IconBox>
-                        <TextBox>더보기</TextBox>
+                    <TextBox>더보기</TextBox>
                 </Item>
             </MoreButton>
-            {isMoreMenuVisible && 
-            <MenuButtonContainer>
-                <MenuButtonManager>
-                    {role === 'ADMIN' && <MenuItem onClick={onClickManagement}>사이트 관리</MenuItem>}
-                    <MenuItem onClick={onClickLogout}>로그아웃
-                        <FiLogOut size={16} style={{ marginLeft: '8px' }} />
-                    </MenuItem>
-                </MenuButtonManager>
-            </MenuButtonContainer>}
+            {isMoreMenuVisible &&
+                <MenuButtonContainer>
+                    <MenuButtonManager>
+                        {role === 'ADMIN' && <MenuItem onClick={onClickManagement}>사이트 관리</MenuItem>}
+                        <MenuItem onClick={onClickLogout}>로그아웃
+                            <FiLogOut size={16} style={{ marginLeft: '8px' }} />
+                        </MenuItem>
+                    </MenuButtonManager>
+                </MenuButtonContainer>}
             <AlertContainer isVisible={isAlertFormVisible}>
                 {isAlertFormVisible &&
                     <NoticeForm
@@ -191,19 +204,19 @@ const SubscribersListContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 2px;
-  border-top: 1px solid #ccc;
   margin: 10px;
-  justify-content: center;
-`;
-
-const SubscribersHeader = styled.p`
-  margin-bottom: 10px;
-  margin-left: 30px;
-
+  height: 250px;
+  border-top: 1px solid #ccc;
+    align-items: center;    
   @media (max-width: 1300px) {
     display: none;
     }
+`;
+
+const SubscribersHeader = styled.div`
+    margin: 20px;
+    width: 80%;
+    text-align: left; 
 `;
 
 const NaviFrame = styled.div`
