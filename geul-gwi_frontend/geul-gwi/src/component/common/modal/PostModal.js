@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import Post from 'component/user/profile/Post';
 import imageDataFetcher from 'service/imageDataFetcher';
@@ -6,12 +6,26 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 
 const PostModal = (props) => {
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
+    const [profileImage, setProfileImage] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const profile = await imageDataFetcher(axiosAddr, props.post.userProfile);
+                setProfileImage(profile);
+            } catch (error) {
+                console.error('Error fetching profile image:', error);
+            }
+        };
+
+        fetchData();
+    }, [axiosAddr, props.post.userProfile]);
 
     return (
         <ModelFrame onClick={() => props.ModalClose()}>
             <ViewPage onClick={(event) => event.stopPropagation()}>
                 <Post
-                    profile={imageDataFetcher(axiosAddr, props.post.userProfile)}
+                    profile={profileImage}
                     nickname={props.post.nickname}
                     comment={props.post.comment}
                     geulgwiContent={props.post.geulgwiContent}

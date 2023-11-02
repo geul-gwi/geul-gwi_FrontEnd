@@ -10,7 +10,6 @@ const SortManager = (props) => {
 
     const handleTabShowToggle = () => {
         setSortTabShow(!sortTabShow);
-        console.log(sortTabShow);
     }
 
     const SortFunc = (sortby) => {
@@ -24,10 +23,9 @@ const SortManager = (props) => {
     return (
         <Frame>
             <ManagerFrame>
-                <ButtonFrame onClick={handleTabShowToggle}>
-            정렬
-            <FiChevronDown />
-        </ButtonFrame>
+                <SortButton onClick={handleTabShowToggle}>
+                    정렬<FiChevronDown />
+                </SortButton>
                 {sortTabShow &&
                     <TabFrame onMouseLeave={handleTabShowToggle}>
                         <Item onClick={() => SortFunc("인기순")}>인기순</Item>
@@ -37,7 +35,9 @@ const SortManager = (props) => {
                 }
             </ManagerFrame>
             <PostContainer
-                posts={props.posts}
+                posts={sortedList}
+
+                
             />
         </Frame>
     );
@@ -63,16 +63,15 @@ const ManagerFrame = styled.div`
     justify-content : flex-end;
 `
 
-const ButtonFrame = styled.div`
+const SortButton = styled.div`
     display : flex;
     min-width : 90px; 
     width : auto; 
-    height : 30px;
+    height : 28px;
     border-radius : 16px;
     justify-content : space-evenly; 
     align-items : center;
     font-size : 14px;
-    letter-spacing : 1px;
     border : 3px solid #ccebb5;
     background-color : #ccebb5;
     color : white;

@@ -62,10 +62,7 @@ const ChallengeInfo = () => {
         }
 
         setIsEditing(!isEditing);
-
-
     };
-
 
     // 챌린지 목록과 진행 중인 챌린지 가져오기
     useEffect(() => {
@@ -79,7 +76,7 @@ const ChallengeInfo = () => {
                 });
 
                 if (listResponse) {
-                    console.log("챌린지 회차 목록: ", listResponse.data);
+                    //console.log("챌린지 회차 목록: ", listResponse.data);
                     const updatedChallenges = await checkChallengeStatus(listResponse.data);
                     setChallenges(updatedChallenges);
 

@@ -8,42 +8,29 @@ import { AiOutlineEdit, AiFillHeart, AiOutlineHeart, AiOutlineClose } from "reac
 
 const PostContainer = (props) => {
     const navigate = useNavigate();
-
     const { axiosAddr } = useContext(AxiosAddrContext);
     const { userSeq, accessToken } = useSelector((state) => state.authReducer);
-    const likeUrl = '/challenge/like/';
-    const unlikeUrl = '/challenge/unlike/';
-    const postDeleteUrl = '/challenge/delete/';
+    const likeUrl = '/challenge/like/'; // 챌린지 글 좋아요 요청
+    const unlikeUrl = '/challenge/unlike/'; // 챌린지 글 좋아요 취소 요청
+    const postDeleteUrl = '/challenge/delete/'; // 챌린지 글 삭제 요청
+
+    const [likedPosts, setLikedPosts] = useState({});
 
     const onClickLikeButton = async (challengeSeq, isLiked) => {
-        if (isLiked) {
-            try {
-                const response = await axios.delete(`${axiosAddr}${unlikeUrl}${challengeSeq}/${userSeq}`, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
+        try {
+            if (isLiked) {
+                await axios.delete(`${axiosAddr}${unlikeUrl}${challengeSeq}/${userSeq}`, {
+                    headers: { Authorization: `Bearer ${accessToken}` }
                 });
-                if (response) {
-                    window.location.reload();
-                    //console.log("좋아요 취소: ", response);
-                }
-            } catch (error) {
-                console.error("좋아요 취소: ", error);
-            }
-        } else {
-            try {
-                const response = await axios.post(`${axiosAddr}${likeUrl}${challengeSeq}/${userSeq}`, {}, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
+                setLikedPosts(prevLikedPosts => ({ ...prevLikedPosts, [challengeSeq]: false }));
+            } else {
+                await axios.post(`${axiosAddr}${likeUrl}${challengeSeq}/${userSeq}`, {}, {
+                    headers: { Authorization: `Bearer ${accessToken}` }
                 });
-                if (response) {
-                    window.location.reload();
-                    //console.log("좋아요: ", response);
-                }
-            } catch (error) {
-                console.error("좋아요: ", error);
+                setLikedPosts(prevLikedPosts => ({ ...prevLikedPosts, [challengeSeq]: true }));
             }
+        } catch (error) {
+            console.error("좋아요 처리 중 에러:", error);
         }
     }
 
@@ -52,7 +39,6 @@ const PostContainer = (props) => {
             challengeUserSeq: post.challengeUserSeq,
             challengeContent: post.challengeContent
         }
-
         navigate('/main/ChallengePostEdit', { state: data });
     };
 
@@ -78,53 +64,53 @@ const PostContainer = (props) => {
     };
 
     return (
-        <PostManager>
+        <Frame>
             {props.posts && props.posts.map((post) => (
-                <PostItem>
+                <Item>
                     {userSeq === post.userSeq && (
                         <HeaderButtonContainer>
                             <EditIcon><AiOutlineEdit size={20} color='gray' onClick={() => onClickPostEdit(post)} /></EditIcon>
                             <EditIcon><AiOutlineClose size={20} color='gray' onClick={() => onDeletePost(post.challengeUserSeq)} /></EditIcon>
                         </HeaderButtonContainer>
                     )}
-                    <ItemProfile>{post.nickname}</ItemProfile>
-                    <ItemMainText>{post.challengeContent}</ItemMainText>
+                    <Nickname>{post.nickname}</Nickname>
+                    <Content>{post.challengeContent}</Content>
                     <ItemBottom>
                         <LikeViewCount>{post.likeCount}</LikeViewCount>
                         <LikeButtonContainer>
                             {
-                                post.isLiked ? <AiFillHeart class="likebtn" size={20} color={"red"} onClick={(event) => {
+                                post.isLiked ? <AiFillHeart class="likebtn" size={25} color={"red"} onClick={(event) => {
                                     event.stopPropagation();
                                     onClickLikeButton(post.challengeUserSeq, post.isLiked);
                                 }} />
                                     :
-                                    <AiOutlineHeart size={20} color={"#444444"} onClick={(event) => {
+                                    <AiOutlineHeart size={25} color={"#444444"} onClick={(event) => {
                                         event.stopPropagation();
                                         onClickLikeButton(post.challengeUserSeq, post.isLiked);
                                     }} />
                             }
                         </LikeButtonContainer>
                     </ItemBottom>
-                </PostItem>
-            ))
-            }
-        </PostManager>
+                </Item>
+            ))}
+        </Frame>
     );
 };
 
-const PostManager = styled.div`
+// 메인 프레임
+const Frame = styled.div`
     display : flex;
     width : 100%;
-    min-height : 40px; height : auto;
-    padding : 20px 0px 20px 0px;
-
-    flex-direction : row;
-    justify-content : space-between;
-    gap : 20px;
+    min-height : 40px; 
+    height : auto;
+    padding : 20px;
+    align-items: center;
+    gap : 10px;
     flex-wrap : wrap;
 `
 
-const PostItem = styled.div`
+// 챌린지 게시물 하나 프레임
+const Item = styled.div`
     display : flex;
     width : calc(49% - 30px);   
     height : 140px;
@@ -140,18 +126,19 @@ const PartFrame = styled.div`
     padding : 5px 10px 5px 10px;
 `
 
-// PostItem의 제목부분
-const ItemProfile = styled(PartFrame)`
-    display : flex;height : 20px;
+// 닉네임
+const Nickname = styled(PartFrame)`
+    display : flex;
+    height : 20px;
     align-items : center;
     color : rgba(10,10,10, 1);
-    font-size : 16px;
+    font-size : 17px;
 `
 // PostItem의 본문부분
-const ItemMainText = styled(PartFrame)`
+const Content = styled(PartFrame)`
     height : 70px;
     color : rgba(120,120,120,1);
-    font-size : 14px;
+    font-size : 15px;
     line-height : 20px;
 `
 // PostItem의 하단 부분 ( 좋아요 , 좋아요 갯수 )
