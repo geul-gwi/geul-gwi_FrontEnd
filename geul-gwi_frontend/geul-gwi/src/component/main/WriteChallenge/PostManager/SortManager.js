@@ -35,7 +35,7 @@ const SortManager = (props) => {
                 }
             </ManagerFrame>
             <PostContainer
-                posts={sortedList}
+                posts={props.posts}
 
                 
             />
