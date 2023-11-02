@@ -37,6 +37,11 @@ const FriendRequestItem = (props) => {
 
     // 친구 요청 수락
     const onFriendRequestAccept = async () => {
+        const userConfirmed = window.confirm(`${props.friend.nickname}님의 친구 요청을 받으시겠습니까?`);  
+        if (!userConfirmed) {
+            return;
+        }
+
         try {
             const friendDTO = {
                 'toUser': props.friend.userSeq, // 나에게 요청 보낸 사람
@@ -48,6 +53,7 @@ const FriendRequestItem = (props) => {
                 },
             });
             //console.log('친구 요청 수락 완료 : ', response);
+            alert(`${props.friend.nickname}님과 친구가 되었습니다.`);
             props.setMenu('list');
         
 
