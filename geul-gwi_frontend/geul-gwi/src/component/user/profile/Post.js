@@ -154,7 +154,7 @@ const Post = (props) => {
                 <ProfileName>
                     <Name onClick={onClickProfile}>{props.nickname}</Name>
                     <Comment>{props.comment}</Comment>
-                    {userSeq === props.profileUserSeq && (
+                    {userSeq === props.userSeq && (
                         <HeaderButtonContainer>
                             <EditIcon><AiOutlineEdit size={22} color='gray' onClick={onClickPostEdit} /></EditIcon>
                             <EditIcon><AiOutlineClose size={22} color='gray' onClick={onDeletePost} /></EditIcon>
@@ -207,7 +207,7 @@ const EditIcon = styled.div`
 
 const PostFrame = styled.div`
     display : flex;
-    width : 85%;
+    width : 500px;
     height : auto;
     padding : 20px; 
     border-radius : 16px;
@@ -249,8 +249,8 @@ const TagButtonContainer = styled.div`
     height : 30px;
 `
 const ProfileImage = styled.div`
-    width : 45px;
-    height : 100%;
+    width : 50px;
+    height : 50px;
     border-radius : 50%;
     overflow: hidden;
     border: 1px solid #ccc;
@@ -267,6 +267,7 @@ const ProfileName = styled.div`
         height : 100%;
         flex-direction: column;
         justify-content : space-evenly;
+        position: relative;
     `
 const TagContainer = styled.div`
         display : flex;
@@ -281,6 +282,7 @@ const ButtonContainer = styled.div`
     height : 100%;
     border-radius : 16px;
     cursor : pointer;
+    
 
 `
 const Name = styled.div`
@@ -308,10 +310,9 @@ const TagsContainer = styled.div`
 const HeaderButtonContainer = styled.div`
   display: flex;
   gap: 10px;
-  
   flex-direction: row;
-      position: absolute; /* 아이콘의 위치를 조절하기 위해 상대 위치 설정 */
-    top: 5px; /* 원하는 위치로 조절 (상단 여백) */
+  position: absolute; /* 아이콘의 위치를 조절하기 위해 상대 위치 설정 */
+    top: 10px; /* 원하는 위치로 조절 (상단 여백) */
     right: 5px; /* 원하는 위치로 조절 (우측 여백) */
 `;
 

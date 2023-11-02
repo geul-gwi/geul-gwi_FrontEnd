@@ -1,17 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import Axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
-import imageDataFetcher from 'service/imageDataFetcher';
 
 const MemberItem = (props) => {
   const axiosAddress = useContext(AxiosAddrContext).axiosAddr;  
   const userToken = useSelector((state) => state.authReducer.accessToken);
   const userDetailApi = '/user/detail/';
-  const [profile, setProfile] = useState(null);
-
-
 
   const handleClick = async () => {
     try {

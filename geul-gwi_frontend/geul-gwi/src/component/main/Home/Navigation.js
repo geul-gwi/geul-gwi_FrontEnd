@@ -126,7 +126,7 @@ const Navigation = () => {
 
     return (
         <NaviFrame>
-            <Logo onClick={onCllickLogo} src={process.env.PUBLIC_URL + "/Logo.png"}></Logo>
+            <Logo onClick={onCllickLogo} src={"/LOGO.png"}></Logo>
             <Container>
                 {menus.map((element, idx) => (
                     <Item id={"NaviButton" + idx} onClick={() => ComponentMove(element.target)}>
@@ -138,9 +138,11 @@ const Navigation = () => {
                 ))}
                 <Item>
                     <IconBox>
-                        <ProfileImage src={userProfile ? userProfile : "/img/defaultProfile.png"}/>
+                        <ProfileImage 
+                            src={userProfile ? userProfile : "/img/defaultProfile.png"}
+                            onClick={onClickProfile}
+                        />
                     </IconBox>
-
                     <TextBox onClick={onClickProfile}>프로필</TextBox>
 
                 </Item>
@@ -156,7 +158,7 @@ const Navigation = () => {
 
             <MoreButton onClick={handleMoreButtonClick}>
                 <Item>
-                    <IconBox><IconImg src={process.env.PUBLIC_URL + "/icon/Navigation/free-icon-menu-1828859.png"} /></IconBox>
+                    <IconBox><IconImg src={"/icon/Navigation/free-icon-menu-1828859.png"} /></IconBox>
                         <TextBox>더보기</TextBox>
                 </Item>
             </MoreButton>
@@ -192,6 +194,7 @@ const SubscribersListContainer = styled.div`
   padding: 2px;
   border-top: 1px solid #ccc;
   margin: 10px;
+  justify-content: center;
 `;
 
 const SubscribersHeader = styled.p`

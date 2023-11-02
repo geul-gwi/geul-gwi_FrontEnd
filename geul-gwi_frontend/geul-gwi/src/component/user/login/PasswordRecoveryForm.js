@@ -48,7 +48,7 @@ const PasswordRecoveryForm = () => {
     return (
         <div className="LoginForm">
             <div className="LeftContainer">
-                <Logo src={process.env.PUBLIC_URL + "/Logo.png"}></Logo>
+                <Logo src={process.env.PUBLIC_URL + "/LOGO.png"}></Logo>
             </div>
             <div className="RightContainer" style={{ position: 'relative' }}>
                 <IconContainer>

@@ -28,6 +28,7 @@ const Profile = ({ profileUserSeq }) => {
   useEffect(() => {
     async function fetchUserProfile() {
       try {
+        console.log("추우우우우우울력!@#$!$:", process.env.PUBLIC_URL + "/Logo.png");
         const response = await Axios.get(`${axiosAddr}${userDetailUrl}${profileUserSeq}`, {
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -206,7 +207,8 @@ const ProfileContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    margin: auto;
+    width: 550px;
     height: auto;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     border-radius: 8px;

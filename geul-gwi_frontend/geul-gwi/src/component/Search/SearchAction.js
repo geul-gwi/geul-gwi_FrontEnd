@@ -30,6 +30,13 @@ const SearchForm = () => {
 
    const [selectedTag, setSelectedTag] = useState(null); // 검색하고자 하는 태그
 
+   const truncateString = (str, num) => {
+      if (str.length <= num) {
+        return str;
+      }
+      return str.slice(0, num) + '...';
+    };
+
    useEffect(() => {
       if(selectedTag !== null)
          return;
@@ -136,7 +143,7 @@ const SearchForm = () => {
                            {post.nickname}
                         </Nickname>
                         <Content>
-                           {post.geulgwiContent}
+                           {truncateString(post.geulgwiContent, 50)}
                         </Content>
                      </HoveredContainer>
                      <HoveredBack />

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 // component
 import ChallengeInfo from 'component/challenge/ChallengeInfo';
-import SortManager from './PostManager/SortManager';
+import SortManager from 'component/main/WriteChallenge/PostManager/SortManager'
 
 const ChallengeComponent = (props) => {
     return (

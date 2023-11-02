@@ -1,5 +1,5 @@
 import 'css/App.css'
-import RootRoute from './RootRoute'
+import RootRoute from 'RootRoute'
 
 // Toast관련 라이브러리
 import 'react-toastify/dist/ReactToastify.css'; // Toast를 제대로 사용하기 위한 css 파일
@@ -22,21 +22,21 @@ const persistor = persistStore(store);
 function App() {
 
   return (
-    <div className="App" style={{fontFamily : 'MaruBuriExtraLight'}}>
+    <div className="App" style={{ fontFamily: 'MaruBuriExtraLight' }}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <RootRoute />
         </PersistGate>
       </Provider>
-       
+
       <ToastContainer
-      position="top-right"
-      autoClose={3000}
-      hideProgressBar={false}
-      closeOnClick={true}
-      pauseOnHover={true}
-      draggable={true}
-      progress={undefined}
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick={true}
+        pauseOnHover={true}
+        draggable={true}
+        progress={undefined}
       />
     </div>
   );

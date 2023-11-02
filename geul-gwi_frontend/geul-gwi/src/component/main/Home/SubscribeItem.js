@@ -6,27 +6,21 @@ import { useSelector } from 'react-redux';
 import Axios from 'axios';
 import imageDataFetcher from 'service/imageDataFetcher';
 
-const SubscribeItem = (props) => {
+const SubscribeItem = ({user}) => {
     const navigate = useNavigate();
-    const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
-    const userSeq = useSelector((state) => state.authReducer.userSeq);
-    const userToken = useSelector((state) => state.authReducer.accessToken);
-    const [profile, setProfile] = useState();
 
     // 프로필 클릭 => 해당 유저 프로필로 이동한다.
     const onClickProfile = () => {
-        navigate('/main/Profile', { state: { profileUserSeq: props.user.userSeq } });
+        navigate('/main/Profile', { state: { profileUserSeq: user.userSeq }});
     };
 
     return (
         <Frame>
             <ProfileImage
-                src={profile || '/img/defaultProfile.png'}
+                src={user.profile || '/img/defaultProfile.png'}
                 onClick={onClickProfile}
             />
-            <ContentContainer>
-                    <Name onClick={onClickProfile}>{props.user.nickname}</Name>
-            </ContentContainer>
+            <Name onClick={onClickProfile}>{user.nickname}</Name>
         </Frame>
     );
 };
@@ -34,13 +28,21 @@ const SubscribeItem = (props) => {
 const Frame = styled.div`
     display: flex;
     align-items: center;
-    width: 80%;
+    width: 90%;
     height: auto;
     background-color: white;
     font-size: 14px;
     padding:5px;
-    border-radius: 16px;
     border-bottom: 1px solid rgb(240, 240, 240);
+    justify-content: center;
+    transform: 0.3s;
+    :hover{
+        background-color: rgb(240, 240, 240);
+    }
+
+    @media (max-width: 1300px) {
+        flex-direction: column;
+    }
 `;
 
 const ProfileImage = styled.img`
@@ -58,12 +60,7 @@ const ProfileImage = styled.img`
     }
 `;
 
-const ContentContainer = styled.div`
-    flex: 8;
-`;
-
 const Name = styled.div`
-    font-weight: bold;
     margin-bottom: 2px;
     cursor: pointer;
 `;

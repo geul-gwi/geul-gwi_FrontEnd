@@ -240,7 +240,7 @@ const RegisterAction = () => {
             alert("최소 태그 1개를 선택해주세요");
             return;
         }
-        
+
         const formData = new FormData();
 
         if (profile != null)
@@ -273,7 +273,7 @@ const RegisterAction = () => {
                 navigate('/accounts/');
             })
             .catch(function (error) {
-                alert("회원가입이 정상적으로 완료되지 못했습니다. \n 다시 시도해주세요.");
+                alert("회원가입이 정상적으로 완료하지 못했습니다. \n 다시 시도해주세요.");
                 console.error(error);
             });
     }
@@ -344,18 +344,10 @@ const RegisterAction = () => {
 
         onEmailHandler={onEmailHandler} // 이메일 Request Input Handler
         EmailValidCodeHandler={EmailValidCodeHandler} // 이메일인증코드 Input Handler
-        
-        
 
-        // Page Manage
         PageStep={PageStep}
-
-        // ToggleMove
         ToggleMove={ToggleMove}
-
-        // TagList
         TagList={TagList}
-        // TagClick
         TagClick={onClickTagButton}
         />
     );

@@ -68,7 +68,7 @@ const LoginForm = () => {
         <div className="LoginForm">
             <div className="LeftContainer">
                 <div className="TitleContainer">
-                    <Logo src={process.env.PUBLIC_URL + "/Logo.png"}></Logo>
+                    <Logo src={process.env.PUBLIC_URL + "/LOGO.png"}></Logo>
                 </div>
             </div>
             <div className="RightContainer" style={{ position: 'relative' }}>

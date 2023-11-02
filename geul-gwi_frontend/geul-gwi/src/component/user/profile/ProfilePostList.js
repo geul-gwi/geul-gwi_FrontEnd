@@ -71,7 +71,7 @@ const ProfilePostList = (props) => {
         <Container>
             {posts && posts.map((post) => (
                 <Post 
-                    userSeq={props.userSeq}
+                    userSeq={props.profileUserSeq}
                     profile={props.profile}
                     nickname={props.nickname}
                     comment={props.comment}
