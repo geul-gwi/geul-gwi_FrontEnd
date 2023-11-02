@@ -32,12 +32,14 @@ const LoginForm = () => {
         }
     };
 
-    const LoginSubmit = () => {
+    const LoginSubmit = (event) => {
+        event.preventDefault();
+
         const data = {
             userId: Id,
             userPassword: Password
         };
-        console.log("로그인: ", data);
+        //console.log("로그인: ", data);
         axios.post(AxiosAddress + RequestMapping, data)
             .then(async (response) => {
                 console.log(response.data);
@@ -47,8 +49,10 @@ const LoginForm = () => {
                 dispatch(setNickname(response.data.userNickname));
                 dispatch(setRole(response.data.role));
                 fetchAndSetProfileImage(response.data.profile);
+
+                alert(`${response.data.userNickname}님 반갑습니다. !!`);
                 
-                navigate("/main"); // Redirect to the main page
+                navigate("/main"); 
             })
             .catch(function (error) {
                 console.log(error);
@@ -56,7 +60,7 @@ const LoginForm = () => {
     };
 
     const onClickLink = (path) => {
-        navigate('/accounts/' + path);
+       navigate('/accounts' + path);
     }
 
     return (
@@ -74,7 +78,7 @@ const LoginForm = () => {
                 <form className="FormContentManage">
                     <input className='loginFormInput' type='text' placeholder='아이디' onChange={(e) => setId(e.target.value)}></input>
                     <input className='loginFormInput' type='password' placeholder='비밀번호' onChange={(e) => setPassword(e.target.value)}></input><br />
-                    <Button onClick={LoginSubmit}>로그인</Button>
+                    <Button onClick={(event) => LoginSubmit(event)}>로그인</Button>
                 </form>
                 <div className='sub_Container'>
                     <SubSpan onClick={() => onClickLink("id")}>아이디 찾기</SubSpan> 
