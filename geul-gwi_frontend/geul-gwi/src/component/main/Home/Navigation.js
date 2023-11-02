@@ -188,15 +188,19 @@ const Navigation = () => {
 const SubscribersListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 95%;
-  padding: 5px;
+  width: 100%;
+  padding: 2px;
   border-top: 1px solid #ccc;
   margin: 10px;
 `;
 
 const SubscribersHeader = styled.p`
   margin-bottom: 10px;
-  margin-left:30px;
+  margin-left: 30px;
+
+  @media (max-width: 1300px) {
+    display: none;
+    }
 `;
 
 const NaviFrame = styled.div`
@@ -270,7 +274,7 @@ const MenuItem = styled.div`
   transition: background-color 0.2s;
   border-radius: 8px;
   font-size: 15px;
-  
+
   &:hover{
         background-color : rgb(240, 240, 240);
     }
@@ -299,12 +303,15 @@ const Item = styled.div`
     border-radius: 8px;
     transition: 0.3s;
 
-    &:hover{
+    
+        &:hover{
         background-color : rgb(240, 240, 240);
-    }
+
+        }
+    
 `
 const IconBox = styled.div`
-display: flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     width: 40px;
@@ -312,9 +319,14 @@ display: flex;
     cursor: pointer;
     border-radius: 50%;
     flex: 2;
-    &:hover {
-        background-color: rgb(240, 240, 240);
+    transition: 0.3s;
+    @media (max-width: 1300px) {
+        &:hover {
+            transform: scale(1.2);
+        }
     }
+
+
 `
 const TextBox = styled.div`
     display : flex;

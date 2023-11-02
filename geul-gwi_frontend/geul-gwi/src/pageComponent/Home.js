@@ -113,8 +113,8 @@ const MidContainer = styled(ContainerFrame)`
     height : auto;
 
     @media (max-width: 1300px) {
-        left: calc(50% - 165px); /* 조정된 가운데 정렬 */
-    }
+    left: calc(50% - 315px); /* 가운데 정렬의 수정된 값 */
+  }
 `
 
 const RightContainer = styled(ContainerFrame)`
