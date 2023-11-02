@@ -221,7 +221,7 @@ const Frame = styled.div`
     height: auto;
     background-color: white;
     transition: background-color 0.2s;
-    font-size: 14px;
+    font-size: 15px;
     padding: 10px;
     border-radius: 16px;
     &:hover {
@@ -238,8 +238,8 @@ const TopRow = styled.div`
 
 const RedDot = styled.div`
         position: absolute; 
-        top: 18px; /* 원하는 위치 조절 */
-        right: 30px; /* 원하는 위치 조절 */
+        top: 16px; /* 원하는 위치 조절 */
+        right: 25px; /* 원하는 위치 조절 */
         width: 8px; /* 원하는 크기 조절 */
         height: 8px; /* 원하는 크기 조절 */
         background-color: rgb(242,151,165);
@@ -268,7 +268,7 @@ const ProfileContainer = styled.div`
     height: 100%;
     align-items: center;
     justify-content: center;
-    flex: 3;
+    flex: 5;
     position: relative;
 `;
 
@@ -300,7 +300,7 @@ const CloseButton = styled.div`
 
 const Button = styled.button`
     position: absolute;
-    right: 25px;
+    right: 40px;
     background-color: "#3498db";
     color: "white"; 
     border: none;

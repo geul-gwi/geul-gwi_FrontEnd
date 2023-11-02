@@ -42,7 +42,7 @@ const PasswordRecoveryForm = () => {
     };
 
     const onClickLink = (path) => {
-        navigate('/accounts/' + path);
+        navigate('/accounts' + path);
     }
 
     return (
@@ -61,9 +61,9 @@ const PasswordRecoveryForm = () => {
                     <Button onClick={LoginSubmit}>요청</Button>
                 </FormContentManage>
                 <div className='sub_Container'>
-                <SubSpan onClick={() => onClickLink("/")}>로그인</SubSpan>
-                    <SubSpan onClick={() => onClickLink("register")}>회원가입</SubSpan>
-                    <SubSpan onClick={() => onClickLink("id")}>아이디 찾기</SubSpan>
+                <SubSpan onClick={() => onClickLink("")}>로그인</SubSpan>
+                    <SubSpan onClick={() => onClickLink("/register")}>회원가입</SubSpan>
+                    <SubSpan onClick={() => onClickLink("/id")}>아이디 찾기</SubSpan>
                 </div>
             </div>
         </div>

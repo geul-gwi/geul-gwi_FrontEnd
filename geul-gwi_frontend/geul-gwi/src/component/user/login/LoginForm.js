@@ -81,9 +81,9 @@ const LoginForm = () => {
                     <Button onClick={(event) => LoginSubmit(event)}>로그인</Button>
                 </form>
                 <div className='sub_Container'>
-                    <SubSpan onClick={() => onClickLink("id")}>아이디 찾기</SubSpan> 
-                    <SubSpan onClick={() => onClickLink("password")}>비밀번호 찾기</SubSpan>
-                    <SubSpan onClick={() => onClickLink("register")}>회원가입</SubSpan>
+                    <SubSpan onClick={() => onClickLink("/id")}>아이디 찾기</SubSpan> 
+                    <SubSpan onClick={() => onClickLink("/password")}>비밀번호 찾기</SubSpan>
+                    <SubSpan onClick={() => onClickLink("/register")}>회원가입</SubSpan>
                 </div>
 
             </div>

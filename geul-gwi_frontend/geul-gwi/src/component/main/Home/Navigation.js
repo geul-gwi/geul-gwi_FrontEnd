@@ -197,7 +197,7 @@ const NaviFrame = styled.div`
     align-items: center;
     background-color: white;
     width: 320px;
-    box-shadow: 0px 0px 32px 0px #F2C936;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `
 
 const Container = styled.div`

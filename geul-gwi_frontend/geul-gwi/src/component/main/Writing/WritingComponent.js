@@ -86,9 +86,10 @@ const Tabs = styled.div`
 
 const TabButton = styled.button`
    background-color: ${(props) => (props.active ? "#ccebb5" : "#ccc")};
-   color: #fff;
+   color: white;
    border: none;
-   padding: 10px 20px;
+   width: 80px;
+   height: 30px;
    cursor: pointer;
    margin: 0 10px;
    border-radius: 5px;
@@ -102,14 +103,15 @@ const TabButton = styled.button`
 const Frame = styled.div`
     position : relative;
     display : flex;
-    width : 98%;
+    width : 100%;
     background-color : white;
     justify-content : center;
-    padding-top: 20px; 
-    padding-bottom: 20px;
+    padding-top: 50px; 
+    padding-bottom: 50px;
     user-select: none;
     margin-bottom: 80px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
 `
 
 const FlexFrame = styled.div`
@@ -122,7 +124,7 @@ const TitleContainer = styled.div`
     display : flex;
     flex-direction: column;
     justify-content : space-between;
-        height : 50px;
+    height : 50px;
 `
 
 const MainContainer = styled.div`
@@ -156,7 +158,7 @@ const SubmitContainer = styled.div`
 // 작성 버튼
 const SubmitBtn = styled.div`
     display : flex;
-    width : 100px;
+    width : 110px;
     height : 30px;
     border-radius : 12px;
     background-color : #ccebb5;
@@ -175,17 +177,23 @@ const SubmitBtn = styled.div`
 const FormContainer = styled.form`
     display : flex;
     width : 100%;
-    height : auto;
     flex-direction: column;
     margin-bottom : 10px;
     align-items: center;
 `
 
 const ContentArea = styled.textarea`
-    width : 96%;
+    width : 95%;
     height : 150px;
-    padding: 10px;
+    padding: 12px;
     font-size: 14px;
+    border-radius: 16px;
+
+    &:focus {
+        outline: none; /* 포커스 테두리 제거 (선택 사항) */
+        border-color:  #ccebb5; /* 포커스 시 변경할 테두리 색상 */
+        box-shadow: 0 0 5px  #ccebb5; /* 포커스 시 그림자 효과 (선택 사항) */
+    }
 `
 
 export default WritingComponent;

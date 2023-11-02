@@ -1,15 +1,8 @@
-// import Library
 import React, { useEffect, Fragment, useContext, useState } from 'react';
-import { toast } from 'react-toastify';     // 토스트 메시지를 보내기 위한 라이브러리
 import { useNavigate } from 'react-router-dom'; // 페이지 이동용 라이브러리
-
-// import Context
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
-// import Page Component
 import WritingComponent from 'component/main/Writing/WritingComponent';
-// Using Redux
 import { useSelector } from 'react-redux';
-// import Axios
 import axios from 'axios';
 
 const WritingAction = () => {

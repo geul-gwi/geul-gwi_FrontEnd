@@ -26,7 +26,7 @@ const IDRecoveryForm = () => {
     };
 
     const handleLinkClick = (path) => {
-        navigate(`/accounts/${path}`);
+        navigate(`/accounts${path}`);
     };
 
     return (
@@ -44,10 +44,10 @@ const IDRecoveryForm = () => {
                     <Button onClick={handleSubmit}>요청</Button>
                 </form>
                 <div className='sub_Container'>
-                    <SubSpan onClick={() => handleLinkClick("/")}>로그인</SubSpan>
+                    <SubSpan onClick={() => handleLinkClick("")}>로그인</SubSpan>
 
-                    <SubSpan onClick={() => handleLinkClick("register")}>회원가입</SubSpan>
-                    <SubSpan onClick={() => handleLinkClick("password")}>비밀번호 찾기</SubSpan>
+                    <SubSpan onClick={() => handleLinkClick("/register")}>회원가입</SubSpan>
+                    <SubSpan onClick={() => handleLinkClick("/password")}>비밀번호 찾기</SubSpan>
                 </div>
             </div>
         </div>

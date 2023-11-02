@@ -85,7 +85,7 @@ const ShowButton = styled.div`
     cursor : pointer;
     transition : 0.2s;
     &:hover{    
-        background-color : mistyrose;
+        background-color : rgb(240, 240, 240);
     }
 `
 // 태그 추가하는 영억 - Level 1

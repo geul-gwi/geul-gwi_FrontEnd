@@ -77,7 +77,7 @@ const WeatherFrame = styled.div`
     flex-direction : column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 0px 16px 0px rgba(153, 255, 228, 0.5);
+    box-shadow: 0px 0px 16px 0px #ccebb5;
 `
 
 // 날씨 정보를 담을 Container
@@ -131,53 +131,6 @@ const TextWeatherState = styled.div`
     color : #6C6B6B;
     font-size : 14px;
 `
-const AskHowYouFeel = styled.div`
-    display : flex;
-    width : 100%;
-    height : 20px;
-    justify-content: center;
-    align-items : center;   
-    color : rgba(54,54,54,52%); // 연한 회색 - 보조Text
-    font-size : 12px;
-`
-const WeatherLikeContainer = styled.div`
-    display : flex;
-    width : 100%;
-    height : 20px;
-    justify-content: space-evenly;
-    align-items : center;
-`
-const WeatherLikeBtn = styled.div`
-    cursor : pointer;
-    width : 15px;
-    height : 15px;
-    border-radius : 50%;
-    border : 1px solid grey;
 
-    &:hover{
-        background-color : grey;
-    }
-`
-const WeatherLikeTextContainer = styled.div`
-    display : flex;
-    width : 86%;
-    height : 30px;
-    
-    justify-content : space-between;
-`
-const BadText = styled.div`
-    width : auto;
-    min-width : 10px;
-    height : 100%;
-    color : rgba(235,71,71,100);
-    font-size : 12px;
-`
-const GoodText = styled.div`
-    width : auto;
-    min-width : 10px;
-    height : 100%;
-    color : rgba(35,251,0,100);
-    font-size : 12px;
-`
 
 export default Weather;

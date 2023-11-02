@@ -162,8 +162,7 @@ const MainContainer = styled.div`
     width: 100%;
     background-color: white;
     flex-direction: column;
-    box-shadow: 0px 0px 32px 0px #99ffe4;
-    box-shadow: 0px 0px 32px 0px rgba(153, 255, 228, 0.5);
+    box-shadow: 0px 0px 32px 0px #ccebb5;
     user-select: none;
     position: relative;
     padding-bottom: 10px;

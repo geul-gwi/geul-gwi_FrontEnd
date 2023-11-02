@@ -6,6 +6,7 @@ import Axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
+import { Button } from 'component/common/button/Button';
 
 // 챌린지 회차 목록
 const ChallengeInfo = () => {
@@ -220,9 +221,9 @@ const ChallengeInfo = () => {
                     <ChallengeTitleContainer>
                         <ChallengeTitle>{selectedIndex + 1 + "회차 챌린지"}</ChallengeTitle>
                         <ChallengeState>
-                            {selectedChallenge.status === "FINISHED" && <span style={{ color: "red" }}>종료</span>}
-                            {selectedChallenge.status === "ONGOING" && <span style={{ color: "blue" }}>진행 중</span>}
-                            {selectedChallenge.status === "UPCOMING" && <span style={{ color: "green" }}>예정</span>}
+                            {selectedChallenge.status === "FINISHED" && <span style={{ color: "#f77d74" }}>종료</span>}
+                            {selectedChallenge.status === "ONGOING" && <span style={{ color: "#80d1c8" }}>진행 중</span>}
+                            {selectedChallenge.status === "UPCOMING" && <span style={{ color: "#6fb375" }}>예정</span>}
                         </ChallengeState>
                     </ChallengeTitleContainer>
                     <Date>{selectedChallenge.start + " ~ " + selectedChallenge.end}</Date>
@@ -233,7 +234,9 @@ const ChallengeInfo = () => {
                         ))}
                     </TagContainer>
                 </BottomContainer>
-                    {role === 'ADMIN' && <EditButton onClick={onClickEdit}>편집</EditButton>}
+                <ButtonContainer>
+                    {role === 'ADMIN' && <Button onClick={onClickEdit}>편집</Button>}
+                </ButtonContainer>
             </FlexContainer>
             :
                 <EditContainer>
@@ -262,7 +265,6 @@ const ChallengeInfo = () => {
                         <Button onClick={challengeEditHandler}>완료</Button>
                         <Button onClick={onClickEdit}>취소</Button>
                     </ButtonContainer>
-
                 </EditContainer>
             }
         </Frame>
@@ -271,12 +273,14 @@ const ChallengeInfo = () => {
 
 const Frame = styled.div`
     display : flex;
-    width : 600px;
+    width : 610px;
     height : auto;
-    padding : 10px;
     justify-content: center;
     background-color: white;
     position: relative;
+    border-radius: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 10px;
 `
 
 const ButtonContainer = styled.div`
@@ -288,23 +292,6 @@ const ButtonContainer = styled.div`
     gap: 10px;
 `
 
-
-const EditButton = styled.div`
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    width: 120px;
-    height: 30px;
-    right: 15px;
-    bottom: 20px;
-    cursor: pointer;
-    :hover{
-        background-color: rgb(240, 240, 240);
-    }
-`
 
 const BottomContainer = styled.div`
     padding: 10px;
@@ -460,16 +447,6 @@ const KeywordInput = styled.input`
   margin-top: 10px;
 `;
 
-const Button = styled.div`
-  background-color: white;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  padding: 8px 40px;
-  cursor: pointer;
-  :hover{
-
-  }
-`
 
 const InputComent = styled.textarea`
   width: 100%;

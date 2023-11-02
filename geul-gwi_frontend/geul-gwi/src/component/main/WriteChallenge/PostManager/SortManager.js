@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { FiChevronDown } from "react-icons/fi";
 // component
 import PostContainer from 'component/main/WriteChallenge/PostManager/PostContainer';
-import SortButton from 'component/main/WriteChallenge/PostManager/SortButton';
 
 const SortManager = (props) => {
     const [sortedList, setSortedList] = useState(props.posts);
@@ -24,7 +24,10 @@ const SortManager = (props) => {
     return (
         <Frame>
             <ManagerFrame>
-                <SortButton handleTabShowToggle={handleTabShowToggle}/>
+                <ButtonFrame onClick={handleTabShowToggle}>
+            정렬
+            <FiChevronDown />
+        </ButtonFrame>
                 {sortTabShow &&
                     <TabFrame onMouseLeave={handleTabShowToggle}>
                         <Item onClick={() => SortFunc("인기순")}>인기순</Item>
@@ -55,34 +58,59 @@ const ManagerFrame = styled.div`
     position : relative;
     display : flex;
     width : calc(100%);
-    min-height : 10px; height : auto;
+    min-height : 10px; 
+    height : auto;
     justify-content : flex-end;
 `
+
+const ButtonFrame = styled.div`
+    display : flex;
+    min-width : 90px; 
+    width : auto; 
+    height : 30px;
+    border-radius : 16px;
+    justify-content : space-evenly; 
+    align-items : center;
+    font-size : 14px;
+    letter-spacing : 1px;
+    border : 3px solid #ccebb5;
+    background-color : #ccebb5;
+    color : white;
+    cursor : pointer;
+    transition : 0.2s;
+    
+    &:hover{
+        background-color: white;
+        color : rgba(40,40,40,1);
+    }
+`
+
 const TabFrame = styled.div`
     position : absolute;
-    top : calc(100% + 5px);
-    right : 0px;
+    top : calc(100% + 10px);
     display : flex;
     position : absolute;
-    z-index : 5;
+    z-index : 1;
     width : 90px;
-    min-height: 20px; height : auto;
+    min-height: 20px; 
+    height : auto;
     background-color: white;
     border-radius : 16px;
-    box-shadow : 1px 1px 10px 2px rgba(40,40,40,0.4);
+    box-shadow : 1px 1px 10px 2px rgba(40,40,40,0.2);
     padding : 10px 5px 10px 5px;
     flex-direction : column;
     justify-content : center;
     align-items : center;
-    gap : 15px;
+    gap : 10px;
 `
 const Item = styled.div`
     display : flex;
     width : 100%;
-    height : 20px;
+    height : 15px;
     padding : 5px 0px 5px 0px;
-    justify-content : center; align-items : center;
-    border-radius : 12px;
+    justify-content : center; 
+    align-items : center;
+    border-radius : 8px;
     font-size : 14px;
     cursor : pointer;
     &:hover{

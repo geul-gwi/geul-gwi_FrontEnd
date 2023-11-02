@@ -7,8 +7,9 @@ import 'css/main/Writing/AddTagListComponent.css';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 // Axios Address Context
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
-import { Tag, TagButton } from 'component/common/button/Tag'
-
+import { Tag, TagButton } from 'component/common/button/Tag';
+import { Button } from 'component/common/button/Button'
+ 
 const AddTagListComponent = (props) => {
     const axiosAddress = useContext(AxiosAddrContext).axiosAddr;  // Axios Address
     const defaultTagUrl = "/tag/list/DEFAULT";
@@ -187,7 +188,7 @@ const AddTagListComponent = (props) => {
                 </SelectedTagItemContainer>
             </SelectedTagContainer>
             <CompleteButtonContainer>
-                <CompleteButton onClick={() => OnCompleteClick()}>완료</CompleteButton>
+                <Button onClick={() => OnCompleteClick()}>완료</Button>
             </CompleteButtonContainer>
         </ComponentFrame>
     );
@@ -290,26 +291,7 @@ const ExistTagListItemContainer = styled.div`
     align-items: center; 
     flex-wrap: wrap;
 `
-// ExistTagList 태그 아이템 Level 3
-const ExistTagItem = styled.div`
-    display : flex;
-    width : 30%;
-    height : 30px;
-    box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.25);
-    border-radius : 16px;
-    font-size : 14px;
-    cursor : pointer;
-    justify-content: center; align-items: center;
 
-    &:hover{
-        background-color : rgba(245,245,245, 0.9);
-       color : black;
-    }
-`
-
-// ---------------------------------------------------
-
-// TagList 사용자 지정 태그 level 1
 const UserChooseTagList = styled(TagListContainer)`
 
 `
@@ -354,54 +336,13 @@ const SelectedTagItemContainer = styled.div`
     align-items : center;
     gap : 10px;
 `
-// 선택된 태그 버튼 Level 2
-const SelectedButton = styled.div`
-    background-color: ${props => props.backColor};
-    color: ${props => props.fontColor};
-    display : flex;
-    min-width : 40px; 
-    width : auto; 
-    height : 20px;
-    border-radius : 16px;
-    box-shadow : 0px 0px 10px 0px grey;
-    padding : 0px 5px 0px 5px;
-    justify-content : center; 
-    align-items : center;
-    font-size : 12px; 
-    color : grey;
-    cursor : pointer;
 
-    &:hover {
-        background-color: ${props => props.selected ? props.backColor : '#f0f0f0'};
-        transform: translateY(-2px);
-        box-shadow: ${props => props.selected ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none'};
-    }
-`
 const CompleteButtonContainer = styled(ContainerFrame)`
     display : flex;
     height : 30px;
     flex-direction: row; 
     justify-content: flex-end;
     align-items : center;
-`
-
-const CompleteButton = styled.div`
-    display : flex;
-    min-width : 80px; 
-    max-width : 100px; 
-    width : auto;
-    height : 30px;
-    border-radius : 16px;
-    background-color: #21DD3F;
-    color : white; 
-    font-size : 14px;
-    justify-content: center; 
-    align-items: center;
-    cursor : pointer;
-
-    &:hover{
-        background-color : #2DF24D;
-    }
 `
 
 const ColorPickerContainer = styled.div`
