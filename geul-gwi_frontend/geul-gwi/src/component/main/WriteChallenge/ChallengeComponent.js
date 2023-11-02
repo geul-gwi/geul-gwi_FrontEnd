@@ -10,6 +10,7 @@ const ChallengeComponent = (props) => {
             <ChallengeInfo />
             <FlexManager>
                 <SortManager
+                    setPosts={props.setPosts}
                     posts={props.posts}
                 />
             </FlexManager>

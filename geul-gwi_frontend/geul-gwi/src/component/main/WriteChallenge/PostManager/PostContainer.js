@@ -14,20 +14,32 @@ const PostContainer = (props) => {
     const unlikeUrl = '/challenge/unlike/'; // 챌린지 글 좋아요 취소 요청
     const postDeleteUrl = '/challenge/delete/'; // 챌린지 글 삭제 요청
 
-    const [likedPosts, setLikedPosts] = useState({});
-
     const onClickLikeButton = async (challengeSeq, isLiked) => {
         try {
             if (isLiked) {
                 await axios.delete(`${axiosAddr}${unlikeUrl}${challengeSeq}/${userSeq}`, {
                     headers: { Authorization: `Bearer ${accessToken}` }
                 });
-                setLikedPosts(prevLikedPosts => ({ ...prevLikedPosts, [challengeSeq]: false }));
+                // 취소된 경우, -1하여 새로운 값 설정
+                const updatedPosts = props.posts.map(post => {
+                    if (post.challengeUserSeq === challengeSeq) {
+                        return { ...post, isLiked: !isLiked, likeCount: post.likeCount - 1 };
+                    }
+                    return post;
+                });
+                props.setPosts(updatedPosts);
             } else {
                 await axios.post(`${axiosAddr}${likeUrl}${challengeSeq}/${userSeq}`, {}, {
                     headers: { Authorization: `Bearer ${accessToken}` }
                 });
-                setLikedPosts(prevLikedPosts => ({ ...prevLikedPosts, [challengeSeq]: true }));
+                 // 좋아요 누른 경우, +1하여 새로운 값 설정
+                const updatedPosts = props.posts.map(post => {
+                    if (post.challengeUserSeq === challengeSeq) {
+                        return { ...post, isLiked: !isLiked, likeCount: post.likeCount + 1 };
+                    }
+                    return post;
+                });
+                props.setPosts(updatedPosts);
             }
         } catch (error) {
             console.error("좋아요 처리 중 에러:", error);
@@ -174,8 +186,8 @@ const HeaderButtonContainer = styled.div`
   display: flex;
   gap: 5px;
   
-  flex-direction: row;
-      position: absolute; /* 아이콘의 위치를 조절하기 위해 상대 위치 설정 */
+   flex-direction: row;
+    position: absolute; /* 아이콘의 위치를 조절하기 위해 상대 위치 설정 */
     top: 10px; /* 원하는 위치로 조절 (상단 여백) */
     right: 10px; /* 원하는 위치로 조절 (우측 여백) */
 `;

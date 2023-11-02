@@ -36,8 +36,7 @@ const SortManager = (props) => {
             </ManagerFrame>
             <PostContainer
                 posts={props.posts}
-
-                
+                setPosts={props.setPosts}
             />
         </Frame>
     );
@@ -60,6 +59,7 @@ const ManagerFrame = styled.div`
     width : calc(100%);
     min-height : 10px; 
     height : auto;
+    margin-right: 40px;
     justify-content : flex-end;
 `
 

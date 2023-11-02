@@ -160,6 +160,7 @@ const WrtchgAction = () => {
     return (
         <ChallengeComponent
             challengeList={challenges} // 챌린지 회차 목록
+            setPosts={setPosts}
             posts={posts} // 해당 회차 게시물 목록
             PrevButtonClick={PrevButtonClick}
             NextButtonClick={NextButtonClick}
