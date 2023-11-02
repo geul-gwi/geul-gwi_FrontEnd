@@ -22,7 +22,12 @@ const MessageForm = () => {
 
    // 답장하기 버튼을 클릭하면 해당 메시지 정보를 선택하고 MessageWritingForm을 표시
    const replyToMessage = (message) => {
-      setSelectedMessage(message);
+      console.log("답장하기:", message);
+      const data = {
+         receiverSeq : message.senderSeq,
+         receiverNickname : message.senderNickname
+      }
+      setSelectedMessage(data);
    }
 
    // 메시지 삭제 요청
@@ -134,8 +139,7 @@ const MessageForm = () => {
       </Container>
          {selectedMessage && (
             <MessageWritingForm
-               receiverSeq={selectedMessage.senderSeq}
-               receiverNickName={selectedMessage.senderNickname}
+               data={selectedMessage}
             />
          )}
       </>
@@ -150,6 +154,7 @@ const Container = styled.div`
    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
    background-color: white;
    margin-bottom: 20px;
+   border-radius: 16px;
 `;
 
 const Tabs = styled.div`

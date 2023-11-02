@@ -55,7 +55,7 @@ const NoticeItem = (props) => {
         const hour = s.slice(11, 13);
         const minute = s.slice(14, 16);
         const second = s.slice(17, 19);
-        return new Date(year, month, day, hour, minute, second);
+        return new Date(year, month, day, hour + 9, minute, second);
     }
     // 시간 계산하는 함수!! (n분 전, n시간 전, 어제, 날짜)
     function formatDateTime() {
