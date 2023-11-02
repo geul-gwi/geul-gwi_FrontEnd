@@ -77,10 +77,13 @@ const Profile = ({ profileUserSeq }) => {
 
     // 쪽지 보내기
     const onClickMessageSend = () => {
-      navigate('/main/messageWriting', { 
-        receiverSeq: profileUserSeq, 
+
+      const data = { 
+        receiverSeq: userInfo.userSeq, 
         receiverNickname: userInfo.nickname
-      });
+      };
+
+      navigate('/main/messageWriting', { state: data });
     };
     
   // 친구 요청 

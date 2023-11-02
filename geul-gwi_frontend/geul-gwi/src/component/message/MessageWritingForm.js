@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; 
+import { Button } from 'component/common/button/Button';
 
-// 받는 사람 userSeq랑 nickname 보내주기
-const MessageWritingForm = ({ receiverSeq, receiverNickName }) => {
+const MessageWritingForm = ({data})=> {
    const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
-   const receiverDeleteUrl = '/message/send';
+   const messageUrl = '/message/send';
    const userSeq = useSelector((state) => state.authReducer.userSeq);
    const userToken = useSelector((state) => state.authReducer.accessToken);
    
@@ -22,36 +22,25 @@ const MessageWritingForm = ({ receiverSeq, receiverNickName }) => {
          title: message.title,
          content: message.content,
          senderSeq: userSeq,
-         receiverSeq: receiverSeq,
+         receiverSeq: data.receiverSeq,
       };
 
-      axios.post(`${axiosAddress}${receiverDeleteUrl}`, messageDTO, {
+      axios.post(`${axiosAddress}${messageUrl}`, messageDTO, {
          headers: {
             Authorization: `Bearer ${userToken}`
          }
       })
          .then((response) => {
-            console.log('메시지 전송 성공 : ', response);
+            console.log('쪽지 전송 성공 : ', response);
+            alert("쪽지 전송을 완료했습니다.");
             // 성공 후 메시지 입력란 초기화
             setMessage({ title: '', content: '' });
          })
          .catch((error) => {
             console.error('메시지 전송 실패:', error);
+            alert("쪽지 전송을 실패했습니다.");
          });
 
-   };
-
-   // 쪽지 유효성 검사
-   const CheckMessage = () => {
-      if (message.content && message.title){
-         alert('쪽지를 작성해주세요.');
-         return false;
-      } 
-      else if (message.content.length > 250) {
-         alert('내용은 250자 이하로 작성해주세요.');
-         return false;
-      }
-      return true;
    };
 
    return (
@@ -59,22 +48,23 @@ const MessageWritingForm = ({ receiverSeq, receiverNickName }) => {
          <Title>쪽지</Title>
          <RecipientInfo>
             <RecipientLabel>받는 사람:</RecipientLabel>
-            <RecipientName>{receiverNickName}</RecipientName>
+            <RecipientName>{data.receiverNickname}</RecipientName>
          </RecipientInfo>
          <Form>
             <Input
                type="text"
-               placeholder="제목을 입력하세요."
+               placeholder="제목"
                value={message.title}
                onChange={(e) => setMessage({ ...message, title: e.target.value })}
             />
             <Textarea
-               placeholder="내용을 입력하세요."
+               type="text"
+               placeholder="내용"
                value={message.content}
                onChange={(e) => setMessage({ ...message, content: e.target.value })}
             />
             <CharCount>{message.content ? `${message.content.length} / 250자` : "0 / 250자"}</CharCount>
-            <SendButton onClick={sendMessage}>전송</SendButton>
+            <Button onClick={sendMessage}>전송</Button>
          </Form>
       </Container>
    );
@@ -123,8 +113,13 @@ const Input = styled.input`
    padding: 5px;
    border: 1px solid #ccc;
    border-radius: 5px;
-   width: 500px;
-   height: 40px;
+   width: 300px;
+   height: 30px;
+   &:focus {
+        outline: none; /* 포커스 테두리 제거 (선택 사항) */
+        border-color:  #ccebb5; /* 포커스 시 변경할 테두리 색상 */
+        box-shadow: 0 0 5px  #ccebb5; /* 포커스 시 그림자 효과 (선택 사항) */
+    }
 `;
 
 const Textarea = styled.textarea`
@@ -135,18 +130,11 @@ const Textarea = styled.textarea`
    resize: vertical;
    width: 500px;
    height: 150px;
-`;
-
-const SendButton = styled.button`
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   margin-top: 10px;
-   padding: 10px 60px;
-   background-color: white;
-   border: 1px solid #ccc;
-   border-radius: 8px;
-   cursor: pointer;
+   &:focus {
+        outline: none; /* 포커스 테두리 제거 (선택 사항) */
+        border-color:  #ccebb5; /* 포커스 시 변경할 테두리 색상 */
+        box-shadow: 0 0 5px  #ccebb5; /* 포커스 시 그림자 효과 (선택 사항) */
+    }
 `;
 
 const CharCount = styled.div`

@@ -131,27 +131,35 @@ const Navigation = () => {
                 {menus.map((element, idx) => (
                     <Item id={"NaviButton" + idx} onClick={() => ComponentMove(element.target)}>
                         <IconBox><IconImg src={process.env.PUBLIC_URL + element.src} /></IconBox>
+                        {window.innerWidth >= 1000 && (
                         <TextBox>{element.name}</TextBox>
+                        )}
                     </Item>
                 ))}
                 <Item>
                     <IconBox>
                         <ProfileImage src={userProfile ? userProfile : "/img/defaultProfile.png"}/>
                     </IconBox>
+                    {window.innerWidth >= 1000 && (
                     <TextBox onClick={onClickProfile}>프로필</TextBox>
+                    )}
                 </Item>
             </Container>
+            {window.innerWidth >= 1000 && (
                 <SubscribersListContainer>
                      <SubscribersHeader>구독</SubscribersHeader>                 
                         {subscribes.map((subscribe, index) => (
                         <SubscribeItem key={index} user={subscribe} />
                         ))}
-                </SubscribersListContainer>
+                </SubscribersListContainer> 
+            )}
 
             <MoreButton onClick={handleMoreButtonClick}>
                 <Item>
                     <IconBox><IconImg src={process.env.PUBLIC_URL + "/icon/Navigation/free-icon-menu-1828859.png"} /></IconBox>
-                    <TextBox>더보기</TextBox>
+                    {window.innerWidth >= 1000 && (
+                        <TextBox>더보기</TextBox>
+                    )}
                 </Item>
             </MoreButton>
             {isMoreMenuVisible && <MenuButtonContainer>
@@ -200,7 +208,7 @@ const NaviFrame = styled.div`
     flex-direction: column;
     align-items: center;
     background-color: white;
-    width: 320px;
+    width: 100%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `
 

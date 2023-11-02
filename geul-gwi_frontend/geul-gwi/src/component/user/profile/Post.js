@@ -207,15 +207,16 @@ const EditIcon = styled.div`
 
 const PostFrame = styled.div`
     display : flex;
-    width : calc(85% - 40px);
+    width : 85%;
     height : auto;
     padding : 20px; 
-    border-radius : 5px;
+    border-radius : 16px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     background-color : white;
     flex-direction: column;
     margin-top : 30px;
     user-select: none;
+
 `
 
 const PostProfileContainer = styled.div`
@@ -248,21 +249,21 @@ const TagButtonContainer = styled.div`
     height : 30px;
 `
 const ProfileImage = styled.div`
-    width : 50px;
+    width : 45px;
     height : 100%;
-    border-radius : 70%;
+    border-radius : 50%;
     overflow: hidden;
     border: 1px solid #ccc;
     cursor: pointer;
 
     &:hover {
-      transform: scale(1.2);
+      transform: scale(1.1);
       transition: transform 0.2s ease-in-out;
     }
 `
 const ProfileName = styled.div`
         display : flex;
-        width : calc(100% - 60px);
+        width : calc(100% - 65px);
         height : 100%;
         flex-direction: column;
         justify-content : space-evenly;
@@ -318,10 +319,7 @@ const ArrowButton = styled.div`
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
-    background-color: rgb(250, 250, 250);
     color: #333;
-    border: 1px solid #ccc;
-    border-radius: 100%;
     padding: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -332,7 +330,7 @@ const ArrowButton = styled.div`
     }
 
     &:hover {
-        background-color: rgb(230, 230, 230);
+        color: black;
     }
 `;
 

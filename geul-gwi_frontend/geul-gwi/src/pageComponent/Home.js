@@ -95,9 +95,14 @@ const LeftContainer = styled(ContainerFrame)`
     left : 0px;
     top : 0px;
     height : 100vh;
-    z-index : 5;
+    width: 320px;
+    z-index : 10;
     flex-direction : column;
     justify-content: space-between;
+
+    @media (max-width: 1000px) {
+        width: 80px; /* 반절 크기로 축소 */
+    }
 `
 
 const MidContainer = styled(ContainerFrame)`
@@ -107,17 +112,24 @@ const MidContainer = styled(ContainerFrame)`
     width : 630px;
     min-height : 100vh;
     height : auto;
+
+    @media (max-width: 1000px) {
+        left: calc(50% - 165px); /* 조정된 가운데 정렬 */
+    }
 `
 
 const RightContainer = styled(ContainerFrame)`
-    position : fixed;
-    display : flex;
-    width : 250px;
-    right : 50px;
-    top : 25px;
-    flex-direction : column;
-    gap: 25px;
-    z-index : 5;
+    position: fixed;
+    display: flex;
+    width: 250px;
+    right: 50px;
+    top: 30px;
+    flex-direction: column;
+    gap: 30px;
+    z-index: 10;
+    @media (max-width: 1000px) {
+        display: none;
+    }
 `
 
 export default Home;
