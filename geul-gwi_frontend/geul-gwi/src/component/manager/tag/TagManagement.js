@@ -5,7 +5,8 @@ import axios from 'axios';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 // Axios Address Context
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
-import { TagButton } from 'component/common/button/Tag';
+import { Tag, TagButton } from 'component/common/button/Tag';
+import { Button } from 'component/common/button/Button';
 
 const TagManagement = () => {
   const AxiosAddress = useContext(AxiosAddrContext).axiosAddr;
@@ -21,6 +22,7 @@ const TagManagement = () => {
   // User 로그인 정보
   const UserSequence = useSelector((state) => state.authReducer.userSeq);
   const UserToken = useSelector((state) => state.authReducer.accessToken);
+  
 
   const onTagHandler = (event) => {
     setTag(event.currentTarget.value);
@@ -131,6 +133,13 @@ const TagManagement = () => {
           />
        </ColorPickerContainer>
       </TagInputContainer>
+      <SelectedTagsPreview>
+                        <SelectedTagsContainer>
+                            <Tag fontColor={tagFontColor} backColor={tagBackColor}>
+                                {'# ' + tag}
+                            </Tag>
+                        </SelectedTagsContainer>
+                    </SelectedTagsPreview>
       <ButtonGroup>
         <Button onClick={onAddTagHandler}>추가</Button>
       </ButtonGroup>
@@ -142,8 +151,14 @@ const InputTag = styled.input`
   width: 200px;
   margin-bottom: 10px;
   padding: 0 10px;
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   border-radius: 8px;
+
+  &:focus {
+        outline: none; /* 포커스 테두리 제거 (선택 사항) */
+        border-color:  #ccebb5; /* 포커스 시 변경할 테두리 색상 */
+        box-shadow: 0 0 5px  #ccebb5; /* 포커스 시 그림자 효과 (선택 사항) */
+    }
 `;
 
 const ButtonGroup = styled.div`
@@ -178,16 +193,6 @@ const TagsContainer = styled.div`
   gap: 10px; 
 `;
 
-const Button = styled.div`
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  padding: 8px 40px;
-  cursor: pointer;
-  margin-left: 10px;
-  margin-top: 10px;
-  font-size: 15px;
-`;
-
 const TagInputContainer = styled.div`
   display: flex;
   align-items: center;
@@ -219,6 +224,20 @@ const ColorPickerContainer = styled.div`
   align-items: center;
   width: 100%;
   height: auto;
+`;
+
+// 미리보기
+const SelectedTagsPreview = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+`;
+
+const SelectedTagsContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
 `;
 
 export default TagManagement;

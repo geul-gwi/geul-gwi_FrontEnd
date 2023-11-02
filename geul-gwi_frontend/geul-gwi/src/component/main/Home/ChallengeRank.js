@@ -195,8 +195,6 @@ const Icon = styled.img`
     left: 20px;
     height: 40px;
     width: 40px;
-    background-color: #F2F2F2;
-    border-radius: 50%; /* 이미지를 둥글게 만듭니다 */
     padding: 5px; /* 여백을 줍니다 */
     margin-right: 10px; /* 우측 여백을 줍니다 */
 `;

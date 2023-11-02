@@ -4,10 +4,8 @@ import { Tag } from 'component/common/button/Tag';
 
 
 const MemberInfoForm = ({user}) => {
-  
   return (
     <Container>
-      <ProfileImage src={user.profile || '/img/defaultProfile.png'} />
       <Title>회원 정보</Title>
       <UserInfo>
         <InfoLabel>Role:</InfoLabel>

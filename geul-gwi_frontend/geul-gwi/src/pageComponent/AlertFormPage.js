@@ -1,13 +1,11 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
-// import Component
+// Component
 import AlertForm from 'component/notice/NoticeForm';
 
 const AlertFormPage = () => {
     return (
-        <Fragment>
             <AlertForm />
-        </Fragment>
     );
 };
 

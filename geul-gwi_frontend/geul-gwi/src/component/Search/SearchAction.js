@@ -33,8 +33,6 @@ const SearchForm = () => {
    useEffect(() => {
       if(selectedTag !== null)
          return;
-      //console.log("글귀 목록 요청");
-      //console.log("토큰@@@@@@@@@: " ,userToken);
       // 전체 게시물 목록 불러오기
       Axios.get(axiosAddr + postListApi, {
          headers: {
@@ -171,7 +169,7 @@ const BottomContainer = styled.div`
    padding: 40px;
    margin-top: 20px;
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-   min-height: 100vh;
+   min-height: 90vh;
    border-radius: 16px;
 `
 

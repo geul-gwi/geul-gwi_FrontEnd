@@ -140,12 +140,12 @@ const Navigation = () => {
                     <IconBox>
                         <ProfileImage src={userProfile ? userProfile : "/img/defaultProfile.png"}/>
                     </IconBox>
-                    {window.innerWidth >= 1000 && (
+
                     <TextBox onClick={onClickProfile}>프로필</TextBox>
-                    )}
+
                 </Item>
             </Container>
-            {window.innerWidth >= 1000 && (
+            {window.innerWidth >= 1300 && (
                 <SubscribersListContainer>
                      <SubscribersHeader>구독</SubscribersHeader>                 
                         {subscribes.map((subscribe, index) => (
@@ -157,12 +157,11 @@ const Navigation = () => {
             <MoreButton onClick={handleMoreButtonClick}>
                 <Item>
                     <IconBox><IconImg src={process.env.PUBLIC_URL + "/icon/Navigation/free-icon-menu-1828859.png"} /></IconBox>
-                    {window.innerWidth >= 1000 && (
                         <TextBox>더보기</TextBox>
-                    )}
                 </Item>
             </MoreButton>
-            {isMoreMenuVisible && <MenuButtonContainer>
+            {isMoreMenuVisible && 
+            <MenuButtonContainer>
                 <MenuButtonManager>
                     {role === 'ADMIN' && <MenuItem onClick={onClickManagement}>사이트 관리</MenuItem>}
                     <MenuItem onClick={onClickLogout}>로그아웃
@@ -189,7 +188,7 @@ const Navigation = () => {
 const SubscribersListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 95%;
   padding: 5px;
   border-top: 1px solid #ccc;
   margin: 10px;
@@ -216,7 +215,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 70px;
+    margin-top: 50px;
     width: 100%;
 `
 
@@ -224,9 +223,14 @@ const Logo = styled.img`
     position: relative;
     top: 30px;
     left: 0px;
-    height: 220px;
-    width: 240px;
+    height: 230px;
+    width: 230px;
     cursor: pointer;
+
+    @media (max-width: 1300px) {
+        width: 70px;
+        height: 70px;
+    }
 `
 
 const AlertContainer = styled.div`
@@ -239,20 +243,20 @@ const AlertContainer = styled.div`
 
 const MenuButtonContainer = styled.div`
   position: absolute;
-  left: 35px;
+  left: 30px;
   bottom: 80px;
   width: 200px;
-  min-height: 10px;
   height: auto;
-  border-radius: 12px;
+  border-radius: 16px;
   background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 10px;
 
 `;
 
 const MenuButtonManager = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px;
 `;
 
 const MenuItem = styled.div`
@@ -261,16 +265,21 @@ const MenuItem = styled.div`
   justify-content: space-between;
   color: #343434;
   cursor: pointer;
-  padding: 0 5px;
+  width: 90%;
+  height: 30px;
   transition: background-color 0.2s;
   border-radius: 8px;
+  font-size: 15px;
+  
+  &:hover{
+        background-color : rgb(240, 240, 240);
+    }
 `;
 
 const ProfileImage = styled.img`
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    margin-right: 10px;
     cursor: pointer;
     transition: transform 0.2s;
     border: solid 1px #ccc;
@@ -313,6 +322,10 @@ const TextBox = styled.div`
     align-items: center;
     color : #343434;
     font-size: 17px;
+
+    @media (max-width: 1300px) {
+        display: none;
+    }
 `
 const IconImg = styled.img`
     width : 20px;

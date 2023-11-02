@@ -11,18 +11,7 @@ const MemberItem = (props) => {
   const userDetailApi = '/user/detail/';
   const [profile, setProfile] = useState(null);
 
-  // useEffect(() => {
-  //   const fetchProfileImage = async () => {
-  //     try {
-  //       const profileImage = await imageDataFetcher(axiosAddress, props.user.profile);
-  //       setProfile(profileImage);
-  //     } catch (error) {
-  //       console.error('세부 프로필 이미지:', error);
-  //     }
-  //   };
-  
-  //   fetchProfileImage();
-  // }, [axiosAddress, props.user.profile]);
+
 
   const handleClick = async () => {
     try {

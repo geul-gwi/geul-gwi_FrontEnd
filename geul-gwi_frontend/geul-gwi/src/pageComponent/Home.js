@@ -85,8 +85,7 @@ const BackImg = styled.div`
 
 const ContainerFrame = styled.div`
     position : absolute;
-    width : 200px;
-    height: 700px;
+    height: 90vh;
 `
 
 const LeftContainer = styled(ContainerFrame)`
@@ -100,7 +99,7 @@ const LeftContainer = styled(ContainerFrame)`
     flex-direction : column;
     justify-content: space-between;
 
-    @media (max-width: 1000px) {
+    @media (max-width: 1300px) {
         width: 80px; /* 반절 크기로 축소 */
     }
 `
@@ -113,7 +112,7 @@ const MidContainer = styled(ContainerFrame)`
     min-height : 100vh;
     height : auto;
 
-    @media (max-width: 1000px) {
+    @media (max-width: 1300px) {
         left: calc(50% - 165px); /* 조정된 가운데 정렬 */
     }
 `
@@ -127,7 +126,7 @@ const RightContainer = styled(ContainerFrame)`
     flex-direction: column;
     gap: 30px;
     z-index: 10;
-    @media (max-width: 1000px) {
+    @media (max-width: 1300px) {
         display: none;
     }
 `

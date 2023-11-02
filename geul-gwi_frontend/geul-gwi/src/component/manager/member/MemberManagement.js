@@ -177,6 +177,7 @@ const ItemContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 90%;
+  padding: 5px;
 `;
 
 const Paging = styled.div`

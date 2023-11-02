@@ -6,6 +6,7 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 
 // component
 import ChallengeInfo from 'component/challenge/ChallengeInfo';
+import { Button } from 'component/common/button/Button';
 
 const ChallengeManagement = () => {
   const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
@@ -62,14 +63,9 @@ const ChallengeManagement = () => {
   return (
     <MainContainer>
       <ChallengeInfo/>
-      <ShowButton onClick={ShowList}>
-        <ButtonTextContainer>챌린지 추가</ButtonTextContainer>
-        <ButtonIconContainer>
-          <Iconimg src={PublicWritingIconPath + "plus.svg"} />
-        </ButtonIconContainer>
-      </ShowButton>
-      {showTagList ? null :
+
         <BottomContainer>
+          <Title>챌린지 추가</Title>
           <Container>
             <InputComent placeholder='내용' onChange={(e) => setComment(e.target.value)}/>
           </Container>
@@ -104,7 +100,7 @@ const ChallengeManagement = () => {
           </DateContainer>
           <Button onClick={onClickAddChallenge}>등록</Button>
         </BottomContainer>
-      }
+  
     </MainContainer>
   );
 };
@@ -116,7 +112,8 @@ const MainContainer = styled.div`
   user-select: none;
   width: 800px;
   margin: auto;
-  height: 90vh;
+  height: 95vh;
+  gap: 10px;
 `
 const DateContainer = styled.div`
   display: flex;
@@ -133,20 +130,27 @@ const DateTitle = styled.p`
 
 const DateInput = styled.input`
   width: 140px;
-  height: 34px;
+  height: 30px;
   font-size: 15px;
   color: gray;
+
+  &:focus {
+        outline: none; /* 포커스 테두리 제거 (선택 사항) */
+        border-color:  #ccebb5; /* 포커스 시 변경할 테두리 색상 */
+        box-shadow: 0 0 5px  #ccebb5; /* 포커스 시 그림자 효과 (선택 사항) */
+    }
 `
 const BottomContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: white;
-  width: 500px;
+  width: 590px;
   padding: 40px 20px 30px 20px;
   margin-bottom: 20px;
   justify-content: center;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
 `
 const Container = styled.div`
   display: flex;
@@ -176,64 +180,32 @@ const KeywordInput = styled.input`
   padding: 5px;
   font-size: 16px;
   margin-top: 10px;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &:focus {
+        outline: none; /* 포커스 테두리 제거 (선택 사항) */
+        border-color:  #ccebb5; /* 포커스 시 변경할 테두리 색상 */
+        box-shadow: 0 0 5px  #ccebb5; /* 포커스 시 그림자 효과 (선택 사항) */
+    }
 `;
-
-const Button = styled.div`
-  background-color: white;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  padding: 8px 40px;
-  cursor: pointer;
-  :hover{
-
-  }
-`
 
 const InputComent = styled.textarea`
   width: 100%;
   height: 80px;
   border: 1px solid #ddd;
-  padding: 10px;
+  padding: 15px;
   resize: vertical;
   font-size: 15px;
-`;
+  margin-top: 10px;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-const ShowButton = styled.div`
-    margin-top: 20px;
-    display : flex;
-    width : 140px;
-    height : 50px;
-    padding : 0px 10px 0px 10px;
-    border-radius: 16px;
-    margin-bottom: 20px;
-    background: #FFF;
-    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.25);
-    align-items: center; justify-content: space-between;
-    cursor : pointer;
-    transition : 0.2s;
-    &:hover{
-        background-color : mistyrose;
+  &:focus {
+        outline: none; /* 포커스 테두리 제거 (선택 사항) */
+        border-color:  #ccebb5; /* 포커스 시 변경할 테두리 색상 */
+        box-shadow: 0 0 5px  #ccebb5; /* 포커스 시 그림자 효과 (선택 사항) */
     }
-`
-const ButtonTextContainer = styled.div`
-    display : flex;
-    width : 100px;
-    height : 80px;
-    justify-content: center; 
-    align-items: center;
-    font-size : 12px; color : black;
-`
-const ButtonIconContainer = styled.div`
-    display : flex;
-    width : 15px;
-    height : 15px;
-    justify-content: center;
-    align-items: center;
-`
-const Iconimg = styled.img`
-    width : 100%;
-    height : 100%;
-    object-fit: contain;
-`
+`;
 
 export default ChallengeManagement;
