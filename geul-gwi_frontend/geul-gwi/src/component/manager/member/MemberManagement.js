@@ -156,8 +156,10 @@ const LeftContainer = styled.div`
   margin: auto;
   width: 350px;
   padding: 20px;
-  height: 90vh;
+  border-radius: 16px;
+  height: 80vh;
   user-select: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
 const Title = styled.span`

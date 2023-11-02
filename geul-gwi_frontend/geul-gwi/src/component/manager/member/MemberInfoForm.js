@@ -55,10 +55,11 @@ const Container = styled.div`
   background-color: white;
   padding: 20px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   margin: 0 auto;
   user-select: none;
-  width: 500px;
+  width: 300px;
+  border-radius: 16px;
 `;
 
 const ProfileImage = styled.img`

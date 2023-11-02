@@ -8,12 +8,13 @@ import TagManagement from 'component/manager/tag/TagManagement';
 import MemberManagement from 'component/manager/member/MemberManagement';
 import ChallengeManagement from 'component/manager/challenge/ChallengeManagement';
 import Navigation from 'component/main/Home/Navigation';
-import path from 'img/back_gradient.jpg';
 
 const ManagerPage = () => {
     return (
         <MainContainer>
-            <Navigation/>
+                <LeftContainer>
+                    <Navigation />
+                </LeftContainer>
             <ManagerLeftNav />
             <HeadBackImg />
             <MainContainaer>
@@ -32,16 +33,14 @@ const MainContainer = styled.div`
 `
 
 const HeadBackImg = styled.div`
-    position : absolute;
+    position : fixed;
     width : 100%;
-    height : 1200px;
     top: 0;
     left : 0;
     z-index: -1;
-    background-image: url(${path});
-    background-position : "center";
-    background-repeat : "no-repeat";
-    background-size: cover;
+    //background: linear-gradient(to right, #F9F7DA, #F5ED98);
+    height: 100vh;
+    background:#F9F7DA
 `
 
 const MainContainaer = styled.div`
@@ -53,11 +52,26 @@ const MainContainaer = styled.div`
     text-align: center;
 `
 
-const HeadContainer = styled.div`
-    position : relative;
-    top : 0%;
-    width : 100%;
-    height : 150px;
+const ContainerFrame = styled.div`
+    position : absolute;
+    width : 200px;
+    height: 700px;
+`
+
+const LeftContainer = styled(ContainerFrame)`
+    position : fixed;
+    display : flex;
+    left : 0px;
+    top : 0px;
+    height : 100vh;
+    width: 320px;
+    z-index : 10;
+    flex-direction : column;
+    justify-content: space-between;
+
+    @media (max-width: 1000px) {
+        width: 80px; /* 반절 크기로 축소 */
+    }
 `
 
 export default ManagerPage;

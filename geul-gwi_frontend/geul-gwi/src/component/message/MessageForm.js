@@ -20,6 +20,14 @@ const MessageForm = () => {
    const [selectedTab, setSelectedTab] = useState("received");
    const [messages, setMessages] = useState([]);
 
+   useEffect(() => {
+      if (selectedTab === "received") {
+         GetReceiveMessage(); // 받은 쪽지 목록 요청
+      } else {
+         GetSendMessage(); // 보낸 쪽지 목록 요청
+      }
+    }, []);
+
    // 답장하기 버튼을 클릭하면 해당 메시지 정보를 선택하고 MessageWritingForm을 표시
    const replyToMessage = (message) => {
       console.log("답장하기:", message);

@@ -11,18 +11,18 @@ const MemberItem = (props) => {
   const userDetailApi = '/user/detail/';
   const [profile, setProfile] = useState(null);
 
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        const profileImage = await imageDataFetcher(axiosAddress, props.user.profile);
-        setProfile(profileImage);
-      } catch (error) {
-        console.error('세부 프로필 이미지:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchProfileImage = async () => {
+  //     try {
+  //       const profileImage = await imageDataFetcher(axiosAddress, props.user.profile);
+  //       setProfile(profileImage);
+  //     } catch (error) {
+  //       console.error('세부 프로필 이미지:', error);
+  //     }
+  //   };
   
-    fetchProfileImage();
-  }, [axiosAddress, props.user.profile]);
+  //   fetchProfileImage();
+  // }, [axiosAddress, props.user.profile]);
 
   const handleClick = async () => {
     try {
@@ -42,7 +42,7 @@ const MemberItem = (props) => {
     <Item>
       <Container>
         <ProfileImage
-          src={profile || '/img/defaultProfile.png'}
+          src={props.user.profile || '/img/defaultProfile.png'}
           onClick={handleClick}
         />
         <UserName onClick={handleClick}>{props.user.nickname}</UserName>

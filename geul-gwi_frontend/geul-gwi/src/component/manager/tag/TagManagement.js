@@ -155,13 +155,15 @@ const ButtonGroup = styled.div`
 const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 900px;
+  height: 80vh;
   width: 500px;
   padding: 20px 50px;
   text-align: center;
   background-color: white;
   margin: auto;
   user-select: none;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
 const TagContainer = styled.div`

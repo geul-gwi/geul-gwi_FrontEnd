@@ -65,6 +65,7 @@ const NavBar = styled.div`
     background-color: white;
     border-radius: 8px;
     user-select: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
 
