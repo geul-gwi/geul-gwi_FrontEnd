@@ -12,7 +12,8 @@ import imageDataFetcher from 'service/imageDataFetcher';
 const PostEditForm = ({ data }) => {
     const navigate = useNavigate();
     const { axiosAddr } = useContext(AxiosAddrContext);
-    const { userSeq, accessToken } = useSelector((state) => state.authReducer);
+    const userSeq = useSelector((state) => state.authReducer.userSeq);
+    const userToken = useSelector((state) => state.authReducer.accessToken);
     const postEditUrl = "/geulgwi/update/"; // 게시물 수정 요청 주소
 
     const [content, setContent] = useState(data.geulgwiContent);
@@ -85,7 +86,7 @@ const PostEditForm = ({ data }) => {
             //console.log("요청 주소: ", `${axiosAddr}${postEditUrl}${post.geulgwiSeq}`);
             const response = await axios.post(`${axiosAddr}${postEditUrl}${data.geulgwiSeq}`, formData, {
                 headers: {
-                    Authorization: `Bearer ${accessToken}`,
+                    Authorization: `Bearer ${userToken}`,
                     'Content-Type': 'multipart/form-data',
                 }
             });
@@ -141,7 +142,7 @@ const PostEditForm = ({ data }) => {
             <FlexFrame>
                 <TitleContainer>
                     <Title>글귀 수정</Title>
-                    <SubTitle>글귀를 수정해주세요.</SubTitle>
+                    <SubTitle>글귀를 수정해보세요.</SubTitle>
                 </TitleContainer>
                 <FormContainer>
                     <ContentArea
@@ -156,6 +157,8 @@ const PostEditForm = ({ data }) => {
                     files={files}
                     showFiles={showFiles}
                 />
+                </FlexFrame>
+                <FlexFrame>
                 <AddTagButtonForm
                     setTags={setTags}
                     tags={tags}
@@ -173,13 +176,12 @@ const Container = styled.div`
     position : relative;
     display : flex;
     width : 100%;
-    background-color : white;
-    border-radius : 16px;
+    height: 100%;
     justify-content : center;
-    padding-top: 30px; 
-    padding-bottom: 20px;
     user-select: none;
-    margin-bottom: 80px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 `
 
 const FormContainer = styled.form`
@@ -204,8 +206,11 @@ const ContentArea = styled.textarea`
 const FlexFrame = styled.div`
     display : flex;
     width : 90%;
-    //height : calc(100%);
     flex-direction: column;
+    background-color : white;
+    border-radius : 16px;
+    padding: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `
 
 const TitleContainer = styled.div`
