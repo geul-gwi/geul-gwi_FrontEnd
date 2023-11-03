@@ -16,9 +16,9 @@ const menus = []
 menus.push({ "name": "홈", "src": "/icon/Navigation/home.svg", "target": "/main" })
 menus.push({ "name": "알림", "src": "/icon/Navigation/bell.svg", "target": "/alarm" })
 menus.push({ "name": "친구", "src": "/icon/Navigation/users.svg", "target": "/friend" })
-menus.push({ "name": "쪽지함", "src": "/icon/Navigation/free-icon-letter-1250663.png", "target": "/main/message" })
-menus.push({ "name": "챌린지", "src": "/icon/Navigation/free-icon-notes-622216.png", "target": "/main/WritingChallenge" })
-menus.push({ "name": "작성", "src": "/icon/Navigation/free-icon-add-button-7324985.png", "target": "/main/Writing" })
+menus.push({ "name": "쪽지함", "src": "/icon/Navigation/letter.png", "target": "/main/message" })
+menus.push({ "name": "챌린지", "src": "/icon/Navigation/notepad.png", "target": "/main/WritingChallenge" })
+menus.push({ "name": "작성", "src": "/icon/Navigation/plus.png", "target": "/main/Writing" })
 
 const Navigation = () => {
     const dispatch = useDispatch();
@@ -171,7 +171,7 @@ const Navigation = () => {
 
             <MoreButton onClick={handleMoreButtonClick}>
                 <Item>
-                    <IconBox><IconImg src={"/icon/Navigation/free-icon-menu-1828859.png"} /></IconBox>
+                    <IconBox><IconImg src={"/icon/Navigation/burger2.png"} /></IconBox>
                     <TextBox>더보기</TextBox>
                 </Item>
             </MoreButton>

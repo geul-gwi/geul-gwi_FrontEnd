@@ -28,7 +28,6 @@ const Profile = ({ profileUserSeq }) => {
   useEffect(() => {
     async function fetchUserProfile() {
       try {
-        console.log("추우우우우우울력!@#$!$:", process.env.PUBLIC_URL + "/Logo.png");
         const response = await Axios.get(`${axiosAddr}${userDetailUrl}${profileUserSeq}`, {
           headers: {
             Authorization: `Bearer ${userToken}`,

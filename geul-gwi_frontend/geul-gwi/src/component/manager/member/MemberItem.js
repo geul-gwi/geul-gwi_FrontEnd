@@ -82,10 +82,11 @@ const ButtonContainer = styled.div`
 `;
 
 const DeleteButton = styled.div`
-    background-color: #f2f2f2;
+    background-color: #ccebb5;
     padding: 8px 18px;
     border-radius: 8px;
     font-size: 15px;
+    color: white;
     user-select: none;
     :hover{
       cursor: pointer;
