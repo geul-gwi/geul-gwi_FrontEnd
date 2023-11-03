@@ -203,7 +203,7 @@ const Navigation = () => {
                         handleAlertClick={handleAlertClick}
                     />}
             </AlertContainer>
-            <AlertContainer isVisible={isFriendForm} size={'-362px'}>
+            <AlertContainer isVisible={isFriendForm} size={'-361px'}>
                 {isFriendForm &&
                     <FriendForm
                         handleFriendClick={handleFriendClick}
