@@ -101,7 +101,7 @@ const MemberSearchItem = (props) => {
             <Content>{props.member.nickname}</Content>
             <ProfileContainer>
                 {friendStatus !== 'friend' && <Button onClick={onFriendRequestAccept} disabled={isPending}>
-                    {isPending ? '승인 대기 중' : '친구 요청'}
+                    {isPending ? '승인 대기' : '친구 요청'}
                 </Button>}
             </ProfileContainer>
         </Frame>
