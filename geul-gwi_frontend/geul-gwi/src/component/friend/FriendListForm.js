@@ -67,7 +67,6 @@ const Frame = styled.div`
   flex-direction: column;
   width: 450px;
   height: 600px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   background-color: white;
   padding: 5px;

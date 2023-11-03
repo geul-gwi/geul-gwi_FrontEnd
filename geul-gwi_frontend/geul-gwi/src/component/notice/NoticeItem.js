@@ -48,7 +48,7 @@ const NoticeItem = (props) => {
 
     // 서버에서 받은 시간 표준으로 바꾸는 함수!!
     function parseISOString(s) {
-        // 2023-10-28 04:57:51
+        // 2023-11-03T00:49:35.694719620
         const year = s.slice(0, 4);
         const month = s.slice(5, 7) - 1; // 월은 0부터 시작하므로 1을 빼줍니다.
         const day = s.slice(8, 10);
@@ -61,8 +61,7 @@ const NoticeItem = (props) => {
     function formatDateTime() {
         const currentDate = new Date();
         const messageDate = parseISOString(props.notice.regDate);
-        //console.log("변환하기 전 시간 : ", props.notice.regDate);
-        //console.log("변환한 시간 : ", messageDate);
+        console.log("시간 : ", props.notice.regDate + " => " + messageDate);
         const timeDiff = currentDate - messageDate;
         const seconds = Math.floor(timeDiff / 1000);
         const minutes = Math.floor(seconds / 60);
