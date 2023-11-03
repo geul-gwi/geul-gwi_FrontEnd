@@ -65,25 +65,23 @@ const MessageForm = () => {
    // 받은 쪽지 목록 가져오기
    const GetReceiveMessage = () => {
       axios.post(`${axiosAddress}${receiveListUrl}${userSeq}`, {}, {
-         headers: {
-            Authorization: `Bearer ${userToken}`,
-         },
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
       })
-         .then(async (response) => {
-
-               console.log('받은 목록 요청 성공 :', response);
-               //setMessages(response.data);
-               const messagesWithImages = await Promise.all(response.data.map(async (message) => {
-                  const profileImage = await imageDataFetcher(axiosAddress, message.senderProfile);
-                  return { ...message, profileImage };
-               }));
-               setMessages(messagesWithImages);
-            
-         })
-         .catch((error) => {
-            console.error('받은 목록 요청 실패 :', error);
-         });
-   }
+        .then(async (response) => {
+          console.log('받은 목록 요청 성공 :', response);
+          const messagesWithImages = await Promise.all(response.data.map(async (message) => {
+            const profileImage = await imageDataFetcher(axiosAddress, message.senderProfile);
+            return { ...message, profileImage };
+          }));
+          console.log(messagesWithImages);
+          setMessages(messagesWithImages); 
+        })
+        .catch((error) => {
+          console.error('받은 목록 요청 실패 :', error);
+        });
+    }
 
    // 보낸 쪽지 목록 가져오기
    const GetSendMessage = () => {
@@ -93,14 +91,13 @@ const MessageForm = () => {
          },
       })
          .then(async (response) => {
-            if (response) {
-               console.log('보낸 메시지 목록 요청 성공 :', response);
-               const messagesWithImages = await Promise.all(response.data.map(async (message) => {
-                  const profileImage = await imageDataFetcher(axiosAddress, message.senderProfile);
-                  return { ...message, profileImage };
-               }));
-               setMessages(messagesWithImages);
-            }
+            const messagesWithImages = await Promise.all(response.data.map(async (message) => {
+               const profileImage = await imageDataFetcher(axiosAddress, message.senderProfile);
+               return { ...message, profileImage };
+             }));
+             
+             console.log(messagesWithImages);
+             setMessages(messagesWithImages); 
          })
          .catch((error) => {
             console.error('보낸 메시지 목록 요청 실패 :', error);
@@ -148,11 +145,11 @@ const MessageForm = () => {
                      <ProfileContainer>
                         {selectedTab === "received" ? (
                            <ProfilePicture
-                              src={messages.senderProfile ? messages.senderProfile : '/img/defaultProfile.png'}
+                              src={message.profileImage ? message.profileImage : '/img/defaultProfile.png'}
                            />
                         ) : (
                            <ProfilePicture
-                              src={messages.senderProfile ? messages.senderProfile : '/img/defaultProfile.png'}
+                              src={message.profileImage ? message.profileImage : '/img/defaultProfile.png'}
                            />
                         )}
 
