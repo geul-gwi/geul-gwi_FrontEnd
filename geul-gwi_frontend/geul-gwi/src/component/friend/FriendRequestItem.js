@@ -64,18 +64,16 @@ const FriendRequestItem = (props) => {
 
     return (
         <Frame>
-            <ProfileImage 
-                src={profile || '/img/defaultProfile.png'} 
-                onClick={onClickProfile}
-            />
-            <ContentContainer>
-                <TopRow>
-                    <Name>{props.friend.nickname}</Name>
-                </TopRow>
-            </ContentContainer>
-            <ProfileContainer>
-                <Button onClick={onFriendRequestAccept}>확인</Button>
-            </ProfileContainer>
+            <LeftContainer>
+                <ProfileImage
+                    src={profile || '/img/defaultProfile.png'}
+                    onClick={onClickProfile}
+                />
+                <Name>{props.friend.nickname}</Name>
+            </LeftContainer>
+            <RightContainer>
+                <Button onClick={onFriendRequestAccept}>받기</Button>
+            </RightContainer>
         </Frame>
     );
 };
@@ -83,36 +81,39 @@ const FriendRequestItem = (props) => {
 const Frame = styled.div`
     display: flex;
     align-items: center;
+    flex-direction: row;
     width: 95%;
     height: auto;
     background-color: white;
-    transition: background-color 0.2s;
-    font-size: 14px;
     padding: 5px;
-    border-radius: 16px;
-        border-bottom: 1px solid rgb(240, 240, 240);
-    &:hover {
-        cursor: pointer;
-        background-color: rgb(245, 245, 245);
-    }
+    cursor: pointer;
 `;
 
-const TopRow = styled.div`
+const LeftContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 10px;
+`;
+
+const RightContainer = styled.div`
     display: flex;
     align-items: center;
-    margin-bottom: 4px;
+    justify-content: flex-end;
+    flex: 1;
+    padding: 0 10px;
 `;
 
+
+
 const ProfileImage = styled.img`
-    /* 이미지 스타일 */
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 1px solid #ccc;
-    margin-right: 10px;
-    margin-left: 10px;
     cursor: pointer;
     object-fit: cover;
+    margin-right: 12px;
 
     &:hover {
         transform: scale(1.1);
@@ -120,41 +121,29 @@ const ProfileImage = styled.img`
     }
 `;
 
-const ProfileContainer = styled.div`
-    display: flex;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    position: relative;
-`;
-
-const ContentContainer = styled.div`
-    flex: 9;
-`;
 
 const Name = styled.div`
-    font-weight: bold;
-    margin-bottom: 2px;
+    color: #333;
+    margin-bottom: 4px;
+    cursor: pointer;
 `;
 
 
-const Button = styled.div`
-    border: 1px solid #ccc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
+const Button = styled.button`
+    background-color: "#3498db";
+    color: "white"; 
+    border: none;
+    padding: 7px 10px;
     border-radius: 8px;
-    width: 100px;
-    height: 30px;
-
-    &:hover {
-        cursor: pointer;
-        background-color: rgb(245, 245, 245);
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s, color 0.3s;
+    
+    :hover{
+        background-color: rgb(230, 230, 230);
     }
 `;
+
 
 
 export default FriendRequestItem;

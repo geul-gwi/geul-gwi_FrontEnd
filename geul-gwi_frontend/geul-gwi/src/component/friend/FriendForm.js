@@ -42,8 +42,8 @@ const FriendForm = (props) => {
 const Frame = styled.div`
   display: flex;
   flex-direction: column;
-  width: 450px;
-  height: 600px;
+  width: 350px;
+  height: 100vh;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 0 10px 10px 0;
   background-color: white;
@@ -65,7 +65,6 @@ const CloseButton = styled.div` // 닫기 버튼
 
 const TitleContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   width: 100%;
   padding: 15px 20px;
 `;
