@@ -72,11 +72,11 @@ const MessageForm = () => {
         .then(async (response) => {
           console.log('받은 목록 요청 성공 :', response);
           const messagesWithImages = await Promise.all(response.data.map(async (message) => {
-            const profileImage = await imageDataFetcher(axiosAddress, message.senderProfile);
+            const profileImage = await imageDataFetcher(axiosAddress, message.profile);
             return { ...message, profileImage };
           }));
-          console.log(messagesWithImages);
-          setMessages(messagesWithImages); 
+          //console.log(messagesWithImages);
+          setMessages(messagesWithImages.reverse()); 
         })
         .catch((error) => {
           console.error('받은 목록 요청 실패 :', error);
@@ -92,12 +92,12 @@ const MessageForm = () => {
       })
          .then(async (response) => {
             const messagesWithImages = await Promise.all(response.data.map(async (message) => {
-               const profileImage = await imageDataFetcher(axiosAddress, message.senderProfile);
+               const profileImage = await imageDataFetcher(axiosAddress, message.profile);
                return { ...message, profileImage };
              }));
              
-             console.log(messagesWithImages);
-             setMessages(messagesWithImages); 
+             //console.log(messagesWithImages);
+             setMessages(messagesWithImages.reverse()); 
          })
          .catch((error) => {
             console.error('보낸 메시지 목록 요청 실패 :', error);
