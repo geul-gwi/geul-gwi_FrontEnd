@@ -17,8 +17,8 @@ const TagManagement = () => {
   // State 값 변수
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState('');
-  const [tagFontColor, setTagFontColor] = useState('white');
-  const [tagBackColor, setTagBackColor] = useState('#FBD929');
+  const [tagFontColor, setTagFontColor] = useState('#c9c9c9');
+  const [tagBackColor, setTagBackColor] = useState('#F5ED98');
   // User 로그인 정보
   const UserSequence = useSelector((state) => state.authReducer.userSeq);
   const UserToken = useSelector((state) => state.authReducer.accessToken);
@@ -193,10 +193,10 @@ const TagManagement = () => {
 
 const InputTag = styled.input`
   width: 200px;
-  margin-bottom: 10px;
   padding: 0 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
+  margin-left: 30px;
 
   &:focus {
         outline: none; /* 포커스 테두리 제거 (선택 사항) */
@@ -251,6 +251,7 @@ const TagInputContainer = styled.div`
   align-items: center;
   width: 100%;
   justify-content: center;
+
 `;
 
 const ColorPicker = styled.input`
@@ -267,6 +268,7 @@ const Title = styled.p`
 
 const Adding = styled.p`
   font-size: 18px;
+  margin-bottom: 30px;
 
 `;
 
@@ -296,6 +298,8 @@ const SelectedTagsPreview = styled.div`
 const SelectedTagsContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
+    margin-top: 10px;
+    margin-bottom: 10px;
 `;
 
 export default TagManagement;
