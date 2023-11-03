@@ -11,6 +11,7 @@ const MemberSearchItem = (props) => {
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
+    const [isPending, setIsPending] = useState(false);
 
     const [profile, setProfile] = useState();
 
@@ -81,9 +82,11 @@ const MemberSearchItem = (props) => {
                     Authorization: `Bearer ${userToken}`,
                 },
             });
+            setIsPending(true); // 요청 버튼 비활성화
             alert(`${props.member.nickname}님에게 친구 요청을 보냈습니다.`);
            
         } catch (error) {
+            setIsPending(false); // 요청 버튼 활성화
             console.error('친구 요청 실패 : ', error);
             alert(`${props.member.nickname}님에게 친구 요청을 실패했습니다.\n다시 시도해주세요.`);
         }
@@ -97,7 +100,9 @@ const MemberSearchItem = (props) => {
             />
             <Content>{props.member.nickname}</Content>
             <ProfileContainer>
-                {friendStatus !== 'friend' && <Button onClick={onFriendRequestAccept}>친구 요청</Button>}
+                {friendStatus !== 'friend' && <Button onClick={onFriendRequestAccept} disabled={isPending}>
+                    {isPending ? '승인 대기 중' : '친구 요청'}
+                </Button>}
             </ProfileContainer>
         </Frame>
     );
