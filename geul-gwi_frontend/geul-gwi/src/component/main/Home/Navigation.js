@@ -64,6 +64,8 @@ const Navigation = () => {
     }, []);
 
     const ComponentMove = (target) => {
+        handleOtherMenuClick(target); // 다른 메뉴 클릭 시 닫기 핸들러 호출
+        
         if (target === "/alarm") {
             handleAlertClick();
             return;
@@ -78,6 +80,19 @@ const Navigation = () => {
         }
         navigate(`${target}`);
     }
+
+     // 다른 메뉴 클릭 시 닫기 핸들러 함수 추가
+     const handleOtherMenuClick = (targetMenu) => {
+        if (targetMenu !== '/alarm') {
+            setIsAlertFormVisible(false);
+        }
+        if (targetMenu !== '/friend') {
+            SetisFriendForm(false);
+        }
+        if (targetMenu !== '/member') {
+            SetIsMemberForm(false);
+        }
+    };
 
     const handleAlertClick = () => {
         setIsAlertFormVisible(!isAlertFormVisible);
@@ -165,21 +180,22 @@ const Navigation = () => {
                 </Item>
             </Container>
             {window.innerWidth >= 1300 && (
-                <SubscribersListContainer>
+                <SubscriberContainer>
                     <SubscribersHeader>구독</SubscribersHeader>
-                    {subscribes.map((subscribe, index) => (
-                        <Item>
-                            <IconBox>
-                                <ProfileImage
-                                    src={subscribe.profile ? subscribe.profile : "/img/defaultProfile.png"}
-                                    onClick={() => onClickSubscribeProfile(subscribe.userSeq)}
-                                />
-                            </IconBox>
-                            <TextBox onClick={() => onClickSubscribeProfile(subscribe.userSeq)}>{subscribe.nickname}</TextBox>
-                        </Item>
-                    ))}
-
-                </SubscribersListContainer>
+                        <SubscribersListContainer>
+                            {subscribes.map((subscribe, index) => (
+                                <Item>
+                                    <IconBox>
+                                        <ProfileImage
+                                            src={subscribe.profile ? subscribe.profile : "/img/defaultProfile.png"}
+                                            onClick={() => onClickSubscribeProfile(subscribe.userSeq)}
+                                        />
+                                    </IconBox>
+                                    <TextBox onClick={() => onClickSubscribeProfile(subscribe.userSeq)}>{subscribe.nickname}</TextBox>
+                                </Item>
+                            ))}
+                    </SubscribersListContainer>
+                </SubscriberContainer>
             )}
 
             <MoreButton onClick={handleMoreButtonClick}>
@@ -219,7 +235,7 @@ const Navigation = () => {
     );
 };
 
-const SubscribersListContainer = styled.div`
+const SubscriberContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -227,13 +243,40 @@ const SubscribersListContainer = styled.div`
   height: 250px;
   border-top: 1px solid #ccc;
     align-items: center;    
+  
+  @media (max-width: 1300px) {
+    display: none;
+    }
+`;
+
+const SubscribersListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+    align-items: center;    
+    overflow-y: auto; /* 스크롤바가 수직 방향으로 표시됩니다. */
+    margin-bottom: 10px;
+
+    scrollbar-width: thin; /* 스크롤바 너비를 얇게 조정 */
+    scrollbar-color: #888 transparent; /* 스크롤바 색상 설정 */
+    overflow-y: auto; /* 세로 스크롤바 표시 */
+  
+    &::-webkit-scrollbar {
+        width: 5px; /* 스크롤바 너비 */
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #888; /* 스크롤바 색상 */
+    }
+  
   @media (max-width: 1300px) {
     display: none;
     }
 `;
 
 const SubscribersHeader = styled.div`
-    margin: 20px;
+    margin: 10px;
     width: 80%;
     text-align: left; 
 `;
@@ -241,6 +284,7 @@ const SubscribersHeader = styled.div`
 const NaviFrame = styled.div`
     position: absolute;
     height: 100%;
+
     user-select: none;
     display: flex;
     flex-direction: column;

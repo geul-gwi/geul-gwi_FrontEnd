@@ -7,7 +7,7 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 // css import
 import 'css/user/Register.css'
 // Import Component
-import RegisterContainer from 'component/user/register/RegisterContainer';
+import RegisterContainer from 'component/user/accounts/register/RegisterContainer';
 
 const RegisterAction = () => {
     const navigate = useNavigate();
@@ -209,7 +209,21 @@ const RegisterAction = () => {
 
     // 입력 누락 확인 및 조건만족 Check
     const CheckGoodToContinue = () => {
-
+        if (
+            Id.trim() !== "" &&
+            Password.trim() !== "" &&
+            ConfirmPassword.trim() !== "" &&
+            NickName.trim() !== "" &&
+            Name.trim() !== "" &&
+            Email.trim() !== "" &&
+            Age.trim() !== "" &&
+            Gender.trim() !== "" &&
+            Tags.length > 0
+        ) {
+            return true; // 모든 필수 입력란이 채워져 있음
+        } else {
+            return false; // 하나 이상의 필수 입력란이 비어 있음
+        }
     }
 
 
@@ -235,9 +249,15 @@ const RegisterAction = () => {
 
     // 회원 가입 처리
     const onSubmitHandler = async () => {
-        if(Tags.length === 0)
+
+        if(!CheckGoodToContinue())
         {
-            alert("최소 태그 1개를 선택해주세요");
+            alert("정보를 모두 입력해주세요.");
+            return;
+        }
+        else if(Tags.length === 0)
+        {
+            alert("최소 태그 1개를 선택해주세요.");
             return;
         }
 
@@ -273,7 +293,7 @@ const RegisterAction = () => {
                 navigate('/accounts/');
             })
             .catch(function (error) {
-                alert("회원가입이 정상적으로 완료하지 못했습니다. \n 다시 시도해주세요.");
+                alert("회원가입이 정상적으로 완료되지 못했습니다. \n 다시 시도해주세요.");
                 console.error(error);
             });
     }

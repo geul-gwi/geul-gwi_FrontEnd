@@ -10,7 +10,9 @@ const FriendRequestForm = (props) => {
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
+    
     const friendRequestsUrl = '/friend/list/pending/'; // 친구 요청 목록 요청 주소
+    const friendAcceptUrl = '/friend/confirm'; // 친구 요청 확인 요청 주소
 
     const [requests, setRequests] = useState([]); // 친구 요청 목록 데이터
 
@@ -32,6 +34,32 @@ const FriendRequestForm = (props) => {
         fetchUserProfile();
     }, []);
 
+    // 친구 요청 수락
+    const onFriendRequestAccept = async (friend) => {
+        const userConfirmed = window.confirm(`${friend.nickname}님의 친구 요청을 받으시겠습니까?`);
+        if (!userConfirmed) {
+            return;
+        }
+
+        try {
+            const friendDTO = {
+                'toUser': friend.userSeq, // 나에게 요청 보낸 사람
+                'fromUser': userSeq, // 나
+            };
+            const response = await Axios.post(`${axiosAddr}${friendAcceptUrl}`, friendDTO, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+            //console.log('친구 요청 수락 완료 : ', response);
+            alert(`${friend.nickname}님과 친구가 되었습니다.`);
+            props.setMenu('list');
+
+
+        } catch (error) {
+            console.error('친구 요청 수락 실패 : ', error);
+        }
+    };
 
     return (
         <Frame>
@@ -39,6 +67,7 @@ const FriendRequestForm = (props) => {
                 <FriendRequestItem
                     key={friend.userSeq}
                     friend={friend}
+                    onFriendRequestAccept={onFriendRequestAccept}
                 />
             ))}
         </Frame>

@@ -80,10 +80,11 @@ const Button = styled.div`
   color: white;
   position: absolute;
   top: 23px;
-  right: -10px;
-  border-radius: 8px;
+  right: -20px;
+  border-radius: 12px;
   padding: 8px 30px;
   cursor: pointer;
+  transition: 0.3s;
 
   &:hover {
         background-color: #ccebb5;

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; 
-import { Button } from 'component/common/button/Button';
 
 const MessageWritingForm = ({data})=> {
    const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
@@ -45,9 +44,8 @@ const MessageWritingForm = ({data})=> {
 
    return (
       <Container>
-         <Title>쪽지</Title>
+         <Title>쪽지 보내기</Title>
          <RecipientInfo>
-            <RecipientLabel></RecipientLabel>
             <RecipientName>{data.receiverNickname}</RecipientName>
          </RecipientInfo>
          <Form>
@@ -58,7 +56,6 @@ const MessageWritingForm = ({data})=> {
             />
             <Textarea
                type="text"
-               placeholder="내용"
                value={message.content}
                onChange={(e) => setMessage({ ...message, content: e.target.value })}
             />
@@ -81,8 +78,23 @@ const Container = styled.div`
    margin-bottom: 50px;
 `;
 
+const Button = styled.button`
+   padding: 8px 30px;
+   border: none;
+   cursor: pointer;
+   margin-top: 10px;
+   border-radius: 8px;
+   transition: 0.3s;
+   background-color: #ccebb5;
+   color: white;
+
+   &:hover {
+      background-color: #ccc;
+   }
+`;
+
 const Title = styled.h2`
-   font-size: 20px;
+   font-size: 18px;
    margin-bottom: 20px;
 `;
 
@@ -90,11 +102,6 @@ const RecipientInfo = styled.div`
    display: flex;
    align-items: center;
    margin-bottom: 20px;
-`;
-
-const RecipientLabel = styled.span`
-   font-weight: bold;
-   margin-right: 10px;
 `;
 
 const RecipientName = styled.span`
@@ -105,35 +112,37 @@ const Form = styled.div`
    display: flex;
    flex-direction: column;
    align-items: center;
+   width: 500px;
 `;
 
 const Input = styled.input`
    margin: 10px 0;
-   padding: 5px;
    border: 1px solid #ccc;
    border-radius: 5px;
-   width: 300px;
    height: 30px;
+   width: 500px;
+   padding: 10px 10px 10px 10px;
+   transition: border-color 0.3s, box-shadow 0.3s; /* 변화가 부드럽게 보이도록 트랜지션 추가 */
    &:focus {
         outline: none; /* 포커스 테두리 제거 (선택 사항) */
-        border-color:  #ccebb5; /* 포커스 시 변경할 테두리 색상 */
-        box-shadow: 0 0 5px  #ccebb5; /* 포커스 시 그림자 효과 (선택 사항) */
-    }
+        border-color: #ccebb5; /* 포커스 시 변경할 테두리 색상 */
+        box-shadow: 0 0 8px #ccebb5; /* 포커스 시 그림자 효과 (선택 사항) */
+   }
 `;
 
 const Textarea = styled.textarea`
-   margin: 10px 0;
-   padding: 10px;
    border: 1px solid #ccc;
    border-radius: 5px;
    resize: vertical;
    width: 500px;
-   height: 150px;
+   height: 100px;
+   padding: 10px;
+   transition: border-color 0.3s, box-shadow 0.3s; /* 변화가 부드럽게 보이도록 트랜지션 추가 */
    &:focus {
         outline: none; /* 포커스 테두리 제거 (선택 사항) */
-        border-color:  #ccebb5; /* 포커스 시 변경할 테두리 색상 */
-        box-shadow: 0 0 5px  #ccebb5; /* 포커스 시 그림자 효과 (선택 사항) */
-    }
+        border-color: #ccebb5; /* 포커스 시 변경할 테두리 색상 */
+        box-shadow: 0 0 8px #ccebb5; /* 포커스 시 그림자 효과 (선택 사항) */
+   }
 `;
 
 const CharCount = styled.div`

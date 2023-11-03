@@ -75,6 +75,11 @@ const PostContainer = (props) => {
         }
     };
 
+        // 프로필 클릭 => 해당 유저의 프로필로 이동한다.
+        const onClickProfile = (userSeq) => {
+            navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
+        };
+
     return (
         <Frame>
             {props.posts && props.posts.map((post) => (
@@ -85,7 +90,15 @@ const PostContainer = (props) => {
                             <EditIcon><AiOutlineClose size={20} color='gray' onClick={() => onDeletePost(post.challengeUserSeq)} /></EditIcon>
                         </HeaderButtonContainer>
                     )}
-                    <Nickname>{post.nickname}</Nickname>
+                    <ProfileContainer>
+                        <ProfilePicture 
+                            src={'/img/defaultProfile.png'} 
+                            onClick={() => onClickProfile(post.userSeq)}
+                        />
+                        <Nickname onClick={() => onClickProfile(post.userSeq)}>
+                            {post.nickname}
+                        </Nickname>
+                    </ProfileContainer>
                     <Content>{post.challengeContent}</Content>
                     <ItemBottom>
                         <LikeCount>{post.likeCount}</LikeCount>
@@ -121,6 +134,32 @@ const Frame = styled.div`
     flex-wrap : wrap;
 `
 
+
+const ProfileContainer = styled.div`
+    display : flex;
+    width : 100%;
+    height : 40px;
+    align-items: center;
+    margin-bottom:10px;
+        
+`
+
+const ProfilePicture = styled.img`
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+
+    cursor: pointer;
+    object-fit: cover;
+
+    &:hover {
+        transform: scale(1.1);
+        transition: transform 0.2s ease-in-out;
+    }
+`;
+
+
 // 챌린지 게시물 하나 프레임
 const Item = styled.div`
     display : flex;
@@ -145,6 +184,7 @@ const Nickname = styled(PartFrame)`
     align-items : center;
     color : rgba(10,10,10, 1);
     font-size : 17px;
+    cursor: pointer;
 `
 // PostItem의 본문부분
 const Content = styled(PartFrame)`
@@ -158,17 +198,15 @@ const ItemBottom = styled.div`
     display : flex;
     width : 100%;
     height : 30px;
-    justify-content : space-between;
-    align-items : center;
+    justify-content: flex-end;
 `
 // PostItem의 하단 부분의 왼쪽 ( 좋아요 수 표시 )
 const LikeCount = styled.div`
     display : flex;
-    min-width : 10px; width : auto;
     padding : 0px 0px 0px 5px;
     align-items : center;
-    color : rgba(10,10,10,0.7); 
-    font-size : 15px;
+    font-size : 14px;
+    margin-top: 3px;
 `
 const LikeButtonContainer = styled.div`
     display : flex;

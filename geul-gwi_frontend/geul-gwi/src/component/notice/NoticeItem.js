@@ -48,7 +48,7 @@ const NoticeItem = (props) => {
 
     // 서버에서 받은 시간 표준으로 바꾸는 함수!!
     function parseISOString(s) {
-        // 2023-10-28 04:57:51
+        // 2023-11-03T00:49:35.694719620
         const year = s.slice(0, 4);
         const month = s.slice(5, 7) - 1; // 월은 0부터 시작하므로 1을 빼줍니다.
         const day = s.slice(8, 10);
@@ -61,8 +61,7 @@ const NoticeItem = (props) => {
     function formatDateTime() {
         const currentDate = new Date();
         const messageDate = parseISOString(props.notice.regDate);
-        //console.log("변환하기 전 시간 : ", props.notice.regDate);
-        //console.log("변환한 시간 : ", messageDate);
+        console.log("시간 : ", props.notice.regDate + " => " + messageDate);
         const timeDiff = currentDate - messageDate;
         const seconds = Math.floor(timeDiff / 1000);
         const minutes = Math.floor(seconds / 60);
@@ -152,7 +151,7 @@ const NoticeItem = (props) => {
                 },
             });
             //console.log(response.data);
-
+            
             return response.data;
 
         } catch (error) {
@@ -168,11 +167,11 @@ const NoticeItem = (props) => {
 
     // 친구 요청 수락
     const onFriendRequestAccept = async () => {
-        // 이미 친구 상태인지 확인한다.
-        if (friendStatus === 'friend') {
-            alert("이미 친구 상태입니다.");
+        const userConfirmed = window.confirm(`${props.notice.nickname}님의 친구 요청을 수락하시겠습니까?`);  
+        if (!userConfirmed) {
             return;
         }
+
         try {
             const friendDTO = {
                 'toUser': props.notice.fromUser, // 나에게 요청 보낸 사람
@@ -184,6 +183,9 @@ const NoticeItem = (props) => {
                 },
             });
             //console.log('친구 요청 수락 완료 : ', response);
+            alert(`${props.notice.nickname}님과 친구가 되었습니다.`);
+            const status = await CheckFriendStatus();
+            setFriendStatus(status);
            
         } catch (error) {
             console.error('친구 요청 수락 실패 : ', error);
@@ -203,8 +205,9 @@ const NoticeItem = (props) => {
                 <Time>{formatDateTime(props.notice.regDate)}</Time>
             </ContentContainer>
             <ProfileContainer>
-                {friendStatus !== 'friend' && props.notice.type === 'FRIEND' &&
-                <Button onClick={onFriendRequestAccept}>확인</Button>}
+                {friendStatus === 'stranger' && props.notice.type === 'FRIEND' &&
+                    <Button onClick={onFriendRequestAccept}>받기</Button>
+                }
                 {props.notice.checked === 'F' && <RedDot /> }
                 <CloseButton onClick={onClickDelete}> 
                     <AiOutlineClose size={12} color='gray' />
@@ -220,12 +223,12 @@ const Frame = styled.div`
     width: 100%;
     height: auto;
     background-color: white;
-    transition: background-color 0.2s;
+    transition: background-color 0.3s;
     font-size: 15px;
     padding: 10px;
     border-radius: 16px;
+    cursor: pointer;
     &:hover {
-        cursor: pointer;
         background-color: rgb(245, 245, 245);
     }
 `;
@@ -239,10 +242,10 @@ const TopRow = styled.div`
 const RedDot = styled.div`
         position: absolute; 
         top: 16px; /* 원하는 위치 조절 */
-        right: 25px; /* 원하는 위치 조절 */
+        right: 26px; /* 원하는 위치 조절 */
         width: 8px; /* 원하는 크기 조절 */
         height: 8px; /* 원하는 크기 조절 */
-        background-color: rgb(242,151,165);
+        background-color: #75d97f;
         border-radius: 50%;
 `;
 
@@ -274,7 +277,7 @@ const ProfileContainer = styled.div`
 
 
 const ContentContainer = styled.div`
-    flex: 9;
+
 `;
 
 const Nickname = styled.span`
@@ -293,9 +296,8 @@ const Time = styled.div`
 
 const CloseButton = styled.div`
     position: absolute;
-    margin-left: 5px;
     cursor: pointer;
-    right: 3px;
+    right: 12px;
 `;
 
 const Button = styled.button`

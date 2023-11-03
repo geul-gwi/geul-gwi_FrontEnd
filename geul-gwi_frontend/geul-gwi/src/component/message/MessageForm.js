@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { AxiosAddrContext } from 'contextStore/AxiosAddress'; 
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux';
 // component
 import MessageWritingForm from 'component/message/MessageWritingForm';
@@ -15,7 +15,7 @@ const MessageForm = () => {
 
    const userSeq = useSelector((state) => state.authReducer.userSeq);
    const userToken = useSelector((state) => state.authReducer.accessToken);
-   
+
    const [selectedMessage, setSelectedMessage] = useState(null); // 선택한 메시지 정보
    const [selectedTab, setSelectedTab] = useState("received");
    const [messages, setMessages] = useState([]);
@@ -26,14 +26,14 @@ const MessageForm = () => {
       } else {
          GetSendMessage(); // 보낸 쪽지 목록 요청
       }
-    }, []);
+   }, []);
 
    // 답장하기 버튼을 클릭하면 해당 메시지 정보를 선택하고 MessageWritingForm을 표시
    const replyToMessage = (message) => {
       console.log("답장하기:", message);
       const data = {
-         receiverSeq : message.senderSeq,
-         receiverNickname : message.senderNickname
+         receiverSeq: message.senderSeq,
+         receiverNickname: message.senderNickname
       }
       setSelectedMessage(data);
    }
@@ -108,48 +108,51 @@ const MessageForm = () => {
 
    return (
       <>
-      <Container>
-         <Tabs>
-            <TabButton
-                  onClick={() => handleTabClick("received")}
-               active={selectedTab === "received"}
-            >
-               받은 쪽지
-            </TabButton>
-            <TabButton
-                  onClick={() => handleTabClick("sent")}
-               active={selectedTab === "sent"}
-            >
-               보낸 쪽지
-            </TabButton>
-         </Tabs>
-         <Header>{selectedTab === "received" ? "받은 쪽지함" : "보낸 쪽지함"}</Header>
-
-         <MessageList>
-               {messages.length === 0 ? (<EmptyMessage>쪽지함이 비었습니다.</EmptyMessage>) : (null)}
-            {messages && messages.map((message) => (
-               <MessageItem key={message.messageSeq}>
-                  {selectedTab === "received" ? (
-                        <Sender>보낸 사람: {message.senderNickname}</Sender>
-                  ) : (
-                     <Recipient>받는 사람: {message.receiverNickname}</Recipient>
-                  )}
-                  <Title>제목: {message.title}</Title>
-                  <div>{message.content}</div>
-                  <DeleteButton onClick={() => deleteMessage(message.messageSeq)}>X</DeleteButton>
-                  {selectedTab === "received" ? (
-                     <ReplyButton onClick={() => replyToMessage(message)}>답장하기</ReplyButton>
-                     ) : (null)
-                  }
-               </MessageItem>
-            ))}
-         </MessageList>
-      </Container>
          {selectedMessage && (
             <MessageWritingForm
                data={selectedMessage}
             />
          )}
+         <Container>
+            <Tabs>
+               <TabButton
+                  onClick={() => handleTabClick("received")}
+                  active={selectedTab === "received"}
+               >
+                  받은 쪽지
+               </TabButton>
+               <TabButton
+                  onClick={() => handleTabClick("sent")}
+                  active={selectedTab === "sent"}
+               >
+                  보낸 쪽지
+               </TabButton>
+            </Tabs>
+            <Header>{selectedTab === "received" ? "받은 쪽지함" : "보낸 쪽지함"}</Header>
+
+            <MessageList>
+               {messages.length === 0 ? (<EmptyMessage>쪽지함이 비었습니다.</EmptyMessage>) : (null)}
+               {messages && messages.map((message) => (
+                  <MessageItem key={message.messageSeq}>
+                     <ProfileContainer>
+                        <ProfilePicture
+                           src={'/img/defaultProfile.png'}
+                        />
+                        {selectedTab === "received" ? (
+                           <Sender>{message.senderNickname}</Sender>
+                        ) : (
+                           <Recipient>{message.receiverNickname}</Recipient>
+                        )}
+                     </ProfileContainer>
+                     <Title>{message.title}</Title>
+                     <Message>{message.content}</Message>
+                     <DeleteButton onClick={() => deleteMessage(message.messageSeq)}>X</DeleteButton>
+                     {selectedTab === "received" && <ReplyButton onClick={() => replyToMessage(message)}>답장하기</ReplyButton>}
+                  </MessageItem>
+               ))}
+            </MessageList>
+         </Container>
+
       </>
    );
 };
@@ -165,10 +168,34 @@ const Container = styled.div`
    border-radius: 16px;
 `;
 
+const ProfileContainer = styled.div`
+    display : flex;
+    flex-direction: row;
+    width : 100%;
+    align-items: center;
+    margin-bottom: 10px;  
+    justify-content: flex-start;
+`
+
 const Tabs = styled.div`
    display: flex;
    justify-content: center;
    margin-bottom: 20px;
+`;
+
+const ProfilePicture = styled.img`
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+
+    cursor: pointer;
+    object-fit: cover;
+
+    &:hover {
+        transform: scale(1.1);
+        transition: transform 0.2s ease-in-out;
+    }
 `;
 
 const TabButton = styled.button`
@@ -188,6 +215,7 @@ const TabButton = styled.button`
 
 const Header = styled.h1`
    font-size: 20px;
+   margin-left: 10px;
    margin-bottom: 20px;
 `;
 
@@ -195,19 +223,19 @@ const EmptyMessage = styled.p`
    color: grey;
 `;
 
-const MessageList = styled.ul`
+const MessageList = styled.div`
    display: flex;
+   align-items: center;
    flex-direction: column;
    justify-content: center;
-   list-style: none;
-   padding: 0;
    margin: none;
+   gap: 10px;
 `;
 
-const MessageItem = styled.li`
+const MessageItem = styled.div`
+   width: 90%;   
    border: 1px solid #ccc;
    padding: 20px;
-   margin: 10px 0;
    border-radius: 10px;
    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
    transition: transform 0.3s;
@@ -230,16 +258,23 @@ const Recipient = styled.div`
 
 const Title = styled.div`
    margin-bottom: 20px;
+   font-weight: bold;
+`;
+
+const Message = styled.div`
+   margin-bottom: 20px;
+   min-height: 30px;
 `;
 
 const ReplyButton = styled.button`
-   border: solid 1px #ccc;
-   padding: 5px 10px;
+   padding: 8px 25px;
+   border: none;
    cursor: pointer;
    margin-top: 10px;
-   background-color: white;
-   border-radius: 5px;
-   transition: background-color 0.3s;
+   border-radius: 8px;
+   transition: 0.3s;
+   background-color: #ccebb5;
+   color: white;
 
    &:hover {
       background-color: #ccc;
