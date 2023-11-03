@@ -11,12 +11,11 @@ const MemberSearchItem = (props) => {
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
-    
-    const [profile, setProfile] = useState();
 
     const friendRequestUrl = '/friend/confirm'; // 친구 요청 주소
     const friendStatusUrl = '/friend/status'; // 친구 상태 요청 주소
 
+    const [profile, setProfile] = useState();
     const [friendStatus, setFriendStatus] = useState(null);
 
     useEffect(() => {
@@ -65,7 +64,7 @@ const MemberSearchItem = (props) => {
     };
 
     // 친구 요청 
-    const onFriendRequestAccept = async () => {
+    const onClickFriendRequest = async () => {
         // 이미 친구 상태인지 확인한다.
         const userConfirmed = window.confirm(`${props.member.nickname}님에게 친구 요청을 보내시겠습니까?`);  
         if (!userConfirmed) {
@@ -110,8 +109,8 @@ const MemberSearchItem = (props) => {
                 <Nickname onClick={onClickProfile}>{props.member.nickname}</Nickname>
             </LeftContainer>
             <RightContainer>
-                {friendStatus === 'stranger' && <Button onClick={onFriendRequestAccept}>친구 요청</Button>}
-                {friendStatus === 'pending' && <Button>요청 대기 중</Button>}
+                {friendStatus === 'stranger' && <Button onClick={onClickFriendRequest}>친구 요청</Button>}
+                {friendStatus === 'pending' && <Button>승인 대기</Button>}
             </RightContainer>
         </Frame>
     );
