@@ -4,10 +4,10 @@ import styled from "styled-components";
 import {Routes, Route} from 'react-router-dom';
 
 // component
-import Register from "component/user/register/RegisterAction";
-import LoginForm from "component/user/login/LoginForm";
-import PasswordRecoveryForm from 'component/user/login/PasswordRecoveryForm';
-import IDRecoveryForm from "component/user/login/IDRecoveryForm";
+import Register from "component/user/accounts/register/RegisterAction";
+import LoginForm from "component/user/accounts/LoginForm";
+import PasswordRecoveryForm from 'component/user/accounts/PasswordRecoveryForm';
+import IDRecoveryForm from "component/user/accounts/IDRecoveryForm";
 
 const Account = () => {
     return (

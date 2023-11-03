@@ -48,6 +48,7 @@ const Item = styled.div`
   justify-content: space-between;
   padding: 10px;
   border-radius: 16px;
+  transition: 0.3s;
   :hover{
     background-color: rgb(240, 240, 240);
   }
@@ -63,7 +64,7 @@ const ProfileImage = styled.img`
   width: 45px;
   height: 45px;
   border-radius: 50%;
-      :hover{
+  :hover{
       cursor: pointer;
     }
 `;
@@ -71,7 +72,7 @@ const ProfileImage = styled.img`
 const UserName = styled.p`
     margin-left: 15px;
     font-size: 15px;
-        :hover{
+    :hover{
       cursor: pointer;
     }
 `;
@@ -83,14 +84,13 @@ const ButtonContainer = styled.div`
 
 const DeleteButton = styled.div`
     background-color: #ccebb5;
-    padding: 8px 18px;
-    border-radius: 8px;
+    padding: 8px 25px;
+    border-radius: 12px;
     font-size: 15px;
     color: white;
     user-select: none;
-    :hover{
       cursor: pointer;
-    }
+    
 
 `;
 

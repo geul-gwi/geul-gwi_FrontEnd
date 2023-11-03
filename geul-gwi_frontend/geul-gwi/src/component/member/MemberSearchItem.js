@@ -65,16 +65,11 @@ const MemberSearchItem = (props) => {
 
     // 친구 요청 
     const onClickFriendRequest = async () => {
-        // 이미 친구 상태인지 확인한다.
         const userConfirmed = window.confirm(`${props.member.nickname}님에게 친구 요청을 보내시겠습니까?`);  
         if (!userConfirmed) {
             return;
         }
 
-        if (friendStatus === 'friend') {
-            alert("이미 친구 상태입니다.");
-            return;
-        }
         try {
             const friendDTO = {
                 'toUser': props.member.userSeq, // 나에게 요청 보낸 사람

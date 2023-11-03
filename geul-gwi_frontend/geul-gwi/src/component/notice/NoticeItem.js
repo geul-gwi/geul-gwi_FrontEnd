@@ -151,7 +151,7 @@ const NoticeItem = (props) => {
                 },
             });
             //console.log(response.data);
-
+            
             return response.data;
 
         } catch (error) {
@@ -167,11 +167,11 @@ const NoticeItem = (props) => {
 
     // 친구 요청 수락
     const onFriendRequestAccept = async () => {
-        // 이미 친구 상태인지 확인한다.
-        if (friendStatus === 'friend') {
-            alert("이미 친구 상태입니다.");
+        const userConfirmed = window.confirm(`${props.notice.nickname}님의 친구 요청을 수락하시겠습니까?`);  
+        if (!userConfirmed) {
             return;
         }
+
         try {
             const friendDTO = {
                 'toUser': props.notice.fromUser, // 나에게 요청 보낸 사람
@@ -183,6 +183,9 @@ const NoticeItem = (props) => {
                 },
             });
             //console.log('친구 요청 수락 완료 : ', response);
+            alert(`${props.notice.nickname}님과 친구가 되었습니다.`);
+            const status = await CheckFriendStatus();
+            setFriendStatus(status);
            
         } catch (error) {
             console.error('친구 요청 수락 실패 : ', error);
@@ -203,7 +206,8 @@ const NoticeItem = (props) => {
             </ContentContainer>
             <ProfileContainer>
                 {friendStatus === 'stranger' && props.notice.type === 'FRIEND' &&
-                <Button onClick={onFriendRequestAccept}>확인</Button>}
+                    <Button onClick={onFriendRequestAccept}>받기</Button>
+                }
                 {props.notice.checked === 'F' && <RedDot /> }
                 <CloseButton onClick={onClickDelete}> 
                     <AiOutlineClose size={12} color='gray' />
@@ -219,12 +223,12 @@ const Frame = styled.div`
     width: 100%;
     height: auto;
     background-color: white;
-    transition: background-color 0.2s;
+    transition: background-color 0.3s;
     font-size: 15px;
     padding: 10px;
     border-radius: 16px;
+    cursor: pointer;
     &:hover {
-        cursor: pointer;
         background-color: rgb(245, 245, 245);
     }
 `;
@@ -238,10 +242,10 @@ const TopRow = styled.div`
 const RedDot = styled.div`
         position: absolute; 
         top: 16px; /* 원하는 위치 조절 */
-        right: 25px; /* 원하는 위치 조절 */
+        right: 26px; /* 원하는 위치 조절 */
         width: 8px; /* 원하는 크기 조절 */
         height: 8px; /* 원하는 크기 조절 */
-        background-color: rgb(242,151,165);
+        background-color: #75d97f;
         border-radius: 50%;
 `;
 
@@ -273,7 +277,7 @@ const ProfileContainer = styled.div`
 
 
 const ContentContainer = styled.div`
-    flex: 9;
+
 `;
 
 const Nickname = styled.span`
@@ -292,9 +296,8 @@ const Time = styled.div`
 
 const CloseButton = styled.div`
     position: absolute;
-    margin-left: 5px;
     cursor: pointer;
-    right: 3px;
+    right: 12px;
 `;
 
 const Button = styled.button`

@@ -190,11 +190,11 @@ const Post = (props) => {
                     </TagsContainer>
                 </TagContainer>
                 <ButtonContainer>
+                    <LikeCount>{likeCount}</LikeCount>
                     {isLiked ?
                         <AiFillHeart class="likebtn" size={30} color={"red"} onClick={onClickLikeButton} /> :
                         <AiOutlineHeart class="likebtn" size={30} onClick={onClickLikeButton} />
                     }
-                    {likeCount}
                 </ButtonContainer>
             </TagButtonContainer>
         </PostFrame>
@@ -203,6 +203,11 @@ const Post = (props) => {
 
 const EditIcon = styled.div`
     cursor: pointer;
+`;
+
+const LikeCount = styled.div`
+   font-size: 17px;
+   margin-top: 5px;
 `;
 
 const PostFrame = styled.div`
@@ -216,7 +221,6 @@ const PostFrame = styled.div`
     flex-direction: column;
     margin-top : 30px;
     user-select: none;
-
 `
 
 const PostProfileContainer = styled.div`
@@ -247,6 +251,7 @@ const TagButtonContainer = styled.div`
     display : flex;
     width : 100%;
     height : 30px;
+
 `
 const ProfileImage = styled.div`
     width : 50px;
@@ -278,12 +283,10 @@ const ButtonContainer = styled.div`
     display : flex;
     justify-content : center;
     align-items : center;
-    width : 30px;
+    width : auto;
     height : 100%;
-    border-radius : 16px;
     cursor : pointer;
-    
-
+    gap: 2px;
 `
 const Name = styled.div`
     width : 100%;
@@ -291,7 +294,7 @@ const Name = styled.div`
     font-style : "bold";
     font-size : 16px;
     color : #5F5F5F;
-            cursor: pointer;
+    cursor: pointer;
 `
 
 const Comment = styled.div`
