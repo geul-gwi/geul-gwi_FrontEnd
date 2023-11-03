@@ -149,6 +149,7 @@ const ProfileImage = styled.img`
     cursor: pointer;
     object-fit: cover;
     margin-right: 12px;
+
     &:hover {
         transform: scale(1.1);
         transition: transform 0.2s ease-in-out;
@@ -158,6 +159,7 @@ const ProfileImage = styled.img`
 const Nickname = styled.div`
     color: #333;
     margin-bottom: 4px;
+    cursor: pointer;
 `;
 
 const Button = styled.button`

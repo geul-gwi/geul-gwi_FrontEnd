@@ -197,13 +197,13 @@ const Navigation = () => {
                         </MenuItem>
                     </MenuButtonManager>
                 </MenuButtonContainer>}
-            <AlertContainer isVisible={isAlertFormVisible} size={'-450px'}>
+            <AlertContainer isVisible={isAlertFormVisible} size={'-461px'}>
                 {isAlertFormVisible &&
                     <NoticeForm
                         handleAlertClick={handleAlertClick}
                     />}
             </AlertContainer>
-            <AlertContainer isVisible={isFriendForm} size={'-450px'}>
+            <AlertContainer isVisible={isFriendForm} size={'-361px'}>
                 {isFriendForm &&
                     <FriendForm
                         handleFriendClick={handleFriendClick}

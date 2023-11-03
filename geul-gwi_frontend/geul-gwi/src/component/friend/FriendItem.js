@@ -71,15 +71,15 @@ const FriendItem = (props) => {
 
     return (
         <Frame>
-            <ProfileImage
-                src={profile || '/img/defaultProfile.png'}
-                onClick={onClickProfile}
-            />
-            <ContentContainer>
-                    <Name onClick={onClickProfile}>{props.friend.nickname}</Name>
-            </ContentContainer>
-            <ProfileContainer>
-                <CloseButton onClick={onClickDelete}>친구 끊기</CloseButton>
+            <LeftContainer>
+                <ProfileImage
+                    src={profile || '/img/defaultProfile.png'}
+                    onClick={onClickProfile}
+                />
+                <Name onClick={onClickProfile}>{props.friend.nickname}</Name>
+            </LeftContainer>
+            <RightContainer>
+                <Button onClick={onClickDelete}>친구 끊기</Button>
                 <SubscribeButton onClick={toggleSubscription}>
                     {isSubscribed === 'T' ?
                         < img src={process.env.PUBLIC_URL + "/icon/notification1.png"}
@@ -90,7 +90,7 @@ const FriendItem = (props) => {
                         ></img>
                     }
                 </SubscribeButton>
-            </ProfileContainer>
+            </RightContainer>
         </Frame>
     );
 };
@@ -98,20 +98,32 @@ const FriendItem = (props) => {
 const Frame = styled.div`
     display: flex;
     align-items: center;
-    width: 92%;
+    flex-direction: row;
+    width: 75%;
     height: auto;
     background-color: white;
+    padding: 5px;
+    cursor: pointer;
+`;
 
-    font-size: 14px;
-    padding:5px;
-    border-radius: 16px;
-    border-bottom: 1px solid rgb(240, 240, 240);
+const LeftContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 10px;
+`;
+
+const RightContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1;
+    padding: 0 10px;
 `;
 
 const SubscribeButton = styled.button`
-    margin-left: 5px;
+
     cursor: pointer;
-    font-size: 25px;
     color: black;
     background-color: white;
     border: none;
@@ -130,6 +142,7 @@ const ProfileImage = styled.img`
     margin-right: 10px;
     cursor: pointer;
     object-fit: cover;
+    margin-right: 12px;
 
     &:hover {
         transform: scale(1.1);
@@ -137,42 +150,23 @@ const ProfileImage = styled.img`
     }
 `;
 
-const ProfileContainer = styled.div`
-    display: flex;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    position: relative;
-`;
-
-const ContentContainer = styled.div`
-    flex: 8;
-`;
-
 const Name = styled.div`
-    font-weight: bold;
-    margin-bottom: 2px;
+    color: #333;
     cursor: pointer;
 `;
 
-const CloseButton = styled.div`
-    display: flex;
-    border: 1px solid #ccc;
-    width: 100px;
-    height: 30px;
-    background-color: white;
+const Button = styled.button`
+    background-color: "#3498db";
+    color: "white"; 
+    border: none;
+    padding: 7px 10px;
     border-radius: 8px;
-    margin-left: 5px;
     cursor: pointer;
-    border-color: #ccc;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.2s;
-
+    font-size: 12px;
+    transition: background-color 0.3s, color 0.3s;
+    
     :hover{
-        background-color: rgb(240, 240, 240);
+        background-color: rgb(230, 230, 230);
     }
 `;
 
