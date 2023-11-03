@@ -150,7 +150,9 @@ const Post = (props) => {
     return (
         <PostFrame>
             <PostProfileContainer>
-                <ProfileImage onClick={onClickProfile}><img src={props.profile ? props.profile : '/img/defaultProfile.png'}></img></ProfileImage>
+                <ProfileImage onClick={onClickProfile}>
+                    <img src={props.profile ? props.profile : '/img/defaultProfile.png'}></img>
+                </ProfileImage>
                 <ProfileName>
                     <Name onClick={onClickProfile}>{props.nickname}</Name>
                     <Comment>{props.comment}</Comment>

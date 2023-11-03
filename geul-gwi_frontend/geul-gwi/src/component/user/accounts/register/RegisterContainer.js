@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 // Component
 import { TagButton } from 'component/common/button/Tag';
 
 const RegisterContainer = (props) => {
+    const navigate = useNavigate();
     const [IsValidRequested, setIsValidRequested] = useState(false);
+
+    
 
     // 아이디 유효성 검사
     const CheckId = () => {
@@ -160,6 +164,10 @@ const RegisterContainer = (props) => {
         setIsValidRequested(true);
     };
 
+    const onClickLogin = () => {
+        navigate(`/accounts`);
+    };
+
     return (
         <RegiContainer>
 
@@ -167,8 +175,7 @@ const RegisterContainer = (props) => {
                 <div style={{ display: 'flex', flexDirection: 'column', width: '400px', height: '100%', margin: '0 auto' }}>
                     <h2 className='title'>회원 가입</h2>
                     <AlreadyAccountContainer>
-                        계정이 있으신가요?
-                        <LoginButton>로그인</LoginButton>
+                        <LoginButton onClick={onClickLogin}>계정이 있으신가요? 로그인</LoginButton>
                     </AlreadyAccountContainer>
                     <ProfilePicture
                         src={props.showProfile ? (props.showProfile) : null || '/img/defaultProfile.png'}
@@ -473,7 +480,6 @@ const AlreadyAccountContainer = styled.div`
 
 const LoginButton = styled.span`
     margin-left: 5px;
-    color: skyblue;
     cursor: pointer;
 `;
 

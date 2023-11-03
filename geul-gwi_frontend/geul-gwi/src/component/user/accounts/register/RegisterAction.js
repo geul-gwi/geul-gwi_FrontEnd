@@ -293,7 +293,7 @@ const RegisterAction = () => {
                 navigate('/accounts/');
             })
             .catch(function (error) {
-                alert("회원가입이 정상적으로 완료하지 못했습니다. \n 다시 시도해주세요.");
+                alert("회원가입이 정상적으로 완료되지 못했습니다. \n 다시 시도해주세요.");
                 console.error(error);
             });
     }
