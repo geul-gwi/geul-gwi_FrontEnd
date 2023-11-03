@@ -164,8 +164,8 @@ const Nickname = styled.div`
 `;
 
 const Button = styled.button`
-    background-color: "#3498db";
-    color: "white"; 
+    background-color: #b7de99;
+    color: white;
     border: none;
     padding: 7px 10px;
     border-radius: 8px;
@@ -174,7 +174,7 @@ const Button = styled.button`
     transition: background-color 0.3s, color 0.3s;
     
     :hover{
-        background-color: rgb(230, 230, 230);
+        background-color: #ccebb5;
     }
 `;
 

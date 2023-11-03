@@ -132,6 +132,7 @@ const TagManagement = () => {
             })}
           </TagsContainer>
         </TagContainer>
+        <Adding>태그 추가</Adding>
         <TagInputContainer>
           <InputTag
             type='text'
@@ -208,6 +209,7 @@ const ButtonGroup = styled.div`
     display: flex;
     margin: auto;
     margin-bottom: 20px;
+
 `;
 
 const MainContainer = styled.div`
@@ -241,6 +243,7 @@ const TagsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px; 
+  margin-bottom: 20px;
 `;
 
 const TagInputContainer = styled.div`
@@ -259,6 +262,11 @@ const ColorPicker = styled.input`
 
 const Title = styled.p`
   font-size: 20px;
+
+`;
+
+const Adding = styled.p`
+  font-size: 18px;
 
 `;
 
