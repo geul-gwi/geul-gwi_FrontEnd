@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Axios from 'axios';
 
 // Component
-import TagSearchForm from 'component/search/TagSearchForm'
+import TagSearchForm from 'component/main/LeftNavi/search/TagSearchForm'
 
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux';

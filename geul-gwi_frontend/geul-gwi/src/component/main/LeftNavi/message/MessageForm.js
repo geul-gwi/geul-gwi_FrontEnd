@@ -4,7 +4,7 @@ import axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux';
 // component
-import MessageWritingForm from 'component/message/MessageWritingForm';
+import MessageWritingForm from 'component/main/LeftNavi/message/MessageWritingForm';
 
 const MessageForm = () => {
    const axiosAddress = useContext(AxiosAddrContext).axiosAddr;

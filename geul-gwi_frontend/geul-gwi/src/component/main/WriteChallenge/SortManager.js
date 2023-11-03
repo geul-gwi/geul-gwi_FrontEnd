@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FiChevronDown } from "react-icons/fi";
 // component
-import PostContainer from 'component/main/WriteChallenge/PostManager/PostContainer';
+import PostContainer from 'component/main/WriteChallenge/PostContainer';
 
 const SortManager = (props) => {
     const [sortedList, setSortedList] = useState(props.posts);

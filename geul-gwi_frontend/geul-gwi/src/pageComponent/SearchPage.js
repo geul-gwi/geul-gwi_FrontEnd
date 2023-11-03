@@ -1,7 +1,7 @@
 import React from 'react';
 
 // import Component
-import SearchAction from 'component/search/SearchAction'
+import SearchAction from 'component/main/LeftNavi/search/SearchAction'
 
 const SearchPage = () => {
     return (

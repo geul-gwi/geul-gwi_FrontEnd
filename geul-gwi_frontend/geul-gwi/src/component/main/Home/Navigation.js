@@ -9,9 +9,9 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import imageDataFetcher from 'service/imageDataFetcher';
 
 // component
-import NoticeForm from "component/notice/NoticeForm";
-import FriendForm from "component/friend/FriendForm";
-import MemberSearchForm from 'component/member/MemberSearchForm';
+import NoticeForm from "component/main/LeftNavi/notice/NoticeForm";
+import FriendForm from "component/main/LeftNavi/friend/FriendForm";
+import MemberSearchForm from 'component/main/LeftNavi/memberSearch/MemberSearchForm';
 
 const menus = []
 menus.push({ "name": "홈", "src": "/icon/Navigation/home.svg", "target": "/main" })
@@ -60,6 +60,10 @@ const Navigation = () => {
             })
             .catch(error => {
                 console.error('구독자 목록:', error);
+                if (error.response.data.errorCode === 'A-002') {
+                    alert("로그인이 만료되었습니다. 로그인을 다시 시도해주세요.");
+                    navigate('/accounts');
+                }
             });
     }, []);
 

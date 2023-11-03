@@ -3,7 +3,7 @@ import Axios from 'axios';
 import styled from 'styled-components';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
-import NoticeItem from 'component/notice/NoticeItem';
+import NoticeItem from 'component/main/LeftNavi/notice/NoticeItem';
 import { AiOutlineClose } from 'react-icons/ai';
 
 const TYPE = {};

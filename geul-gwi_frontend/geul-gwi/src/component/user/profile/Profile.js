@@ -34,7 +34,7 @@ const Profile = ({ profileUserSeq }) => {
           },
         });
   
-        console.log("프로필:", response.data);
+        //console.log("프로필:", response.data);
         const userData = response.data;
         const profileImageUrl = await imageDataFetcher(axiosAddr, userData.profile);
   
@@ -42,14 +42,15 @@ const Profile = ({ profileUserSeq }) => {
           return { ...userData, profile: profileImageUrl };
         });
       } catch (error) {
+        if (error.response.data.errorCode === 'A-002') {
+          alert("로그인이 만료되었습니다. 로그인을 다시 시도해주세요.");
+          navigate('/accounts');
+        }
         console.log('프로필 불러오기 실패:', error);
       }
     }
-  
-    if (profileUserSeq) {
       fetchUserProfile();
-    }
-  }, [profileUserSeq, userToken]);
+  }, [profileUserSeq]);
 
   useEffect(() => {
     const fetchData = async () => {

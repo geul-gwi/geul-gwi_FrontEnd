@@ -3,7 +3,7 @@ import Axios from 'axios';
 import styled from 'styled-components';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
-import FriendItem from 'component/friend/FriendItem';
+import FriendItem from 'component/main/LeftNavi/friend/FriendItem';
 
 
 const FriendListForm = (props) => {

@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 import { AiOutlineClose } from 'react-icons/ai';
 // component
-import FriendListForm from 'component/friend/FriendListForm';
-import FriendRequestForm from 'component/friend/FriendRequestForm';
+import FriendListForm from 'component/main/LeftNavi/friend/FriendListForm';
+import FriendRequestForm from 'component/main/LeftNavi/friend/FriendRequestForm';
 
 
 const FriendForm = (props) => {

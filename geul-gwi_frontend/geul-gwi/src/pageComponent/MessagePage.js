@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Component
-import MessageFormForm from 'component/message/MessageForm';
+import MessageFormForm from 'component/main/LeftNavi/message/MessageForm';
 
 const MessagePage = () => {
     return (

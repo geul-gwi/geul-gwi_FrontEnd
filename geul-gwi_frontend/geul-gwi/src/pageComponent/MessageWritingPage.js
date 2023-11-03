@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 
 // component
-import MessageWritingForm from 'component/message/MessageWritingForm';
+import MessageWritingForm from 'component/main/LeftNavi/message/MessageWritingForm';
 
 const MessagePage = () => {
     const location = useLocation();
