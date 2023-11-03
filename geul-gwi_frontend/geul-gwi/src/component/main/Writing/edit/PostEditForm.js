@@ -87,7 +87,7 @@ const PostEditForm = ({ data }) => {
                 }
             });
 
-            alert("게시물 수정이 완료되었습니다.");
+            alert("수정이 완료되었습니다.");
             navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
 
         } catch (error) {
@@ -136,8 +136,8 @@ const PostEditForm = ({ data }) => {
         <Container>
             <FlexFrame>
                 <TitleContainer>
-                    <Title>게시물 수정</Title>
-                    <SubTitle>게시물을 수정하세요.</SubTitle>
+                    <Title>글귀 수정</Title>
+                    <SubTitle>글귀를 수정해주세요.</SubTitle>
                 </TitleContainer>
                 <FormContainer>
                     <ContentArea
@@ -240,7 +240,7 @@ const Button = styled.div`
     width : 100px;
     height : 30px;
     border-radius : 12px;
-    background-color : #FF9E9E;
+    background-color : #b7de99;
     justify-content : center; 
     align-items : center;
     font-size : 14px; 
@@ -248,7 +248,7 @@ const Button = styled.div`
     cursor : pointer;
 
     &:hover{
-        background-color : #FFB1B1;
+        background-color : #ccebb5;
     }
 `
 

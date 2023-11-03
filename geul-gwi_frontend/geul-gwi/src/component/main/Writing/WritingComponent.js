@@ -30,7 +30,7 @@ const WritingComponent = (props) => {
                         <TabButton onClick={() => props.handleTabClick("geulgwi")}
                             active={props.selectedTab === "geulgwi"}
                         >
-                            일반
+                            글귀
                         </TabButton>
                         <TabButton onClick={() => props.handleTabClick("challenge")}
                             active={props.selectedTab === "challenge"}
@@ -39,17 +39,17 @@ const WritingComponent = (props) => {
                         </TabButton>
                     </Tabs>
                     <TitleContainer style={{ marginBottom: '30px' }}>
-                        <ComponentName>{props.selectedTab === "geulgwi" ? "일반 글 작성" : "챌린지 작성"}</ComponentName>
+                        <ComponentName>{props.selectedTab === "geulgwi" ? "글귀 작성" : "챌린지 작성"}</ComponentName>
                         <ComponentIntro>
                             {props.selectedTab === "geulgwi" ?
-                                "나만의 글 귀를 작성해주세요."
-                                : "모든 키워드가 들어가도록 나만의 글 귀를 작성해주세요."}.
+                                "나만의 글귀를 작성해주세요."
+                                : "모든 키워드가 들어가도록 나만의 글귀를 작성해주세요."}.
                         </ComponentIntro>
                     </TitleContainer>
 
                     <FormContainer>
                         <ContentArea
-                            placeholder="글 귀를 작성하세요"
+                            placeholder="글귀를 작성하세요."
                             onChange={(e) => props.FormMainTextChange(e)}
                         >
                         </ContentArea>

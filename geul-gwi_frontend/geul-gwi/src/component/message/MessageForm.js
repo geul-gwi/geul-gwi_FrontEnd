@@ -56,7 +56,7 @@ const MessageForm = () => {
             }
          })
          .catch((error) => {
-            console.error('메시지 삭제 실패 :', error);
+            console.error('삭제 실패 :', error);
          });
    }
 
@@ -126,7 +126,7 @@ const MessageForm = () => {
          <Header>{selectedTab === "received" ? "받은 쪽지함" : "보낸 쪽지함"}</Header>
 
          <MessageList>
-               {messages.length === 0 ? (<EmptyMessage>쪽지함이 비어있습니다.</EmptyMessage>) : (null)}
+               {messages.length === 0 ? (<EmptyMessage>쪽지함이 비었습니다.</EmptyMessage>) : (null)}
             {messages && messages.map((message) => (
                <MessageItem key={message.messageSeq}>
                   {selectedTab === "received" ? (

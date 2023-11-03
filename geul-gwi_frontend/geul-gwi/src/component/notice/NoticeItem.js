@@ -94,7 +94,7 @@ const NoticeItem = (props) => {
                 return (
                     <span>
                         <Nickname>{props.notice.nickname}</Nickname>
-                        {'님에게 친구 요청이 왔습니다.'}
+                        {'님으로부터 친구 요청이 왔습니다.'}
                     </span>
                 );
             case 'MESSAGE':
@@ -108,21 +108,21 @@ const NoticeItem = (props) => {
                 return (
                     <span>
                         <Nickname>{props.notice.nickname}</Nickname>
-                        {'님이 글 귀를 작성했습니다.'}
+                        {'님이 글귀를 작성했습니다.'}
                     </span>
                 );
             case 'LIKE_GEULGWI':
                 return (
                     <span>
                         <Nickname>{props.notice.nickname}</Nickname>
-                        {'님이 회원님의 글 귀에 좋아요를 눌렀습니다.'}
+                        {'님이 회원님의 글귀에 좋아요를 눌렀습니다.'}
                     </span>
                 );
             case 'CHALLENGE':
                 return (
                     <span>
                         <Nickname>{props.notice.nickname}</Nickname>
-                        {'님이 챌린지 글 귀를 작성했습니다.'}
+                        {'님이 챌린지를 작성했습니다.'}
                     </span>
                 );
             case 'LIKE_CHALLENGE':

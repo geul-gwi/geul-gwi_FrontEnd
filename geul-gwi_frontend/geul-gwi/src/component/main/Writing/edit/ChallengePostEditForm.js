@@ -32,7 +32,7 @@ const ChallengePostEditForm = ({ data }) => {
                     }
                 });
     
-                alert("글 수정이 완료되었습니다.");
+                alert("수정이 완료되었습니다.");
                 navigate('/');
     
             } catch (error) {
@@ -47,12 +47,12 @@ const ChallengePostEditForm = ({ data }) => {
                 <FlexFrame>
                     <TitleContainer style={{ marginBottom: '30px' }}>
                         <ComponentName>챌린지 글 수정</ComponentName>
-                        <ComponentIntro>글을 수정해 보세요.</ComponentIntro>
+                        <ComponentIntro>글을 수정해 주세요.</ComponentIntro>
                     </TitleContainer>
                     <FormContainer>
                         <ContentArea
                             value={content}
-                            placeholder="글 귀를 작성하세요"
+                            placeholder="글귀를 작성하세요."
                             onChange={(e) => setContent(e.target.value)}
                         >
                         </ContentArea>

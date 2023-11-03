@@ -37,8 +37,8 @@ const MessageWritingForm = ({data})=> {
             setMessage({ title: '', content: '' });
          })
          .catch((error) => {
-            console.error('메시지 전송 실패:', error);
-            alert("쪽지 전송을 실패했습니다.");
+            console.error('쪽지 전송 실패:', error);
+            alert("쪽지 전송에 실패했습니다.");
          });
 
    };
@@ -47,13 +47,12 @@ const MessageWritingForm = ({data})=> {
       <Container>
          <Title>쪽지</Title>
          <RecipientInfo>
-            <RecipientLabel>받는 사람:</RecipientLabel>
+            <RecipientLabel></RecipientLabel>
             <RecipientName>{data.receiverNickname}</RecipientName>
          </RecipientInfo>
          <Form>
             <Input
                type="text"
-               placeholder="제목"
                value={message.title}
                onChange={(e) => setMessage({ ...message, title: e.target.value })}
             />
