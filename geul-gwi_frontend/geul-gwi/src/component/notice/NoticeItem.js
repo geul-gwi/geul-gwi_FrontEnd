@@ -203,7 +203,7 @@ const NoticeItem = (props) => {
                 <Time>{formatDateTime(props.notice.regDate)}</Time>
             </ContentContainer>
             <ProfileContainer>
-                {friendStatus !== 'friend' && props.notice.type === 'FRIEND' &&
+                {friendStatus === 'stranger' && props.notice.type === 'FRIEND' &&
                 <Button onClick={onFriendRequestAccept}>확인</Button>}
                 {props.notice.checked === 'F' && <RedDot /> }
                 <CloseButton onClick={onClickDelete}> 

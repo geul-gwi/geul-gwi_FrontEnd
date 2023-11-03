@@ -64,6 +64,8 @@ const Navigation = () => {
     }, []);
 
     const ComponentMove = (target) => {
+        handleOtherMenuClick(target); // 다른 메뉴 클릭 시 닫기 핸들러 호출
+        
         if (target === "/alarm") {
             handleAlertClick();
             return;
@@ -78,6 +80,19 @@ const Navigation = () => {
         }
         navigate(`${target}`);
     }
+
+     // 다른 메뉴 클릭 시 닫기 핸들러 함수 추가
+     const handleOtherMenuClick = (targetMenu) => {
+        if (targetMenu !== '/alarm') {
+            setIsAlertFormVisible(false);
+        }
+        if (targetMenu !== '/friend') {
+            SetisFriendForm(false);
+        }
+        if (targetMenu !== '/member') {
+            SetIsMemberForm(false);
+        }
+    };
 
     const handleAlertClick = () => {
         setIsAlertFormVisible(!isAlertFormVisible);

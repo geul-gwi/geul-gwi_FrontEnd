@@ -1,19 +1,12 @@
 import React, { useEffect, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import Axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
-import { useSelector } from 'react-redux'; // Redux 사용 Library
 import imageDataFetcher from 'service/imageDataFetcher';
 
 const FriendRequestItem = (props) => {
     const navigate = useNavigate();
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
-    const userSeq = useSelector((state) => state.authReducer.userSeq);
-    const userToken = useSelector((state) => state.authReducer.accessToken);
-
-    const friendAcceptUrl = '/friend/confirm'; // 친구 요청 확인 요청 주소
-
     const [profile, setProfile] = useState();
 
     useEffect(() => {
@@ -35,33 +28,6 @@ const FriendRequestItem = (props) => {
         onClickProfile(); // 닫기
     };
 
-    // 친구 요청 수락
-    const onFriendRequestAccept = async () => {
-        const userConfirmed = window.confirm(`${props.friend.nickname}님의 친구 요청을 받으시겠습니까?`);  
-        if (!userConfirmed) {
-            return;
-        }
-
-        try {
-            const friendDTO = {
-                'toUser': props.friend.userSeq, // 나에게 요청 보낸 사람
-                'fromUser': userSeq, // 나
-            };
-            const response = await Axios.post(`${axiosAddr}${friendAcceptUrl}`, friendDTO, {
-                headers: {
-                    Authorization: `Bearer ${userToken}`,
-                },
-            });
-            //console.log('친구 요청 수락 완료 : ', response);
-            alert(`${props.friend.nickname}님과 친구가 되었습니다.`);
-            props.setMenu('list');
-        
-
-        } catch (error) {
-            console.error('친구 요청 수락 실패 : ', error);
-        }
-    };
-
     return (
         <Frame>
             <LeftContainer>
@@ -72,7 +38,7 @@ const FriendRequestItem = (props) => {
                 <Name>{props.friend.nickname}</Name>
             </LeftContainer>
             <RightContainer>
-                <Button onClick={onFriendRequestAccept}>받기</Button>
+                <Button onClick={() => props.onFriendRequestAccept(props.friend)}>받기</Button>
             </RightContainer>
         </Frame>
     );

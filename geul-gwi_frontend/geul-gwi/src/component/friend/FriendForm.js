@@ -33,7 +33,9 @@ const FriendForm = (props) => {
             </MenuContainer>
             <ScrollableSubContainer>
                 {menu === 'list' ? <FriendListForm /> : 
-            <FriendRequestForm setMenu={setMenu}/>}
+            <FriendRequestForm 
+              setMenu={setMenu}
+            />}
             </ScrollableSubContainer>
         </Frame>
     );
@@ -56,12 +58,6 @@ const CloseButton = styled.div` // 닫기 버튼
     right: 15px; 
     cursor: pointer;
 `;
-
-// const AlertEmptyMessage = styled.div` 
-//   margin-top: 20px;
-//   font-size: 13px;
-//   color: gray;
-// `;
 
 const TitleContainer = styled.div`
   display: flex;

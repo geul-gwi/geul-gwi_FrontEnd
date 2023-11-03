@@ -90,7 +90,7 @@ const Profile = ({ profileUserSeq }) => {
   const sendFriendRequest = async () => {
     if('pending' === friendStatus)
     {
-      alert("현재 친구 요청 대기중입니다.");
+      alert("친구 승인 대기중입니다.");
       return;
     }
 
@@ -106,6 +106,10 @@ const Profile = ({ profileUserSeq }) => {
         },
       });
       console.log('친구 요청 성공 : ', response.data);
+
+      const status = await CheckFriendStatus();
+      setFriendStatus(status);
+
     } catch (error) {
       console.error('친구 요청 실패:', error);
     }
@@ -121,6 +125,9 @@ const Profile = ({ profileUserSeq }) => {
         },
       });
       console.log('친구 삭제: ', response.data);
+
+      const status = await CheckFriendStatus();
+      setFriendStatus(status);
 
     } catch (error) {
       console.error('친구 삭제:', error);
@@ -177,7 +184,7 @@ const Profile = ({ profileUserSeq }) => {
               <Button onClick={sendFriendRequest}>친구 요청</Button>
             )}
             {userSeq !== profileUserSeq && friendStatus === 'pending' && (
-              <Button onClick={sendFriendRequest}>친구 대기 중</Button>
+              <Button onClick={sendFriendRequest}>승인 대기</Button>
             )}
             {userSeq !== profileUserSeq && friendStatus === 'friend' && (
               <Button onClick={onClickFriendDelete}>친구 끊기</Button>

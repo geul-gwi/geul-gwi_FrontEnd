@@ -34,7 +34,7 @@ const WrtchgAction = () => {
                 });
 
                 if (listResponse) {
-                    //console.log("챌린지 회차 목록: ", listResponse.data);
+                    console.log("챌린지 회차 목록111111: ", listResponse.data);
                     const updatedChallenges = await checkChallengeStatus(listResponse.data);
                     setChallenges(updatedChallenges);
 
