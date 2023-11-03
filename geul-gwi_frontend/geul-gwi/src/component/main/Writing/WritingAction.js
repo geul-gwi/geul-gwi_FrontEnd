@@ -108,7 +108,7 @@ const WritingAction = () => {
             });
 
             //console.log("글 작성 완료: ", response);
-            alert("글 작성이 완료되었습니다.");
+            alert("작성이 완료되었습니다.");
             navigate("/");
         } catch (error) {
             console.error("글 작성 실패: ", error);
@@ -130,7 +130,7 @@ const WritingAction = () => {
                         Authorization: `Bearer ${accessToken}`,
                     },
                 });
-                alert("글 작성이 완료되었습니다.");
+                alert("작성이 완료되었습니다.");
                 navigate("/");
                 
             } else {
