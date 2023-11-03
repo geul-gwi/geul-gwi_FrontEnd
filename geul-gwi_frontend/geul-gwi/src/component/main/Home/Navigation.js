@@ -86,11 +86,13 @@ const Navigation = () => {
     const handleAlertClick = () => {
         setIsAlertFormVisible(!isAlertFormVisible);
         SetisFriendForm(false);
+        SetIsMemberForm(false);
     };
 
     const handleFriendClick = () => {
         SetisFriendForm(!isFriendForm);
         setIsAlertFormVisible(false);
+        SetIsMemberForm(false);
     };
 
     const handleMemberClick = () => {
@@ -99,9 +101,6 @@ const Navigation = () => {
         SetisFriendForm(false);
     };
 
-    const goHome = () => {
-        navigate("/");
-    }
     const [isMoreMenuVisible, setIsMoreMenuVisible] = useState(false);
 
     const handleMoreButtonClick = () => {
@@ -202,19 +201,19 @@ const Navigation = () => {
                         </MenuItem>
                     </MenuButtonManager>
                 </MenuButtonContainer>}
-            <AlertContainer isVisible={isAlertFormVisible} size={'-300px'}>
+            <AlertContainer isVisible={isAlertFormVisible} size={'-450px'}>
                 {isAlertFormVisible &&
                     <NoticeForm
                         handleAlertClick={handleAlertClick}
                     />}
             </AlertContainer>
-            <AlertContainer isVisible={isFriendForm} size={'-300px'}>
+            <AlertContainer isVisible={isFriendForm} size={'-450px'}>
                 {isFriendForm &&
                     <FriendForm
                         handleFriendClick={handleFriendClick}
                     />}
             </AlertContainer>
-            <AlertContainer isVisible={isMemberForm} size={'-300px'}>
+            <AlertContainer isVisible={isMemberForm} size={'-311px'}>
                 {isMemberForm &&
                     <MemberSearchForm
                         handleMemberClick={handleMemberClick}
@@ -280,7 +279,7 @@ const Logo = styled.img`
 const AlertContainer = styled.div`
     position: absolute;
     top: 0px;
-    right: ${({ isVisible }) => (isVisible ? '-450px' : "0px")}; /* 알림함을 왼쪽에 숨겨둡니다. */
+    right: ${({ isVisible, size }) => (isVisible ? size : "0px")}; /* 알림함을 왼쪽에 숨겨둡니다. */
     transition: right 0.3s; 
     height: 100vh;
 `

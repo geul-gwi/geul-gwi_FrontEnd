@@ -41,7 +41,7 @@ const MemberSearchItem = (props) => {
     const CheckFriendStatus = async () => {
         try {
             const friendDTO = {
-                'toUser': props.notice.fromUser, // 확인하고 싶은 사람
+                'toUser': props.member.userSeq, // 확인하고 싶은 사람
                 'fromUser': userSeq, // 나
             };
             //console.log(`관계 확인 : `, friendDTO);
@@ -50,7 +50,6 @@ const MemberSearchItem = (props) => {
                     Authorization: `Bearer ${userToken}`,
                 },
             });
-            //console.log(response.data);
 
             return response.data;
 
@@ -92,15 +91,11 @@ const MemberSearchItem = (props) => {
 
     return (
         <Frame>
-            <ProfileImage 
-                src={profile || '/img/defaultProfile.png'} 
+            <ProfileImage
+                src={profile || '/img/defaultProfile.png'}
                 onClick={onClickProfile}
             />
-            <ContentContainer>
-                <TopRow>
-                    <Content>{props.member.nickname}</Content>
-                </TopRow>
-            </ContentContainer>
+            <Content>{props.member.nickname}</Content>
             <ProfileContainer>
                 {friendStatus !== 'friend' && <Button onClick={onFriendRequestAccept}>친구 요청</Button>}
             </ProfileContainer>
@@ -148,14 +143,10 @@ const ProfileContainer = styled.div`
     height: 100%;
     align-items: center;
     justify-content: center;
-    flex: 5;
+    flex: 7;
     position: relative;
 `;
 
-
-const ContentContainer = styled.div`
-    flex: 9;
-`;
 
 const Content = styled.div`
     color: #333;
@@ -168,7 +159,7 @@ const Button = styled.button`
     background-color: "#3498db";
     color: "white"; 
     border: none;
-    padding: 7px 23px;
+    padding: 7px 10px;
     border-radius: 8px;
     cursor: pointer;
     font-size: 12px;
