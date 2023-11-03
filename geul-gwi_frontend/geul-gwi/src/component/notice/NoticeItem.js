@@ -87,7 +87,6 @@ const NoticeItem = (props) => {
     };
 
     // 알림 타입에 따라서 내용 변환하는 함수
-    // 알림 타입에 따라서 내용 변환하는 함수
     const generateMessage = () => {
         switch (props.notice.type) {
             case 'FRIEND':
@@ -122,7 +121,7 @@ const NoticeItem = (props) => {
                 return (
                     <span>
                         <Nickname>{props.notice.nickname}</Nickname>
-                        {'님이 챌린지 글 귀를 작성했습니다.'}
+                        {'님이 챌린지를 작성했습니다.'}
                     </span>
                 );
             case 'LIKE_CHALLENGE':

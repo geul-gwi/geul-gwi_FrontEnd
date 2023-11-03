@@ -55,7 +55,7 @@ const PostContainer = (props) => {
     };
 
     const onDeletePost = async (challengeUserSeq) => {
-        const confirmed = window.confirm('해당 글 귀를 삭제하시겠습니까?');
+        const confirmed = window.confirm('해당 글을 삭제하시겠습니까?');
         // 사용자가 확인을 클릭한 경우에만 삭제 동작을 실행
         if (confirmed) {
             try {
@@ -67,7 +67,7 @@ const PostContainer = (props) => {
                 if (response) {
                     alert("삭제가 완료되었습니다.");
                     window.location.reload();
-                    console.log("챌린지 글 삭제: ", response);
+                    //console.log("챌린지 글 삭제: ", response);
                 }
             } catch (error) {
                 console.error("챌린지 글 삭제: ", error);
@@ -90,16 +90,20 @@ const PostContainer = (props) => {
                     <ItemBottom>
                         <LikeViewCount>{post.likeCount}</LikeViewCount>
                         <LikeButtonContainer>
-                            {
-                                post.isLiked ? <AiFillHeart class="likebtn" size={25} color={"red"} onClick={(event) => {
-                                    event.stopPropagation();
-                                    onClickLikeButton(post.challengeUserSeq, post.isLiked);
-                                }} />
-                                    :
-                                    <AiOutlineHeart size={25} color={"#444444"} onClick={(event) => {
+                            { post.isLiked ? 
+                                    <AiFillHeart class="likebtn" size={25} color={"red"} 
+                                        onClick={(event) => { 
                                         event.stopPropagation();
                                         onClickLikeButton(post.challengeUserSeq, post.isLiked);
-                                    }} />
+                                    }} 
+                                    />
+                                    :
+                                    <AiOutlineHeart size={25} color={"#444444"} 
+                                        onClick={(event) => {
+                                        event.stopPropagation();
+                                        onClickLikeButton(post.challengeUserSeq, post.isLiked);
+                                    }} 
+                                    />
                             }
                         </LikeButtonContainer>
                     </ItemBottom>

@@ -1,13 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 // component
-import ChallengeInfo from 'component/challenge/ChallengeInfo';
+import ChallengeInfo from 'component/main/WriteChallenge/ChallengeHeader';
 import SortManager from 'component/main/WriteChallenge/PostManager/SortManager'
 
 const ChallengeComponent = (props) => {
     return (
         <Frame>
-            <ChallengeInfo />
+            <ChallengeInfo 
+                PrevButtonClick={props.PrevButtonClick}
+                NextButtonClick={props.NextButtonClick}
+                selectedIndex={props.selectedIndex}
+                selectedChallenge={props.selectedChallenge}
+            />
             <FlexManager>
                 <SortManager
                     setPosts={props.setPosts}
