@@ -13,7 +13,8 @@ const MemberSearchForm = (props) => {
     const userToken = useSelector((state) => state.authReducer.accessToken);
     const memberListUrl = '/user/list'; // 회원 목록 요청 주소
 
-    const [members, setMembers] = useState([]); // 알림 데이터
+    const [members, setMembers] = useState([]); 
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         async function fetchMembers() {
@@ -32,10 +33,17 @@ const MemberSearchForm = (props) => {
         fetchMembers();
     }, []);
 
-    // 닫기 버튼 클릭 시 처리
     const onClickCloseButton = () => {
         props.handleMemberClick();
     };
+
+    const handleSearch = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const filteredMembers = members.filter((member) => {
+        return member.nickname.toLowerCase().includes(searchQuery.toLowerCase());
+    });
 
     return (
         <Frame>
@@ -44,14 +52,19 @@ const MemberSearchForm = (props) => {
                 <CloseButton onClick={onClickCloseButton}><AiOutlineClose size={15} color='gray' /></CloseButton>
             </TitleContainer>
             <SearchContainer>
-                <SearchInput placeholder='검색' />
+                <SearchInput
+                    placeholder='검색'
+                    value={searchQuery}
+                    onChange={handleSearch}
+                />
             </SearchContainer>
             <ScrollableSubContainer>
                 {members.length === 0 ? (
                     <AlertEmptyMessage>회원이 없습니다.</AlertEmptyMessage>
                 ) : (
-                    members.map((member) => (
+                    filteredMembers.map((member) => (
                         <MemberSearchItem
+                            key={member.id}
                             member={member}
                             handleMemberClick={props.handleMemberClick}
                         />
@@ -72,6 +85,8 @@ const Frame = styled.div`
   background-color: white;
   padding: 5px;
   user-select: none;
+  justify-content: center;
+  align-items: center;
 `;
 
 const CloseButton = styled.div` // 닫기 버튼
@@ -88,7 +103,7 @@ const AlertEmptyMessage = styled.div`
 
 const TitleContainer = styled.div`
   display: flex;
-  width: 100%;
+  width: 90%;
   padding: 15px 20px;
 `;
 
@@ -96,12 +111,21 @@ const SearchContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 90%;
+  text-align: center;
+  margin: 10px;
 `;
 
 const SearchInput = styled.input`
-  width: 100%;
   padding: 5px;
   height: 20px;
+  border-radius: 8px;
+  margin: auto;
+
+  &:focus {
+        outline: none;
+        border-color:  #ccebb5; 
+        box-shadow: 0 0 5px  #ccebb5;
+    }
 `;
 
 const ScrollableSubContainer = styled.div`
