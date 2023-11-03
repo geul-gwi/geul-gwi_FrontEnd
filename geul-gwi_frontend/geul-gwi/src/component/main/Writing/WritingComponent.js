@@ -43,7 +43,7 @@ const WritingComponent = (props) => {
                         <ComponentIntro>
                             {props.selectedTab === "geulgwi" ?
                                 "나만의 글 귀를 만들어보세요."
-                                : "모든 키워드가 이용하여 나만의 글 귀를 만들어보세요."}.
+                                : "모든 키워드가 이용하여 나만의 글귀를 만들어보세요."}.
                         </ComponentIntro>
                     </TitleContainer>
 

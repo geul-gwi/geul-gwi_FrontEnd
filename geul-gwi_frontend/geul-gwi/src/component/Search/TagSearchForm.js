@@ -76,16 +76,17 @@ const TagContainer = styled.div`
 `;
 
 const Button = styled.div`
+  background-color: #b7de99;
+  color: white;
   position: absolute;
   top: 23px;
   right: -10px;
   border-radius: 8px;
-  border: 1px solid #ccc;
   padding: 8px 30px;
   cursor: pointer;
 
   &:hover {
-        background-color: #f2f2f2;
+        background-color: #ccebb5;
     }
 `;
 
