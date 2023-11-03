@@ -1,15 +1,17 @@
 import styled from 'styled-components';
 
 export const Button = styled.button`
-    width: 120px;
+    width: 100px;
     height: 30px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: white;
+    border: 0px solid #ccc;
+    border-radius: 10px;
+    background-color: #b7de99;
+    color: white;
     font-size: 14px;
     cursor: pointer;
     transform: 0.3s;
-    &:hover {
-      background-color: #f2f2f2;
-    }
+
+    :hover{
+      background-color: #ccebb5;
+  }
 `;
