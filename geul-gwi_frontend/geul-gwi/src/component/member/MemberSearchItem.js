@@ -101,7 +101,12 @@ const MemberSearchItem = (props) => {
         return null; // 현재 사용자의 프로필을 렌더링하지 않습니다.
     }
 
+    if (userSeq === props.member.userSeq) {
+        return null; // 현재 사용자의 프로필을 렌더링하지 않습니다.
+    }
+
     return (
+        
         
         <Frame>
             <LeftContainer>
