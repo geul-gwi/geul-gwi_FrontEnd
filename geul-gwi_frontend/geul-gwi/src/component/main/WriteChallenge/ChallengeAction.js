@@ -5,9 +5,8 @@ import { useSelector } from 'react-redux';
 // component
 import ChallengeComponent from 'component/main/WriteChallenge/ChallengeComponent';
 
-
 // 챌린지 폼 관련 함수, 변수 관리
-export const ChallengeAction = () => {
+const WrtchgAction = () => {
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
@@ -161,6 +160,7 @@ export const ChallengeAction = () => {
     return (
         <ChallengeComponent
             challengeList={challenges} // 챌린지 회차 목록
+            setPosts={setPosts}
             posts={posts} // 해당 회차 게시물 목록
             PrevButtonClick={PrevButtonClick}
             NextButtonClick={NextButtonClick}
@@ -170,4 +170,4 @@ export const ChallengeAction = () => {
     );
 };
 
-export default ChallengeAction;
+export default WrtchgAction;
