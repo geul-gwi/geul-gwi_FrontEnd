@@ -30,7 +30,7 @@ const MessageWritingForm = ({data})=> {
          }
       })
          .then((response) => {
-            console.log('쪽지 전송 성공 : ', response);
+            //console.log('쪽지 전송 성공 : ', response);
             alert("쪽지 전송을 완료했습니다.");
             // 성공 후 메시지 입력란 초기화
             setMessage({ title: '', content: '' });

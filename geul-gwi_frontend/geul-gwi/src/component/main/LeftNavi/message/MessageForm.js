@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux';
+import { AiOutlineClose } from 'react-icons/ai';
 // component
 import MessageWritingForm from 'component/main/LeftNavi/message/MessageWritingForm';
+import imageDataFetcher from 'service/imageDataFetcher';
 
 const MessageForm = () => {
    const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
@@ -67,11 +69,16 @@ const MessageForm = () => {
             Authorization: `Bearer ${userToken}`,
          },
       })
-         .then((response) => {
-            if (response) {
+         .then(async (response) => {
+
                console.log('받은 목록 요청 성공 :', response);
-               setMessages(response.data);
-            }
+               //setMessages(response.data);
+               const messagesWithImages = await Promise.all(response.data.map(async (message) => {
+                  const profileImage = await imageDataFetcher(axiosAddress, message.senderProfile);
+                  return { ...message, profileImage };
+               }));
+               setMessages(messagesWithImages);
+            
          })
          .catch((error) => {
             console.error('받은 목록 요청 실패 :', error);
@@ -85,10 +92,14 @@ const MessageForm = () => {
             Authorization: `Bearer ${userToken}`,
          },
       })
-         .then((response) => {
+         .then(async (response) => {
             if (response) {
                console.log('보낸 메시지 목록 요청 성공 :', response);
-               setMessages(response.data);
+               const messagesWithImages = await Promise.all(response.data.map(async (message) => {
+                  const profileImage = await imageDataFetcher(axiosAddress, message.senderProfile);
+                  return { ...message, profileImage };
+               }));
+               setMessages(messagesWithImages);
             }
          })
          .catch((error) => {
@@ -135,18 +146,27 @@ const MessageForm = () => {
                {messages && messages.map((message) => (
                   <MessageItem key={message.messageSeq}>
                      <ProfileContainer>
-                        <ProfilePicture
-                           src={'/img/defaultProfile.png'}
-                        />
                         {selectedTab === "received" ? (
-                           <Sender>{message.senderNickname}</Sender>
+                           <ProfilePicture
+                              src={messages.senderProfile ? messages.senderProfile : '/img/defaultProfile.png'}
+                           />
                         ) : (
-                           <Recipient>{message.receiverNickname}</Recipient>
+                           <ProfilePicture
+                              src={messages.senderProfile ? messages.senderProfile : '/img/defaultProfile.png'}
+                           />
+                        )}
+
+                        {selectedTab === "received" ? (
+                           <Nickname>{message.senderNickname}</Nickname>
+                        ) : (
+                           <Nickname>{message.receiverNickname}</Nickname>
                         )}
                      </ProfileContainer>
                      <Title>{message.title}</Title>
                      <Message>{message.content}</Message>
-                     <DeleteButton onClick={() => deleteMessage(message.messageSeq)}>X</DeleteButton>
+                     <DeleteButton onClick={() => deleteMessage(message.messageSeq)}>
+                        <AiOutlineClose size={12} color='gray' />
+                     </DeleteButton>
                      {selectedTab === "received" && <ReplyButton onClick={() => replyToMessage(message)}>답장하기</ReplyButton>}
                   </MessageItem>
                ))}
@@ -158,8 +178,8 @@ const MessageForm = () => {
 };
 
 const Container = styled.div`
+   display: flex;
    flex-direction: column;
-   width: 100%;
    user-select: none;
    padding: 20px;
    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
@@ -169,12 +189,11 @@ const Container = styled.div`
 `;
 
 const ProfileContainer = styled.div`
-    display : flex;
+    display: flex;
     flex-direction: row;
-    width : 100%;
     align-items: center;
-    margin-bottom: 10px;  
-    justify-content: flex-start;
+    margin-bottom: 10px;
+    justify-content: center;
 `
 
 const Tabs = styled.div`
@@ -184,13 +203,13 @@ const Tabs = styled.div`
 `;
 
 const ProfilePicture = styled.img`
-    width: 35px;
-    height: 35px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     border: 1px solid #ccc;
-
     cursor: pointer;
     object-fit: cover;
+    margin-right: 10px; // 닉네임 오른쪽에 여백 추가
 
     &:hover {
         transform: scale(1.1);
@@ -227,16 +246,14 @@ const MessageList = styled.div`
    display: flex;
    align-items: center;
    flex-direction: column;
-   justify-content: center;
-   margin: none;
    gap: 10px;
 `;
 
 const MessageItem = styled.div`
    width: 90%;   
    border: 1px solid #ccc;
-   padding: 20px;
-   border-radius: 10px;
+   padding: 15px;
+   border-radius: 16px;
    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
    transition: transform 0.3s;
    position: relative;
@@ -246,14 +263,8 @@ const MessageItem = styled.div`
    }
 `;
 
-const Sender = styled.div`
-   font-weight: bold;
-   margin-bottom: 10px;
-`;
-
-const Recipient = styled.div`
-   font-weight: bold;
-   margin-bottom: 10px;
+const Nickname = styled.div`
+    flex: 1; // 텍스트 길이에 따라 적절한 크기로 조정
 `;
 
 const Title = styled.div`

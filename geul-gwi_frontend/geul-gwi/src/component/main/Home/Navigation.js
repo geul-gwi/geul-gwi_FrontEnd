@@ -60,8 +60,9 @@ const Navigation = () => {
             })
             .catch(error => {
                 console.error('구독자 목록:', error);
-                if (error.response.data.errorCode === 'A-002') {
-                    alert("로그인이 만료되었습니다. 로그인을 다시 시도해주세요.");
+                if (error.response.data.errorCode === 'A-002' 
+                        || error.response.data.errorCode === 'A-001' ) {
+                    alert("세션이 만료되었습니다. 로그인을 다시 시도해주세요.");
                     navigate('/accounts');
                 }
             });
@@ -217,13 +218,13 @@ const Navigation = () => {
                         </MenuItem>
                     </MenuButtonManager>
                 </MenuButtonContainer>}
-            <AlertContainer isVisible={isAlertFormVisible} size={'-461px'}>
+            <AlertContainer isVisible={isAlertFormVisible} size={'-460px'}>
                 {isAlertFormVisible &&
                     <NoticeForm
                         handleAlertClick={handleAlertClick}
                     />}
             </AlertContainer>
-            <AlertContainer isVisible={isFriendForm} size={'-361px'}>
+            <AlertContainer isVisible={isFriendForm} size={'-360px'}>
                 {isFriendForm &&
                     <FriendForm
                         handleFriendClick={handleFriendClick}
