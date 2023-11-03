@@ -67,6 +67,11 @@ const MemberSearchItem = (props) => {
     // 친구 요청 
     const onFriendRequestAccept = async () => {
         // 이미 친구 상태인지 확인한다.
+        const userConfirmed = window.confirm(`${props.member.nickname}님에게 친구 요청을 보내시겠습니까?`);  
+        if (!userConfirmed) {
+            return;
+        }
+
         if (friendStatus === 'friend') {
             alert("이미 친구 상태입니다.");
             return;
@@ -82,6 +87,8 @@ const MemberSearchItem = (props) => {
                 },
             });
             alert(`${props.member.nickname}님에게 친구 요청을 보냈습니다.`);
+            const status = await CheckFriendStatus();
+            setFriendStatus(status);
            
         } catch (error) {
             console.error('친구 요청 실패 : ', error);
@@ -91,14 +98,14 @@ const MemberSearchItem = (props) => {
 
     return (
         <Frame>
-            <ProfileImage
-                src={profile || '/img/defaultProfile.png'}
-                onClick={onClickProfile}
-            />
-            <Content>{props.member.nickname}</Content>
-            <ProfileContainer>
-                {friendStatus !== 'friend' && <Button onClick={onFriendRequestAccept}>친구 요청</Button>}
-            </ProfileContainer>
+            <LeftContainer>
+                <ProfileImage src={profile || '/img/defaultProfile.png'} onClick={onClickProfile} />
+                <Nickname onClick={onClickProfile}>{props.member.nickname}</Nickname>
+            </LeftContainer>
+            <RightContainer>
+                {friendStatus === 'stranger' && <Button onClick={onFriendRequestAccept}>친구 요청</Button>}
+                {friendStatus === 'pending' && <Button>요청 대기 중</Button>}
+            </RightContainer>
         </Frame>
     );
 };
@@ -106,19 +113,27 @@ const MemberSearchItem = (props) => {
 const Frame = styled.div`
     display: flex;
     align-items: center;
-    width: 100%;
+    flex-direction: row;
+    width: 95%;
     height: auto;
     background-color: white;
-    transition: background-color 0.2s;
-    font-size: 15px;
     padding: 5px;
     cursor: pointer;
 `;
 
-const TopRow = styled.div`
+const LeftContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 10px;
+`;
+
+const RightContainer = styled.div`
     display: flex;
     align-items: center;
-    margin-bottom: 4px;
+    justify-content: flex-end;
+    flex: 1;
+    padding: 0 10px;
 `;
 
 const ProfileImage = styled.img`
@@ -126,36 +141,21 @@ const ProfileImage = styled.img`
     height: 40px;
     border-radius: 50%;
     border: 1px solid #ccc;
-    margin-right: 10px;
-    margin-left: 10px;
     cursor: pointer;
     object-fit: cover;
-
+    margin-right: 12px;
     &:hover {
         transform: scale(1.1);
         transition: transform 0.2s ease-in-out;
     }
 `;
 
-const ProfileContainer = styled.div`
-    display: flex;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    flex: 7;
-    position: relative;
-`;
-
-
-const Content = styled.div`
+const Nickname = styled.div`
     color: #333;
     margin-bottom: 4px;
 `;
 
 const Button = styled.button`
-    position: absolute;
-    right: 40px;
     background-color: "#3498db";
     color: "white"; 
     border: none;
