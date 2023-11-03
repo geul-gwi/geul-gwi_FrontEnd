@@ -82,10 +82,10 @@ const FriendItem = (props) => {
                 <CloseButton onClick={onClickDelete}>친구 끊기</CloseButton>
                 <SubscribeButton onClick={toggleSubscription}>
                     {isSubscribed === 'T' ?
-                        < img src={process.env.PUBLIC_URL + "/icon/free-icon-notification-2326147.png"}
+                        < img src={process.env.PUBLIC_URL + "/icon/notification1.png"}
                             style={{ width: '30px', height: '30px' }}
                         ></img>
-                        : <img src={process.env.PUBLIC_URL + "/icon/free-icon-notification-2326010.png"}
+                        : <img src={process.env.PUBLIC_URL + "/icon/notification2.png"}
                             style={{ width: '30px', height: '30px' }}
                         ></img>
                     }
