@@ -109,6 +109,7 @@ const MemberSearchItem = (props) => {
         
         
         <Frame>
+<<<<<<< HEAD
             <LeftContainer>
                 <ProfileImage src={profile || '/img/defaultProfile.png'} onClick={onClickProfile} />
                 <Nickname onClick={onClickProfile}>{props.member.nickname}</Nickname>
@@ -117,6 +118,18 @@ const MemberSearchItem = (props) => {
                 {friendStatus === 'stranger' && <Button onClick={onClickFriendRequest}>친구 요청</Button>}
                 {friendStatus === 'pending' && <Button>승인 대기</Button>}
             </RightContainer>
+=======
+            <ProfileImage
+                src={profile || '/img/defaultProfile.png'}
+                onClick={onClickProfile}
+            />
+            <Content>{props.member.nickname}</Content>
+            <ProfileContainer>
+                {friendStatus !== 'friend' && <Button onClick={onFriendRequestAccept} disabled={isPending}>
+                    {isPending ? '승인 대기' : '친구 요청'}
+                </Button>}
+            </ProfileContainer>
+>>>>>>> 221011d (chore: change button label in MemberSearchItem)
         </Frame>
     );
 };
