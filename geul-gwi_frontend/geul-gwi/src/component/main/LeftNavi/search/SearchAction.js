@@ -48,7 +48,7 @@ const SearchForm = () => {
       })
          .then((response) => {
             //console.log("글 목록 요청 성공 : ", response);
-            setPosts(response.data);
+            setPosts(response.data.reverse());
             ReFactData(response.data);
          })
          .catch((error) => {
@@ -65,8 +65,8 @@ const SearchForm = () => {
             },
          });
          if (response) {
-            console.log("태그 검색 성공 : ", response.data);
-            setPosts(response.data);
+            //console.log("태그 검색 성공 : ", response.data);
+            setPosts(response.data.reverse());
             ReFactData(response.data);
          }
       } catch (error) {
@@ -233,13 +233,11 @@ const HoveredContainer = styled.div`
 
 const ItemsContainer = styled.div`
  min-width: 655px;
-
   align-items: center;
   justify-content: center;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 2px;
-
    grid-column: span 3;
    background-color: white;
 `;
@@ -249,23 +247,18 @@ const Nickname = styled.div`
   width : 100%;
   height : 10px;
   padding : 5px 0px 5px 0px;
-  font-size : 15px;
-  font-family: "Nanum Square";
-  font-style : "bold";
-
+  font-size : 17px;
+  font-weight: bold;
   justify-content: center;
 `
 const Content = styled.div`
-  display : flex;
   width : 100%;
-  max-height : calc(100% - 10px); 
   height : auto;
-  font-size : 13px;
-  font-family: "Nanum Square Round";
-  font-style : "normal";
-
+  font-size : 15px;
+  font-weight: bold;
   justify-content: center;
   text-align: center;
+  white-space: pre-line; /* 줄바꿈을 허용하는 스타일 */
 `
 
 export default SearchForm;

@@ -36,7 +36,7 @@ const ProfilePostList = (props) => {
             }
         }
         fetchUserPosts();
-    }, []);
+    }, [props.profileUserSeq]);
 
     const ReFactData = async (posts) => {
         try {

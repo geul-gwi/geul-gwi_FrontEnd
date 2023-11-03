@@ -248,6 +248,7 @@ const Content = styled.div`
     height : auto;
     margin-bottom : 25px;
     font-size: 16px;
+    white-space: pre-line; /* 줄바꿈을 허용하는 스타일 */
 `
 const TagButtonContainer = styled.div`
     display : flex;
