@@ -11,12 +11,17 @@ import imageDataFetcher from 'service/imageDataFetcher';
 // component
 import NoticeForm from "component/notice/NoticeForm";
 import FriendForm from "component/friend/FriendForm";
+import MemberSearchForm from 'component/member/MemberSearchForm';
 
 const menus = []
 menus.push({ "name": "홈", "src": "/icon/Navigation/home.svg", "target": "/main" })
 menus.push({ "name": "알림", "src": "/icon/Navigation/bell.svg", "target": "/alarm" })
 menus.push({ "name": "친구", "src": "/icon/Navigation/users.svg", "target": "/friend" })
+
 menus.push({ "name": "회원 찾기", "src": "/icon/Navigation/plus.png", "target": "/main/Writing" })
+
+menus.push({ "name": "회원 검색", "src": "/icon/Navigation/search.png", "target": "/member" })
+
 menus.push({ "name": "쪽지함", "src": "/icon/Navigation/letter.png", "target": "/main/message" })
 menus.push({ "name": "챌린지", "src": "/icon/Navigation/notepad.png", "target": "/main/WritingChallenge" })
 menus.push({ "name": "작성", "src": "/icon/Navigation/plus.png", "target": "/main/Writing" })
@@ -34,6 +39,7 @@ const Navigation = () => {
 
     const [isAlertFormVisible, setIsAlertFormVisible] = useState(false);
     const [isFriendForm, SetisFriendForm] = useState(false);
+    const [isMemberForm, SetIsMemberForm] = useState(false);
 
     const [subscribes, setSubscribes] = useState([]);
 
@@ -70,6 +76,10 @@ const Navigation = () => {
             handleFriendClick();
             return;
         }
+        else if (target === "/member") {
+            handleMemberClick();
+            return;
+        }
         navigate(`${target}`);
     }
 
@@ -82,6 +92,13 @@ const Navigation = () => {
         SetisFriendForm(!isFriendForm);
         setIsAlertFormVisible(false);
     };
+
+    const handleMemberClick = () => {
+        SetIsMemberForm(!isMemberForm);
+        setIsAlertFormVisible(false);
+        SetisFriendForm(false);
+    };
+
     const goHome = () => {
         navigate("/");
     }
@@ -185,16 +202,22 @@ const Navigation = () => {
                         </MenuItem>
                     </MenuButtonManager>
                 </MenuButtonContainer>}
-            <AlertContainer isVisible={isAlertFormVisible}>
+            <AlertContainer isVisible={isAlertFormVisible} size={'-300px'}>
                 {isAlertFormVisible &&
                     <NoticeForm
                         handleAlertClick={handleAlertClick}
                     />}
             </AlertContainer>
-            <AlertContainer isVisible={isFriendForm}>
+            <AlertContainer isVisible={isFriendForm} size={'-300px'}>
                 {isFriendForm &&
                     <FriendForm
                         handleFriendClick={handleFriendClick}
+                    />}
+            </AlertContainer>
+            <AlertContainer isVisible={isMemberForm} size={'-300px'}>
+                {isMemberForm &&
+                    <MemberSearchForm
+                        handleMemberClick={handleMemberClick}
                     />}
             </AlertContainer>
         </NaviFrame>
@@ -257,7 +280,7 @@ const Logo = styled.img`
 const AlertContainer = styled.div`
     position: absolute;
     top: 0px;
-    right: ${({ isVisible }) => (isVisible ? "-460px" : "0px")}; /* 알림함을 왼쪽에 숨겨둡니다. */
+    right: ${({ isVisible }) => (isVisible ? '-450px' : "0px")}; /* 알림함을 왼쪽에 숨겨둡니다. */
     transition: right 0.3s; 
     height: 100vh;
 `
