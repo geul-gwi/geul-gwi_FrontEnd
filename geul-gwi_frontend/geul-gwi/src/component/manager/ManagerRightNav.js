@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import { FiUsers, FiTrello, FiTag } from 'react-icons/fi';
+// import { FiUsers, FiTrello, FiTag } from 'react-icons/fi';
 
 
 const ManagerLeftNav = () => {
@@ -17,13 +17,14 @@ const ManagerLeftNav = () => {
           
             <ItemContainer>
                 <Item
-                    onClick={() => handleNavigation('/manager/member')}
+                    onClick={() => handleNavigation('/manager')}
                     active={activeItem === 'member'}
                     onMouseEnter={() => setActiveItem('member')}
                     onMouseLeave={() => setActiveItem(null)}
                 >
                     <IconContainer active={activeItem === 'member'}>
-                        <FiUsers size={24} />
+                        {/* <FiUsers size={24} /> */}
+                        <IconImg src={"/icon/Navigation/users.svg"} />
                     </IconContainer>
                     <ItemLabel active={activeItem === 'member'}>회원</ItemLabel>
                 </Item>
@@ -34,18 +35,20 @@ const ManagerLeftNav = () => {
                     onMouseLeave={() => setActiveItem(null)}
                 >
                     <IconContainer active={activeItem === 'challenge'}>
-                        <FiTrello size={24} />
+                        {/* <FiTrello size={24} /> */}
+                        <IconImg src={"/icon/Navigation/notepad.png"} />
                     </IconContainer>
                     <ItemLabel active={activeItem === 'challenge'}>챌린지</ItemLabel>
                 </Item>
                 <Item
-                    onClick={() => handleNavigation('/manager')}
+                    onClick={() => handleNavigation('/manager/tag')}
                     active={activeItem === 'tag'}
                     onMouseEnter={() => setActiveItem('tag')}
                     onMouseLeave={() => setActiveItem(null)}
                 >
                     <IconContainer active={activeItem === 'tag'}>
-                        <FiTag size={24} />
+                        {/* <FiTag size={24} /> */}
+                        <IconImg src={"/icon/Navigation/hashtag.png"} />
                     </IconContainer>
                     <ItemLabel active={activeItem === 'tag'}>태그</ItemLabel>
                 </Item>
@@ -107,6 +110,11 @@ const IconContainer = styled.div`
         opacity: 1;
     }
 `;
+
+const IconImg = styled.img`
+    width : 24px;
+    height : 24px;
+`
 
 const ItemLabel = styled.h4`
     margin: 0;

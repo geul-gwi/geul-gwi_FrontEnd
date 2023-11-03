@@ -2,7 +2,7 @@ import { React } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Routes, Route } from 'react-router-dom';
-import ManagerLeftNav from 'component/manager/ManagerLeftNav';
+import ManagerRightNav from 'component/manager/ManagerRightNav';
 
 import TagManagement from 'component/manager/tag/TagManagement';
 import MemberManagement from 'component/manager/member/MemberManagement';
@@ -12,16 +12,16 @@ import Navigation from 'component/main/Home/Navigation';
 const ManagerPage = () => {
     return (
         <MainContainer>
-                <LeftContainer>
+                <RightContainer>
                     <Navigation />
-                </LeftContainer>
-            <ManagerLeftNav />
+                </RightContainer>
+            <ManagerRightNav />
             <HeadBackImg />
             <MainContainaer>
                 <Routes>
-                    <Route path="/" element={<TagManagement />} ></Route>
+                    <Route path="/" element={<MemberManagement />}></Route>
                     <Route path="/challenge/*" element={<ChallengeManagement />} ></Route>
-                    <Route path="/member/*" element={<MemberManagement />}></Route>
+                    <Route path="/tag/*" element={<TagManagement />} ></Route>
                 </Routes>
             </MainContainaer>
         </MainContainer>
@@ -58,7 +58,7 @@ const ContainerFrame = styled.div`
     height: 700px;
 `
 
-const LeftContainer = styled(ContainerFrame)`
+const RightContainer = styled(ContainerFrame)`
     position : fixed;
     display : flex;
     left : 0px;
