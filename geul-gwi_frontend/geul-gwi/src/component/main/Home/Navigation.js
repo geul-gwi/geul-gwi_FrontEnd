@@ -276,7 +276,7 @@ const Logo = styled.img`
 const AlertContainer = styled.div`
     position: absolute;
     top: 0px;
-    right: ${({ isVisible }) => (isVisible ? {size} : "0px")}; /* 알림함을 왼쪽에 숨겨둡니다. */
+    right: ${({ isVisible }) => (isVisible ? '-450px' : "0px")}; /* 알림함을 왼쪽에 숨겨둡니다. */
     transition: right 0.3s; 
     height: 100vh;
 `
