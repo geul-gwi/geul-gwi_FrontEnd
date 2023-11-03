@@ -11,8 +11,9 @@ const AddTagButtonForm = (props) => {
     const defaultTagUrl = "/tag/list/DEFAULT";
     const addTagUrl = "/tag/register/";
 
-    const { userSeq, userToken } = useSelector((state) => state.authReducer.userSeq);
-
+    const userSeq = useSelector((state) => state.authReducer.userSeq);
+    const userToken = useSelector((state) => state.authReducer.accessToken);
+   
     const [selectedMenu, setSelectedMenu] = useState(true); // 태그 선택 폼 On/Off
     const [defaultTags, setDefaultTags] = useState([]); // DEFAULT 전채 태그
 
@@ -55,10 +56,11 @@ const AddTagButtonForm = (props) => {
             value: tagValue,
         };
 
+        console.log("userAddTag:", userAddTag);
+        console.log("토큰:", userToken);
         // 사용자가 추가한 태그 요청
-        axios.post(`${axiosAddress}${addTagUrl}${userSeq}`,
-            userAddTag,
-            {
+
+        axios.post(`${axiosAddress}${addTagUrl}${userSeq}`, userAddTag, {
                 headers: {
                     Authorization: "Bearer " + userToken
                 },
@@ -68,6 +70,7 @@ const AddTagButtonForm = (props) => {
 
             }).catch((error) => {
                 console.error("사용자 지정 태그 추가 실패", error);
+                alert("태그 ")
             })
     }
 
@@ -105,9 +108,6 @@ const AddTagButtonForm = (props) => {
     return (
         <AddTagFrame>
             <Title>태그 지정</Title>
-
-            {/* 태그 추가 리스트 보기 */}
-
                 <TagMenuContainer>
                     <TagMenuItemContainer><TagMenuItem onClick={() => { setSelectedMenu(true) }}>지정된 태그</TagMenuItem></TagMenuItemContainer>
                     <TagMenuItemContainer><TagMenuItem onClick={() => { setSelectedMenu(false) }}>사용자 지정</TagMenuItem></TagMenuItemContainer>

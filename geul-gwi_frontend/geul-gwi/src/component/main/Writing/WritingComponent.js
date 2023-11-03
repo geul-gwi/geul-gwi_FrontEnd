@@ -42,8 +42,8 @@ const WritingComponent = (props) => {
                         <ComponentName>{props.selectedTab === "geulgwi" ? "글귀 작성" : "챌린지 작성"}</ComponentName>
                         <ComponentIntro>
                             {props.selectedTab === "geulgwi" ?
-                                "나만의 글귀를 작성해주세요."
-                                : "모든 키워드가 들어가도록 나만의 글귀를 작성해주세요."}.
+                                "나만의 글 귀를 만들어보세요."
+                                : "모든 키워드가 이용하여 나만의 글 귀를 만들어보세요."}.
                         </ComponentIntro>
                     </TitleContainer>
 

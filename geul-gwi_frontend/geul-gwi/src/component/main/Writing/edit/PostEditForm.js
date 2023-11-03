@@ -22,16 +22,18 @@ const PostEditForm = ({ data }) => {
 
     useEffect(() => {
         // 게시물 이미지 URL 목록을 가져오는 함수
-        const fetchImageUrls = async () => {
+        const fetchDataAndCreateFiles = async () => {
             const urls = [];
             for (const file of data.files) {
                 try {
-                    const imageUrl = await imageDataFetcher(file);
+                    const imageUrl = await imageDataFetcher(axiosAddr, file);
                     urls.push(imageUrl);
                 } catch (error) {
                     console.error('이미지 URL 가져오기 실패:', error);
                 }
             }
+
+            console.log("가져온 urls", urls); 
             setFiles(urls);
             setShowFiles(urls);
 
@@ -55,8 +57,9 @@ const PostEditForm = ({ data }) => {
             setFiles(newFiles);
         };
 
-        fetchImageUrls();
+        fetchDataAndCreateFiles();
     }, []);
+    
 
     // 수정 완료 버튼 클릭
     const OnSubmit = async () => {
@@ -88,7 +91,7 @@ const PostEditForm = ({ data }) => {
             });
 
             alert("수정이 완료되었습니다.");
-            navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
+            window.history.back();
 
         } catch (error) {
             console.error("글 수정 실패: ", error);
@@ -97,6 +100,7 @@ const PostEditForm = ({ data }) => {
 
     // base64를 blob으로 변환해주는 함수
     function b64toBlob(b64Data, contentType = '', sliceSize = 512) {
+
         //console.log("변환하기 전 파일: ", b64Data);
         const image_data = atob(b64Data.split(',')[1]); // data:image/gif;base64 필요없으니 떼주고, base64 인코딩을 풀어준다
 
@@ -114,7 +118,7 @@ const PostEditForm = ({ data }) => {
     // 이미지 추가
     const ImageAddHandler = (e) => {
         const addFiles = e.target.files;
-        console.log("이미지 추가: ", addFiles);
+        //console.log("이미지 추가: ", addFiles);
         setFiles((prevImages) => [...prevImages, ...addFiles]);
 
         const fileURLs = [];

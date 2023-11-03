@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-// Axios Address Context
 import { AxiosAddrContext } from 'contextStore/AxiosAddress'; 
-// Import Library
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 // component
 import MemberItem from "./MemberItem";

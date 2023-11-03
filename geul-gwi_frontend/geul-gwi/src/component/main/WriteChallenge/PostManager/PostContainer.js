@@ -88,7 +88,7 @@ const PostContainer = (props) => {
                     <Nickname>{post.nickname}</Nickname>
                     <Content>{post.challengeContent}</Content>
                     <ItemBottom>
-                        <LikeViewCount>{post.likeCount}</LikeViewCount>
+                        <LikeCount>{post.likeCount}</LikeCount>
                         <LikeButtonContainer>
                             {
                                 post.isLiked ? <AiFillHeart class="likebtn" size={25} color={"red"} onClick={(event) => {
@@ -162,7 +162,7 @@ const ItemBottom = styled.div`
     align-items : center;
 `
 // PostItem의 하단 부분의 왼쪽 ( 좋아요 수 표시 )
-const LikeViewCount = styled.div`
+const LikeCount = styled.div`
     display : flex;
     min-width : 10px; width : auto;
     padding : 0px 0px 0px 5px;

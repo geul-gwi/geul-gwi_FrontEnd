@@ -19,7 +19,6 @@ const ImageUploadForm = (props) => {
                     <ItemContainer>
                         <StyledInput id="imgUpload" type='file' onChange={(e) => handleImageChanged(e)} multiple />
                         <InputLabel for="imgUpload">
-                            {/* 이미지를 추가하세요 버튼의 아이콘 */}
                             <DefaultImgIconContainer>
                                 <img 
                                     src={WritingIconPath + "picture.svg"} 
@@ -27,7 +26,6 @@ const ImageUploadForm = (props) => {
                                     style={{width : "40px", height : "40 px"}}
                                 />
                             </DefaultImgIconContainer>
-                            {/* 이미지를 추가하세요 버튼의 텍스트 */}
                             <DefaultImgTextContainer>추가</DefaultImgTextContainer>
                         </InputLabel>
                     </ItemContainer>

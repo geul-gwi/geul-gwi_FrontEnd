@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux'; 
@@ -104,7 +105,8 @@ const ProfileEditForm = ({ userInfo }) => {
             if (response) {
                 console.log('프로필 편집 성공 : ', response);
                 alert("프로필 편집을 완료했습니다.");
-                navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
+                //navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
+                window.history.back();
             }
         } catch (error) {
             console.log('프로필 편집 실패  : ', error);
@@ -193,7 +195,7 @@ const ProfileEditForm = ({ userInfo }) => {
     const handleCancel = () => {
         const userResponse = window.confirm("변경된 내용을 삭제하시겠습니까?\n변경 내용을 삭제하면 이전 정보로 복구됩니다.");
         if (userResponse) {
-            navigate('/main/ProfilePage');
+            window.history.back();
         }
     };
 
