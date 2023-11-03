@@ -92,15 +92,17 @@ const PostContainer = (props) => {
                     )}
                     <ProfileContainer>
                         <ProfilePicture 
-                            src={'/img/defaultProfile.png'} 
+                            src={post.profile ? post.profile : '/img/defaultProfile.png'} 
                             onClick={() => onClickProfile(post.userSeq)}
                         />
                         <Nickname onClick={() => onClickProfile(post.userSeq)}>
                             {post.nickname}
                         </Nickname>
+
                     </ProfileContainer>
                     <Content>{post.challengeContent}</Content>
                     <ItemBottom>
+                        <Date>{post.regDate}</Date>
                         <LikeCount>{post.likeCount}</LikeCount>
                         <LikeButtonContainer>
                             {
@@ -175,6 +177,16 @@ const Item = styled.div`
 const PartFrame = styled.div`
     width : calc(100% - 20px); // padding 20px 값을 뺌
     padding : 5px 10px 5px 10px;
+`
+
+// 닉네임
+const Date = styled(PartFrame)`
+    display : flex;
+    height : 20px;
+    align-items : center;
+    color : rgba(10,10,10, 1);
+    font-size : 12px;
+    cursor: pointer;
 `
 
 // 닉네임

@@ -4,6 +4,7 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux';
 // component
 import ChallengeComponent from 'component/main/WriteChallenge/ChallengeComponent';
+import imageDataFetcher from 'service/imageDataFetcher';
 
 // 챌린지 폼 관련 함수, 변수 관리
 const WrtchgAction = () => {
@@ -34,7 +35,7 @@ const WrtchgAction = () => {
                 });
 
                 if (listResponse) {
-                    console.log("챌린지 회차 목록111111: ", listResponse.data);
+                    //console.log("챌린지 회차 목록111111: ", listResponse.data);
                     const updatedChallenges = await checkChallengeStatus(listResponse.data);
                     setChallenges(updatedChallenges);
 
@@ -72,24 +73,23 @@ const WrtchgAction = () => {
         fetchChallenges();
     }, []);
 
-
     const checkChallengeStatus = async (challenges) => {
-        const today = new Date(); 
+        const today = new Date();
         const updatedChallenges = await Promise.all(challenges.map(async (challenge) => {
             const startDate = new Date(challenge.start);
             const endDate = new Date(challenge.end);
             if (challenge.status === 'ONGOING' && today >= endDate) {
                 console.log("진행중인 챌린지 종료됨!!", endDate);
-                challenge.status = 'FINISHED'; 
+                challenge.status = 'FINISHED';
                 await statusChangeHandler(challenge.challengeAdminSeq, 'FINISHED');
             } else if (challenge.status === 'UPCOMING' && today >= startDate) {
                 if (today >= endDate) {
                     console.log("예정중인 챌린지 종료됨!!", endDate);
-                    challenge.status = 'FINISHED'; 
+                    challenge.status = 'FINISHED';
                     await statusChangeHandler(challenge.challengeAdminSeq, 'FINISHED');
                 } else {
                     console.log("예정중인 챌린지 시작됨!!", startDate);
-                    challenge.status = 'ONGOING'; 
+                    challenge.status = 'ONGOING';
                     await statusChangeHandler(challenge.challengeAdminSeq, 'ONGOING');
                 }
             }
@@ -119,6 +119,7 @@ const WrtchgAction = () => {
     useEffect(() => {
         if (selectedChallengeSeq === null)
             return;
+
         const tagSearchHandler = async () => {
             try {
                 const response = await Axios.get(`${axiosAddr}${listUrl}/${selectedChallengeSeq}?viewSeq=${userSeq}`, {
@@ -126,20 +127,41 @@ const WrtchgAction = () => {
                         Authorization: `Bearer ${userToken}`,
                     },
                 });
-                if (response) {
-                    console.log("해당 챌린지 글 목록 : ", response.data);
-                    setPosts(response.data);
-                }
+                setPosts(await imageChange(response.data));
             } catch (error) {
                 console.error('해당 챌린지 글 목록.', error);
             }
         };
+
+        const imageChange = async (posts) => {
+            try {
+                return await Promise.all(posts.map(async (post) => {
+                    try {
+                        const profileImageUrl = await imageDataFetcher(axiosAddr, post.profile);
+        
+                        if (profileImageUrl) {
+                            post.profile = profileImageUrl; // 프로필 데이터를 이미지 URL로 설정
+                        }
+        
+                        return post;
+                    } catch (error) {
+                        console.error('프로필 가져오기 에러:', error);
+                        return post; // 에러 발생 시 현재 post 객체를 반환하여 업데이트
+                    }
+                }));
+            } catch (error) {
+                console.error('게시물 업데이트 에러:', error);
+                return posts;
+            }
+        };
+
         tagSearchHandler();
     }, [selectedChallengeSeq]);
 
+
     // 이전 버튼
     const PrevButtonClick = () => {
-        console.log("이전글",challenges);
+        //console.log("이전글", challenges);
         if (challenges.length > 0 && selectedIndex > 0) {
             const newIndex = selectedIndex - 1;
             setSelectedChallengeSeq(challenges[newIndex].challengeAdminSeq);
