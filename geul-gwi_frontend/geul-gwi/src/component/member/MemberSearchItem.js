@@ -11,7 +11,7 @@ const MemberSearchItem = (props) => {
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
-
+    
     const [profile, setProfile] = useState();
 
     const friendRequestUrl = '/friend/confirm'; // 친구 요청 주소
@@ -96,7 +96,12 @@ const MemberSearchItem = (props) => {
         }
     };
 
+    if (userSeq === props.member.userSeq) {
+        return null; // 현재 사용자의 프로필을 렌더링하지 않습니다.
+    }
+
     return (
+        
         <Frame>
             <LeftContainer>
                 <ProfileImage src={profile || '/img/defaultProfile.png'} onClick={onClickProfile} />
