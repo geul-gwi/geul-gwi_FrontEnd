@@ -26,7 +26,7 @@ const ImageUploadForm = (props) => {
                                     style={{width : "40px", height : "40 px"}}
                                 />
                             </DefaultImgIconContainer>
-                            <DefaultImgTextContainer>추가</DefaultImgTextContainer>
+                            <DefaultImgTextContainer>이미지 추가</DefaultImgTextContainer>
                         </InputLabel>
                     </ItemContainer>
                     {props.showFiles && props.showFiles.map((image,idx) => (
