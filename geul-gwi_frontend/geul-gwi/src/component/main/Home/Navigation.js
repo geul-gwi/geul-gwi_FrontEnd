@@ -16,6 +16,7 @@ const menus = []
 menus.push({ "name": "홈", "src": "/icon/Navigation/home.svg", "target": "/main" })
 menus.push({ "name": "알림", "src": "/icon/Navigation/bell.svg", "target": "/alarm" })
 menus.push({ "name": "친구", "src": "/icon/Navigation/users.svg", "target": "/friend" })
+menus.push({ "name": "회원 찾기", "src": "/icon/Navigation/plus.png", "target": "/main/Writing" })
 menus.push({ "name": "쪽지함", "src": "/icon/Navigation/letter.png", "target": "/main/message" })
 menus.push({ "name": "챌린지", "src": "/icon/Navigation/notepad.png", "target": "/main/WritingChallenge" })
 menus.push({ "name": "작성", "src": "/icon/Navigation/plus.png", "target": "/main/Writing" })
