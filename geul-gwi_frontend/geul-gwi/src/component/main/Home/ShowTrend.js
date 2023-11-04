@@ -1,31 +1,58 @@
-import React from 'react';
 import styled from 'styled-components';
+import React, { useEffect, useContext, useState } from 'react';
+import Axios from 'axios';
+import { AxiosAddrContext } from 'contextStore/AxiosAddress';
+import { useSelector } from 'react-redux';
 import { Tag } from 'component/common/button/Tag';
 
-let tags = []
-tags.push({ "value": "웜무드", "search": 2023, "postCount": 128 })
-tags.push({ "value": "새벽워킹", "search": 11629, "postCount": 1129 })
-tags.push({ "value": "운동 동기부여", "search": 1722, "postCount": 298 })
-tags.push({ "value": "불타올라", "search": 891, "postCount": 129 })
-tags.push({ "value": "심신안정", "search": 4110, "postCount": 516 })
-tags.push({ "value": "연인사랑", "search": 8929, "postCount": 832 })
-
 const ShowTrend = () => {
+    const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
+    const userToken = useSelector((state) => state.authReducer.accessToken);
+
+    const tagTrandUrl = '/geulgwi/tagTrend';
+    const [datas, setDatas] = useState([]); 
+
+    useEffect(() => {
+        const fetchChallenges = async () => {
+            try {
+                const response = await Axios.get(`${axiosAddr}${tagTrandUrl}`, {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`
+                    }
+                });
+
+                if (response) {
+                    //console.log("태그 트렌드: ", response.data);
+                    setDatas(response.data);
+                }
+            } catch (error) {
+                console.error('태그 트렌드:', error);
+                if (error.response.errorCode === 'A-001' 
+                    || error.response.errorCode === 'A-002')
+                {
+                    alert("세션이 만료되었습니다. 로그인을 다시 시도해주세요.");
+                }
+            }
+        };
+
+        fetchChallenges();
+    }, []);
+    
     return (
         <TrendFrame>
             <TitleName>태그 트렌드</TitleName>
             <ItemManager>
-                {tags && tags.map((tag, idx) => (
+                {datas && datas.map((tag, idx) => (
                         <Item>
-                        <Rank>{idx + 1 + "위"}</Rank>
                             <ItemDataContainer>
                                 <Tag
-                                    fontColor={'white'}
-                                    backColor={'yellow'}
+                                    key={idx}
+                                    fontColor={tag.fontColor}
+                                    backColor={tag.backColor}
                                 >
                                     {"#" + tag.value}
                                 </Tag>
-                                <ItemData>{tag.postCount + "개의 글"}</ItemData>
+                                <ItemData>{tag.count + "개의 글"}</ItemData>
                             </ItemDataContainer>
                         </Item>
                 ))}
@@ -88,15 +115,6 @@ const ItemData = styled.div`
     font-size: 13px;
     color: #8E8B8B;
     text-align: right;
-`;
-
-const Rank = styled.div`
-    width: 35%;
-    height: 20px;
-    font-size: 14px;
-    color: #3AEEC3;
-    font-weight: bold;
-    text-transform: uppercase;
 `;
 
 export default ShowTrend;

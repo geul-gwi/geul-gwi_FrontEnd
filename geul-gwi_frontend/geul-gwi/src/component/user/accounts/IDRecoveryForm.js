@@ -112,10 +112,4 @@ const Button = styled.button`
     }
 `
 
-const FormContentManage = styled.form`
-    text-align: center;
-    width: 70%;
-`;
-
-
 export default IDRecoveryForm;

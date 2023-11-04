@@ -18,11 +18,6 @@ const PasswordRecoveryForm = () => {
     const passwordRequestUrl = '/email/password';
     const [Id, setId] = useState('');
     const [email, setEmail] = useState('');
-    const [selectedDomain, setSelectedDomain] = useState(''); // 콤보박스로 선택한 도메인
-
-    const handleDomainChange = (e) => {
-        setSelectedDomain(e.target.value);
-    };
 
     const LoginSubmit = () => {
         const EmailDTO = {

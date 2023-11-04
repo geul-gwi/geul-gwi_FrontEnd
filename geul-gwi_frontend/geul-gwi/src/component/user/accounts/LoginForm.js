@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,8 +9,7 @@ import { faUser as RegularUser } from '@fortawesome/free-regular-svg-icons'
 import imageDataFetcher from 'service/imageDataFetcher';
 
 import 'css/LoginForm.css';
-import { useDispatch, useSelector } from 'react-redux'; 
-import { setToken, clearToken } from 'Reducer/auth';
+import { useDispatch } from 'react-redux'; 
 import { login, setNickname, setProfile, setUserSeq, setRole } from 'Reducer/authReducer';
 
 const LoginForm = () => {
