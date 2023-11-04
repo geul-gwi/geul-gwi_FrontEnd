@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import styled from 'styled-components';
@@ -8,6 +8,8 @@ import ProfilePostList from 'component/user/profile/ProfilePostList';
 import { Tag } from 'component/common/button/Tag'
 import { Button } from 'component/common/button/Button'
 import imageDataFetcher from 'service/imageDataFetcher';
+
+// useCallback
 
 // profileUserSeq => 보여줄 유저의 프로필 시퀀스
 const Profile = ({ profileUserSeq }) => {
@@ -25,40 +27,36 @@ const Profile = ({ profileUserSeq }) => {
   const [userInfo, setUserInfo] = useState({}); // 유저 프로필 정보
   const [friendStatus, setFriendStatus] = useState(null);
 
-  useEffect(() => {
-    async function fetchUserProfile() {
-      try {
-        const response = await Axios.get(`${axiosAddr}${userDetailUrl}${profileUserSeq}`, {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-        });
-  
-        //console.log("프로필:", response.data);
-        const userData = response.data;
-        const profileImageUrl = await imageDataFetcher(axiosAddr, userData.profile);
-  
-        setUserInfo((prevUserInfo) => {
-          return { ...userData, profile: profileImageUrl };
-        });
-      } catch (error) {
-        if (error.response.data.errorCode === 'A-002') {
-          alert("로그인이 만료되었습니다. 로그인을 다시 시도해주세요.");
-          navigate('/accounts');
+  const fetchUserProfile = useCallback(async () => {
+    try {
+      const response = await Axios.get(`${axiosAddr}${userDetailUrl}${profileUserSeq}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`
         }
-        console.log('프로필 불러오기 실패:', error);
-      }
-    }
-      fetchUserProfile();
-  }, [profileUserSeq]);
+      });
 
-  useEffect(() => {
-    const fetchData = async () => {
+      const userData = response.data;
+      const profileImageUrl = await imageDataFetcher(axiosAddr, userData.profile);
+
+      setUserInfo({
+        ...userData,
+        profile: profileImageUrl
+      });
+
       const status = await CheckFriendStatus();
       setFriendStatus(status);
-    };
-    fetchData();
-  }, [profileUserSeq]);
+    } catch (error) {
+      if (error.response?.data.errorCode === 'A-002') {
+        alert("로그인이 만료되었습니다. 로그인을 다시 시도해주세요.");
+        navigate('/accounts');
+      }
+      console.log('프로필 불러오기 실패:', error);
+    }
+  }, [axiosAddr, userToken, profileUserSeq, navigate]);
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, [fetchUserProfile]);
 
   // 프로필 사진 클릭
   const onProfileClick = () => {
@@ -136,26 +134,24 @@ const Profile = ({ profileUserSeq }) => {
   };
 
   // 친구 상태인지 체크하는 함수
-  const CheckFriendStatus = async () => {
+  const CheckFriendStatus = useCallback(async () => {
     try {
       const friendDTO = {
-        'toUser': profileUserSeq, // 확인하고 싶은 사람
-        'fromUser': userSeq, // 나
+        'toUser': profileUserSeq,
+        'fromUser': userSeq,
       };
-      //console.log(`관계 확인 : `, friendDTO);
+
       const response = await Axios.post(`${axiosAddr}${friendStatusUrl}`, friendDTO, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       });
-      console.log(response.data);
 
       return response.data;
-
     } catch (error) {
       console.error('친구 상태 확인 실패 : ', error);
     }
-  };
+  }, [axiosAddr, userSeq, profileUserSeq, userToken]);
 
   return (
     <>

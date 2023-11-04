@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiLogOut } from 'react-icons/fi'; // 로그아웃 아이콘
 import styled from 'styled-components';
@@ -7,23 +7,16 @@ import Axios from 'axios';
 import { logout } from 'Reducer/authReducer';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import imageDataFetcher from 'service/imageDataFetcher';
+import { menus } from 'utils/constants'; // 메뉴 정의
 
 // component
 import NoticeForm from "component/main/LeftNavi/notice/NoticeForm";
 import FriendForm from "component/main/LeftNavi/friend/FriendForm";
 import MemberSearchForm from 'component/main/LeftNavi/memberSearch/MemberSearchForm';
 
-const menus = []
-menus.push({ "name": "홈", "src": "/icon/Navigation/home.svg", "target": "/main" })
-menus.push({ "name": "알림", "src": "/icon/Navigation/bell.svg", "target": "/alarm" })
-menus.push({ "name": "친구", "src": "/icon/Navigation/users.svg", "target": "/friend" })
-menus.push({ "name": "회원 검색", "src": "/icon/Navigation/search.png", "target": "/member" })
-menus.push({ "name": "쪽지함", "src": "/icon/Navigation/letter.png", "target": "/main/message" })
-menus.push({ "name": "챌린지", "src": "/icon/Navigation/notepad.png", "target": "/main/WritingChallenge" })
-menus.push({ "name": "작성", "src": "/icon/Navigation/plus.png", "target": "/main/Writing" })
-
 const Navigation = () => {
     const dispatch = useDispatch();
+    const isSubscribed = useSelector((state) => state.authReducer.isSubscribed);
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
@@ -66,7 +59,7 @@ const Navigation = () => {
                     navigate('/accounts');
                 }
             });
-    }, []);
+    }, [isSubscribed]);
 
     const ComponentMove = (target) => {
         handleOtherMenuClick(target); // 다른 메뉴 클릭 시 닫기 핸들러 호출
@@ -87,7 +80,7 @@ const Navigation = () => {
     }
 
      // 다른 메뉴 클릭 시 닫기 핸들러 함수 추가
-     const handleOtherMenuClick = (targetMenu) => {
+    const handleOtherMenuClick = useCallback((targetMenu) => {
         if (targetMenu !== '/alarm') {
             setIsAlertFormVisible(false);
         }
@@ -97,31 +90,31 @@ const Navigation = () => {
         if (targetMenu !== '/member') {
             SetIsMemberForm(false);
         }
-    };
+    }, []);
 
-    const handleAlertClick = () => {
-        setIsAlertFormVisible(!isAlertFormVisible);
+    const handleAlertClick = useCallback(() => {
+        setIsAlertFormVisible((prevState) => !prevState);
         SetisFriendForm(false);
         SetIsMemberForm(false);
-    };
+    }, []);
 
-    const handleFriendClick = () => {
-        SetisFriendForm(!isFriendForm);
+    const handleFriendClick = useCallback(() => {
+        SetisFriendForm((prevState) => !prevState);
         setIsAlertFormVisible(false);
         SetIsMemberForm(false);
-    };
+    }, []);
 
-    const handleMemberClick = () => {
-        SetIsMemberForm(!isMemberForm);
+    const handleMemberClick = useCallback(() => {
+        SetIsMemberForm((prevState) => !prevState);
         setIsAlertFormVisible(false);
         SetisFriendForm(false);
-    };
+    }, []);
 
     const [isMoreMenuVisible, setIsMoreMenuVisible] = useState(false);
 
-    const handleMoreButtonClick = () => {
-        setIsMoreMenuVisible(!isMoreMenuVisible);
-    };
+    const handleMoreButtonClick = useCallback(() => {
+        setIsMoreMenuVisible((prevState) => !prevState);
+    }, []);
 
     const userNickname = useSelector((state) => state.authReducer.userNickname);
     const userProfile = useSelector((state) => state.authReducer.userProfile);

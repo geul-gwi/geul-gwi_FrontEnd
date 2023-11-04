@@ -1,12 +1,16 @@
 // authReducer.js
 
+// Redux 스토어에 구독 상태를 관리하는 리듀서를 생성하고 
+// 액션을 디스패치하여 해당 상태를 변경합니다.
+
 // 초기 상태
 const initialState = {
   accessToken: null,
   userSeq: null,
   userProfile: null,
   userNickname: null,
-  role: null
+  role: null,
+  isSubscribed: false, // 초기 구독 상태
 };
 
 // 액션 타입 정의
@@ -16,6 +20,18 @@ const SETUSERSEQ = 'auth/SETUSERSEQ';
 const SET_USER_PROFILE = 'auth/SET_USER_PROFILE';
 const SET_USER_NICKNAME = 'auth/SET_USER_NICKNAME';
 const ROLE = 'auth/ROLE';
+
+// action types
+export const SUBSCRIBE = 'SUBSCRIBE'; // 구독
+
+// action creators
+export const subscribeAction = (isSubscribed) => {
+  return {
+    type: SUBSCRIBE,
+    payload: isSubscribed,
+  };
+};
+
 
 // 액션 생성자 함수
 export const login = (accessToken) => ({
@@ -87,7 +103,12 @@ const authReducer = (state = initialState, action) => {
         ...state,
         userNickname: action.payload,
       };
-
+      
+    case SUBSCRIBE:
+      return {
+        ...state,
+        isSubscribed: action.payload,
+      };
 
     default:
       return state;

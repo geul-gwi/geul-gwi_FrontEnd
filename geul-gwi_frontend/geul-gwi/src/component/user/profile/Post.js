@@ -1,9 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { AiOutlineLeft, AiOutlineRight, AiOutlineEdit, AiFillHeart, AiOutlineHeart, AiOutlineClose } from "react-icons/ai"; 
 import styled from 'styled-components';
 import axios from 'axios';
 import "css/main/Post.css"
 import { useNavigate } from 'react-router-dom';
+
 // component
 import { Tag } from 'component/common/button/Tag';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
@@ -12,7 +13,6 @@ import imageDataFetcher from 'service/imageDataFetcher';
 
 const Post = (props) => {
     const navigate = useNavigate();
-
     const { axiosAddr } = useContext(AxiosAddrContext);
     const { userSeq, accessToken } = useSelector((state) => state.authReducer);
 
@@ -20,6 +20,9 @@ const Post = (props) => {
     const likeDelateUrl = '/geulgwi/unlike/'; // 좋아요 취소 요청 주소
     const postDetailUrl = '/geulgwi/search/'; // 게시물 세부 요청 주소
     const postDeleteUrl = '/geulgwi/delete/'; // 게시물 삭제 요청 주소
+
+    const [isLoading, setIsLoading] = useState(true); // 로딩 상태를 관리하기 위한 상태 추가
+
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0); // 이미지 넘겨보기 위한 인덱스
     const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 목록을 저장할 배열
@@ -75,10 +78,10 @@ const Post = (props) => {
             setImageUrls(urls);
         };
         fetchImageUrls();
-    }, []);
+    }, [props.files]);
 
     // 좋아요 눌렀을 때 새로고침
-    const reload = async () => {
+    const reload = useCallback(async () => {
         try {
             const response = await axios.get(`${axiosAddr}${postDetailUrl}${props.geulgwiSeq}?viewSeq=${userSeq}`, {
                 headers: {
@@ -95,7 +98,7 @@ const Post = (props) => {
             console.error('이미지 가져오기에 실패했습니다.', error);
             return null;
         }
-    }
+    }, [props.geulgwiSeq, userSeq, axiosAddr, accessToken]);
 
     const onClickLikeButton = async (e) => {
         if (isLiked) {

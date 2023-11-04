@@ -2,13 +2,16 @@ import React, { useEffect, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
-import { useSelector } from 'react-redux'; 
 import Axios from 'axios';
 import imageDataFetcher from 'service/imageDataFetcher';
+import { subscribeAction } from 'Reducer/authReducer'; // 리덕스 액션 가져오기
+import { useDispatch, useSelector } from 'react-redux'; // Redux 사용 Library
 
 const FriendItem = (props) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
+    const subscribedAction = useSelector((state) => state.authReducer.isSubscribed);
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
     const [profile, setProfile] = useState();
@@ -61,8 +64,10 @@ const FriendItem = (props) => {
                         Authorization: `Bearer ${userToken}`,
                     },
                 });
-                console.log('구독:', response);
+                //console.log('구독:', response);
                 setIsSubscribed(isSubscribed === 'T' ? 'F' : 'T');
+                // 구독 상태 변경을 트리거하는 함수에서 해당 액션을 디스패치하여 Redux 스토어의 상태를 업데이트합니다.
+                dispatch(subscribeAction(!subscribedAction)); // Redux 스토어에 새로운 구독 상태 디스패치
             } catch (error) {
                 console.error('구독:', error);
             }

@@ -12,7 +12,6 @@ const TagSearchForm = (props) => {
   useEffect(() => {
     axios.post(`${axiosAddress}${defaultTagUrl}`)
       .then(response => {
-        //console.log("태그 요청 : ", response.data);
         setTags(response.data);
       })
       .catch(error => {
@@ -38,7 +37,10 @@ const TagSearchForm = (props) => {
       <TagContainer>
         <TagsContainer>
           {tags && tags.map(tag => (
-            <TagButton fontColor={tag.fontColor} backColor={tag.backColor}
+            <TagButton 
+              key={tag.value}
+              fontColor={tag.fontColor} 
+              backColor={tag.backColor}
               selected={props.selectedTag === tag}
               onClick={() => handleTagClick(tag)}
             >
@@ -91,7 +93,7 @@ const Button = styled.div`
     }
 `;
 
-const TagButton = styled.button`
+const TagButton = React.memo(styled.button`
     background-color: ${props => (props.selected ? props.backColor : '#f0f0f0')};
     color: ${props => (props.selected ? props.fontColor : 'black')};
     border: none;
@@ -110,7 +112,7 @@ const TagButton = styled.button`
         transform: translateY(-2px);
         box-shadow: ${props => (props.selected ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none')};
     }
-`;
+`);
 
 const TagsContainer = styled.div`
   display: flex;
