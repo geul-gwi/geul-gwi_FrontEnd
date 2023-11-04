@@ -51,6 +51,11 @@ const ChallengeRank = () => {
                 }
             } catch (error) {
                 console.error('챌린지 목록 및 진행 중인 회차 가져오기 에러:', error);
+                if (error.response.errorCode === 'A-001' 
+                    || error.response.errorCode === 'A-002')
+                {
+                    alert("세션이 만료되었습니다. 로그인을 다시 시도해주세요.");
+                }
             }
         };
 

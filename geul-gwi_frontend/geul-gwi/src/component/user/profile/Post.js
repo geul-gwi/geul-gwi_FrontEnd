@@ -11,6 +11,27 @@ import { useSelector } from 'react-redux'; // Redux 사용 Library
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import imageDataFetcher from 'service/imageDataFetcher';
 
+const bounceAnimation = keyframes`
+    0% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-10px);
+    }
+    75% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+`;
+
+const LikeButton = styled.div`
+    display: inline-block;
+    animation: ${({ clicked }) => (clicked ? bounceAnimation : 'none')} 0.5s;
+    transition: transform 0.1s ease-in-out;
+`;
+
 const Post = (props) => {
     const navigate = useNavigate();
     const { axiosAddr } = useContext(AxiosAddrContext);
@@ -20,9 +41,6 @@ const Post = (props) => {
     const likeDelateUrl = '/geulgwi/unlike/'; // 좋아요 취소 요청 주소
     const postDetailUrl = '/geulgwi/search/'; // 게시물 세부 요청 주소
     const postDeleteUrl = '/geulgwi/delete/'; // 게시물 삭제 요청 주소
-
-    const [isLoading, setIsLoading] = useState(true); // 로딩 상태를 관리하기 위한 상태 추가
-
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0); // 이미지 넘겨보기 위한 인덱스
     const [imageUrls, setImageUrls] = useState([]); // 이미지 URL 목록을 저장할 배열
@@ -129,10 +147,10 @@ const Post = (props) => {
                 if (response) {
                     console.log("좋아요 성공 : ", response);
                     reload();
-                    setClicked(true);
+                    setClicked(true); // 클릭 시에 clicked 상태를 true로 변경
 
                     setTimeout(() => {
-                        setClicked(false);
+                        setClicked(false); // 500ms 후에 clicked 상태를 false로 재설정
                     }, 500); // 500ms delay to reset the state
                 }
             } catch (error) {
@@ -155,27 +173,6 @@ const Post = (props) => {
     const onClickProfile = () => {
         navigate('/main/Profile', { state: { profileUserSeq: props.userSeq } });
     };
-
-    const bounceAnimation = keyframes`
-    0% {
-        transform: translateY(0);
-    }
-    25% {
-        transform: translateY(-10px);
-    }
-    75% {
-        transform: translateY(-5px);
-    }
-    100% {
-        transform: translateY(0);
-    }
-`;
-
-    const LikeButton = styled.div`
-        display: inline-block;
-        animation: ${clicked ? bounceAnimation : 'none'} 0.5s;
-        transition: transform 0.1s ease-in-out;
-`;
 
     return (
         <PostFrame>
@@ -223,11 +220,12 @@ const Post = (props) => {
                 </TagContainer>
                 <ButtonContainer>
                     <LikeCount>{likeCount}</LikeCount>
-                    <LikeButton>
-                        {isLiked ?
-                            <AiFillHeart class="likebtn" size={30} color={"red"} onClick={onClickLikeButton} /> :
+                    <LikeButton clicked={clicked}>
+                        {isLiked ? (
+                            <AiFillHeart class="likebtn" size={30} color={"red"} onClick={onClickLikeButton} />
+                        ) : (
                             <AiOutlineHeart class="likebtn" size={30} onClick={onClickLikeButton} />
-                        }
+                        )}
                     </LikeButton>
                 </ButtonContainer>
             </TagButtonContainer>
@@ -243,6 +241,11 @@ const LikeCount = styled.div`
    font-size: 17px;
    margin-top: 5px;
 `;
+
+
+
+
+
 
 const PostFrame = styled.div`
     display : flex;
