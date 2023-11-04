@@ -79,27 +79,34 @@ const WeatherFrame = styled.div`
     justify-content: center;
     box-shadow: 0px 0px 16px 0px #ccebb5;
     border-radius: 16px;
+    padding-bottom: 10px;
 `
 
 // 날씨 정보를 담을 Container
 const Title = styled.div`
-    padding: 20px 5px 20px 5px;
-    border-bottom: 1px solid #ccc;
-
+    padding: 10px 5px 0px 5px;
+    display: flex;
+    width: 100%;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    font-family: "Nanum Square";
+    font-size: 18px;
+    color: #FFAA5C;
 `
 
 // 날씨 정보를 담을 Container
 const DisplayContainer = styled.div`
     display : flex;
     width : 70%;
-    height : 80px;
+    height : 70px;
     align-items : center;
 `
 const DisplayIconContainer = styled.div`
     margin-left : 10px;
     display : flex;
     width : 70%;
-    height : 100%;
+    height : 110%;
     justify-content: center;
     align-items: center;
 `
@@ -121,7 +128,7 @@ const TextWeatherName = styled.div`
     font-family : "Nanum Square";
     font-style : "bold";
     font-size : 16px;
-    color : #474646;
+    color : #505050;
 `
 const TextWeatherState = styled.div`
     width : 100%;
