@@ -7,7 +7,7 @@ import ManagerRightNav from 'component/manager/ManagerRightNav';
 import TagManagement from 'component/manager/tag/TagManagement';
 import MemberManagement from 'component/manager/member/MemberManagement';
 import ChallengeManagement from 'component/manager/challenge/ChallengeManagement';
-import Navigation from 'component/main/Home/Navigation';
+import Navigation from 'component/main/LeftNavi/Navigation';
 
 const ManagerPage = () => {
     return (

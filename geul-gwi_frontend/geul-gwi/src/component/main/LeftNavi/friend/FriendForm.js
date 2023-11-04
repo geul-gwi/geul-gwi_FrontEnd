@@ -1,44 +1,53 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
 import { AiOutlineClose } from 'react-icons/ai';
-// component
 import FriendListForm from 'component/main/LeftNavi/friend/FriendListForm';
 import FriendRequestForm from 'component/main/LeftNavi/friend/FriendRequestForm';
 
 
 const FriendForm = (props) => {
-    const [menu, setMenu] = useState('list'); // 현재 선택된 메뉴 ('list' 또는 'requests')
+  const [menu, setMenu] = useState('list'); // 현재 선택된 메뉴 ('list' 또는 'requests')
+  const [shouldRenderList, setShouldRenderList] = useState(true);
 
-    // 닫기 버튼 클릭
-    const onClickCloseButton = async () => {
-        props.handleFriendClick();
-    };
+  // 닫기 버튼 클릭
+  const onClickCloseButton = async () => {
+    props.handleFriendClick();
+  };
 
-    return (
-        <Frame>
-            <TitleContainer>
-                <span>친구</span>
-                <CloseButton onClick={onClickCloseButton}>
-                    <AiOutlineClose size={15} color='gray' />
-                </CloseButton>
-            </TitleContainer>
-            <MenuContainer>
-                <Menu onClick={() => setMenu('list')} active={menu === 'list'}>
-                    목록
-                </Menu>
-                <Menu onClick={() => setMenu('requests')} active={menu === 'requests'}>
-                    받은 요청
-                </Menu>
-            </MenuContainer>
-            <ScrollableSubContainer>
-                {menu === 'list' ? <FriendListForm /> : 
-            <FriendRequestForm 
-              setMenu={setMenu}
-            />}
-            </ScrollableSubContainer>
-        </Frame>
-    );
+  useEffect(() => {
+    if (menu === 'requests') {
+      setShouldRenderList(false);
+    } else {
+      setShouldRenderList(true);
+    }
+  }, [menu]);
+
+  return (
+    <Frame>
+      <TitleContainer>
+        <span>친구</span>
+        <CloseButton onClick={onClickCloseButton}>
+          <AiOutlineClose size={15} color='gray' />
+        </CloseButton>
+      </TitleContainer>
+      <MenuContainer>
+        <Menu onClick={() => setMenu('list')} active={menu === 'list'}>
+          목록
+        </Menu>
+        <Menu onClick={() => setMenu('requests')} active={menu === 'requests'}>
+          받은 요청
+        </Menu>
+      </MenuContainer>
+      <ScrollableSubContainer>
+        {shouldRenderList && menu === 'list' && <FriendListForm />}
+        {menu === 'requests' && (
+          <FriendRequestForm
+            setMenu={setMenu}
+          />
+        )}
+      </ScrollableSubContainer>
+    </Frame>
+  );
 };
 
 const Frame = styled.div`

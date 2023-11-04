@@ -1,11 +1,10 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import Axios from 'axios';
-import imageDataFetcher from 'service/imageDataFetcher';
-import { subscribeAction } from 'Reducer/authReducer'; // 리덕스 액션 가져오기
-import { useDispatch, useSelector } from 'react-redux'; // Redux 사용 Library
+import { subscribeAction } from 'Reducer/authReducer'; 
+import { useDispatch, useSelector } from 'react-redux'; 
 
 const FriendItem = (props) => {
     const navigate = useNavigate();
@@ -14,22 +13,8 @@ const FriendItem = (props) => {
     const subscribedAction = useSelector((state) => state.authReducer.isSubscribed);
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
-    const [profile, setProfile] = useState();
     const [isSubscribed, setIsSubscribed] = useState(props.friend.isSubscribed); // 구독 상태 여부
-
-    useEffect(() => {
-        const fetchProfileImage = async () => {
-            try {
-                const imageUrl = await imageDataFetcher(axiosAddr, props.friend.profile);
-                setProfile(imageUrl);
-            } catch (error) {
-                console.error('친구 프로필 이미지 가져오기 실패.', error);
-            }
-        };
-
-        fetchProfileImage();
-    }, [props.friend.profile]);
-
+    
     // 친구 삭제
     const onClickDelete = () => {
         const userConfirmed = window.confirm(`정말로 ${props.friend.nickname}님과 친구를 끊으시겠습니까?`);  
@@ -78,7 +63,7 @@ const FriendItem = (props) => {
         <Frame>
             <LeftContainer>
                 <ProfileImage
-                    src={profile || '/img/defaultProfile.png'}
+                    src={props.friend.profile || '/img/defaultProfile.png'}
                     onClick={onClickProfile}
                 />
                 <Name onClick={onClickProfile}>{props.friend.nickname}</Name>

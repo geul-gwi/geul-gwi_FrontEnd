@@ -1,24 +1,18 @@
-// import Library
 import React, { useContext, useEffect, useState } from 'react';
-
 import styled from 'styled-components';
 import Axios from 'axios';
-
-// Component
-import TagSearchForm from 'component/main/LeftNavi/search/TagSearchForm'
-
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux';
 import imageDataFetcher from 'service/imageDataFetcher';
-
-import PostModal from 'component/common/modal/PostModal'
+import TagSearchForm from 'component/main/LeftNavi/search/TagSearchForm';
+import PostModal from 'component/common/modal/PostModal';
 
 
 const SearchForm = () => {
-   //const navigate = useNavigate();
    const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
    const userSeq = useSelector((state) => state.authReducer.userSeq);
    const userToken = useSelector((state) => state.authReducer.accessToken);
+
    const postListApi = '/geulgwi/list'; // 게시물 목록 요청 주소
    const postDetailUrl = '/geulgwi/search/'; // 게시물 세부 요청 주소
    const tagSearchPostUrl = '/geulgwi/search';
@@ -27,7 +21,6 @@ const SearchForm = () => {
    const [viewPosts, setViewPosts] = useState([]); // 글 전체 리스트
    const [viewPost, setViewPost] = useState(null); // 모달창 게시물 데이터
    const [ModalState, setModalState] = useState(false);
-
    const [selectedTag, setSelectedTag] = useState(null); // 검색하고자 하는 태그
 
    const truncateString = (str, num) => {
@@ -47,7 +40,6 @@ const SearchForm = () => {
          }
       })
          .then((response) => {
-            //console.log("글 목록 요청 성공 : ", response);
             setPosts(response.data.reverse());
             ReFactData(response.data);
          })

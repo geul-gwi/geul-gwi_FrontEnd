@@ -33,15 +33,15 @@ const Navigation = () => {
     const [subscribes, setSubscribes] = useState([]);
 
     useEffect(() => {
-        Axios.get(`${axiosAddr}${subscribeListUrl}${userSeq}`, {
-            headers: {
-                Authorization: "Bearer " + userToken
-            }
-        })
-            .then(async response => {
-                console.log("구독자 목록: ", response.data);
+        const fetchData = async () => {
+            try {
+                const response = await Axios.get(`${axiosAddr}${subscribeListUrl}${userSeq}`, {
+                    headers: {
+                        Authorization: "Bearer " + userToken
+                    }
+                });
+                console.log('구독자 목록:', response);
                 const usersData = response.data;
-
                 const updatedUsers = await Promise.all(
                     usersData.map(async user => {
                         const profileImage = await imageDataFetcher(axiosAddr, user.profile);
@@ -50,16 +50,19 @@ const Navigation = () => {
                 );
 
                 setSubscribes(updatedUsers);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('구독자 목록:', error);
-                if (error.response.data.errorCode === 'A-002' 
-                        || error.response.data.errorCode === 'A-001' ) {
+                if (error.response?.data.errorCode === 'A-002' || error.response?.data.errorCode === 'A-001') {
                     alert("세션이 만료되었습니다. 로그인을 다시 시도해주세요.");
                     navigate('/accounts');
                 }
-            });
-    }, [isSubscribed]);
+            }
+        };
+
+
+        fetchData();
+        
+    }, [userSeq, userToken, axiosAddr, subscribeListUrl, isSubscribed]);
 
     const ComponentMove = (target) => {
         handleOtherMenuClick(target); // 다른 메뉴 클릭 시 닫기 핸들러 호출
@@ -116,7 +119,6 @@ const Navigation = () => {
         setIsMoreMenuVisible((prevState) => !prevState);
     }, []);
 
-    const userNickname = useSelector((state) => state.authReducer.userNickname);
     const userProfile = useSelector((state) => state.authReducer.userProfile);
     const role = useSelector((state) => state.authReducer.role);
 
@@ -182,14 +184,13 @@ const Navigation = () => {
                     <SubscribersHeader>구독</SubscribersHeader>
                         <SubscribersListContainer>
                             {subscribes.map((subscribe, index) => (
-                                <Item>
+                                <Item onClick={() => onClickSubscribeProfile(subscribe.userSeq)}>
                                     <IconBox>
                                         <ProfileImage
                                             src={subscribe.profile ? subscribe.profile : "/img/defaultProfile.png"}
-                                            onClick={() => onClickSubscribeProfile(subscribe.userSeq)}
                                         />
                                     </IconBox>
-                                    <TextBox onClick={() => onClickSubscribeProfile(subscribe.userSeq)}>{subscribe.nickname}</TextBox>
+                                    <TextBox>{subscribe.nickname}</TextBox>
                                 </Item>
                             ))}
                     </SubscribersListContainer>

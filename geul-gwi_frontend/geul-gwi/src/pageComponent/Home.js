@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
 // component 
-import Navigation from 'component/main/Home/Navigation';
+import Navigation from 'component/main/LeftNavi/Navigation';
 import Weather from "component/main/Home/Weather"
 import ShowTrend from 'component/main/Home/ShowTrend';
 import ChallengeRank from 'component/main/Home/ChallengeRank';
