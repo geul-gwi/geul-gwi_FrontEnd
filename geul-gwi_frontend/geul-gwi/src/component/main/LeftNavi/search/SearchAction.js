@@ -202,13 +202,14 @@ const ItemImg = styled.img`
   //background-image: url(${process.env.PUBLIC_URL + "/Logo.png"});
 `
 const HoveredBack = styled.div`
-  position : absolute;
-  width : 100%;
-  height : 100%;
+  position: absolute;
+  width: 100%;
+  height: 100%;
   border-radius: 16px;
-  background-color: rgba(255,255,255,0.3);
-  z-index : 1;
-`
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 1;
+
+`;
 
 const HoveredContainer = styled.div`
   display : flex;
