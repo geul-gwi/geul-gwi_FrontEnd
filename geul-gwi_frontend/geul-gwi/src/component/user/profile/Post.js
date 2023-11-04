@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { AiOutlineLeft, AiOutlineRight, AiOutlineEdit, AiFillHeart, AiOutlineHeart, AiOutlineClose } from "react-icons/ai"; 
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import "css/main/Post.css"
 import { useNavigate } from 'react-router-dom';
@@ -39,6 +39,8 @@ const Post = (props) => {
         setCurrentImageIndex((prevIndex) => (prevIndex - 1 + imageUrls.length) % imageUrls.length);
     };
 
+    const [clicked, setClicked] = useState(false);
+    
     // 게시물 삭제 함수
     const onDeletePost = async () => {
         // 사용자에게 확인 메시지를 표시
@@ -127,6 +129,11 @@ const Post = (props) => {
                 if (response) {
                     console.log("좋아요 성공 : ", response);
                     reload();
+                    setClicked(true);
+
+                    setTimeout(() => {
+                        setClicked(false);
+                    }, 500); // 500ms delay to reset the state
                 }
             } catch (error) {
                 console.error("좋아요 실패 : ", error);
@@ -149,6 +156,26 @@ const Post = (props) => {
         navigate('/main/Profile', { state: { profileUserSeq: props.userSeq } });
     };
 
+    const bounceAnimation = keyframes`
+    0% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-10px);
+    }
+    75% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+`;
+
+    const LikeButton = styled.div`
+        display: inline-block;
+        animation: ${clicked ? bounceAnimation : 'none'} 0.5s;
+        transition: transform 0.1s ease-in-out;
+`;
 
     return (
         <PostFrame>
@@ -196,10 +223,12 @@ const Post = (props) => {
                 </TagContainer>
                 <ButtonContainer>
                     <LikeCount>{likeCount}</LikeCount>
-                    {isLiked ?
-                        <AiFillHeart class="likebtn" size={30} color={"red"} onClick={onClickLikeButton} /> :
-                        <AiOutlineHeart class="likebtn" size={30} onClick={onClickLikeButton} />
-                    }
+                    <LikeButton>
+                        {isLiked ?
+                            <AiFillHeart class="likebtn" size={30} color={"red"} onClick={onClickLikeButton} /> :
+                            <AiOutlineHeart class="likebtn" size={30} onClick={onClickLikeButton} />
+                        }
+                    </LikeButton>
                 </ButtonContainer>
             </TagButtonContainer>
         </PostFrame>
