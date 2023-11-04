@@ -82,7 +82,7 @@ const Button = styled.div`
   color: white;
   position: absolute;
   top: 23px;
-  right: -20px;
+  right: 0px;
   border-radius: 12px;
   padding: 8px 30px;
   cursor: pointer;

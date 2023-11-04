@@ -19,8 +19,6 @@ import MessageWritingPage from 'pageComponent/MessageWritingPage';
 import PostEditPage from 'pageComponent/PostEditPage';
 import ChallengePostEditPage from 'pageComponent/ChallengePostEditPage';
 
-import path from 'img/background.jpg';
-
 // Redux Import
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 
@@ -64,24 +62,29 @@ const Home = () => {
 };
 
 const Frame = styled.div`
-    position: relative;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-`;
+    position : relative;
+    width : 1200px;
+    height: auto;
+    min-height : 100vh;
+    margin : 0 auto;
+    
+`
 
 const BackImg = styled.div`
-    position: fixed;
-    width: 100%;
-    height: 100vh;
-    background: #F9F7DA;
+    position : fixed;
+    width : 100%;
+    top: 0;
+    left : 0;
     z-index: -1;
-`;
+    //background: linear-gradient(to right, #F9F7DA, #F5ED98);
+    height: 100vh;
+    background:#F9F7DA
+`
 
 const ContainerFrame = styled.div`
-    display: flex;
-    position: relative;
-`;
+    position : absolute;
+    height: 90vh;
+`
 
 const LeftContainer = styled(ContainerFrame)`
     position : fixed;
@@ -100,8 +103,16 @@ const LeftContainer = styled(ContainerFrame)`
 `
 
 const MidContainer = styled(ContainerFrame)`
-    flex: 1;
-    margin: 0 20px;
+    position : absolute;
+    top : 30px;
+    left : calc(50% - 350px);
+    width : 630px;
+    min-height : 100vh;
+    height : auto;
+
+    @media (max-width: 1300px) {
+    left: calc(50% - 315px); /* 가운데 정렬의 수정된 값 */
+  }
 `
 
 const RightContainer = styled(ContainerFrame)`
