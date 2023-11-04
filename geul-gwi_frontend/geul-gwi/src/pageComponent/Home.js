@@ -64,29 +64,24 @@ const Home = () => {
 };
 
 const Frame = styled.div`
-    position : relative;
-    width : 1200px;
-    height: auto;
-    min-height : 100vh;
-    margin : 0 auto;
-    
-`
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+`;
 
 const BackImg = styled.div`
-    position : fixed;
-    width : 100%;
-    top: 0;
-    left : 0;
-    z-index: -1;
-    //background: linear-gradient(to right, #F9F7DA, #F5ED98);
+    position: fixed;
+    width: 100%;
     height: 100vh;
-    background:#F9F7DA
-`
+    background: #F9F7DA;
+    z-index: -1;
+`;
 
 const ContainerFrame = styled.div`
-    position : absolute;
-    height: 90vh;
-`
+    display: flex;
+    position: relative;
+`;
 
 const LeftContainer = styled(ContainerFrame)`
     position : fixed;
@@ -105,20 +100,8 @@ const LeftContainer = styled(ContainerFrame)`
 `
 
 const MidContainer = styled(ContainerFrame)`
-    position: absolute;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 630px;
-    min-height: 100vh;
-    height: auto;
-    max-width: 1000px; /* 필요에 따라 최대 너비 설정 */
-    
-    @media (max-width: 1300px) {
-        left: 50%;
-        transform: translateX(-50%);
-        width: 630px; /* 가운데 정렬의 수정된 값 */
-    }
+    flex: 1;
+    margin: 0 20px;
 `
 
 const RightContainer = styled(ContainerFrame)`
