@@ -64,6 +64,8 @@ const Navigation = () => {
         
     }, [userSeq, userToken, axiosAddr, subscribeListUrl, isSubscribed]);
 
+    
+
     const ComponentMove = (target) => {
         handleOtherMenuClick(target); // 다른 메뉴 클릭 시 닫기 핸들러 호출
         
@@ -274,15 +276,16 @@ const SubscribersListContainer = styled.div`
     margin-bottom: 10px;
 
     scrollbar-width: thin; /* 스크롤바 너비를 얇게 조정 */
-    scrollbar-color: #888 transparent; /* 스크롤바 색상 설정 */
+    scrollbar-color: #F2C936 transparent; /* 스크롤바 색상 설정 */
     overflow-y: auto; /* 세로 스크롤바 표시 */
   
     &::-webkit-scrollbar {
-        width: 5px; /* 스크롤바 너비 */
+        width: 6px; /* 스크롤바 너비 */
     }
 
     &::-webkit-scrollbar-thumb {
-        background-color: #888; /* 스크롤바 색상 */
+        background-color: #F2C936; /* 스크롤바 색상 */
+        border-radius: 8px;
     }
   
   @media (max-width: 1300px) {
@@ -331,13 +334,13 @@ const AlertContainer = styled.div`
 const MenuButtonContainer = styled.div`
   position: absolute;
   left: 30px;
-  bottom: 80px;
+  bottom: 60px;
   width: 200px;
   height: auto;
   border-radius: 16px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  padding: 10px;
+  padding: 12px;
 
 `;
 
@@ -352,11 +355,12 @@ const MenuItem = styled.div`
   justify-content: space-between;
   color: #343434;
   cursor: pointer;
-  width: 90%;
+  width: 100%;
   height: 35px;
   transition: background-color 0.2s;
   border-radius: 8px;
   font-size: 15px;
+
 
   &:hover{
         background-color : rgb(240, 240, 240);
