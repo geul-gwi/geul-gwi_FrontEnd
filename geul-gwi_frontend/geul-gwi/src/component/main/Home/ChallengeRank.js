@@ -172,20 +172,22 @@ const MainContainer = styled.div`
     box-shadow: 0px 0px 32px 0px #ccebb5;
     user-select: none;
     position: relative;
-    padding-bottom: 10px;
+    padding-bottom: 13px;
     align-items: center;
     border-radius: 16px;
 `;
 
 const Title = styled.div`
+    padding: 10px 5px 5px 5px;
     display: flex;
     width: 100%;
     height: 50px;
     justify-content: center;
     align-items: center;
-    font-style: bold;
+    font-family: "Nanum Square";
+    font-weight: bold;
     font-size: 18px;
-    color: #3AEEC3;
+    color: #FFAA5C;
 `;
 
 const Item = styled.div`
@@ -197,26 +199,28 @@ const Item = styled.div`
 
 const Icon = styled.img`
     position: absolute;
-    left: 20px;
-    height: 40px;
-    width: 40px;
+    left: 40px;
+    height: 350px;
+    width: 35px;
     padding: 5px; /* 여백을 줍니다 */
     margin-right: 10px; /* 우측 여백을 줍니다 */
 `;
 
 const Nickname = styled.div`
     font-size: 17px;
-    color: #404040;
+    font-family : "Nanum Square";
+    font-style : "bold";
+    color: #505050;
     font-weight: bold;
     position: absolute;
-    left: 80px;
+    left: 90px;
 `;
 
 const LikeCount = styled.div`
-    font-size: 11px;
+    font-size: 12px;
     color: #8E8B8B;
     position: absolute;
-    right: 20px;
+    right: 50px;
 `;
 
 export default ChallengeRank;

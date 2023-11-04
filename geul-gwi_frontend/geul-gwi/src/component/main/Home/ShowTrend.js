@@ -26,7 +26,7 @@ const ShowTrend = () => {
                     setDatas(response.data);
                 }
             } catch (error) {
-                console.error('태그 트렌드:', error);
+                console.error('인기 태그:', error);
                 if (error.response.errorCode === 'A-001' 
                     || error.response.errorCode === 'A-002')
                 {
@@ -40,7 +40,7 @@ const ShowTrend = () => {
     
     return (
         <TrendFrame>
-            <TitleName>태그 트렌드</TitleName>
+            <TitleName>인기 태그</TitleName>
             <ItemManager>
                 {datas && datas.map((tag, idx) => (
                         <Item>
@@ -64,31 +64,30 @@ const ShowTrend = () => {
 const TrendFrame = styled.div`
     display: flex;
     width: 100%;
-    min-height: 500px;
+    min-height: 400px;
     height: auto;
-    background-color: #FAFAFA;
+    background-color: white;
     border-radius: 16px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 16px 0px #ccebb5;
 `;
 
 const TitleName = styled.div`
+    padding: 10px 5px 10px 5px;
     display: flex;
     width: 100%;
     height: 50px;
     justify-content: center;
     align-items: center;
     font-family: "Nanum Square";
-    font-weight: bold;
     font-size: 18px;
-    color: #3AEEC3;
-    text-transform: uppercase;
+    color: #FFAA5C;
 `;
 
 const ItemManager = styled.div`
-    width: 80%;
+    width: 60%;
     min-height: calc(100% - 70px);
     height: auto;
 `;
@@ -98,14 +97,14 @@ const Item = styled.div`
     width: 100%;
     flex-direction: column;
     margin: 0px 0px 20px 0px;
-    background-color: #f5f5f5;
-    padding: 10px;
+    background-color: #ffffff;
+    padding: 5px;
     border-radius: 12px;
 `;
 
 const ItemDataContainer = styled.div`
     display: flex;
-    width: 100%;
+    width: 90%;
     height: auto;
     justify-content: space-between; 
     align-items: center;
@@ -114,7 +113,6 @@ const ItemDataContainer = styled.div`
 const ItemData = styled.div`
     font-size: 13px;
     color: #8E8B8B;
-    text-align: right;
 `;
 
 export default ShowTrend;

@@ -27,7 +27,7 @@ export const Tag = styled.div`
     border: none;
     border-radius: 20px;
     padding: 8px 17px;
-    font-size: 12px;
+    font-size: 13px;
     align-items: center;
     position: relative;
 `;

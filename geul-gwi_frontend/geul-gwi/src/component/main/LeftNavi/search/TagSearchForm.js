@@ -78,7 +78,7 @@ const TagContainer = styled.div`
 `;
 
 const Button = styled.div`
-  background-color: #b7de99;
+  background-color: #ccebb5;
   color: white;
   position: absolute;
   top: 23px;
@@ -89,7 +89,7 @@ const Button = styled.div`
   transition: 0.3s;
 
   &:hover {
-        background-color: #ccebb5;
+        background-color: #daf1c7;
     }
 `;
 
