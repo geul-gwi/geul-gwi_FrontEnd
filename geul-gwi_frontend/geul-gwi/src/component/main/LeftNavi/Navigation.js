@@ -353,7 +353,7 @@ const MenuItem = styled.div`
   color: #343434;
   cursor: pointer;
   width: 90%;
-  height: 30px;
+  height: 35px;
   transition: background-color 0.2s;
   border-radius: 8px;
   font-size: 15px;
@@ -432,7 +432,8 @@ const MoreButton = styled.div`
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 30px;
+    height: 25px;
+    padding: 5px 0;
     cursor: pointer;
     display: flex;
     margin-bottom: 10px; /* 이 부분이 중요합니다. 아이템을 컨테이너의 맨 밑으로 이동시킵니다. */
