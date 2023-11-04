@@ -124,7 +124,7 @@ const WritingAction = () => {
                     challengeAdminSeq: challenge.challengeAdminSeq,
                     userSeq: userSeq
                 };
-
+                console.log("ChallengeRegDTO", ChallengeRegDTO);
                 const response = await axios.post(`${axiosAddr}${challengeWriteUrl}`, ChallengeRegDTO, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
@@ -138,6 +138,10 @@ const WritingAction = () => {
             }
         } catch (error) {
             console.error("챌린지 작성: ", error);
+            if(error.data.errorcode === 'c-001')
+            {
+                alert("키워드가 누락되었습니다.");
+            }
         }
     }
 
