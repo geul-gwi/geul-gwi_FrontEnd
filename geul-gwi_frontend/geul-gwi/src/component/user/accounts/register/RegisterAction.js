@@ -209,21 +209,22 @@ const RegisterAction = () => {
 
     // 입력 누락 확인 및 조건만족 Check
     const CheckGoodToContinue = () => {
-        if (
-            Id.trim() !== "" &&
-            Password.trim() !== "" &&
-            ConfirmPassword.trim() !== "" &&
-            NickName.trim() !== "" &&
-            Name.trim() !== "" &&
-            Email.trim() !== "" &&
-            Age.trim() !== "" &&
-            Gender.trim() !== "" &&
-            Tags.length > 0
-        ) {
-            return true; // 모든 필수 입력란이 채워져 있음
-        } else {
-            return false; // 하나 이상의 필수 입력란이 비어 있음
-        }
+        // if (
+        //     Id.trim() !== "" &&
+        //     Password.trim() !== "" &&
+        //     ConfirmPassword.trim() !== "" &&
+        //     NickName.trim() !== "" &&
+        //     Name.trim() !== "" &&
+        //     Email.trim() !== "" &&
+        //     Age.trim() !== "" &&
+        //     Gender.trim() !== "" &&
+        //     Tags.length > 0
+        // ) {
+        //     return true; // 모든 필수 입력란이 채워져 있음
+        // } else {
+        //     return false; // 하나 이상의 필수 입력란이 비어 있음
+        // }
+        return true;
     }
 
 
