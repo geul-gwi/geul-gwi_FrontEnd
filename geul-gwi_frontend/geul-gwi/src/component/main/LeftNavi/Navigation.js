@@ -239,7 +239,7 @@ const SubscriberContainer = styled.div`
   flex-direction: column;
   width: 100%;
   margin: 10px;
-  height: 250px;
+  height: 180px;
   border-top: 1px solid #ccc;
     align-items: center;    
   
@@ -252,7 +252,7 @@ const SubscribersListContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+
     align-items: center;    
     overflow-y: auto; /* 스크롤바가 수직 방향으로 표시됩니다. */
     margin-bottom: 10px;
@@ -425,7 +425,7 @@ const IconImg = styled.img`
 `
 const MoreButton = styled.div`
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     align-items: center;
     justify-content: center;
     width: 100%;

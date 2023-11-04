@@ -105,16 +105,20 @@ const LeftContainer = styled(ContainerFrame)`
 `
 
 const MidContainer = styled(ContainerFrame)`
-    position : absolute;
-    top : 30px;
-    left : calc(50% - 350px);
-    width : 630px;
-    min-height : 100vh;
-    height : auto;
-
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 630px;
+    min-height: 100vh;
+    height: auto;
+    max-width: 1000px; /* 필요에 따라 최대 너비 설정 */
+    
     @media (max-width: 1300px) {
-    left: calc(50% - 315px); /* 가운데 정렬의 수정된 값 */
-  }
+        left: 50%;
+        transform: translateX(-50%);
+        width: 630px; /* 가운데 정렬의 수정된 값 */
+    }
 `
 
 const RightContainer = styled(ContainerFrame)`
