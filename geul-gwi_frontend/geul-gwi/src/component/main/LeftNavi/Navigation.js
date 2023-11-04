@@ -179,12 +179,15 @@ const Navigation = () => {
 
                 </Item>
             </Container>
-            {window.innerWidth >= 1300 && (
+
                 <SubscriberContainer>
                     <SubscribersHeader>구독</SubscribersHeader>
                         <SubscribersListContainer>
                             {subscribes.map((subscribe, index) => (
-                                <Item onClick={() => onClickSubscribeProfile(subscribe.userSeq)}>
+                                <Item 
+                                    key={index}
+                                    onClick={() => onClickSubscribeProfile(subscribe.userSeq)}
+                                >
                                     <IconBox>
                                         <ProfileImage
                                             src={subscribe.profile ? subscribe.profile : "/img/defaultProfile.png"}
@@ -195,7 +198,7 @@ const Navigation = () => {
                             ))}
                     </SubscribersListContainer>
                 </SubscriberContainer>
-            )}
+
 
             <MoreButton onClick={handleMoreButtonClick}>
                 <Item>
@@ -234,18 +237,31 @@ const Navigation = () => {
     );
 };
 
+const NaviFrame = styled.div`
+    height: 100vh; 
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding-bottom: 30px; /* 기존 하단 패딩 대신, MoreButton 높이만큼 공간 확보 */
+`
+
 const SubscriberContainer = styled.div`
-  display: flex;
+ display: flex;
   flex-direction: column;
   width: 100%;
   margin: 10px;
-  height: 180px;
+  height: calc(100vh - 380px); /* 전체 높이에서 상단 높이(Logo, menus) 및 하단 높이(MoreButton) 제외 */
   border-top: 1px solid #ccc;
-    align-items: center;    
-  
+  align-items: center;
+  overflow: hidden; /* 더 많은 항목을 가리기 위해 오버플로우를 숨김 */
+
   @media (max-width: 1300px) {
     display: none;
-    }
+  }
 `;
 
 const SubscribersListContainer = styled.div`
@@ -280,18 +296,7 @@ const SubscribersHeader = styled.div`
     text-align: left; 
 `;
 
-const NaviFrame = styled.div`
-    position: absolute;
-    height: 100%;
 
-    user-select: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: white;
-    width: 100%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-`
 
 const Container = styled.div`
     display: flex;
@@ -424,13 +429,13 @@ const IconImg = styled.img`
 
 `
 const MoreButton = styled.div`
-    position: absolute;
-    bottom: 10px;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 50px;
+    height: 30px;
     cursor: pointer;
     display: flex;
+    margin-bottom: 10px; /* 이 부분이 중요합니다. 아이템을 컨테이너의 맨 밑으로 이동시킵니다. */
 `;
+
 export default Navigation;
