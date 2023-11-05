@@ -268,26 +268,6 @@ const ImageContainer = styled.div`
     align-items: center;
     margin-bottom: 30px;
 `;
-
-const ImageSlideFade = keyframes`
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-`;
-
-const ImageContainer = styled.div`
-    position: relative;
-    display: flex;
-    width: 100%;
-    height: auto;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 30px;
-`;
-
 const PostProfileContainer = styled.div`
     display : flex;
     width : 100%;
