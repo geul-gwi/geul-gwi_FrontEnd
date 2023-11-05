@@ -33,6 +33,11 @@ const Navigation = () => {
     const [subscribes, setSubscribes] = useState([]);
 
     useEffect(() => {
+        if(userToken === null)
+        {
+            navigate('/accounts');
+            return;
+        }
         const fetchData = async () => {
             try {
                 const response = await Axios.get(`${axiosAddr}${subscribeListUrl}${userSeq}`, {
