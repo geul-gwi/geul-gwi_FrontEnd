@@ -25,13 +25,13 @@ const SearchForm = () => {
 
    const truncateString = (str, num) => {
       if (str.length <= num) {
-        return str;
+         return str;
       }
       return str.slice(0, num) + '...';
-    };
+   };
 
    useEffect(() => {
-      if(selectedTag !== null)
+      if (selectedTag !== null)
          return;
       // 전체 게시물 목록 불러오기
       Axios.get(axiosAddr + postListApi, {
@@ -119,7 +119,7 @@ const SearchForm = () => {
 
    return (
       <MainContainer>
-         <TagSearchForm 
+         <TagSearchForm
             selectedTag={selectedTag}
             setSelectedTag={setSelectedTag}
             tagSearchHandler={tagSearchHandler}
@@ -129,7 +129,11 @@ const SearchForm = () => {
             <ItemsContainer>
                {viewPosts && viewPosts.map((post) => (
                   <Item onClick={() => ModalOpen(post.geulgwiSeq)}>
-                     {post.files && <ItemImg src={post.files[0]}></ItemImg>}
+                     {post.files && post.files[0] ? (
+                        <ItemImg src={post.files[0]} />
+                     ) : (
+                        <Logo src={process.env.PUBLIC_URL + "/LOGO.png"} />
+                     )}
                      <HoveredContainer>
                         <Nickname>
                            {post.nickname}
@@ -143,9 +147,9 @@ const SearchForm = () => {
                ))}
             </ItemsContainer>
          </BottomContainer>
-         {ModalState && viewPost && 
-            <PostModal 
-               post={viewPost} 
+         {ModalState && viewPost &&
+            <PostModal
+               post={viewPost}
                ModalClose={ModalClose}
             />
          }
@@ -178,29 +182,42 @@ const ResultContainer = styled.div`
 `
 
 const Item = styled.div`
-  position : relative;
-  display : flex;
-  width : 220px;
-  height : 230px;
-  overflow : hidden;
+  position: relative;
+  display: flex;
+  width: 220px;
+  height: 230px;
+  overflow: hidden;
   justify-content: center;
   align-items: center;
-  cursor : pointer;
-  transition : 0.3s;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
   border-radius: 16px;
 
- &:hover {
-    filter: brightness(90%); /* 아이템을 어둡게 만드는 CSS */
+  &:hover {
+    filter: brightness(90%);
   }
-`
+`;
 const ItemImg = styled.img`
-  background-color : white;
-  width : 100%;
-  height : 100%;
+  width: 100%;
+  height: 100%;
   border-radius: 16px;
   object-fit: cover;
-  //background-image: url(${process.env.PUBLIC_URL + "/Logo.png"});
-`
+  transition: transform 0.2s ease-in-out;
+
+  ${Item}:hover & {
+    transform: scale(1.1);
+  }
+`;
+
+const Logo = styled.img`
+  width: 80%;
+  height: 80%;
+  border-radius: 16px;
+  transition: transform 0.2s ease-in-out;
+  ${Item}:hover & {
+    transform: scale(1.1);
+  }
+`;
 const HoveredBack = styled.div`
   position: absolute;
   width: 100%;
@@ -212,17 +229,18 @@ const HoveredBack = styled.div`
 `;
 
 const HoveredContainer = styled.div`
-  display : flex;
-  position : absolute;
-  width : 90%;
-  max-height : 90%; 
-  height : auto;
-  z-index : 2;
+  display: flex;
+  position: absolute;
+  width: 90%;
+  max-height: 90%;
+  height: auto;
+  z-index: 2;
   flex-direction: column;
-  justify-content : center;
-  align-items : flex-start;
-  gap : 10px;
-`
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+
+`;
 
 const ItemsContainer = styled.div`
  min-width: 655px;

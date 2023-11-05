@@ -275,21 +275,20 @@ const PostProfileContainer = styled.div`
     align-items: center;
     justify-content : space-between;
     margin-bottom:10px;
-        position: relative; /* 상대 위치 설정 */
+    position: relative; /* 상대 위치 설정 */
 `
 const PostImageContainer = styled.div`
     display : flex;
     flex-direction: row;
     width : 100%;
-    height : auto;
     justify-content : center;
     align-items : center;
-    margin-bottom: 30px;
+    min-height: 30px;
 `
 const Content = styled.div`
     width : 100%;
     height : auto;
-    margin-bottom : 25px;
+    margin-bottom : 20px;
     font-size: 16px;
     white-space: pre-line; /* 줄바꿈을 허용하는 스타일 */
 `
@@ -323,7 +322,6 @@ const ProfileName = styled.div`
 const TagContainer = styled.div`
         display : flex;
         width : calc(100% - 30px);
-        height : auto;
     `
 const ButtonContainer = styled.div`
     display : flex;
@@ -336,7 +334,6 @@ const ButtonContainer = styled.div`
 `
 const Name = styled.div`
     width : 100%;
-    height : 35%;
     font-style : "bold";
     font-size : 16px;
     color : #5F5F5F;
@@ -345,7 +342,6 @@ const Name = styled.div`
 
 const Date = styled.div`
     width : 100%;
-    height : 35%;
     font-size : 14px;
     color : #5F5F5F;
     cursor: pointer;
@@ -354,7 +350,6 @@ const Date = styled.div`
 
 const Comment = styled.div`
     width : 100%;
-    height : 35%;
     font-size : 13px;
     color : #ccc;
 `
