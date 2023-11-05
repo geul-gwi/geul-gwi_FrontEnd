@@ -64,7 +64,7 @@ const ShowTrend = () => {
 const TrendFrame = styled.div`
     display: flex;
     width: 100%;
-    min-height: 400px;
+    min-height: 430px;
     height: auto;
     background-color: white;
     border-radius: 16px;
