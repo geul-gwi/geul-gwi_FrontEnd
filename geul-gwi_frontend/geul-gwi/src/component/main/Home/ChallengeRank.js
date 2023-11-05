@@ -206,7 +206,7 @@ const Item = styled.div`
 
 const Icon = styled.img`
     position: absolute;
-    left: 40px;
+    left: 30px;
     height: 350px;
     width: 35px;
     padding: 5px; /* 여백을 줍니다 */
@@ -220,14 +220,14 @@ const Nickname = styled.div`
     color: #505050;
     font-weight: bold;
     position: absolute;
-    left: 90px;
+    left: 80px;
 `;
 
 const LikeCount = styled.div`
     font-size: 12px;
     color: #8E8B8B;
     position: absolute;
-    right: 50px;
+    right: 20px;
 `;
 
 export default ChallengeRank;
