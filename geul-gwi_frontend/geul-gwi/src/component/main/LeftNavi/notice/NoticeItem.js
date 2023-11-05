@@ -6,6 +6,7 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 import imageDataFetcher from 'service/imageDataFetcher';
 import { AiOutlineClose } from 'react-icons/ai';
+const { formatDateTime } = require('service/dateTimeUtils');
 
 const TYPE = {};
 TYPE['FRIEND'] = 'friendSeq';
@@ -45,41 +46,6 @@ const NoticeItem = (props) => {
         };
         fetchData();
     }, [props.notice.fromUser]);
-
-    // 서버에서 받은 시간 표준으로 바꾸는 함수!!
-    function parseISOString(s) {
-        // 2023-11-03T00:49:35.694719620
-        const year = s.slice(0, 4);
-        const month = s.slice(5, 7) - 1; // 월은 0부터 시작하므로 1을 빼줍니다.
-        const day = s.slice(8, 10);
-        const hour = s.slice(11, 13);
-        const minute = s.slice(14, 16);
-        const second = s.slice(17, 19);
-        return new Date(year, month, day, hour + 9, minute, second);
-    }
-    // 시간 계산하는 함수!! (n분 전, n시간 전, 어제, 날짜)
-    function formatDateTime() {
-        const currentDate = new Date();
-        const messageDate = parseISOString(props.notice.regDate);
-        console.log("시간 : ", props.notice.regDate + " => " + messageDate);
-        const timeDiff = currentDate - messageDate;
-        const seconds = Math.floor(timeDiff / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-
-        if (seconds < 60) {
-            return "방금";
-        } else if (minutes < 60) {
-            return `${minutes}분 전`;
-        } else if (hours < 24) {
-            return `${hours}시간 전`;
-        } else if (hours >= 24 && hours < 48) {
-            return "어제";
-        } else {
-            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-            return messageDate.toLocaleDateString(undefined, options);
-        }
-    }
 
     const onClickDelete = () => {
         props.noticeDeleteHandler(props.notice.noticeSeq);

@@ -1,48 +1,45 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useSelector } from 'react-redux'; // Redux 사용 Library
+import { useSelector } from 'react-redux';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineEdit, AiFillHeart, AiOutlineHeart, AiOutlineClose } from "react-icons/ai"; 
+const { formatDateTime } = require('service/dateTimeUtils');
 
 const PostContainer = (props) => {
     const navigate = useNavigate();
     const { axiosAddr } = useContext(AxiosAddrContext);
     const { userSeq, accessToken } = useSelector((state) => state.authReducer);
+
     const likeUrl = '/challenge/like/'; // 챌린지 글 좋아요 요청
     const unlikeUrl = '/challenge/unlike/'; // 챌린지 글 좋아요 취소 요청
     const postDeleteUrl = '/challenge/delete/'; // 챌린지 글 삭제 요청
 
+    
+    const onClickProfile = (userSeq) => {
+        navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
+    };
+
+    const updatePostsWithLike = (challengeSeq, isLiked) => {
+        const updatedPosts = props.posts.map(post => {
+            if (post.challengeUserSeq === challengeSeq) {
+                return { ...post, isLiked: !isLiked, likeCount: post.likeCount + (isLiked ? -1 : 1) };
+            }
+            return post;
+        });
+        props.setPosts(updatedPosts);
+    };
+
     const onClickLikeButton = async (challengeSeq, isLiked) => {
         try {
-            if (isLiked) {
-                await axios.delete(`${axiosAddr}${unlikeUrl}${challengeSeq}/${userSeq}`, {
-                    headers: { Authorization: `Bearer ${accessToken}` }
-                });
-                // 취소된 경우, -1하여 새로운 값 설정
-                const updatedPosts = props.posts.map(post => {
-                    if (post.challengeUserSeq === challengeSeq) {
-                        return { ...post, isLiked: !isLiked, likeCount: post.likeCount - 1 };
-                    }
-                    return post;
-                });
-                props.setPosts(updatedPosts);
-            } else {
-                await axios.post(`${axiosAddr}${likeUrl}${challengeSeq}/${userSeq}`, {}, {
-                    headers: { Authorization: `Bearer ${accessToken}` }
-                });
-                 // 좋아요 누른 경우, +1하여 새로운 값 설정
-                const updatedPosts = props.posts.map(post => {
-                    if (post.challengeUserSeq === challengeSeq) {
-                        return { ...post, isLiked: !isLiked, likeCount: post.likeCount + 1 };
-                    }
-                    return post;
-                });
-                props.setPosts(updatedPosts);
-            }
+            const url = isLiked ? unlikeUrl : likeUrl;
+            await axios[isLiked ? 'delete' : 'post'](`${axiosAddr}${url}${challengeSeq}/${userSeq}`, {}, {
+                headers: { Authorization: `Bearer ${accessToken}` }
+            });
+            updatePostsWithLike(challengeSeq, isLiked);
         } catch (error) {
-            console.error("좋아요 처리 중 에러:", error);
+            console.error("좋아요:", error);
         }
     }
 
@@ -54,9 +51,9 @@ const PostContainer = (props) => {
         navigate('/main/ChallengePostEdit', { state: data });
     };
 
+
     const onDeletePost = async (challengeUserSeq) => {
-        const confirmed = window.confirm('해당 글 귀를 삭제하시겠습니까?');
-        // 사용자가 확인을 클릭한 경우에만 삭제 동작을 실행
+        const confirmed = window.confirm('해당 글을 삭제하시겠습니까?');
         if (confirmed) {
             try {
                 const response = await axios.delete(`${axiosAddr}${postDeleteUrl}${challengeUserSeq}`, {
@@ -75,15 +72,11 @@ const PostContainer = (props) => {
         }
     };
 
-        // 프로필 클릭 => 해당 유저의 프로필로 이동한다.
-        const onClickProfile = (userSeq) => {
-            navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
-        };
 
     return (
         <Frame>
             {props.posts && props.posts.map((post) => (
-                <Item>
+                <Item key={post.challengeUserSeq}>
                     {userSeq === post.userSeq && (
                         <HeaderButtonContainer>
                             <EditIcon><AiOutlineEdit size={20} color='gray' onClick={() => onClickPostEdit(post)} /></EditIcon>
@@ -102,19 +95,29 @@ const PostContainer = (props) => {
                     </ProfileContainer>
                     <Content>{post.challengeContent}</Content>
                     <ItemBottom>
-                        <Date>{post.regDate}</Date>
+                        <Date>{formatDateTime(post.regDate)}</Date>
                         <LikeCount>{post.likeCount}</LikeCount>
                         <LikeButtonContainer>
-                            {
-                                post.isLiked ? <AiFillHeart class="likebtn" size={25} color={"red"} onClick={(event) => {
-                                    event.stopPropagation();
-                                    onClickLikeButton(post.challengeUserSeq, post.isLiked);
-                                }} />
-                                    :
-                                    <AiOutlineHeart size={25} color={"#444444"} onClick={(event) => {
-                                        event.stopPropagation();
-                                        onClickLikeButton(post.challengeUserSeq, post.isLiked);
-                                    }} />
+                        {
+                                post.isLiked ? (
+                                    <AiFillHeart
+                                        size={25}
+                                        color={"red"}
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            onClickLikeButton(post.challengeUserSeq, post.isLiked);
+                                        }}
+                                    />
+                                ) : (
+                                    <AiOutlineHeart
+                                        size={25}
+                                        color={"#444444"}
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            onClickLikeButton(post.challengeUserSeq, post.isLiked);
+                                        }}
+                                    />
+                                )
                             }
                         </LikeButtonContainer>
                     </ItemBottom>
@@ -151,13 +154,12 @@ const ProfilePicture = styled.img`
     height: 35px;
     border-radius: 50%;
     border: 1px solid #ccc;
-
     cursor: pointer;
     object-fit: cover;
+    transition: transform 0.2s ease-in-out;
 
     &:hover {
         transform: scale(1.1);
-        transition: transform 0.2s ease-in-out;
     }
 `;
 
@@ -172,6 +174,12 @@ const Item = styled.div`
     border-radius : 12px;
     box-shadow : 1px 1px 10px 0px rgba(70,70,70,0.2);
     position: relative;
+
+    transition: transform 0.3s ease-in-out;
+
+    &:hover {
+        transform: scale(1.05);
+    }
 `
 // PostItem의 공통적인 부분 Frame으로 묶은 것
 const PartFrame = styled.div`
@@ -182,7 +190,6 @@ const PartFrame = styled.div`
 // 닉네임
 const Date = styled(PartFrame)`
     display : flex;
-    height : 20px;
     align-items : center;
     color : rgba(10,10,10, 1);
     font-size : 12px;
@@ -200,9 +207,9 @@ const Nickname = styled(PartFrame)`
 `
 // PostItem의 본문부분
 const Content = styled(PartFrame)`
-    height : 70px;
+    height : 80px;
     color : rgba(120,120,120,1);
-    font-size : 15px;
+    font-size : 14px;
     line-height : 20px;
 `
 // PostItem의 하단 부분 ( 좋아요 , 좋아요 갯수 )

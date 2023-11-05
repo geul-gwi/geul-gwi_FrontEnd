@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Tag } from 'component/common/button/Tag';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
-import React  from 'react';
+import React from 'react';
 
 // 챌린지 회차 목록
 const ChallengeHeader = (props) => {

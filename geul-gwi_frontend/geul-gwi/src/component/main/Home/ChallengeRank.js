@@ -1,10 +1,12 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useContext, useState } from 'react';
 import Axios from 'axios';
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux';
 
 const ChallengeRank = () => {
+    const navigate = useNavigate();
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
@@ -21,6 +23,12 @@ const ChallengeRank = () => {
 
     const [posts, setPosts] = useState([]); // 해당 회차 챌린지 게시물 목록
     const [selectedChallengeSeq, setSelectedChallengeSeq] = useState(null); // 보여주고 있는 챌린지 시퀀스
+
+    const HandlerGoChallenge = () => {
+        navigate("/main/WritingChallenge");
+    };
+
+   
 
     useEffect(() => {
         const fetchChallenges = async () => {
@@ -150,7 +158,7 @@ const ChallengeRank = () => {
     const topThreeDetails = findTopThreeMostLiked();
 
     return (
-        <MainContainer>
+        <MainContainer onClick={HandlerGoChallenge}>
             <Title>챌린지 랭킹</Title>
             {topThreeDetails.map((detail, idx) => (
                 <Item key={idx}>
@@ -175,6 +183,7 @@ const MainContainer = styled.div`
     padding-bottom: 13px;
     align-items: center;
     border-radius: 16px;
+    cursor: pointer;
 `;
 
 const Title = styled.div`

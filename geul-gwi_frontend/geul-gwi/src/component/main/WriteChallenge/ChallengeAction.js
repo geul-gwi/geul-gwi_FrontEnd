@@ -127,7 +127,7 @@ const WrtchgAction = () => {
                         Authorization: `Bearer ${userToken}`,
                     },
                 });
-                setPosts(await imageChange(response.data));
+                setPosts(await imageChange(response.data.reverse()));
             } catch (error) {
                 console.error('해당 챌린지 글 목록.', error);
             }
