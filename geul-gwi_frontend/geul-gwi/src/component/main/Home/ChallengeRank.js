@@ -28,8 +28,6 @@ const ChallengeRank = () => {
         navigate("/main/WritingChallenge");
     };
 
-   
-
     useEffect(() => {
         const fetchChallenges = async () => {
             try {

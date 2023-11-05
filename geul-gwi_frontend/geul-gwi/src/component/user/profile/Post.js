@@ -10,6 +10,7 @@ import { Tag } from 'component/common/button/Tag';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import imageDataFetcher from 'service/imageDataFetcher';
+const { formatDateTime } = require('service/dateTimeUtils');
 
 const bounceAnimation = keyframes`
     0% {
@@ -181,6 +182,7 @@ const Post = (props) => {
                     <img src={props.profile ? props.profile : '/img/defaultProfile.png'}></img>
                 </ProfileImage>
                 <ProfileName>
+                
                     <Name onClick={onClickProfile}>{props.nickname}</Name>
                     <Comment>{props.comment}</Comment>
                     {userSeq === props.userSeq && (
@@ -208,6 +210,7 @@ const Post = (props) => {
                     )}
                 </ImageContainer>
             </PostImageContainer>
+            <Date>{formatDateTime(props.regDate)}</Date>
             <Content>{props.geulgwiContent}</Content>
             <TagButtonContainer>
                 <TagContainer>
@@ -256,16 +259,6 @@ const PostFrame = styled.div`
     margin-top : 30px;
     user-select: none;
 `
-
-const ImageSlideFade = keyframes`
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-`;
-
 const ImageContainer = styled.div`
     position: relative;
     display: flex;
@@ -349,6 +342,15 @@ const Name = styled.div`
     font-size : 16px;
     color : #5F5F5F;
     cursor: pointer;
+`
+
+const Date = styled.div`
+    width : 100%;
+    height : 35%;
+    font-size : 14px;
+    color : #5F5F5F;
+    cursor: pointer;
+    margin-bottom: 5px;
 `
 
 const Comment = styled.div`
