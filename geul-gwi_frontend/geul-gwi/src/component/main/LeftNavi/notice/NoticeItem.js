@@ -6,7 +6,7 @@ import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { useSelector } from 'react-redux'; // Redux 사용 Library
 import imageDataFetcher from 'service/imageDataFetcher';
 import { AiOutlineClose } from 'react-icons/ai';
-const { formatDateTime } = require('service/dateTimeUtils');
+import PostModal from 'component/common/modal/PostModal';
 
 const TYPE = {};
 TYPE['FRIEND'] = 'friendSeq';
@@ -17,15 +17,19 @@ TYPE['CHALLENGE'] = 'challenge';
 TYPE['LIKE_CHALLENGE'] = 'challengeLickSeq';
 
 const NoticeItem = (props) => {
+    const { formatDateTime } = require('service/dateTimeUtils');
     const navigate = useNavigate();
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
 
     const [profile, setProfile] = useState();
+    const [ModalState, setModalState] = useState(false);
+    const [viewPost, setViewPost] = useState(null); // 모달창 게시물 데이터
 
     const friendAcceptUrl = '/friend/confirm'; // 친구 요청 확인 요청 주소
     const friendStatusUrl = '/friend/status'; // 친구 상태 요청 주소
+    const postDetailUrl = '/geulgwi/search/'; // 게시물 세부 요청 주소
 
     const [friendStatus, setFriendStatus] = useState(null);
 
@@ -51,7 +55,32 @@ const NoticeItem = (props) => {
         props.noticeDeleteHandler(props.notice.noticeSeq);
     };
 
-    // 알림 타입에 따라서 내용 변환하는 함수
+    // 팝업 띄우는 함수
+    const ModalOpen = async (geulgwiSeq) => {
+        if (geulgwiSeq === null)
+            return;
+        try {
+            const response = await Axios.get(`${axiosAddr}${postDetailUrl}${geulgwiSeq}?viewSeq=${userSeq}`, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+            if (response) {
+                console.log("팝업 창에 세부 게시물 : ", response.data);
+                setViewPost(response.data);
+                setModalState(true); // 데이터가 로드된 후에 모달을 열도록 변경
+            }
+        } catch (error) {
+            console.error('팝업 창 세부 게시물 불러오기 실패.', error);
+        }
+    };
+
+
+    const ModalClose = () => {
+        setViewPost(null); // Clear the viewPost data
+        setModalState(false); // Set the ModalState to false to close the modal
+    };
+
     // 알림 타입에 따라서 내용 변환하는 함수
     const generateMessage = () => {
         switch (props.notice.type) {
@@ -117,7 +146,7 @@ const NoticeItem = (props) => {
                 },
             });
             //console.log(response.data);
-            
+
             return response.data;
 
         } catch (error) {
@@ -133,7 +162,7 @@ const NoticeItem = (props) => {
 
     // 친구 요청 수락
     const onFriendRequestAccept = async () => {
-        const userConfirmed = window.confirm(`${props.notice.nickname}님의 친구 요청을 수락하시겠습니까?`);  
+        const userConfirmed = window.confirm(`${props.notice.nickname}님의 친구 요청을 수락하시겠습니까?`);
         if (!userConfirmed) {
             return;
         }
@@ -152,34 +181,43 @@ const NoticeItem = (props) => {
             alert(`${props.notice.nickname}님과 친구가 되었습니다.`);
             const status = await CheckFriendStatus();
             setFriendStatus(status);
-           
+
         } catch (error) {
             console.error('친구 요청 수락 실패 : ', error);
         }
     };
 
     return (
-        <Frame>
-            <ProfileImage 
-                src={profile || '/img/defaultProfile.png'} 
-                onClick={onClickProfile}
-            />
-            <ContentContainer>
-                <TopRow>
-                    <Content>{generateMessage()}</Content>
-                </TopRow>
-                <Time>{formatDateTime(props.notice.regDate)}</Time>
-            </ContentContainer>
-            <ProfileContainer>
-                {friendStatus === 'stranger' && props.notice.type === 'FRIEND' &&
-                    <Button onClick={onFriendRequestAccept}>받기</Button>
-                }
-                {props.notice.checked === 'F' && <RedDot /> }
-                <CloseButton onClick={onClickDelete}> 
-                    <AiOutlineClose size={12} color='gray' />
-                 </CloseButton>
-            </ProfileContainer>
-        </Frame>
+        <>
+            <Frame onClick={() => ModalOpen(props.notice.geulgwiSeq)}>
+                <ProfileImage
+                    src={profile || '/img/defaultProfile.png'}
+                    onClick={onClickProfile}
+                />
+                <ContentContainer>
+                    <TopRow>
+                        <Content>{generateMessage()}</Content>
+                    </TopRow>
+                    <Time>{formatDateTime(props.notice.regDate)}</Time>
+                </ContentContainer>
+                <ProfileContainer>
+                    {friendStatus === 'stranger' && props.notice.type === 'FRIEND' &&
+                        <Button onClick={onFriendRequestAccept}>받기</Button>
+                    }
+                    {props.notice.checked === 'F' && <RedDot />}
+                    <CloseButton onClick={onClickDelete}>
+                        <AiOutlineClose size={12} color='gray' />
+                    </CloseButton>
+                </ProfileContainer>
+
+            </Frame>
+            {ModalState && viewPost && (
+                <PostModal
+                    post={viewPost}
+                    ModalClose={ModalClose}
+                />
+            )}
+        </>
     );
 };
 
