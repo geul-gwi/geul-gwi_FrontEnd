@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-// css Import
 import 'css/main/Writing/AddTagListComponent.css';
-// Import Library
-import { useSelector } from 'react-redux'; // Redux 사용 Library
-// Axios Address Context
+import { useSelector } from 'react-redux'; 
 import { AxiosAddrContext } from 'contextStore/AxiosAddress';
 import { Tag, TagButton } from 'component/common/button/Tag';
-import { Button } from 'component/common/button/Button'
+import { Button } from 'component/common/button/Button';
  
 const AddTagListComponent = (props) => {
     const axiosAddress = useContext(AxiosAddrContext).axiosAddr;  // Axios Address
@@ -117,10 +114,9 @@ const AddTagListComponent = (props) => {
     return (
         <ComponentFrame>
             <TagMenuContainer>
-                <TagMenuItemContainer><TagMenuItem onClick={() => { setSelectedMenu(true) }}>지정된 태그</TagMenuItem></TagMenuItemContainer>
+                <TagMenuItemContainer><TagMenuItem onClick={() => { setSelectedMenu(true) }}>기본 태그</TagMenuItem></TagMenuItemContainer>
                 <TagMenuItemContainer><TagMenuItem onClick={() => { setSelectedMenu(false) }}>사용자 지정</TagMenuItem></TagMenuItemContainer>
             </TagMenuContainer>
-            {/* 메뉴에 따라 보여주는 콘텐츠가 다름 => 지정된태그 or 사용자지정 */}
             {selectedMenu ?
                 <ExistTagList>
                     <SmallTitle_Container>사용할 태그를 선택해주세요</SmallTitle_Container>
