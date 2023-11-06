@@ -131,7 +131,7 @@ const WritingAction = () => {
                     },
                 });
                 alert("작성이 완료되었습니다.");
-                navigate("/");
+                navigate("/main");
                 
             } else {
                 console.log("진행중인 챌린지가 없습니다.");
