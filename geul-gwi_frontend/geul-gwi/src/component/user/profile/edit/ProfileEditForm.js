@@ -63,7 +63,7 @@ const ProfileEditForm = ({ userInfo }) => {
 
             if (response) {
                 alert('계정이 성공적으로 삭제되었습니다.');
-                navigate('/user/login');
+                navigate('/');
             } 
         } catch (error) {
             console.error('계정 탈퇴 실패', error);
