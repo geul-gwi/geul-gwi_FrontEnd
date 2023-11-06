@@ -383,11 +383,12 @@ const ProfileImage = styled.img`
     height: 30px;
     border-radius: 50%;
     cursor: pointer;
-    transition: transform 0.2s;
-    border: solid 1px #ccc;
-
+    object-fit: cover;
+    border: 1px solid #ccc;
+    
     &:hover {
-        transform: scale(1.1);
+      transform: scale(1.1);
+      transition: transform 0.2s ease-in-out;
     }
 `;
 

@@ -178,8 +178,9 @@ const Post = (props) => {
     return (
         <PostFrame>
             <PostProfileContainer>
-                <ProfileImage onClick={onClickProfile}>
-                    <img src={props.profile ? props.profile : '/img/defaultProfile.png'}></img>
+                <ProfileImage 
+                onClick={onClickProfile} 
+                src={props.profile ? props.profile : '/img/defaultProfile.png'}>
                 </ProfileImage>
                 <ProfileName>
                 
@@ -298,14 +299,14 @@ const TagButtonContainer = styled.div`
     height : 30px;
 
 `
-const ProfileImage = styled.div`
+const ProfileImage = styled.img`
     width : 50px;
     height : 50px;
     border-radius : 50%;
     overflow: hidden;
+    object-fit: cover;
     border: 1px solid #ccc;
-    cursor: pointer;
-
+    
     &:hover {
       transform: scale(1.1);
       transition: transform 0.2s ease-in-out;
