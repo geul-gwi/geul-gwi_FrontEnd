@@ -14,10 +14,11 @@ const IDRecoveryForm = () => {
     const [email, setEmail] = useState('');
 
     const handleSubmit = () => {
-        Axios.post(`${axiosAddr}${passwordRequestUrl}`, email)
+        const data = { email : email}
+        console.log("data", data);
+        Axios.post(`${axiosAddr}${passwordRequestUrl}`, data)
             .then(() => {
                 alert("해당 이메일 주소로 아이디 전송을 완료하였습니다.");
-                navigate('/');
             })
             .catch((error) => {
                 console.error(error);
@@ -44,8 +45,7 @@ const IDRecoveryForm = () => {
                     <Button onClick={handleSubmit}>요청</Button>
                 </form>
                 <div className='sub_Container'>
-                    <SubSpan onClick={() => handleLinkClick("")}>로그인</SubSpan>
-
+                    <SubSpan onClick={() => handleLinkClick("/")}>로그인</SubSpan>
                     <SubSpan onClick={() => handleLinkClick("/register")}>회원가입</SubSpan>
                     <SubSpan onClick={() => handleLinkClick("/password")}>비밀번호 찾기</SubSpan>
                 </div>
