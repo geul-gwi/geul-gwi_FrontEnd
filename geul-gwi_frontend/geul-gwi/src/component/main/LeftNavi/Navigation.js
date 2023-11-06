@@ -20,6 +20,8 @@ const Navigation = () => {
     const axiosAddr = useContext(AxiosAddrContext).axiosAddr;
     const userSeq = useSelector((state) => state.authReducer.userSeq);
     const userToken = useSelector((state) => state.authReducer.accessToken);
+    const userProfile = useSelector((state) => state.authReducer.userProfile);
+    const role = useSelector((state) => state.authReducer.role);
 
     const logoutUrl = '/user/logout';
     const subscribeListUrl = '/friend/list/subscribe/';
@@ -31,6 +33,7 @@ const Navigation = () => {
     const [isMemberForm, SetIsMemberForm] = useState(false);
 
     const [subscribes, setSubscribes] = useState([]);
+    const [profile, setProfile] = useState(null);
 
     useEffect(() => {
         if(userToken === null)
@@ -39,13 +42,15 @@ const Navigation = () => {
             return;
         }
         const fetchData = async () => {
+            if(userSeq === null)
+                return;
+
             try {
                 const response = await Axios.get(`${axiosAddr}${subscribeListUrl}${userSeq}`, {
                     headers: {
                         Authorization: "Bearer " + userToken
                     }
                 });
-                console.log('구독자 목록:', response);
                 const usersData = response.data;
                 const updatedUsers = await Promise.all(
                     usersData.map(async user => {
@@ -57,10 +62,6 @@ const Navigation = () => {
                 setSubscribes(updatedUsers);
             } catch (error) {
                 console.error('구독자 목록:', error);
-                if (error.response?.data.errorCode === 'A-002' || error.response?.data.errorCode === 'A-001') {
-                    alert("세션이 만료되었습니다. 로그인을 다시 시도해주세요.");
-                    navigate('/accounts');
-                }
             }
         };
 
@@ -68,6 +69,12 @@ const Navigation = () => {
         fetchData();
         
     }, [userSeq, userToken, axiosAddr, subscribeListUrl, isSubscribed]);
+
+    useEffect(() => {
+        setProfile(userProfile);
+        
+    }, [userProfile]);
+
 
     
 
@@ -126,8 +133,7 @@ const Navigation = () => {
         setIsMoreMenuVisible((prevState) => !prevState);
     }, []);
 
-    const userProfile = useSelector((state) => state.authReducer.userProfile);
-    const role = useSelector((state) => state.authReducer.role);
+
 
     // 로그아웃
     const onClickLogout = async () => {
@@ -137,7 +143,7 @@ const Navigation = () => {
                     Authorization: `Bearer ${userToken}`,
                 },
             });
-            navigate('/accounts');
+            navigate('/');
             dispatch(logout());
 
         } catch (error) {
@@ -178,7 +184,7 @@ const Navigation = () => {
                 <Item>
                     <IconBox>
                         <ProfileImage
-                            src={userProfile ? userProfile : "/img/defaultProfile.png"}
+                            src={profile ? profile : "/img/defaultProfile.png"}
                             onClick={onClickProfile}
                         />
                     </IconBox>

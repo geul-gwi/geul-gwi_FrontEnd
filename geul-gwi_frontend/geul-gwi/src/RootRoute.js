@@ -13,8 +13,8 @@ const RootRoute = () => {
         <BrowserRouter> 
             <UserStore>
                 <Routes>
-                    <Route path='/' element={<Home />}></Route>
-                    <Route path='/accounts/*' element={<Account />}></Route>
+                    <Route path='/main/*' element={<Home />}></Route>
+                    <Route path='/*' element={<Account />}></Route>
                     <Route path='/main/*' element={<MainRoute />}></Route>
                     <Route path='/manager/*' element={<ManagerPage />}></Route>
                 </Routes>

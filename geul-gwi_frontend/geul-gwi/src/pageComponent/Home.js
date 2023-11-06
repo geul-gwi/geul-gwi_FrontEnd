@@ -29,7 +29,7 @@ const Home = () => {
         <div>
             <BackImg />
             <Frame>
-                {isLogged ? '' : <h1><Navigate to="/accounts" replace={true} /></h1>}
+                {isLogged ? '' : <h1><Navigate to="/" replace={true} /></h1>}
                 <LeftContainer>
                     <Navigation />
                 </LeftContainer>

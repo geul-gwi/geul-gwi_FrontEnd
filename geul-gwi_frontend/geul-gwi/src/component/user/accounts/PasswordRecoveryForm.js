@@ -28,7 +28,7 @@ const PasswordRecoveryForm = () => {
             .then(() => {
                 
                 alert("해당 이메일 주소로 비밀번호 전송을 완료하였습니다.");
-                navigate('/accounts/');
+                navigate('/');
             })
             .catch((error) => {
                 console.error(error);
@@ -37,7 +37,7 @@ const PasswordRecoveryForm = () => {
     };
 
     const onClickLink = (path) => {
-        navigate('/accounts' + path);
+        navigate(path);
     }
 
     return (

@@ -7,11 +7,12 @@ import ManagerPage from 'pageComponent/ManagerPage';
 
 // Import Context
 import UserStore from 'contextStore/UserStore';
+import Account from 'Routes/Account';
 
 const MainRoute = () => {
     return (
         <Routes>
-            <Route path='/*' element={<Home />}></Route>
+            <Route path='/main/*' element={<Home />}></Route>
             <Route path='/manager/*' element={<ManagerPage />}></Route>
         </Routes>
     );

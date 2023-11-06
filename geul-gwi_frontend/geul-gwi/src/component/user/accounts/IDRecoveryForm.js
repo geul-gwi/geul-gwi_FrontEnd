@@ -17,7 +17,7 @@ const IDRecoveryForm = () => {
         Axios.post(`${axiosAddr}${passwordRequestUrl}`, email)
             .then(() => {
                 alert("해당 이메일 주소로 아이디 전송을 완료하였습니다.");
-                navigate('/accounts/');
+                navigate('/');
             })
             .catch((error) => {
                 console.error(error);
@@ -26,7 +26,7 @@ const IDRecoveryForm = () => {
     };
 
     const handleLinkClick = (path) => {
-        navigate(`/accounts${path}`);
+        navigate(`${path}`);
     };
 
     return (

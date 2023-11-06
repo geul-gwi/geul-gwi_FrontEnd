@@ -15,9 +15,9 @@ const Account = () => {
             <Circle1 /><Circle2 /><Circle3 /><Circle4 />
         <Routes>
             <Route path="/" element={<LoginForm />}></Route>
-            <Route path="/register/*" element={<Register />}></Route>
-            <Route path="/id/*" element={<IDRecoveryForm />}></Route>
-            <Route path="/password/*" element={<PasswordRecoveryForm />}></Route>
+            <Route path="register/*" element={<Register />}></Route>
+            <Route path="id/*" element={<IDRecoveryForm />}></Route>
+            <Route path="password/*" element={<PasswordRecoveryForm />}></Route>
         </Routes>
         </div>
     );

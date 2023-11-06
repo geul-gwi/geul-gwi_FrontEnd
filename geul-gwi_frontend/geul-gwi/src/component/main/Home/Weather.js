@@ -45,20 +45,13 @@ const Weather = () => {
         OnloadWeather();
     },[]);
 
-
-
-
     return (
         <WeatherFrame> 
             <Title>실시간 날씨</Title>
-            {/*1. 날씨 정보를 담을 Container */}
             <DisplayContainer style={{cursor : 'default'}}>
-                {/* 아이콘을 담을 Container */}
                 <DisplayIconContainer>
-                    {/* <TiWeatherShower size="60" color="#5A2ABF" /> */}
                     <img src={iconImg} alt='Weather_ICON' />
                     </DisplayIconContainer> 
-                {/* 날씨 정보 Text Container */}
                 <DisplayTextContainer>
                     <TextWeatherName>{weatherState.weather}</TextWeatherName>
                     <TextWeatherState>{weatherState.temp}</TextWeatherState>

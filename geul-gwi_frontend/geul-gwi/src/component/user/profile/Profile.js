@@ -46,10 +46,6 @@ const Profile = ({ profileUserSeq }) => {
       const status = await CheckFriendStatus();
       setFriendStatus(status);
     } catch (error) {
-      if (error.response?.data.errorCode === 'A-002') {
-        alert("로그인이 만료되었습니다. 로그인을 다시 시도해주세요.");
-        navigate('/accounts');
-      }
       console.log('프로필 불러오기 실패:', error);
     }
   }, [axiosAddr, userToken, profileUserSeq, navigate]);
