@@ -109,7 +109,7 @@ const WritingAction = () => {
 
             //console.log("글 작성 완료: ", response);
             alert("작성이 완료되었습니다.");
-            navigate("/");
+            navigate("/main");
         } catch (error) {
             console.error("글 작성 실패: ", error);
         }

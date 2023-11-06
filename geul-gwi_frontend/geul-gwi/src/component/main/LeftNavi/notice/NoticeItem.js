@@ -52,7 +52,6 @@ const NoticeItem = (props) => {
     };
 
     // 알림 타입에 따라서 내용 변환하는 함수
-    // 알림 타입에 따라서 내용 변환하는 함수
     const generateMessage = () => {
         switch (props.notice.type) {
             case 'FRIEND':

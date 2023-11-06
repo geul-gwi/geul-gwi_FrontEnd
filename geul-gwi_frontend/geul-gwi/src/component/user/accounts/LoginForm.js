@@ -60,7 +60,7 @@ const LoginForm = () => {
     };
 
     const onClickLink = (path) => {
-       navigate('/accounts' + path);
+       navigate(path);
     }
 
     return (

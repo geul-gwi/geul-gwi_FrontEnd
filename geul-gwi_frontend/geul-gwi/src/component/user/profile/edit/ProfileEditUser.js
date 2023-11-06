@@ -6,12 +6,12 @@ import PasswordChangeForm from 'component/user/profile/edit/PasswordChangeForm';
 const ProfileEditUser = (props) => {
     const PublicWritingIconPath = process.env.PUBLIC_URL + "/icon/Writing/"
     const [isModalOpen, setIsModalOpen] = useState(false); 
-    const [showProfileImage, setShoeProfileImage] = useState(props.newProfile);
+
 
     // 프로필 사진 삭제 
     const handleDeleteProfileImg = () => {
         props.setNewProfile(null);
-        setShoeProfileImage(null);
+        props.setShoeProfileImage(null);
     };
 
     // 모달 창 ON/OFF
@@ -23,14 +23,14 @@ const ProfileEditUser = (props) => {
     const handleProfileImgChange = (event) => {
         const file = event.target.files[0];
         props.setNewProfile(file);
-        setShoeProfileImage(URL.createObjectURL(file));
+        props.setShoeProfileImage(URL.createObjectURL(file));
     };
 
     return (
         <MainContainer>
             <Tittle>프로필 수정</Tittle>
             <ProfilePicture
-                src={showProfileImage ? (showProfileImage) : null || '/img/defaultProfile.png'}
+                src={props.showProfileImage ? (props.showProfileImage) : null || '/img/defaultProfile.png'}
                 onClick={toggleModal}
             />
             <ImageEditButton onClick={setIsModalOpen}>
@@ -84,7 +84,7 @@ const ProfileEditUser = (props) => {
             {isModalOpen && (
                 <ModalOverlay>
                     <ModalContent>
-                        <img src={showProfileImage} />
+                        <img src={props.showProfileImage} />
                         <ModalButtonGroup>
                             <input id="fileInput" type="file" accept="image/*" onChange={handleProfileImgChange} />
                             <Button onClick={handleDeleteProfileImg}>삭제</Button>
@@ -97,6 +97,7 @@ const ProfileEditUser = (props) => {
             <DeleteAccountText onClick={() => props.setIsAcountDelete(!props.isAcountDelete)}>계정 탈퇴하기</DeleteAccountText>
             {props.isAcountDelete && (<>
                 <PasswordInput
+                    type="password"
                     value={props.accountDeletePassword}
                     onChange={(e) => props.setAccountDeletePassword(e.target.value)}
                 />

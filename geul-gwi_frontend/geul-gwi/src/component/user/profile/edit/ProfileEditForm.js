@@ -8,9 +8,14 @@ import {AxiosAddrContext} from 'contextStore/AxiosAddress';
 // component
 import ProfileEditUser from 'component/user/profile/edit/ProfileEditUser';
 import ProfileEditTagForm from 'component/user/profile/edit/ProfileEditTagForm';
+import { login, setNickname, setProfile, setUserSeq, setRole } from 'Reducer/authReducer';
+import { useDispatch } from 'react-redux'; 
+import imageDataFetcher from './../../../../service/imageDataFetcher';
 
 const ProfileEditForm = ({ userInfo }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch(); // Redux Dispatch = 리덕스 저장소 사용
+
     const axiosAddress = useContext(AxiosAddrContext).axiosAddr;
     const userUpdateUrl = '/user/update/';
     const userDeleteUrl = '/user/delete/';
@@ -21,6 +26,8 @@ const ProfileEditForm = ({ userInfo }) => {
     const [newProfile, setNewProfile] = useState(userInfo.profile); 
     const [newNickname, setNewNickname] = useState(userInfo.nickname); 
     const [newComment, setNewComment] = useState(userInfo.comment); 
+
+    const [showProfileImage, setShoeProfileImage] = useState(userInfo.profile);
 
     const [newNicknameError, setNewNicknameError] = useState('');
     const [newCommentError, setNewCommentError] = useState('');
@@ -75,8 +82,10 @@ const ProfileEditForm = ({ userInfo }) => {
         try {
             const formData = new FormData();
 
-            formData.append("file", newProfile);
-            console.log(newProfile);
+            if(newProfile !== null)
+                formData.append("file", newProfile);
+
+            console.log("프로필", newProfile);
             
             const updateDTO = {
                 password: showPasswordChange ? newPassword : userInfo.password,
@@ -92,9 +101,9 @@ const ProfileEditForm = ({ userInfo }) => {
 
 
             // FormData 내용 확인
-            for (let pair of formData.entries()) {
-                console.log(pair[0] + ', ' + pair[1]);
-            }
+            // for (let pair of formData.entries()) {
+            //     console.log(pair[0] + ', ' + pair[1]);
+            // }
 
             const response = await axios.post(
                 `${axiosAddress}${userUpdateUrl}${userSeq}`, formData, {
@@ -105,8 +114,18 @@ const ProfileEditForm = ({ userInfo }) => {
             if (response) {
                 console.log('프로필 편집 성공 : ', response);
                 alert("프로필 편집을 완료했습니다.");
-                //navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
-                window.history.back();
+                try {
+                   // const newProfileData = await imageDataFetcher(newProfile); // 새로운 프로필 이미지를 가져옴
+            
+                    // 새로운 프로필 데이터를 Redux 스토어에 업데이트
+                    dispatch(setProfile(showProfileImage));
+            
+                    // 프로필 페이지로 이동
+                    navigate('/main/Profile', { state: { profileUserSeq: userSeq } });
+                } catch (error) {
+                    console.error('프로필 이미지 가져오기 실패:', error);
+                    // 실패 시에 대응하는 로직 추가
+                }
             }
         } catch (error) {
             console.log('프로필 편집 실패  : ', error);
@@ -216,7 +235,9 @@ const ProfileEditForm = ({ userInfo }) => {
                     CheckNickname={CheckNickname}
                     CheckComment={CheckComment}
                     newPassword={newPassword}
-                    
+                    showProfileImage={showProfileImage}
+                    setShoeProfileImage={setShoeProfileImage}
+
                     setCurPassword={setCurPassword}
                     setNewPassword={setNewPassword}
                     setConfirmNewPassword={setConfirmNewPassword}

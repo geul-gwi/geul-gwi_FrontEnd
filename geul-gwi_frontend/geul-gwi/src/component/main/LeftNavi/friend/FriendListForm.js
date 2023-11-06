@@ -17,36 +17,38 @@ const FriendListForm = () => {
 
     useEffect(() => {
         // 친구 목록 요청 
-        async function fetchUserProfile() {
-            try {
-                const response = await Axios.get(`${axiosAddr}${friendListUrl}${userSeq}`, {
-                    headers: {
-                        Authorization: `Bearer ${userToken}`,
-                    },
-                });
-                //console.log('친구 목록 요청 성공 : ', response.data);
-
-                const friendListWithProfileImages = [];
-
-                for (const friend of response.data) {
-                    try {
-                        const imageUrl = await imageDataFetcher(axiosAddr, friend.profile);
-                        friendListWithProfileImages.push({
-                            ...friend,
-                            profile: imageUrl,
-                        });
-                    } catch (error) {
-                        console.error('친구 프로필 이미지 가져오기 실패.', error);
-                    }
-                }
-
-                setFriends(friendListWithProfileImages);
-            } catch (error) {
-                console.error('친구 목록 요청 실패:', error);
-            }
-        }
+       
         fetchUserProfile();
-    }, [axiosAddr, userSeq, userToken]); // 의존성 목록 추가
+    }, [friends, axiosAddr, userSeq, userToken]); // 의존성 목록 추가
+
+    async function fetchUserProfile() {
+        try {
+            const response = await Axios.get(`${axiosAddr}${friendListUrl}${userSeq}`, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+            //console.log('친구 목록 요청 성공 : ', response.data);
+
+            const friendListWithProfileImages = [];
+
+            for (const friend of response.data) {
+                try {
+                    const imageUrl = await imageDataFetcher(axiosAddr, friend.profile);
+                    friendListWithProfileImages.push({
+                        ...friend,
+                        profile: imageUrl,
+                    });
+                } catch (error) {
+                    console.error('친구 프로필 이미지 가져오기 실패.', error);
+                }
+            }
+
+            setFriends(friendListWithProfileImages);
+        } catch (error) {
+            console.error('친구 목록 요청 실패:', error);
+        }
+    }
 
     // 친구 삭제 처리
     const friendDeleteHandler = async (friendSeq) => {
@@ -58,6 +60,7 @@ const FriendListForm = () => {
             });
             //console.log('친구 삭제: ', response);
             setFriends((prevNotices) => prevNotices.filter((friends) => friends.userSeq !== friendSeq));
+            fetchUserProfile();
         } catch (error) {
             console.error('친구 삭제: ', error);
         }

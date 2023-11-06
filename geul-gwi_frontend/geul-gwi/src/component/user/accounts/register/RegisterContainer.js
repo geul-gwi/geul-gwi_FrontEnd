@@ -165,7 +165,7 @@ const RegisterContainer = (props) => {
     };
 
     const onClickLogin = () => {
-        navigate(`/accounts`);
+        navigate(`/`);
     };
 
     return (

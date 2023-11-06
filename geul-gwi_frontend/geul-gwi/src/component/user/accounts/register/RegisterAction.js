@@ -291,7 +291,7 @@ const RegisterAction = () => {
             .then((response) => {
                 alert("회원가입을 완료했습니다.");
                 //console.log(response.data);
-                navigate('/accounts/');
+                navigate('/');
             })
             .catch(function (error) {
                 alert("회원가입이 정상적으로 완료되지 못했습니다. \n 다시 시도해주세요.");

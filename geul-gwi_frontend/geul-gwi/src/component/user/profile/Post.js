@@ -345,7 +345,6 @@ const Name = styled.div`
 
 const Date = styled.div`
     width : 100%;
-    height : 35%;
     font-size : 14px;
     color : #5F5F5F;
     cursor: pointer;
