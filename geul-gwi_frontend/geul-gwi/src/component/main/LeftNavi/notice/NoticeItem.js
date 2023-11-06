@@ -56,24 +56,32 @@ const NoticeItem = (props) => {
     };
 
     // 팝업 띄우는 함수
-    const ModalOpen = async (geulgwiSeq) => {
-        if (geulgwiSeq === null)
-            return;
-        try {
-            const response = await Axios.get(`${axiosAddr}${postDetailUrl}${geulgwiSeq}?viewSeq=${userSeq}`, {
-                headers: {
-                    Authorization: `Bearer ${userToken}`,
-                },
-            });
-            if (response) {
-                console.log("팝업 창에 세부 게시물 : ", response.data);
-                setViewPost(response.data);
-                setModalState(true); // 데이터가 로드된 후에 모달을 열도록 변경
-            }
-        } catch (error) {
-            console.error('팝업 창 세부 게시물 불러오기 실패.', error);
+    const ModalOpen = async (notice) => {
+
+        switch(notice.type)
+        {
+            case 'GEULGWI':
+                try {
+                    const response = await Axios.get(`${axiosAddr}${postDetailUrl}${notice.geulgwiSeq}?viewSeq=${userSeq}`, {
+                        headers: {
+                            Authorization: `Bearer ${userToken}`,
+                        },
+                    });
+                    if (response) {
+                        console.log("팝업 창에 세부 게시물 : ", response.data);
+                        setViewPost(response.data);
+                        setModalState(true); // 데이터가 로드된 후에 모달을 열도록 변경
+                    }
+                } catch (error) {
+                    console.error('팝업 창 세부 게시물 불러오기 실패.', error);
+                }
+                break;
+
+                case 'MESSAGE':
+                    navigate('/main/message');
+                    break;
         }
-    };
+    }
 
 
     const ModalClose = () => {
@@ -189,7 +197,7 @@ const NoticeItem = (props) => {
 
     return (
         <>
-            <Frame onClick={() => ModalOpen(props.notice.geulgwiSeq)}>
+            <Frame onClick={() => ModalOpen(props.notice)}>
                 <ProfileImage
                     src={profile || '/img/defaultProfile.png'}
                     onClick={onClickProfile}
