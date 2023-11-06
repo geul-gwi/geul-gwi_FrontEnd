@@ -53,7 +53,9 @@ const ChallengeManagement = () => {
       });
       if (response) {
         ShowList();
+        
         alert("챌린지 등록이 완료되었습니다.");
+        window.location.reload();
       }
     } catch (error) {
       console.error('챌린지 등록: ', error);

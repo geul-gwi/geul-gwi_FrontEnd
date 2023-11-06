@@ -26,7 +26,6 @@ const PasswordRecoveryForm = () => {
         };
         Axios.post(`${axiosAddr}${passwordRequestUrl}`, EmailDTO)
             .then(() => {
-                
                 alert("해당 이메일 주소로 비밀번호 전송을 완료하였습니다.");
                 navigate('/');
             })
@@ -56,7 +55,7 @@ const PasswordRecoveryForm = () => {
                     <Button onClick={LoginSubmit}>요청</Button>
                 </FormContentManage>
                 <div className='sub_Container'>
-                <SubSpan onClick={() => onClickLink("")}>로그인</SubSpan>
+                <SubSpan onClick={() => onClickLink("/")}>로그인</SubSpan>
                     <SubSpan onClick={() => onClickLink("/register")}>회원가입</SubSpan>
                     <SubSpan onClick={() => onClickLink("/id")}>아이디 찾기</SubSpan>
                 </div>
