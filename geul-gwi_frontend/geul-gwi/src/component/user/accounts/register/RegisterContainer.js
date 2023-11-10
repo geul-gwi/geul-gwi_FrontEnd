@@ -275,6 +275,7 @@ const RegiContainer = styled.div`
     margin: auto;
     background-color: white;
     user-select: none;
+    justify-content: center; // Center the tags horizontally
 `
 
 const BottomContainer = styled.div`
@@ -346,15 +347,18 @@ const ShowText = styled.div`
 const TagsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
+  width: 90%;
   gap: 10px; 
+  align-items: left; // Center the tags vertically
 `
 
 const TagContainer = styled.div`
 display: flex;
-justify-content: center;
+    justify-content: center;
   margin-top: 30px;
   width: 100%;
   height: 90%;
+  align-items: center;
 
 `
 
