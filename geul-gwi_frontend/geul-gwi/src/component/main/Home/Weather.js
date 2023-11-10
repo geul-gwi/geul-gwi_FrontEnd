@@ -35,6 +35,7 @@ const Weather = () => {
             }
             const icon = json.weather[0].icon; 
             const iconRefact = icon.substring(0,2) + "d"; // 앞의 숫자만 추출하고 뒤에 n이 붙는 것을 d를 붙여 고정함
+           // console.log(`http://openweathermap.org/img/wn/${iconRefact}@2x.png`);
             const iconURL = `http://openweathermap.org/img/wn/${iconRefact}@2x.png`
             setWeatherState(updateDict);
             setIconImg(iconURL);
